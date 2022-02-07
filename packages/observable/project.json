@@ -1,0 +1,33 @@
+{
+  "root": "packages/observable",
+  "sourceRoot": "packages/observable/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/observable",
+        "main": "packages/observable/src/index.ts",
+        "tsConfig": "packages/observable/tsconfig.lib.json",
+        "assets": ["packages/observable/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/observable/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/observable"],
+      "options": {
+        "jestConfig": "packages/observable/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
