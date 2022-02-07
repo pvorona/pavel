@@ -1,0 +1,29 @@
+.tooltip__dot {
+  visibility: hidden;
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+}
+
+.theme-light .tooltip__dot {
+  background-color: white;
+}
+
+.theme-dark .tooltip__dot {
+  background-color: var(--background-cl);
+}
+
+.tooltip {
+  z-index: 1;
+  position: absolute;
+  top: 20px;
+  box-shadow: 0 0 5px #00000030;
+  border-radius: 5px;
+  display: none;
+  pointer-events: none;
+}
+
+.tooltip__legend {
+  display: flex;
+  margin-top: 10px;
+}

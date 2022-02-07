@@ -1,0 +1,27 @@
+.overview__viewbox {
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  cursor: grab;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.overview__left,
+.overview__right {
+  content: " ";
+  transition: background-color 0.3s ease-in-out;
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 100vw;
+}
+
+.overview__left {
+  right: 100%;
+}
+
+.overview__right {
+  left: 100%;
+}

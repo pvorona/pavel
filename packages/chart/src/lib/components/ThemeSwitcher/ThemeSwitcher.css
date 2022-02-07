@@ -1,0 +1,17 @@
+.theme-switcher {
+  background: none;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: color .3s ease-in-out;
+  will-change: contents;
+}
+
+.theme-light .theme-switcher {
+  color: #0087E6;
+}
+
+.theme-dark .theme-switcher {
+  color: hsl(228, 16%, 94%);
+}

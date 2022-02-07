@@ -3,7 +3,7 @@ Abstractions for managing state and UI updates.
 ### Basic usage:
 
 ```ts
-import { observable, effect } from '@pvorona/observable'
+import { observable, effect } from '@pavel/observable'
 
 const App = () => {
   const time = observable(Date.now())
@@ -24,7 +24,7 @@ App()
 ### More complex example:
 
 ```ts
-import { observable, computeLazy, effect } from '@pvorona/observable'
+import { observable, computeLazy, effect } from '@pavel/observable'
 
 const App = () => {
   const a = observable(1)
@@ -91,5 +91,5 @@ import {
   // it'll curve out smoothly changing the value each frame.
   // Observed values can be: [1, 1,3, 2.6, ..., 100]
   animationObservable,
-} from '@pvorona/observable'
+} from '@pavel/observable'
 ```

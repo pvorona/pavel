@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "chart": "packages/chart",
     "observable": "packages/observable",
     "scheduling": "packages/scheduling"
   }

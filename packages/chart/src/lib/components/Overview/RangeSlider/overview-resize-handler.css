@@ -1,0 +1,18 @@
+.overview__resize-handler {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  padding: 0 10px;
+  background-clip: content-box;
+  transition: background-color 0.3s ease-in-out;
+  cursor: ew-resize;
+}
+
+.overview__resize-handler--left {
+  left: -10px;
+}
+
+.overview__resize-handler--right {
+  right: -10px;
+}
