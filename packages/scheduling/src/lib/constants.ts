@@ -1,0 +1,11 @@
+export enum PRIORITY {
+  READ,
+  COMPUTE,
+  WRITE,
+}
+
+export const PRIORITIES_IN_ORDER = [
+  PRIORITY.READ,
+  PRIORITY.COMPUTE,
+  PRIORITY.WRITE,
+]
