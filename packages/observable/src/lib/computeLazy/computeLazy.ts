@@ -1,4 +1,4 @@
-import { collectValues, removeFirstElementOccurrence } from '../utils'
+import { collectValues, notifyAll, removeFirstElementOccurrence } from '../utils'
 import {
   Lambda,
   Gettable,
@@ -23,9 +23,7 @@ export function computeLazy<
 
   function markDirty() {
     dirty = true
-    for (const observer of observers) {
-      observer()
-    }
+    notifyAll(observers)
   }
 
   function recompute() {
