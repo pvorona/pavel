@@ -2,6 +2,8 @@
   "version": 2,
   "projects": {
     "chart": "packages/chart",
+    "chart-demo": "packages/chart-demo",
+    "chart-demo-e2e": "packages/chart-demo-e2e",
     "observable": "packages/observable",
     "scheduling": "packages/scheduling"
   }

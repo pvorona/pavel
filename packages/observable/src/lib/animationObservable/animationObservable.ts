@@ -1,6 +1,10 @@
 import { Lambda, LazyObservable, Gettable, Observable } from '../types'
 import { Transition } from '../transition'
-import { createScheduleTaskWithCleanup } from '@pavel/scheduling'
+import {
+  createScheduleTaskWithCleanup,
+  PRIORITY,
+  URGENCY,
+} from '@pavel/scheduling'
 import { removeFirstElementOccurrence } from '../utils'
 
 export function animationObservable<T>(
@@ -18,7 +22,11 @@ export function animationObservable<T>(
     }
   }
 
-  const scheduleNotifyWithCleanup = createScheduleTaskWithCleanup(notify)
+  const scheduleNotifyWithCleanup = createScheduleTaskWithCleanup(
+    notify,
+    PRIORITY.COMPUTE,
+    URGENCY.NEXT_FRAME,
+  )
 
   const get = () => {
     const newState = transition.getState()

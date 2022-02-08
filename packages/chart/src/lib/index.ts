@@ -1,1 +1,2 @@
-export * from './components'
+export { Chart } from './components'
+export * from './types'

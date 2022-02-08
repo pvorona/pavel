@@ -10,7 +10,7 @@ export const queueByPriority: QueueByPriority = {
   [PRIORITY.WRITE]: createQueue(),
 }
 
-const futureQueueByPriority: QueueByPriority = {
+export const futureQueueByPriority: QueueByPriority = {
   [PRIORITY.READ]: createQueue(),
   [PRIORITY.COMPUTE]: createQueue(),
   [PRIORITY.WRITE]: createQueue(),

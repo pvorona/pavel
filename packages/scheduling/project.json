@@ -3,6 +3,16 @@
   "sourceRoot": "packages/scheduling/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/scheduling",
+        "main": "packages/scheduling/src/index.ts",
+        "tsConfig": "packages/scheduling/tsconfig.lib.json",
+        "assets": ["packages/scheduling/*.md"]
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

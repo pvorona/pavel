@@ -1,0 +1,70 @@
+{
+  "projectType": "application",
+  "root": "packages/chart-demo",
+  "sourceRoot": "packages/chart-demo/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/packages/chart-demo",
+        "compiler": "babel",
+        "index": "packages/chart-demo/src/index.html",
+        "baseHref": "/",
+        "main": "packages/chart-demo/src/main.ts",
+        "polyfills": "packages/chart-demo/src/polyfills.ts",
+        "tsConfig": "packages/chart-demo/tsconfig.app.json",
+        "assets": [
+          "packages/chart-demo/src/favicon.ico",
+          "packages/chart-demo/src/assets"
+        ],
+        "styles": ["packages/chart-demo/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "packages/chart-demo/src/environments/environment.ts",
+              "with": "packages/chart-demo/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "chart-demo:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "chart-demo:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/chart-demo/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/chart-demo"],
+      "options": {
+        "jestConfig": "packages/chart-demo/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
