@@ -1,22 +1,22 @@
 import { collectValues as collectValuesUtil } from '../utils'
 import { Lambda, Observable, Gettable, ObservedTypesOf } from '../types'
 
-export type Options = {
+export type ObserveOptions = {
   readonly collectValues?: boolean
   readonly fireImmediately?: boolean
 }
 
 type CollectingValuesOptions =
-  | (Options & {
+  | (ObserveOptions & {
       readonly collectValues: true
     })
   | { readonly fireImmediately?: boolean }
 
-type NotCollectingValuesOptions = Options & {
+type NotCollectingValuesOptions = ObserveOptions & {
   readonly collectValues: false
 }
 
-const DEFAULT_OPTIONS: Options = {
+const DEFAULT_OPTIONS: ObserveOptions = {
   collectValues: true,
   fireImmediately: true,
 }
@@ -37,7 +37,7 @@ export function observe(
   {
     fireImmediately = DEFAULT_OPTIONS.fireImmediately,
     collectValues = DEFAULT_OPTIONS.collectValues,
-  }: Options = DEFAULT_OPTIONS,
+  }: ObserveOptions = DEFAULT_OPTIONS,
 ): Lambda {
   // Negate to prevent function allocation when possible
   const observer = !collectValues

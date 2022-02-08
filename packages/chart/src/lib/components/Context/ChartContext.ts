@@ -78,11 +78,9 @@ export const ChartContext = (options: ChartOptions) => {
     },
   )
 
-  // Transition.FAST
-  // Duration.FAST
-  const inertStartIndex = inert({ duration: FAST })(startIndex)
+  const inertStartIndex = inert(FAST)(startIndex)
 
-  const inertEndIndex = inert({ duration: FAST })(endIndex)
+  const inertEndIndex = inert(FAST)(endIndex)
 
   const {
     minMaxByGraphName: visibleMinMaxByGraphName,
@@ -178,8 +176,8 @@ export const ChartContext = (options: ChartOptions) => {
     [isDragging, isWheeling, isGrabbingGraphs],
     (isDragging, isWheeling, isGrabbingGraphs) => {
       if (isDragging || isWheeling || isGrabbingGraphs) {
-        inertVisibleMax.setTransition({ duration: MEDIUM })
-        inertVisibleMin.setTransition({ duration: MEDIUM })
+        inertVisibleMax.setTransition(MEDIUM)
+        inertVisibleMin.setTransition(MEDIUM)
       } else {
         inertVisibleMax.setTransition({
           duration: SLOW,
@@ -195,7 +193,7 @@ export const ChartContext = (options: ChartOptions) => {
 
   effect([activeCursor], activeCursor => {
     for (const key in cursor) {
-      const className = cursor[key as keyof typeof cursor]
+      const className = cursor[key]
 
       if (className) {
         document.body.classList.remove(className)

@@ -1,17 +1,17 @@
 import { Easing, linear } from '@pavel/easing'
 import { Transition } from './types'
 
-type Options<T> = {
+export type TransitionOptions = {
   duration: number
   easing?: Easing
-  initialValue: T
+  initialValue: number
 }
 
 export function createTransition({
   duration,
   easing = linear,
   initialValue,
-}: Options<number>): Transition<number> {
+}: TransitionOptions): Transition<number> {
   let startTime = performance.now()
   let startValue = initialValue
   let targetValue = initialValue
