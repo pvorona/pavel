@@ -1,2 +1,2 @@
 export * from './constants'
-export * from './durations'
+export * from './transition'
