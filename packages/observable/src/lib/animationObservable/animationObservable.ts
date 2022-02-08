@@ -5,7 +5,7 @@ import {
   PRIORITY,
   URGENCY,
 } from '@pavel/scheduling'
-import { removeFirstElementOccurrence } from '../utils'
+import { notifyAll, removeFirstElementOccurrence } from '../utils'
 
 export function animationObservable<T>(
   innerObservable: Observable<T> & Gettable<T>,
@@ -17,9 +17,7 @@ export function animationObservable<T>(
   let state = transition.getState()
 
   function notify() {
-    for (const observer of observers) {
-      observer()
-    }
+    notifyAll(observers)
   }
 
   const scheduleNotifyWithCleanup = createScheduleTaskWithCleanup(

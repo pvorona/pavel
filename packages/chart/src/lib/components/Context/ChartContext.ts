@@ -38,7 +38,7 @@ export const ChartContext = (options: ChartOptions) => {
     observable(false),
   )
   const isGrabbingGraphs = observable(false)
-  const activeCursor = observable<Cursor>(cursor.default)
+  const activeCursor = observable(cursor.default)
   const enabledStateByGraphName = observable(
     options.graphNames.reduce(
       (state, graphName) => ({
