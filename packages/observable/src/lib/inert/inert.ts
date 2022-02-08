@@ -5,7 +5,11 @@ import {
   ObservedTypeOf,
   EagerObservable,
 } from '../types'
-import { createGroupTransition, createTransition } from '../transition'
+import {
+  createGroupTransition,
+  createTransition,
+  TransitionOptions,
+} from '../transition'
 import {
   createScheduleTaskWithCleanup,
   PRIORITY,
@@ -15,10 +19,12 @@ import { notifyAll, removeFirstElementOccurrence } from '../utils'
 import { observe } from '../observe'
 import { Easing } from '@pavel/easing'
 
-type Options = {
-  duration: number
-  easing?: Easing
-}
+type Options =
+  | {
+      duration: number
+      easing?: Easing
+    }
+  | number
 
 type AnimatableValue = number
 
@@ -102,7 +108,9 @@ const constructTransition = (
     return createGroupTransition(transitions)
   }
 
-  return createTransition({ ...options, initialValue: value })
+  const transitionOptions = createTransitionOptions(options, value)
+
+  return createTransition(transitionOptions)
 }
 
 const createTransitions = (
@@ -115,11 +123,22 @@ const createTransitions = (
   > = {}
 
   for (const key in collection) {
-    transitions[key] = createTransition({
-      ...options,
-      initialValue: collection[key],
-    })
+    transitions[key] = createTransition(
+      createTransitionOptions(options, collection[key]),
+    )
   }
 
   return transitions
+}
+
+function createTransitionOptions(
+  optionsOrDuration: Options,
+  initialValue: number,
+): TransitionOptions {
+  return typeof optionsOrDuration === 'number'
+    ? {
+        duration: optionsOrDuration,
+        initialValue,
+      }
+    : { ...optionsOrDuration, initialValue }
 }

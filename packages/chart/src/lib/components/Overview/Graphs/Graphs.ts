@@ -63,8 +63,8 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
 
   observe([isDragging, isWheeling], (isDragging, isWheeling) => {
     if (isDragging || isWheeling) {
-      inertGlobalMax.setTransition({ duration: MEDIUM })
-      inertGlobalMin.setTransition({ duration: MEDIUM })
+      inertGlobalMax.setTransition(MEDIUM)
+      inertGlobalMin.setTransition(MEDIUM)
     } else {
       inertGlobalMax.setTransition({
         duration: SLOW,
