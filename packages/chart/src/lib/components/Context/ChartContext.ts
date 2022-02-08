@@ -9,10 +9,10 @@ import {
 import { ChartOptions } from '../../types'
 import {
   cursor,
-  FAST_TRANSITIONS_TIME,
-  LONG_TRANSITIONS_TIME,
+  MEDIUM,
+  SLOW,
   MIN_HEIGHT,
-  VERY_FAST_TRANSITIONS_TIME,
+  FAST,
   WHEEL_CLEAR_TIMEOUT,
 } from '../constants'
 import { OpacityState, Point, EnabledGraphNames } from '../types'
@@ -80,13 +80,9 @@ export const ChartContext = (options: ChartOptions) => {
 
   // Transition.FAST
   // Duration.FAST
-  const inertStartIndex = inert({ duration: VERY_FAST_TRANSITIONS_TIME })(
-    startIndex,
-  )
+  const inertStartIndex = inert({ duration: FAST })(startIndex)
 
-  const inertEndIndex = inert({ duration: VERY_FAST_TRANSITIONS_TIME })(
-    endIndex,
-  )
+  const inertEndIndex = inert({ duration: FAST })(endIndex)
 
   const {
     minMaxByGraphName: visibleMinMaxByGraphName,
@@ -95,12 +91,12 @@ export const ChartContext = (options: ChartOptions) => {
   } = createMinMaxView(startIndex, endIndex, enabledGraphNames, options.data)
 
   const inertVisibleMax = inert({
-    duration: LONG_TRANSITIONS_TIME,
+    duration: SLOW,
     easing: easeInOutQuart,
   })(visibleMax)
 
   const inertVisibleMin = inert({
-    duration: LONG_TRANSITIONS_TIME,
+    duration: SLOW,
     easing: easeInOutQuart,
   })(visibleMin)
 
@@ -112,12 +108,12 @@ export const ChartContext = (options: ChartOptions) => {
   )
 
   const inertGlobalMax = inert({
-    duration: LONG_TRANSITIONS_TIME,
+    duration: SLOW,
     easing: easeInOutQuart,
   })(globalMax)
 
   const inertGlobalMin = inert({
-    duration: LONG_TRANSITIONS_TIME,
+    duration: SLOW,
     easing: easeInOutQuart,
   })(globalMin)
 
@@ -136,7 +132,7 @@ export const ChartContext = (options: ChartOptions) => {
   )
 
   const inertOpacityStateByGraphName = inert({
-    duration: LONG_TRANSITIONS_TIME,
+    duration: SLOW,
     easing: easeInOutQuart,
   })(opacityStateByGraphName)
 
@@ -182,15 +178,15 @@ export const ChartContext = (options: ChartOptions) => {
     [isDragging, isWheeling, isGrabbingGraphs],
     (isDragging, isWheeling, isGrabbingGraphs) => {
       if (isDragging || isWheeling || isGrabbingGraphs) {
-        inertVisibleMax.setTransition({ duration: FAST_TRANSITIONS_TIME })
-        inertVisibleMin.setTransition({ duration: FAST_TRANSITIONS_TIME })
+        inertVisibleMax.setTransition({ duration: MEDIUM })
+        inertVisibleMin.setTransition({ duration: MEDIUM })
       } else {
         inertVisibleMax.setTransition({
-          duration: LONG_TRANSITIONS_TIME,
+          duration: SLOW,
           easing: easeInOutQuart,
         })
         inertVisibleMin.setTransition({
-          duration: LONG_TRANSITIONS_TIME,
+          duration: SLOW,
           easing: easeInOutQuart,
         })
       }
