@@ -7,7 +7,7 @@ import {
 import { ChartContext, ChartOptions } from '../../../types'
 import { easeInOutQuart } from '@pavel/easing'
 import { mapDataToCoords, toBitMapSize } from '../../../util'
-import { FAST_TRANSITIONS_TIME, LONG_TRANSITIONS_TIME } from '../../constants'
+import { MEDIUM, SLOW } from '../../constants'
 import { Point, Component } from '../../types'
 import { createGraphs } from '../../Graphs/createGraphs'
 
@@ -63,15 +63,15 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
 
   observe([isDragging, isWheeling], (isDragging, isWheeling) => {
     if (isDragging || isWheeling) {
-      inertGlobalMax.setTransition({ duration: FAST_TRANSITIONS_TIME })
-      inertGlobalMin.setTransition({ duration: FAST_TRANSITIONS_TIME })
+      inertGlobalMax.setTransition({ duration: MEDIUM })
+      inertGlobalMin.setTransition({ duration: MEDIUM })
     } else {
       inertGlobalMax.setTransition({
-        duration: LONG_TRANSITIONS_TIME,
+        duration: SLOW,
         easing: easeInOutQuart,
       })
       inertGlobalMin.setTransition({
-        duration: LONG_TRANSITIONS_TIME,
+        duration: SLOW,
         easing: easeInOutQuart,
       })
     }
