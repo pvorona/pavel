@@ -9,10 +9,8 @@ import {
 import { ChartOptions } from '../../types'
 import {
   cursor,
-  MEDIUM,
-  SLOW,
+  Transition,
   MIN_HEIGHT,
-  FAST,
   WHEEL_CLEAR_TIMEOUT,
 } from '../constants'
 import { OpacityState, Point, EnabledGraphNames } from '../types'
@@ -78,9 +76,9 @@ export const ChartContext = (options: ChartOptions) => {
     },
   )
 
-  const inertStartIndex = inert(FAST)(startIndex)
+  const inertStartIndex = inert(Transition.Fast)(startIndex)
 
-  const inertEndIndex = inert(FAST)(endIndex)
+  const inertEndIndex = inert(Transition.Fast)(endIndex)
 
   const {
     minMaxByGraphName: visibleMinMaxByGraphName,
@@ -89,12 +87,12 @@ export const ChartContext = (options: ChartOptions) => {
   } = createMinMaxView(startIndex, endIndex, enabledGraphNames, options.data)
 
   const inertVisibleMax = inert({
-    duration: SLOW,
+    duration: Transition.Slow,
     easing: easeInOutQuart,
   })(visibleMax)
 
   const inertVisibleMin = inert({
-    duration: SLOW,
+    duration: Transition.Slow,
     easing: easeInOutQuart,
   })(visibleMin)
 
@@ -106,12 +104,12 @@ export const ChartContext = (options: ChartOptions) => {
   )
 
   const inertGlobalMax = inert({
-    duration: SLOW,
+    duration: Transition.Slow,
     easing: easeInOutQuart,
   })(globalMax)
 
   const inertGlobalMin = inert({
-    duration: SLOW,
+    duration: Transition.Slow,
     easing: easeInOutQuart,
   })(globalMin)
 
@@ -130,7 +128,7 @@ export const ChartContext = (options: ChartOptions) => {
   )
 
   const inertOpacityStateByGraphName = inert({
-    duration: SLOW,
+    duration: Transition.Slow,
     easing: easeInOutQuart,
   })(opacityStateByGraphName)
 
@@ -176,15 +174,15 @@ export const ChartContext = (options: ChartOptions) => {
     [isDragging, isWheeling, isGrabbingGraphs],
     (isDragging, isWheeling, isGrabbingGraphs) => {
       if (isDragging || isWheeling || isGrabbingGraphs) {
-        inertVisibleMax.setTransition(MEDIUM)
-        inertVisibleMin.setTransition(MEDIUM)
+        inertVisibleMax.setTransition(Transition.Medium)
+        inertVisibleMin.setTransition(Transition.Medium)
       } else {
         inertVisibleMax.setTransition({
-          duration: SLOW,
+          duration: Transition.Slow,
           easing: easeInOutQuart,
         })
         inertVisibleMin.setTransition({
-          duration: SLOW,
+          duration: Transition.Slow,
           easing: easeInOutQuart,
         })
       }
