@@ -1,5 +1,5 @@
 import { collectValues as collectValuesUtil } from '../utils'
-import { Lambda, Observable, Gettable, InferTypeParams } from '../types'
+import { Lambda, Observable, Gettable, ObservedTypesOf } from '../types'
 
 export type Options = {
   readonly collectValues?: boolean
@@ -23,7 +23,7 @@ const DEFAULT_OPTIONS: Options = {
 
 export function observe<T extends (Observable<unknown> & Gettable<unknown>)[]>(
   deps: readonly [...T],
-  observer: (...args: InferTypeParams<T>) => void,
+  observer: (...args: ObservedTypesOf<T>) => void,
   options?: CollectingValuesOptions,
 ): Lambda
 export function observe<T extends (Observable<unknown> & Gettable<unknown>)[]>(

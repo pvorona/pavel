@@ -1,4 +1,4 @@
-import { Lambda, Gettable, Observable, InferTypeParams } from '../types'
+import { Lambda, Gettable, Observable, ObservedTypesOf } from '../types'
 import { createScheduleTaskWithCleanup } from '@pavel/scheduling'
 import { collectValues } from '../utils'
 import { observe } from '../observe'
@@ -13,7 +13,7 @@ const DEFAULT_OPTIONS: Options = {
 
 export function effect<T extends (Observable<unknown> & Gettable<unknown>)[]>(
   deps: readonly [...T],
-  observer: (...args: InferTypeParams<T>) => void,
+  observer: (...args: ObservedTypesOf<T>) => void,
   options = DEFAULT_OPTIONS,
 ): Lambda {
   const scheduleNotifyWithCleanup = createScheduleTaskWithCleanup(

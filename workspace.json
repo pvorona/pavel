@@ -4,6 +4,7 @@
     "chart": "packages/chart",
     "chart-demo": "packages/chart-demo",
     "chart-demo-e2e": "packages/chart-demo-e2e",
+    "easing": "packages/easing",
     "observable": "packages/observable",
     "scheduling": "packages/scheduling"
   }

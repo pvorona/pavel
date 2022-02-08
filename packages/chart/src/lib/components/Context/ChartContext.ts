@@ -2,16 +2,12 @@ import {
   effect,
   observable,
   computeLazy,
-  animationObservable,
   observe,
-  transition,
-  groupTransition,
-  Transition,
   resetWhenInactive,
+  inert,
 } from '@pavel/observable'
 import { ChartOptions } from '../../types'
 import {
-  Cursor,
   cursor,
   FAST_TRANSITIONS_TIME,
   LONG_TRANSITIONS_TIME,
@@ -21,7 +17,7 @@ import {
 } from '../constants'
 import { OpacityState, Point, EnabledGraphNames } from '../types'
 import { mapDataToCoords, createMinMaxView } from '../../util'
-import { easeInOutQuart, linear } from '../../easings'
+import { easeInOutQuart } from '@pavel/easing'
 
 export const ChartContext = (options: ChartOptions) => {
   const globalStartIndex = observable(0)
@@ -34,10 +30,10 @@ export const ChartContext = (options: ChartOptions) => {
   const mouseX = observable(0)
   const isHovering = observable(false)
   const isDragging = observable(false)
+  const isGrabbingGraphs = observable(false)
   const isWheeling = resetWhenInactive({ delay: WHEEL_CLEAR_TIMEOUT })(
     observable(false),
   )
-  const isGrabbingGraphs = observable(false)
   const activeCursor = observable(cursor.default)
   const enabledStateByGraphName = observable(
     options.graphNames.reduce(
@@ -74,19 +70,22 @@ export const ChartContext = (options: ChartOptions) => {
       )
     },
   )
+
   const isAnyGraphEnabled = computeLazy(
     [enabledGraphNames],
     enabledGraphNames => {
-      return Boolean(enabledGraphNames.length)
+      return enabledGraphNames.length !== 0
     },
   )
-  const inertStartIndex = animationObservable(
+
+  // Transition.FAST
+  // Duration.FAST
+  const inertStartIndex = inert({ duration: VERY_FAST_TRANSITIONS_TIME })(
     startIndex,
-    transition(startIndex.get(), VERY_FAST_TRANSITIONS_TIME, linear),
   )
-  const inertEndIndex = animationObservable(
+
+  const inertEndIndex = inert({ duration: VERY_FAST_TRANSITIONS_TIME })(
     endIndex,
-    transition(endIndex.get(), VERY_FAST_TRANSITIONS_TIME, linear),
   )
 
   const {
@@ -95,15 +94,15 @@ export const ChartContext = (options: ChartOptions) => {
     max: visibleMax,
   } = createMinMaxView(startIndex, endIndex, enabledGraphNames, options.data)
 
-  const inertVisibleMax = animationObservable(
-    visibleMax,
-    transition(visibleMax.get(), LONG_TRANSITIONS_TIME, easeInOutQuart),
-  )
+  const inertVisibleMax = inert({
+    duration: LONG_TRANSITIONS_TIME,
+    easing: easeInOutQuart,
+  })(visibleMax)
 
-  const inertVisibleMin = animationObservable(
-    visibleMin,
-    transition(visibleMin.get(), LONG_TRANSITIONS_TIME, easeInOutQuart),
-  )
+  const inertVisibleMin = inert({
+    duration: LONG_TRANSITIONS_TIME,
+    easing: easeInOutQuart,
+  })(visibleMin)
 
   const { max: globalMax, min: globalMin } = createMinMaxView(
     globalStartIndex,
@@ -112,14 +111,15 @@ export const ChartContext = (options: ChartOptions) => {
     options.data,
   )
 
-  const inertGlobalMax = animationObservable(
-    globalMax,
-    transition(globalMax.get(), LONG_TRANSITIONS_TIME, easeInOutQuart),
-  )
-  const inertGlobalMin = animationObservable(
-    globalMin,
-    transition(globalMin.get(), LONG_TRANSITIONS_TIME, easeInOutQuart),
-  )
+  const inertGlobalMax = inert({
+    duration: LONG_TRANSITIONS_TIME,
+    easing: easeInOutQuart,
+  })(globalMax)
+
+  const inertGlobalMin = inert({
+    duration: LONG_TRANSITIONS_TIME,
+    easing: easeInOutQuart,
+  })(globalMin)
 
   // why lazy
   const opacityStateByGraphName = computeLazy(
@@ -134,22 +134,11 @@ export const ChartContext = (options: ChartOptions) => {
       )
     },
   )
-  const inertOpacityStateByGraphName = animationObservable(
-    opacityStateByGraphName,
-    groupTransition(
-      options.graphNames.reduce(
-        (state, graphName) => ({
-          ...state,
-          [graphName]: transition(
-            opacityStateByGraphName.get()[graphName],
-            LONG_TRANSITIONS_TIME,
-            easeInOutQuart,
-          ),
-        }),
-        {} as { [key: string]: Transition<number> },
-      ),
-    ),
-  )
+
+  const inertOpacityStateByGraphName = inert({
+    duration: LONG_TRANSITIONS_TIME,
+    easing: easeInOutQuart,
+  })(opacityStateByGraphName)
 
   const mainGraphPoints = computeLazy(
     [
@@ -193,27 +182,17 @@ export const ChartContext = (options: ChartOptions) => {
     [isDragging, isWheeling, isGrabbingGraphs],
     (isDragging, isWheeling, isGrabbingGraphs) => {
       if (isDragging || isWheeling || isGrabbingGraphs) {
-        inertVisibleMax.setTransition(
-          transition(inertVisibleMax.get(), FAST_TRANSITIONS_TIME, linear),
-        )
-        inertVisibleMin.setTransition(
-          transition(inertVisibleMin.get(), FAST_TRANSITIONS_TIME, linear),
-        )
+        inertVisibleMax.setTransition({ duration: FAST_TRANSITIONS_TIME })
+        inertVisibleMin.setTransition({ duration: FAST_TRANSITIONS_TIME })
       } else {
-        inertVisibleMax.setTransition(
-          transition(
-            inertVisibleMax.get(),
-            LONG_TRANSITIONS_TIME,
-            easeInOutQuart,
-          ),
-        )
-        inertVisibleMin.setTransition(
-          transition(
-            inertVisibleMin.get(),
-            LONG_TRANSITIONS_TIME,
-            easeInOutQuart,
-          ),
-        )
+        inertVisibleMax.setTransition({
+          duration: LONG_TRANSITIONS_TIME,
+          easing: easeInOutQuart,
+        })
+        inertVisibleMin.setTransition({
+          duration: LONG_TRANSITIONS_TIME,
+          easing: easeInOutQuart,
+        })
       }
     },
   )

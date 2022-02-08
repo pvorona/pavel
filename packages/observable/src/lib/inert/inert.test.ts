@@ -1,10 +1,6 @@
-/**
- * @jest-environment jsdom
- */
-
 import { observable } from '../observable'
-import { groupTransition, transition } from '../transition'
-import { animationObservable } from './animationObservable'
+// import { groupTransition, transition } from '../transition'
+import { inert } from './inert'
 
 const TRANSITION_DURATION = 100
 
@@ -19,8 +15,7 @@ describe('with numbers', () => {
 
   it('starts with initial value', () => {
     const o = observable(0)
-    const t = transition(0, TRANSITION_DURATION)
-    const animation = animationObservable(o, t)
+    const animation = inert({ duration: TRANSITION_DURATION })(o)
 
     expect(animation.get()).toStrictEqual(0)
     expect(o.get()).toStrictEqual(animation.get())
@@ -28,8 +23,7 @@ describe('with numbers', () => {
 
   it('does not change over time if the source is stationary', () => {
     const o = observable(0)
-    const t = transition(0, TRANSITION_DURATION)
-    const animation = animationObservable(o, t)
+    const animation = inert({ duration: TRANSITION_DURATION })(o)
 
     jest.advanceTimersByTime(TRANSITION_DURATION * 10)
 
@@ -39,8 +33,7 @@ describe('with numbers', () => {
 
   it("transitions to the end value using the transition but doesn't overshoot", () => {
     const o = observable(0)
-    const t = transition(0, TRANSITION_DURATION)
-    const animation = animationObservable(o, t)
+    const animation = inert({ duration: TRANSITION_DURATION })(o)
     const endValue = 100
 
     o.set(endValue)
@@ -106,8 +99,7 @@ describe('with numbers', () => {
 
   it('transitions to the new end value if the target changed during the animation', () => {
     const o = observable(0)
-    const t = transition(0, TRANSITION_DURATION)
-    const animation = animationObservable(o, t)
+    const animation = inert({ duration: TRANSITION_DURATION })(o)
 
     o.set(1000)
 
@@ -151,13 +143,7 @@ describe('with objects', () => {
       c: 0,
       d: 0,
     })
-    const t = groupTransition({
-      a: transition(0, TRANSITION_DURATION),
-      b: transition(0, TRANSITION_DURATION),
-      c: transition(0, TRANSITION_DURATION),
-      d: transition(0, TRANSITION_DURATION),
-    })
-    const animation = animationObservable(o, t)
+    const animation = inert({ duration: TRANSITION_DURATION })(o)
 
     expect(animation.get()).toStrictEqual({
       a: 0,
@@ -174,13 +160,7 @@ describe('with objects', () => {
       c: 0,
       d: 0,
     })
-    const t = groupTransition({
-      a: transition(0, TRANSITION_DURATION),
-      b: transition(0, TRANSITION_DURATION),
-      c: transition(0, TRANSITION_DURATION),
-      d: transition(0, TRANSITION_DURATION),
-    })
-    const animation = animationObservable(o, t)
+    const animation = inert({ duration: TRANSITION_DURATION })(o)
 
     o.set({
       a: 10,
@@ -265,13 +245,7 @@ describe('with objects', () => {
       c: 0,
       d: 0,
     })
-    const t = groupTransition({
-      a: transition(0, TRANSITION_DURATION),
-      b: transition(0, TRANSITION_DURATION),
-      c: transition(0, TRANSITION_DURATION),
-      d: transition(0, TRANSITION_DURATION),
-    })
-    const animation = animationObservable(o, t)
+    const animation = inert({ duration: TRANSITION_DURATION })(o)
 
     o.set({
       a: 10,

@@ -1,8 +1,8 @@
-import { Gettable, InferTypeParams } from '../../types'
+import { Gettable, ObservedTypesOf } from '../../types'
 
 export function collectValues<T extends Gettable<unknown>[]>(
   sources: readonly [...T],
-): InferTypeParams<T>
+): ObservedTypesOf<T>
 export function collectValues(sources: readonly Gettable<unknown>[]) {
   const values = []
 

@@ -4,7 +4,7 @@ import {
   Gettable,
   LazyObservable,
   Observable,
-  InferTypeParams,
+  ObservedTypesOf,
 } from '../types'
 import { observe } from '../observe'
 
@@ -13,7 +13,7 @@ export function computeLazy<
   T,
 >(
   deps: readonly [...A],
-  compute: (...args: InferTypeParams<A>) => T,
+  compute: (...args: ObservedTypesOf<A>) => T,
 ): LazyObservable & Gettable<T> {
   const observers: Lambda[] = []
   let value: T

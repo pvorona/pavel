@@ -3,7 +3,7 @@ import { observe } from '../observe'
 import {
   EagerObservable,
   Gettable,
-  InferTypeParams,
+  ObservedTypesOf,
   Observable,
 } from '../types'
 
@@ -12,7 +12,7 @@ export function compute<
   T,
 >(
   deps: readonly [...A],
-  compute: (...args: InferTypeParams<A>) => T,
+  compute: (...args: ObservedTypesOf<A>) => T,
 ): EagerObservable<T> & Gettable<T> {
   const obs = observable(undefined as unknown as T)
 

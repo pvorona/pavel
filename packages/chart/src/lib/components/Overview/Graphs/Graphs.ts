@@ -1,11 +1,11 @@
-import { effect, computeLazy, observe, transition } from '@pavel/observable'
+import { effect, computeLazy, observe } from '@pavel/observable'
 import {
   clearRect,
   renderLineSeriesWithAreaGradient,
   setCanvasSize,
 } from '../../renderers'
 import { ChartContext, ChartOptions } from '../../../types'
-import { easeInOutQuart, linear } from '../../../easings'
+import { easeInOutQuart } from '@pavel/easing'
 import { mapDataToCoords, toBitMapSize } from '../../../util'
 import { FAST_TRANSITIONS_TIME, LONG_TRANSITIONS_TIME } from '../../constants'
 import { Point, Component } from '../../types'
@@ -63,19 +63,17 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
 
   observe([isDragging, isWheeling], (isDragging, isWheeling) => {
     if (isDragging || isWheeling) {
-      inertGlobalMax.setTransition(
-        transition(inertGlobalMax.get(), FAST_TRANSITIONS_TIME, linear),
-      )
-      inertGlobalMin.setTransition(
-        transition(inertGlobalMin.get(), FAST_TRANSITIONS_TIME, linear),
-      )
+      inertGlobalMax.setTransition({ duration: FAST_TRANSITIONS_TIME })
+      inertGlobalMin.setTransition({ duration: FAST_TRANSITIONS_TIME })
     } else {
-      inertGlobalMax.setTransition(
-        transition(inertGlobalMax.get(), LONG_TRANSITIONS_TIME, easeInOutQuart),
-      )
-      inertGlobalMin.setTransition(
-        transition(inertGlobalMin.get(), LONG_TRANSITIONS_TIME, easeInOutQuart),
-      )
+      inertGlobalMax.setTransition({
+        duration: LONG_TRANSITIONS_TIME,
+        easing: easeInOutQuart,
+      })
+      inertGlobalMin.setTransition({
+        duration: LONG_TRANSITIONS_TIME,
+        easing: easeInOutQuart,
+      })
     }
   })
 
