@@ -29,9 +29,7 @@ export const ChartContext = (options: ChartOptions) => {
   const isHovering = observable(false)
   const isDragging = observable(false)
   const isGrabbingGraphs = observable(false)
-  const isWheeling = resetWhenInactive({ delay: WHEEL_CLEAR_TIMEOUT })(
-    observable(false),
-  )
+  const isWheeling = resetWhenInactive(WHEEL_CLEAR_TIMEOUT)(observable(false))
   const activeCursor = observable(cursor.default)
   const enabledStateByGraphName = observable(
     options.graphNames.reduce(

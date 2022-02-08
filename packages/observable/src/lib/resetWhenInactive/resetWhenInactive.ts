@@ -1,15 +1,17 @@
 import { EagerObservable, Gettable, Settable } from '../types'
 
-type Options = {
-  delay: number
-}
+type ResetWhenInactiveOptions =
+  | {
+      delay: number
+    }
+  | number
 
 export const resetWhenInactive =
-  (options: Options) =>
+  (options: ResetWhenInactiveOptions) =>
   <T>(
     target: EagerObservable<T> & Gettable<T> & Settable<T>,
   ): EagerObservable<T> & Gettable<T> & Settable<T> => {
-    const { delay } = options
+    const delay = getDelay(options)
     const initialValue = target.get()
 
     let timeoutId: undefined | number
@@ -32,3 +34,9 @@ export const resetWhenInactive =
       observe: target.observe,
     }
   }
+
+function getDelay(optionsOrDelay: ResetWhenInactiveOptions): number {
+  return typeof optionsOrDelay === 'number'
+    ? optionsOrDelay
+    : optionsOrDelay.delay
+}
