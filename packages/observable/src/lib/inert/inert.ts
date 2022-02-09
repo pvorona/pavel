@@ -1,14 +1,4 @@
-import {
-  Lambda,
-  ReadonlyEagerSubject,
-  ReadonlyLazySubject,
-  ObservedTypeOf,
-} from '../types'
-import {
-  createGroupTransition,
-  createTransition,
-  TransitionOptions,
-} from '../transition'
+import { Lambda, ObservedTypeOf } from '../types'
 import {
   createScheduleTaskWithCleanup,
   PRIORITY,
@@ -16,30 +6,8 @@ import {
 } from '@pavel/scheduling'
 import { notifyAll, removeFirstElementOccurrence } from '../utils'
 import { observe } from '../observe'
-import { Easing } from '@pavel/easing'
-
-export type InertOptions =
-  | {
-      duration: number
-      easing?: Easing
-    }
-  | number
-
-type AnimatableValue = number
-
-type Collection<T> = Record<string, T>
-
-type AnimatableCollection = Collection<AnimatableValue>
-
-type AnimatableTarget =
-  | ReadonlyEagerSubject<AnimatableValue>
-  | ReadonlyEagerSubject<AnimatableCollection>
-  | ReadonlyLazySubject<AnimatableValue>
-  | ReadonlyLazySubject<AnimatableCollection>
-
-export type InertSubject<T> = ReadonlyLazySubject<T> & {
-  setTransition: (options: InertOptions) => void
-}
+import { AnimatableTarget, InertOptions, InertSubject } from './types'
+import { constructTransition } from './constructTransition'
 
 // type State =
 //   | { value: AnimatableValue, transition: Transition<AnimatableValue> }
@@ -98,48 +66,3 @@ export const inert =
       },
     }
   }
-
-const constructTransition = (
-  value: AnimatableValue | AnimatableCollection,
-  options: InertOptions,
-) => {
-  if (typeof value === 'object') {
-    const transitions = createTransitions(value, options)
-
-    return createGroupTransition(transitions)
-  }
-
-  const transitionOptions = createTransitionOptions(options, value)
-
-  return createTransition(transitionOptions)
-}
-
-const createTransitions = (
-  collection: Record<string, number>,
-  options: InertOptions,
-) => {
-  const transitions: Record<
-    keyof typeof collection,
-    ReturnType<typeof createTransition>
-  > = {}
-
-  for (const key in collection) {
-    transitions[key] = createTransition(
-      createTransitionOptions(options, collection[key]),
-    )
-  }
-
-  return transitions
-}
-
-function createTransitionOptions(
-  optionsOrDuration: InertOptions,
-  initialValue: number,
-): TransitionOptions {
-  return typeof optionsOrDuration === 'number'
-    ? {
-        duration: optionsOrDuration,
-        initialValue,
-      }
-    : { ...optionsOrDuration, initialValue }
-}

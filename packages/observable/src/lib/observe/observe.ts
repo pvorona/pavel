@@ -1,6 +1,5 @@
 import { collectValues as collectValuesUtil } from '../utils'
-import { Lambda, ObservedTypesOf } from '../types'
-import { ReadonlySubject } from '..'
+import { Lambda, ObservedTypesOf, ReadonlySubject } from '../types'
 
 export type ObserveOptions = {
   readonly collectValues?: boolean
@@ -40,10 +39,7 @@ export function observe(
     collectValues = DEFAULT_OPTIONS.collectValues,
   }: ObserveOptions = DEFAULT_OPTIONS,
 ): Lambda {
-  // Negate to prevent function allocation when possible
-  const observer = !collectValues
-    ? externalObserver
-    : () => externalObserver(...collectValuesUtil(deps))
+  const observer = createObserver(externalObserver, deps, collectValues)
   const unobserves = deps.map(dep => dep.observe(observer))
 
   if (fireImmediately) {
@@ -53,4 +49,16 @@ export function observe(
   return () => {
     unobserves.forEach(unobserve => unobserve())
   }
+}
+
+function createObserver(
+  observer: (...args: unknown[]) => void,
+  deps: readonly ReadonlySubject<unknown>[],
+  collectValues: boolean | undefined,
+): (...args: unknown[]) => void {
+  if (collectValues) {
+    return () => observer(...collectValuesUtil(deps))
+  }
+
+  return observer
 }

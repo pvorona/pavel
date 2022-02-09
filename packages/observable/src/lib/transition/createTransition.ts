@@ -7,6 +7,8 @@ export type TransitionOptions = {
   initialValue: number
 }
 
+// TODO:
+// - [ ] Use class to avoid creating new functions for every transition
 export function createTransition({
   duration,
   easing = linear,
