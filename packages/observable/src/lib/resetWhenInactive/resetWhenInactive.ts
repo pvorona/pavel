@@ -1,4 +1,4 @@
-import { EagerObservable, Gettable, Settable } from '../types'
+import { EagerSubject } from '../types'
 
 type ResetWhenInactiveOptions =
   | {
@@ -8,9 +8,7 @@ type ResetWhenInactiveOptions =
 
 export const resetWhenInactive =
   (options: ResetWhenInactiveOptions) =>
-  <T>(
-    target: EagerObservable<T> & Gettable<T> & Settable<T>,
-  ): EagerObservable<T> & Gettable<T> & Settable<T> => {
+  <T>(target: EagerSubject<T>): EagerSubject<T> => {
     const delay = getDelay(options)
     const initialValue = target.get()
 

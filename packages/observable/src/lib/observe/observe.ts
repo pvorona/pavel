@@ -1,5 +1,6 @@
 import { collectValues as collectValuesUtil } from '../utils'
-import { Lambda, Observable, Gettable, ObservedTypesOf } from '../types'
+import { Lambda, ObservedTypesOf } from '../types'
+import { ReadonlySubject } from '..'
 
 export type ObserveOptions = {
   readonly collectValues?: boolean
@@ -21,18 +22,18 @@ const DEFAULT_OPTIONS: ObserveOptions = {
   fireImmediately: true,
 }
 
-export function observe<T extends (Observable<unknown> & Gettable<unknown>)[]>(
+export function observe<T extends ReadonlySubject<unknown>[]>(
   deps: readonly [...T],
   observer: (...args: ObservedTypesOf<T>) => void,
   options?: CollectingValuesOptions,
 ): Lambda
-export function observe<T extends (Observable<unknown> & Gettable<unknown>)[]>(
+export function observe<T extends ReadonlySubject<unknown>[]>(
   deps: readonly [...T],
   observer: () => void,
   options?: NotCollectingValuesOptions,
 ): Lambda
 export function observe(
-  deps: readonly (Observable<unknown> & Gettable<unknown>)[],
+  deps: readonly ReadonlySubject<unknown>[],
   externalObserver: (...args: unknown[]) => void,
   {
     fireImmediately = DEFAULT_OPTIONS.fireImmediately,

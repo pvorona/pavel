@@ -1,20 +1,16 @@
-import { collectValues, notifyAll, removeFirstElementOccurrence } from '../utils'
 import {
-  Lambda,
-  Gettable,
-  LazyObservable,
-  Observable,
-  ObservedTypesOf,
-} from '../types'
+  collectValues,
+  notifyAll,
+  removeFirstElementOccurrence,
+} from '../utils'
+import { Lambda, ReadonlyLazySubject, ObservedTypesOf } from '../types'
 import { observe } from '../observe'
+import { ReadonlySubject } from '..'
 
-export function computeLazy<
-  A extends (Observable<unknown> & Gettable<unknown>)[],
-  T,
->(
+export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
   deps: readonly [...A],
   compute: (...args: ObservedTypesOf<A>) => T,
-): LazyObservable & Gettable<T> {
+): ReadonlyLazySubject<T> {
   const observers: Lambda[] = []
   let value: T
   let dirty = true

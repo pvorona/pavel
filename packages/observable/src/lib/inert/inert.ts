@@ -1,9 +1,8 @@
 import {
   Lambda,
-  LazyObservable,
-  Gettable,
+  ReadonlyEagerSubject,
+  ReadonlyLazySubject,
   ObservedTypeOf,
-  EagerObservable,
 } from '../types'
 import {
   createGroupTransition,
@@ -19,7 +18,7 @@ import { notifyAll, removeFirstElementOccurrence } from '../utils'
 import { observe } from '../observe'
 import { Easing } from '@pavel/easing'
 
-type Options =
+export type InertOptions =
   | {
       duration: number
       easing?: Easing
@@ -33,19 +32,21 @@ type Collection<T> = Record<string, T>
 type AnimatableCollection = Collection<AnimatableValue>
 
 type AnimatableTarget =
-  | (EagerObservable<AnimatableValue> & Gettable<AnimatableValue>)
-  | (EagerObservable<AnimatableCollection> & Gettable<AnimatableCollection>)
-  | (LazyObservable & Gettable<AnimatableValue>)
-  | (LazyObservable & Gettable<AnimatableCollection>)
+  | ReadonlyEagerSubject<AnimatableValue>
+  | ReadonlyEagerSubject<AnimatableCollection>
+  | ReadonlyLazySubject<AnimatableValue>
+  | ReadonlyLazySubject<AnimatableCollection>
 
-// type State = { value: number }
-type InertSubject<T> = LazyObservable &
-  Gettable<T> & {
-    setTransition: (options: Options) => void
-  }
+export type InertSubject<T> = ReadonlyLazySubject<T> & {
+  setTransition: (options: InertOptions) => void
+}
+
+// type State =
+//   | { value: AnimatableValue, transition: Transition<AnimatableValue> }
+//   | { value: AnimatableCollection, transition: Transition<Record<string,AnimatableValue>>}
 
 export const inert =
-  (options: Options) =>
+  (options: InertOptions) =>
   <T extends AnimatableTarget>(target: T): InertSubject<ObservedTypeOf<T>> => {
     let value = target.get()
     let transition = constructTransition(value, options)
@@ -81,7 +82,7 @@ export const inert =
 
     observe([target], setTarget as any, { fireImmediately: false })
 
-    const setTransition = (newOptions: Options) => {
+    const setTransition = (newOptions: InertOptions) => {
       transition = constructTransition(transition.getCurrentValue(), newOptions)
     }
 
@@ -100,7 +101,7 @@ export const inert =
 
 const constructTransition = (
   value: AnimatableValue | AnimatableCollection,
-  options: Options,
+  options: InertOptions,
 ) => {
   if (typeof value === 'object') {
     const transitions = createTransitions(value, options)
@@ -115,7 +116,7 @@ const constructTransition = (
 
 const createTransitions = (
   collection: Record<string, number>,
-  options: Options,
+  options: InertOptions,
 ) => {
   const transitions: Record<
     keyof typeof collection,
@@ -132,7 +133,7 @@ const createTransitions = (
 }
 
 function createTransitionOptions(
-  optionsOrDuration: Options,
+  optionsOrDuration: InertOptions,
   initialValue: number,
 ): TransitionOptions {
   return typeof optionsOrDuration === 'number'
