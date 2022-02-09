@@ -1,7 +1,8 @@
-import { Lambda, Gettable, Observable, ObservedTypesOf } from '../types'
+import { Lambda, ObservedTypesOf } from '../types'
 import { createScheduleTaskWithCleanup } from '@pavel/scheduling'
 import { collectValues } from '../utils'
 import { observe } from '../observe'
+import { ReadonlySubject } from '..'
 
 type Options = {
   readonly fireImmediately?: boolean
@@ -11,7 +12,7 @@ const DEFAULT_OPTIONS: Options = {
   fireImmediately: true,
 }
 
-export function effect<T extends (Observable<unknown> & Gettable<unknown>)[]>(
+export function effect<T extends ReadonlySubject<unknown>[]>(
   deps: readonly [...T],
   observer: (...args: ObservedTypesOf<T>) => void,
   options = DEFAULT_OPTIONS,

@@ -1,9 +1,9 @@
 import { removeFirstElementOccurrence, notifyAllWithValue } from '../utils'
-import { Observer, EagerObservable, Settable, Gettable } from '../types'
+import { Observer, EagerSubject } from '../types'
 
 export function observable<T>(
   initialValue: T,
-): EagerObservable<T> & Settable<T> & Gettable<T> {
+): EagerSubject<T> {
   let value = initialValue
   const observers: Observer<T>[] = []
 

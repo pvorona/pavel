@@ -18,6 +18,14 @@ export type Gettable<A> = {
   get: () => A
 }
 
+export type EagerSubject<T> = EagerObservable<T> & Settable<T> & Gettable<T>
+
+export type ReadonlyEagerSubject<T> = EagerObservable<T> & Gettable<T>
+
+export type ReadonlyLazySubject<T> = LazyObservable & Gettable<T>
+
+export type ReadonlySubject<T> = Observable<T> & Gettable<T>
+
 export type Observable<T> = EagerObservable<T> | LazyObservable
 
 export type ObservedTypesOf<

@@ -1,19 +1,15 @@
 import { observable } from '../observable'
 import { observe } from '../observe'
 import {
-  EagerObservable,
-  Gettable,
+  ReadonlyEagerSubject,
   ObservedTypesOf,
-  Observable,
+  ReadonlySubject,
 } from '../types'
 
-export function compute<
-  A extends (Observable<unknown> & Gettable<unknown>)[],
-  T,
->(
+export function compute<A extends ReadonlySubject<unknown>[], T>(
   deps: readonly [...A],
   compute: (...args: ObservedTypesOf<A>) => T,
-): EagerObservable<T> & Gettable<T> {
+): ReadonlyEagerSubject<T> {
   const obs = observable(undefined as unknown as T)
 
   observe(deps, (...values) => {
