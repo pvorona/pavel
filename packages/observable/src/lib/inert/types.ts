@@ -5,6 +5,7 @@ export type InertOptions =
   | {
       duration: number
       easing?: Easing
+      name?: string
     }
   | number
 

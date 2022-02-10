@@ -9,6 +9,11 @@ export enum URGENCY {
   NEXT_FRAME,
 }
 
+export enum PHASE {
+  INTERACTING,
+  RENDERING,
+}
+
 export const PRIORITIES_IN_ORDER = [
   PRIORITY.READ,
   PRIORITY.COMPUTE,

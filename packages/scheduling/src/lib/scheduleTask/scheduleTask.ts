@@ -1,25 +1,25 @@
-import { PRIORITY, URGENCY } from '../constants'
+import { PHASE } from '..'
+import { PRIORITY } from '../constants'
 import {
   queueByPriority,
   scheduleExecutionIfNeeded,
   futureQueueByPriority,
+  phase,
 } from '../scheduling'
 import { Lambda } from '../types'
 
-export function scheduleTask(
-  task: Lambda,
-  priority = PRIORITY.WRITE,
-  urgency = URGENCY.CURRENT_FRAME,
-): Lambda {
+export function scheduleTask(task: Lambda, priority = PRIORITY.WRITE): Lambda {
   // Capture queue of the current frame
   // to prevent modifications of the future queues
   // when cancelling this task
   const queue =
-    urgency === URGENCY.CURRENT_FRAME ? queueByPriority : futureQueueByPriority
+    phase === PHASE.INTERACTING ? queueByPriority : futureQueueByPriority
   const { isCancelledByIndex, tasks } = queue[priority]
   const nextIndex = tasks.push(task)
 
-  scheduleExecutionIfNeeded()
+  if (phase === PHASE.INTERACTING) {
+    scheduleExecutionIfNeeded()
+  }
 
   return function cancelTask() {
     isCancelledByIndex[nextIndex - 1] = true
