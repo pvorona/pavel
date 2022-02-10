@@ -1,9 +1,5 @@
 import { Lambda, ObservedTypeOf } from '../types'
-import {
-  createScheduleTaskWithCleanup,
-  PRIORITY,
-  URGENCY,
-} from '@pavel/scheduling'
+import { oncePerFrame, PRIORITY } from '@pavel/scheduling'
 import { notifyAll, removeFirstElementOccurrence } from '../utils'
 import { observe } from '../observe'
 import { AnimatableTarget, InertOptions, InertSubject } from './types'
@@ -28,10 +24,9 @@ export const inert =
       }
     }
 
-    const scheduleNotifyWithCleanup = createScheduleTaskWithCleanup(
+    const scheduleNotifyWithCleanup = oncePerFrame(
       notify,
       PRIORITY.COMPUTE,
-      URGENCY.NEXT_FRAME,
     )
 
     const get = () => {

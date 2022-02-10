@@ -84,6 +84,8 @@ export const ChartContext = (options: ChartOptions) => {
     max: visibleMax,
   } = createMinMaxView(startIndex, endIndex, enabledGraphNames, options.data)
 
+  ;(window as any).startIndex = startIndex
+  
   const inertVisibleMax = inert({
     duration: Transition.Slow,
     easing: easeInOutQuart,

@@ -1,5 +1,5 @@
 import { Lambda, ObservedTypesOf } from '../types'
-import { createScheduleTaskWithCleanup } from '@pavel/scheduling'
+import { oncePerFrame } from '@pavel/scheduling'
 import { collectValues } from '../utils'
 import { observe } from '../observe'
 import { ReadonlySubject } from '..'
@@ -17,7 +17,7 @@ export function effect<T extends ReadonlySubject<unknown>[]>(
   observer: (...args: ObservedTypesOf<T>) => void,
   options = DEFAULT_OPTIONS,
 ): Lambda {
-  const scheduleNotifyWithCleanup = createScheduleTaskWithCleanup(
+  const scheduleNotifyWithCleanup = oncePerFrame(
     function performEffect() {
       observer(...collectValues(deps))
     },

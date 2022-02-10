@@ -1,19 +1,22 @@
 import { Lambda } from '../types'
-import { PRIORITY, URGENCY } from '../constants'
+import { PHASE, PRIORITY } from '../constants'
 import { scheduleTask } from '../scheduleTask'
+import { phase } from '../scheduling'
 
 export function createScheduleTaskWithCleanup(
   task: Lambda,
   priority?: PRIORITY,
-  urgency = URGENCY.CURRENT_FRAME,
 ): Lambda {
   let cancelTask: undefined | Lambda
 
   return function scheduleTaskAndCleanUpIfNeeded() {
-    if (cancelTask) {
+    // Only cancel if
+    // 1. was not executed
+    // 2. phase is rendering
+    if (cancelTask && phase !== PHASE.RENDERING) {
       cancelTask()
     }
 
-    cancelTask = scheduleTask(task, priority, urgency)
+    cancelTask = scheduleTask(task, priority)
   }
 }

@@ -1,9 +1,12 @@
 import { QueueByPriority } from './types'
-import { PRIORITY, PRIORITIES_IN_ORDER } from './constants'
+import { PRIORITY, PHASE, PRIORITIES_IN_ORDER } from './constants'
 import { createQueue } from './createQueue'
 
 let executionFrameId: undefined | number = undefined
 
+export let phase = PHASE.INTERACTING
+
+// iterate over constant array
 export const queueByPriority: QueueByPriority = {
   [PRIORITY.READ]: createQueue(),
   [PRIORITY.COMPUTE]: createQueue(),
@@ -17,12 +20,21 @@ export const futureQueueByPriority: QueueByPriority = {
 }
 
 export function scheduleExecutionIfNeeded() {
-  if (executionFrameId) return
+  if (executionFrameId !== undefined) return
 
+  // if (phase === PHASE.INTERACTING) {
   executionFrameId = requestAnimationFrame(performScheduledTasks)
+  // } else {
+  //   executionFrameId = requestIdleCallback(() =>
+  //     requestAnimationFrame(performScheduledTasks),
+  //   )
+  // }
 }
 
-function performScheduledTasks() {
+function performScheduledTasks(now: DOMHighResTimeStamp) {
+  console.log(`Frame start: ${performance.now()}`)
+  phase = PHASE.RENDERING
+
   for (const priority of PRIORITIES_IN_ORDER) {
     const { tasks, isCancelledByIndex } = queueByPriority[priority]
 
@@ -34,26 +46,34 @@ function performScheduledTasks() {
       tasks[i]()
     }
 
-    queueByPriority[priority] = createQueue()
+    if (tasks.length !== 0) {
+      queueByPriority[priority] = createQueue()
+    }
   }
 
   // Should be cleared before calling `schedulePerformWorkIfNeeded`
   executionFrameId = undefined
 
-  const anyTaskScheduledDuringExecution =
-    futureQueueByPriority[PRIORITY.READ].tasks.length !== 0 ||
-    futureQueueByPriority[PRIORITY.COMPUTE].tasks.length !== 0 ||
-    futureQueueByPriority[PRIORITY.WRITE].tasks.length !== 0
+  let anyTaskScheduledDuringRendering = false
 
-  if (anyTaskScheduledDuringExecution) {
-    scheduleExecutionIfNeeded()
-
-    queueByPriority[PRIORITY.READ] = futureQueueByPriority[PRIORITY.READ]
-    queueByPriority[PRIORITY.COMPUTE] = futureQueueByPriority[PRIORITY.COMPUTE]
-    queueByPriority[PRIORITY.WRITE] = futureQueueByPriority[PRIORITY.WRITE]
-
-    futureQueueByPriority[PRIORITY.READ] = createQueue()
-    futureQueueByPriority[PRIORITY.COMPUTE] = createQueue()
-    futureQueueByPriority[PRIORITY.WRITE] = createQueue()
+  for (const priority of PRIORITIES_IN_ORDER) {
+    // Check if not all cancelled
+    if (futureQueueByPriority[priority].tasks.length !== 0) {
+      anyTaskScheduledDuringRendering = true
+      // No need to create new queue
+      // Current frame queue already re-initialized
+      ;[queueByPriority[priority], futureQueueByPriority[priority]] = [
+        futureQueueByPriority[priority],
+        queueByPriority[priority],
+      ]
+    }
   }
+
+  if (anyTaskScheduledDuringRendering) {
+    scheduleExecutionIfNeeded()
+  }
+
+  phase = PHASE.INTERACTING
+
+  console.log(`Frame end: ${performance.now()}`)
 }

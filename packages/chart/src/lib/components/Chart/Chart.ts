@@ -6,7 +6,7 @@ import { YAxis } from '../YAxisV2'
 import { Tooltip } from '../Tooltip'
 import { Series } from '../Series'
 import { ChartContext } from '../Context'
-import { createScheduleTaskWithCleanup, PRIORITY } from '@pavel/scheduling'
+import { oncePerFrame, PRIORITY } from '@pavel/scheduling'
 import { validateConfig } from '../../config'
 
 export const Chart = (uncheckedOptions: ChartOptions) => {
@@ -15,7 +15,7 @@ export const Chart = (uncheckedOptions: ChartOptions) => {
   const { width, height } = context
   const { element } = createDOM()
 
-  const resizeListener = createScheduleTaskWithCleanup(
+  const resizeListener = oncePerFrame(
     function measureContainerSize() {
       width.set(element.offsetWidth)
       height.set(element.offsetHeight)

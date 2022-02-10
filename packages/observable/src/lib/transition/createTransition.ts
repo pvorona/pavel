@@ -17,13 +17,13 @@ export function createTransition({
   let startTime = performance.now()
   let startValue = initialValue
   let targetValue = initialValue
-  let hasCompleted = true
+  // let hasCompleted = true
 
   const getCurrentValue = () => {
     const progress = Math.min((performance.now() - startTime) / duration, 1)
 
     if (progress === 1) {
-      hasCompleted = true
+      // hasCompleted = true
     }
 
     return startValue + (targetValue - startValue) * easing(progress)
@@ -36,13 +36,15 @@ export function createTransition({
 
     startValue = getCurrentValue()
     targetValue = newTargetValue
-    hasCompleted = false
+    // hasCompleted = startValue !== newTargetValue
     startTime = performance.now()
   }
 
   return {
     getCurrentValue,
     setTargetValue,
-    hasCompleted: () => hasCompleted,
+    hasCompleted: () => {
+      return performance.now() > startTime + duration
+    },
   }
 }

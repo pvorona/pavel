@@ -4,9 +4,9 @@ export enum PRIORITY {
   WRITE,
 }
 
-export enum URGENCY {
-  CURRENT_FRAME,
-  NEXT_FRAME,
+export enum PHASE {
+  INTERACTING,
+  RENDERING,
 }
 
 export const PRIORITIES_IN_ORDER = [

@@ -67,6 +67,8 @@ export const Series: Component<ChartOptions, ChartContext> = (
     points: { [key: string]: Point[] },
     opacityState: { [key: string]: number },
   ) {
+    console.log('POINTS')
+
     renderLineSeriesWithAreaGradient({
       points,
       opacityState,
