@@ -5,6 +5,7 @@ import {
   observe,
   resetWhenInactive,
   inert,
+  inertV2,
 } from '@pavel/observable'
 import { ChartOptions } from '../../types'
 import {
@@ -74,9 +75,9 @@ export const ChartContext = (options: ChartOptions) => {
     },
   )
 
-  const inertStartIndex = inert(Transition.Fast)(startIndex)
+  const inertStartIndex = inertV2(Transition.Fast)(startIndex)
 
-  const inertEndIndex = inert(Transition.Fast)(endIndex)
+  const inertEndIndex = inertV2(Transition.Fast)(endIndex)
 
   const {
     minMaxByGraphName: visibleMinMaxByGraphName,
@@ -84,12 +85,13 @@ export const ChartContext = (options: ChartOptions) => {
     max: visibleMax,
   } = createMinMaxView(startIndex, endIndex, enabledGraphNames, options.data)
 
-  const inertVisibleMax = inert({
+  const inertVisibleMax = inertV2({
     duration: Transition.Slow,
     easing: easeInOutQuart,
+    name: 'inertVisibleMax'
   })(visibleMax)
 
-  const inertVisibleMin = inert({
+  const inertVisibleMin = inertV2({
     duration: Transition.Slow,
     easing: easeInOutQuart,
   })(visibleMin)
@@ -101,12 +103,12 @@ export const ChartContext = (options: ChartOptions) => {
     options.data,
   )
 
-  const inertGlobalMax = inert({
+  const inertGlobalMax = inertV2({
     duration: Transition.Slow,
     easing: easeInOutQuart,
   })(globalMax)
 
-  const inertGlobalMin = inert({
+  const inertGlobalMin = inertV2({
     duration: Transition.Slow,
     easing: easeInOutQuart,
   })(globalMin)

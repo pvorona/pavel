@@ -1,11 +1,10 @@
 import { Lambda } from '../types'
-import { PRIORITY, URGENCY } from '../constants'
+import { PRIORITY } from '../constants'
 import { scheduleTask } from '../scheduleTask'
 
 export function createScheduleTaskWithCleanup(
   task: Lambda,
   priority?: PRIORITY,
-  urgency = URGENCY.CURRENT_FRAME,
 ): Lambda {
   let cancelTask: undefined | Lambda
 
@@ -14,6 +13,6 @@ export function createScheduleTaskWithCleanup(
       cancelTask()
     }
 
-    cancelTask = scheduleTask(task, priority, urgency)
+    cancelTask = scheduleTask(task, priority)
   }
 }

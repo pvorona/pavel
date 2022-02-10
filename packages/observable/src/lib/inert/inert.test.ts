@@ -8,10 +8,6 @@ describe('with numbers', () => {
     jest.useFakeTimers()
   })
 
-  afterAll(() => {
-    jest.useRealTimers()
-  })
-
   it('starts with initial value', () => {
     const o = observable(0)
     const animation = inert(Duration)(o)

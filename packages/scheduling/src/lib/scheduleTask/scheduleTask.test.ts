@@ -1,11 +1,9 @@
-/**
- * @jest-environment jsdom
- */
-
 import { scheduleTask } from './scheduleTask'
 import { PRIORITY } from '../constants'
 
 const FRAME_INTERVAL = 100
+
+// test tasks scheduling other tasks
 
 describe('scheduleTask', () => {
   let frameIndex = 0

@@ -1,8 +1,10 @@
 import { QueueByPriority } from './types'
-import { PRIORITY, PRIORITIES_IN_ORDER } from './constants'
+import { PRIORITY, PHASE, PRIORITIES_IN_ORDER } from './constants'
 import { createQueue } from './createQueue'
 
 let executionFrameId: undefined | number = undefined
+
+export let phase = PHASE.INTERACTING
 
 export const queueByPriority: QueueByPriority = {
   [PRIORITY.READ]: createQueue(),
@@ -17,12 +19,15 @@ export const futureQueueByPriority: QueueByPriority = {
 }
 
 export function scheduleExecutionIfNeeded() {
-  if (executionFrameId) return
+  if (executionFrameId !== undefined) return
 
   executionFrameId = requestAnimationFrame(performScheduledTasks)
 }
 
 function performScheduledTasks() {
+  console.log('----FRAME WORK START----')
+  phase = PHASE.RENDERING
+
   for (const priority of PRIORITIES_IN_ORDER) {
     const { tasks, isCancelledByIndex } = queueByPriority[priority]
 
@@ -34,26 +39,39 @@ function performScheduledTasks() {
       tasks[i]()
     }
 
-    queueByPriority[priority] = createQueue()
+    if (tasks.length !== 0) {
+      queueByPriority[priority] = createQueue()
+    }
   }
 
   // Should be cleared before calling `schedulePerformWorkIfNeeded`
   executionFrameId = undefined
 
-  const anyTaskScheduledDuringExecution =
-    futureQueueByPriority[PRIORITY.READ].tasks.length !== 0 ||
-    futureQueueByPriority[PRIORITY.COMPUTE].tasks.length !== 0 ||
-    futureQueueByPriority[PRIORITY.WRITE].tasks.length !== 0
+  let anyTaskScheduledDuringExecution = false
+
+  for (const priority of PRIORITIES_IN_ORDER) {
+    // Check if not all cancelled
+    if (futureQueueByPriority[priority].tasks.length !== 0) {
+      anyTaskScheduledDuringExecution = true
+      // No need to create new queue
+      // Current frame queue already re-initialized
+      ;[queueByPriority[priority], futureQueueByPriority[priority]] = [
+        futureQueueByPriority[priority],
+        queueByPriority[priority],
+      ]
+    }
+  }
 
   if (anyTaskScheduledDuringExecution) {
     scheduleExecutionIfNeeded()
-
-    queueByPriority[PRIORITY.READ] = futureQueueByPriority[PRIORITY.READ]
-    queueByPriority[PRIORITY.COMPUTE] = futureQueueByPriority[PRIORITY.COMPUTE]
-    queueByPriority[PRIORITY.WRITE] = futureQueueByPriority[PRIORITY.WRITE]
-
-    futureQueueByPriority[PRIORITY.READ] = createQueue()
-    futureQueueByPriority[PRIORITY.COMPUTE] = createQueue()
-    futureQueueByPriority[PRIORITY.WRITE] = createQueue()
   }
+
+  phase = PHASE.INTERACTING
+  console.log('----FRAME WORK END----')
 }
+
+// function swapElements (collection: unknown[], leftIndex:number,rightIndex:number){
+//   const temp = collection[leftIndex]
+//   collection[leftIndex] =
+//   collection[rightIndex]=temp
+// }
