@@ -25,9 +25,9 @@ export type EagerSubject<T> = EagerObservable<T> &
   Gettable<T> &
   Named
 
-export type ReadonlyEagerSubject<T> = EagerObservable<T> & Gettable<T>
+export type ReadonlyEagerSubject<T> = EagerObservable<T> & Gettable<T> & Named
 
-export type ReadonlyLazySubject<T> = LazyObservable & Gettable<T>
+export type ReadonlyLazySubject<T> = LazyObservable & Gettable<T> & Named
 
 export type ReadonlySubject<T> = Observable<T> & Gettable<T>
 

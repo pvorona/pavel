@@ -1,8 +1,7 @@
-import { Lambda, ObservedTypesOf } from '../types'
+import { Lambda, ObservedTypesOf, ReadonlySubject } from '../types'
 import { createScheduleTaskWithCleanup } from '@pavel/scheduling'
 import { collectValues } from '../utils'
 import { observe } from '../observe'
-import { ReadonlySubject } from '..'
 
 type Options = {
   readonly fireImmediately?: boolean
