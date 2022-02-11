@@ -1,13 +1,9 @@
 import { Lambda, ObservedTypeOf } from '../types'
-import {
-  createScheduleTaskWithCleanup,
-  PRIORITY,
-  URGENCY,
-} from '@pavel/scheduling'
 import { notifyAll, removeFirstElementOccurrence } from '../utils'
 import { observe } from '../observe'
 import { AnimatableTarget, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
+import { requestIdleCallback, cancelIdleCallback } from './requestIdleCallback'
 
 // type State =
 //   | { value: AnimatableValue, transition: Transition<AnimatableValue> }
@@ -16,26 +12,25 @@ import { constructTransition } from './constructTransition'
 export const inert =
   (options: InertOptions) =>
   <T extends AnimatableTarget>(target: T): InertSubject<ObservedTypeOf<T>> => {
+    // Can get lazy. Use case for idleUntilUrgent?
     let value = target.get()
     let transition = constructTransition(value, options)
+    let idleCallbackId: undefined | number = undefined
+
     const observers: Lambda[] = []
 
-    function notify() {
+    function notifyAndClearIdleCallback() {
       notifyAll(observers)
-
-      if (!transition.hasCompleted()) {
-        scheduleNotifyWithCleanup()
-      }
+      idleCallbackId = undefined
     }
 
-    const scheduleNotifyWithCleanup = createScheduleTaskWithCleanup(
-      notify,
-      PRIORITY.COMPUTE,
-      URGENCY.NEXT_FRAME,
-    )
-
     const get = () => {
+      // TODO: only compute value once per frame
       value = transition.getCurrentValue()
+
+      if (!transition.hasCompleted() && idleCallbackId === undefined) {
+        idleCallbackId = requestIdleCallback(notifyAndClearIdleCallback)
+      }
 
       return value
     }
@@ -43,8 +38,9 @@ export const inert =
     const setTarget = (newTarget: ObservedTypeOf<T>) => {
       transition.setTargetValue(newTarget as any)
 
-      if (!transition.hasCompleted()) {
-        notify()
+      if (!transition.hasCompleted() && idleCallbackId === undefined) {
+        // notifyAndClearIdleCallback()
+        idleCallbackId = requestIdleCallback(notifyAndClearIdleCallback)
       }
     }
 
