@@ -1,11 +1,11 @@
 import { Easing } from '@pavel/easing'
-import { ReadonlyEagerSubject, ReadonlyLazySubject } from '../types'
+import { ReadonlyEagerSubject, ReadonlyLazySubject,Named } from '../types'
 
 export type InertOptions =
-  | {
+  | ({
       duration: number
       easing?: Easing
-    }
+    } & Partial<Named>)
   | number
 
 export type AnimatableValue = number

@@ -18,19 +18,29 @@ import { mapDataToCoords, createMinMaxView } from '../../util'
 import { easeInOutQuart } from '@pavel/easing'
 
 export const ChartContext = (options: ChartOptions) => {
-  const globalStartIndex = observable(0)
-  const globalEndIndex = observable(options.total - 1)
-  const width = observable(options.width)
-  const height = observable(options.height)
-  const canvasHeight = observable(computeCanvasHeight(height.get()))
-  const startIndex = observable(options.viewBox.startIndex)
-  const endIndex = observable(options.viewBox.endIndex)
-  const mouseX = observable(0)
-  const isHovering = observable(false)
-  const isDragging = observable(false)
-  const isGrabbingGraphs = observable(false)
-  const isWheeling = resetWhenInactive(WHEEL_CLEAR_TIMEOUT)(observable(false))
-  const activeCursor = observable(cursor.default)
+  const globalStartIndex = observable(0, {
+    name: 'globalStartIndex',
+  })
+  const globalEndIndex = observable(options.total - 1, {
+    name: 'globalEndIndex',
+  })
+  const width = observable(options.width, { name: 'width' })
+  const height = observable(options.height, { name: 'height' })
+  const canvasHeight = observable(computeCanvasHeight(height.get()), {
+    name: 'canvasHeight',
+  })
+  const startIndex = observable(options.viewBox.startIndex, {
+    name: 'startIndex',
+  })
+  const endIndex = observable(options.viewBox.endIndex, { name: 'endIndex' })
+  const mouseX = observable(0, { name: 'mouseX' })
+  const isHovering = observable(false, { name: 'isHovering' })
+  const isDragging = observable(false, { name: 'isDragging' })
+  const isGrabbingGraphs = observable(false, { name: 'isGrabbingGraphs' })
+  const isWheeling = resetWhenInactive(WHEEL_CLEAR_TIMEOUT)(
+    observable(false, { name: 'isWheeling' }),
+  )
+  const activeCursor = observable(cursor.default, { name: 'activeCursor' })
   const enabledStateByGraphName = observable(
     options.graphNames.reduce(
       (state, graphName) => ({
@@ -39,6 +49,7 @@ export const ChartContext = (options: ChartOptions) => {
       }),
       {} as EnabledGraphNames,
     ),
+    { name: 'enabledStateByGraphName' },
   )
 
   function computeCanvasHeight(containerHeight: number) {

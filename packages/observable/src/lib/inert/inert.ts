@@ -8,14 +8,14 @@ import { notifyAll, removeFirstElementOccurrence } from '../utils'
 import { observe } from '../observe'
 import { AnimatableTarget, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
+import { createName, wrapName } from '../createName'
 
-// type State =
-//   | { value: AnimatableValue, transition: Transition<AnimatableValue> }
-//   | { value: AnimatableCollection, transition: Transition<Record<string,AnimatableValue>>}
+const INERT_GROUP = 'Inert'
 
 export const inert =
   (options: InertOptions) =>
   <T extends AnimatableTarget>(target: T): InertSubject<ObservedTypeOf<T>> => {
+    const name = wrapName(createName(INERT_GROUP, options), target.name)
     let value = target.get()
     let transition = constructTransition(value, options)
     const observers: Lambda[] = []
@@ -55,6 +55,7 @@ export const inert =
     }
 
     return {
+      name,
       setTransition,
       get: get as any,
       observe(observer) {

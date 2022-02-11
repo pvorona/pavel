@@ -3,14 +3,26 @@ import {
   notifyAll,
   removeFirstElementOccurrence,
 } from '../utils'
-import { Lambda, ReadonlyLazySubject, ObservedTypesOf } from '../types'
+import {
+  Lambda,
+  ReadonlyLazySubject,
+  ObservedTypesOf,
+  Named,
+  ReadonlySubject,
+} from '../types'
 import { observe } from '../observe'
-import { ReadonlySubject } from '..'
+import { createName } from '../createName'
+
+const COMPUTE_LAZY_GROUP = 'ComputeLazy'
+
+export type ComputeLazyOptions = Partial<Named>
 
 export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
   deps: readonly [...A],
   compute: (...args: ObservedTypesOf<A>) => T,
+  options?: ComputeLazyOptions,
 ): ReadonlyLazySubject<T> {
+  const name = createName(COMPUTE_LAZY_GROUP, options, compute.name)
   const observers: Lambda[] = []
   let value: T
   let dirty = true
@@ -29,6 +41,7 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
   }
 
   return {
+    name,
     get() {
       if (dirty) {
         value = recompute()

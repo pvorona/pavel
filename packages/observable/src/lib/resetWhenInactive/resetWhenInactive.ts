@@ -1,14 +1,21 @@
-import { EagerSubject } from '../types'
+import { createName, wrapName } from '../createName'
+import { EagerSubject, Named } from '../types'
 
 type ResetWhenInactiveOptions =
-  | {
+  | ({
       delay: number
-    }
+    } & Partial<Named>)
   | number
+
+const RESET_WHEN_INACTIVE_GROUP = 'ResetWhenInactive'
 
 export const resetWhenInactive =
   (options: ResetWhenInactiveOptions) =>
   <T>(target: EagerSubject<T>): EagerSubject<T> => {
+    const name = wrapName(
+      createName(RESET_WHEN_INACTIVE_GROUP, options),
+      target.name,
+    )
     const delay = getDelay(options)
     const initialValue = target.get()
 
@@ -19,6 +26,7 @@ export const resetWhenInactive =
     }
 
     return {
+      name,
       set(newValueOrFactory) {
         if (timeoutId) {
           clearTimeout(timeoutId)
