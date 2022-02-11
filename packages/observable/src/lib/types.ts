@@ -18,7 +18,12 @@ export type Gettable<A> = {
   get: () => A
 }
 
-export type EagerSubject<T> = EagerObservable<T> & Settable<T> & Gettable<T>
+export type Named = Readonly<{ name: string }>
+
+export type EagerSubject<T> = EagerObservable<T> &
+  Settable<T> &
+  Gettable<T> &
+  Named
 
 export type ReadonlyEagerSubject<T> = EagerObservable<T> & Gettable<T>
 
