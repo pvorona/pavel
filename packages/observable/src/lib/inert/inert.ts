@@ -13,8 +13,7 @@ export const inert =
   (options: InertOptions) =>
   <T extends AnimatableTarget>(target: T): InertSubject<ObservedTypeOf<T>> => {
     // Can get lazy. Use case for idleUntilUrgent?
-    let value = target.get()
-    let transition = constructTransition(value, options)
+    let transition = constructTransition(target.get(), options)
     let idleCallbackId: undefined | number = undefined
 
     const observers: Lambda[] = []
@@ -26,7 +25,7 @@ export const inert =
 
     const get = () => {
       // TODO: only compute value once per frame
-      value = transition.getCurrentValue()
+      const value = transition.getCurrentValue()
 
       if (!transition.hasCompleted() && idleCallbackId === undefined) {
         idleCallbackId = requestIdleCallback(notifyAndClearIdleCallback)

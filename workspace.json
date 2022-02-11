@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "cache": "packages/cache",
     "chart": "packages/chart",
     "chart-demo": "packages/chart-demo",
     "chart-demo-e2e": "packages/chart-demo-e2e",

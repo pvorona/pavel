@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@pavel/cache": ["packages/cache/src/index.ts"],
       "@pavel/chart": ["packages/chart/src/index.ts"],
       "@pavel/easing": ["packages/easing/src/index.ts"],
       "@pavel/observable": ["packages/observable/src/index.ts"],

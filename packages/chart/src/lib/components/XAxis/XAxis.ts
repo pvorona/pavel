@@ -1,9 +1,9 @@
+import { createCache } from '@pavel/cache'
 import { computeLazy, effect } from '@pavel/observable'
 import { ChartContext, ChartOptions } from '../../types'
 import {
   toScreenX,
   toBitMapSize,
-  createCache,
   getClosestGreaterOrEqualDivisibleInt,
 } from '../../util'
 import { clearRect, setCanvasSize } from '../renderers'

@@ -1,9 +1,18 @@
 import { removeFirstElementOccurrence, notifyAllWithValue } from '../utils'
 import { Observer, EagerSubject } from '../types'
+import { createName } from '../createName'
+
+export type ObservableOptions = {
+  name?: string
+}
+
+const GROUP_NAME = 'Observable'
 
 export function observable<T>(
   initialValue: T,
+  options?: ObservableOptions
 ): EagerSubject<T> {
+  const name = createName(GROUP_NAME, options)
   let value = initialValue
   const observers: Observer<T>[] = []
 
@@ -12,6 +21,7 @@ export function observable<T>(
   }
 
   return {
+    name,
     set(newValueOrFactory) {
       const newValue =
         newValueOrFactory instanceof Function
