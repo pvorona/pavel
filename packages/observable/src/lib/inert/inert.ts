@@ -34,6 +34,7 @@ export const inert =
     const get = () => {
       // TODO: only compute value once per frame
       // TODO: compute value using requestAnimationFrame parameter instead of performance.now()
+      // Order matters here
       const value = transition.getCurrentValue()
 
       // TODO: don't emit values when there are no observers.
