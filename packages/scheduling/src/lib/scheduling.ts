@@ -27,6 +27,8 @@ export function scheduleExecutionIfNeeded() {
 }
 
 function performScheduledTasks() {
+  console.log('START------------------')
+
   for (const priority of PRIORITIES_IN_ORDER) {
     const { tasks, isCancelledByIndex } = queueByPriority[priority]
 
@@ -60,4 +62,6 @@ function performScheduledTasks() {
     futureQueueByPriority[PRIORITY.COMPUTE] = createQueue()
     futureQueueByPriority[PRIORITY.WRITE] = createQueue()
   }
+
+  console.log('------------------END')
 }

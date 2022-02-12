@@ -4,7 +4,7 @@ import { observe } from '../observe'
 import { AnimatableTarget, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
 import { createName, wrapName } from '../createName'
-import { PRIORITY,scheduleTask } from '@pavel/scheduling'
+import { PRIORITY, scheduleTask } from '@pavel/scheduling'
 
 const INERT_GROUP = 'Inert'
 
@@ -16,14 +16,25 @@ export const inert =
     let transition = constructTransition(target.get(), options)
     const observers: Lambda[] = []
     let notificationScheduled = false
+    let cancelTask: undefined | Lambda
 
     function notifyBeforeNextRender() {
-      scheduleTask(() => {
+      cancelTask = scheduleTask(() => {
+        if (name) {
+          console.log(`notify ${name}`)
+        }
+
         notifyAll(observers)
+
+        notificationScheduled = false
       }, PRIORITY.BEFORE_RENDER)
     }
 
     const get = () => {
+      if (name) {
+        console.log(`get ${name}`)
+      }
+
       // TODO: only compute value once per frame
       // TODO: compute value using requestAnimationFrame parameter instead of performance.now()
       const value = transition.getCurrentValue()
@@ -41,9 +52,14 @@ export const inert =
     const setTarget = (newTarget: ObservedTypeOf<T>) => {
       transition.setTargetValue(newTarget as any)
 
-      if (!transition.hasCompleted() && !notificationScheduled) {
-        notificationScheduled = true
-        notifyBeforeNextRender()
+      if (!transition.hasCompleted()) {
+        notifyAll(observers)
+
+        notificationScheduled = false
+
+        if (cancelTask) {
+          cancelTask()
+        }
       }
     }
 
