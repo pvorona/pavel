@@ -1,16 +1,17 @@
-import { shallowEqual } from '../utils'
 import { Transition } from './types'
 
-// TODO:
-// - [ ] Store hasCompleted state internally to avoid unnecessary
+// TODO
+// - [x] Store hasCompleted state internally to avoid unnecessary
 //       computations when calling `getCurrentValue`
 // - [ ] Use class to avoid creating new functions for every transition
+// - [ ] Support { [key: string]: number } as initial value argument
 export function createGroupTransition(transitions: {
   [key: string]: Transition<number>
 }): Transition<{ [key: string]: number }> {
-  let state = computeState()
+  let currentValue = computeCurrentValue()
+  let hasCompleted = areTransitionsCompleted()
 
-  function computeState() {
+  function computeCurrentValue() {
     const newState: { [key: string]: number } = {}
 
     for (const key in transitions) {
@@ -21,25 +22,25 @@ export function createGroupTransition(transitions: {
   }
 
   function getCurrentValue() {
-    const newState = computeState()
-
-    if (shallowEqual(state, newState)) {
-      // Preserve referential transparency for selectors
-      return state
+    if (hasCompleted) {
+      return currentValue
     }
 
-    state = newState
+    currentValue = computeCurrentValue()
+    hasCompleted = areTransitionsCompleted()
 
-    return state
+    return currentValue
   }
 
   function setTargetValue(target: { [key: string]: number }) {
     for (const key in target) {
       transitions[key].setTargetValue(target[key])
     }
+
+    hasCompleted = areTransitionsCompleted()
   }
 
-  function hasCompleted() {
+  function areTransitionsCompleted() {
     for (const key in transitions) {
       if (!transitions[key].hasCompleted()) {
         return false
@@ -51,7 +52,7 @@ export function createGroupTransition(transitions: {
 
   return {
     setTargetValue,
-    hasCompleted,
+    hasCompleted: () => hasCompleted,
     getCurrentValue,
   }
 }

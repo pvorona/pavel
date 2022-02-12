@@ -9,21 +9,35 @@ export type TransitionOptions = {
 
 // TODO:
 // - [ ] Use class to avoid creating new functions for every transition
-export function createTransition({
+// - [ ] Get timestamp from requestAnimationFrame
+// - [ ] Compute value once per frame
+// - [x] Dont compute when completed
+
+export const createTransition = ({
+  initialValue,
   duration,
   easing = linear,
-  initialValue,
-}: TransitionOptions): Transition<number> {
-  let startTime = performance.now()
+}: TransitionOptions): Transition<number> => {
+  if (duration < 0) {
+    throw new Error(`Expected positive duration. Received ${duration}`)
+  }
+
+  let hasCompleted = true
+  let startTime = 0.0
   let startValue = initialValue
   let targetValue = initialValue
-  let hasCompleted = true
 
   const getCurrentValue = () => {
+    if (hasCompleted) {
+      return targetValue
+    }
+
     const progress = Math.min((performance.now() - startTime) / duration, 1)
 
     if (progress === 1) {
       hasCompleted = true
+
+      return targetValue
     }
 
     return startValue + (targetValue - startValue) * easing(progress)
@@ -34,15 +48,12 @@ export function createTransition({
       return
     }
 
+    // Order matters here
     startValue = getCurrentValue()
-    targetValue = newTargetValue
     hasCompleted = false
+    targetValue = newTargetValue
     startTime = performance.now()
   }
 
-  return {
-    getCurrentValue,
-    setTargetValue,
-    hasCompleted: () => hasCompleted,
-  }
+  return { hasCompleted: () => hasCompleted, getCurrentValue, setTargetValue }
 }

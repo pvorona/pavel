@@ -7,6 +7,7 @@
     "chart-demo-e2e": "packages/chart-demo-e2e",
     "easing": "packages/easing",
     "observable": "packages/observable",
+    "request-idle-callback": "packages/request-idle-callback",
     "scheduling": "packages/scheduling",
     "swapElements": "packages/swapElements"
   }

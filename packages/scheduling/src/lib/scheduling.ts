@@ -1,39 +1,45 @@
 import { swapElements } from '@pavel/swapElements'
 import { QueueByPriority } from './types'
-import { PRIORITIES_IN_ORDER } from './constants'
+import {
+  BEFORE_RENDER_PRIORITIES_IN_ORDER,
+  PHASE,
+  RENDER_PRIORITIES_IN_ORDER,
+  PRIORITIES_IN_ORDER,
+  PRIORITY,
+} from './constants'
 import { createQueue } from './createQueue'
 import { initQueue } from './initQueue'
 
-let executionFrameId: undefined | number = undefined
+let animationFrameId: undefined | number = undefined
+
+export let phase = PHASE.INTERACTING
 
 export const queueByPriority: QueueByPriority = initQueue()
 export const futureQueueByPriority: QueueByPriority = initQueue()
 
-export function scheduleExecutionIfNeeded() {
-  if (executionFrameId !== undefined) return
+Object.assign(window, { queueByPriority, futureQueueByPriority })
 
-  executionFrameId = requestAnimationFrame(performScheduledTasks)
+export function scheduleExecutionIfNeeded() {
+  if (animationFrameId !== undefined) return
+
+  animationFrameId = requestAnimationFrame(performScheduledTasks)
 }
 
 function performScheduledTasks() {
-  for (const priority of PRIORITIES_IN_ORDER) {
-    const { tasks, isCancelledByIndex } = queueByPriority[priority]
+  phase = PHASE.BEFORE_RENDER
 
-    for (let i = 0; i < tasks.length; i++) {
-      if (isCancelledByIndex[i]) {
-        continue
-      }
+  for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
+    executeTasksAndReinitializeQueueIfNeeded(queueByPriority, priority)
+  }
 
-      tasks[i]()
-    }
+  phase = PHASE.RENDERING
 
-    if (tasks.length !== 0) {
-      queueByPriority[priority] = createQueue()
-    }
+  for (const priority of RENDER_PRIORITIES_IN_ORDER) {
+    executeTasksAndReinitializeQueueIfNeeded(queueByPriority, priority)
   }
 
   // Should be cleared before calling `schedulePerformWorkIfNeeded`
-  executionFrameId = undefined
+  animationFrameId = undefined
 
   let anyTaskScheduledDuringRendering = false
 
@@ -49,5 +55,26 @@ function performScheduledTasks() {
 
   if (anyTaskScheduledDuringRendering) {
     scheduleExecutionIfNeeded()
+  }
+
+  phase = PHASE.INTERACTING
+}
+
+function executeTasksAndReinitializeQueueIfNeeded(
+  queue: QueueByPriority,
+  priority: PRIORITY,
+) {
+  const { tasks, isCancelledByIndex } = queue[priority]
+
+  for (let i = 0; i < tasks.length; i++) {
+    if (isCancelledByIndex[i]) {
+      continue
+    }
+
+    tasks[i]()
+  }
+
+  if (tasks.length !== 0) {
+    queue[priority] = createQueue()
   }
 }

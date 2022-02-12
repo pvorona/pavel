@@ -1,16 +1,29 @@
+// TODO: tasks that depend on other tasks
 export enum PRIORITY {
+  BEFORE_RENDER,
   READ,
   COMPUTE,
   WRITE,
 }
 
-export enum URGENCY {
-  CURRENT_FRAME,
-  NEXT_FRAME,
-}
 
-export const PRIORITIES_IN_ORDER = [
+export const BEFORE_RENDER_PRIORITIES_IN_ORDER = [
+  PRIORITY.BEFORE_RENDER
+]
+
+export const RENDER_PRIORITIES_IN_ORDER = [
   PRIORITY.READ,
   PRIORITY.COMPUTE,
   PRIORITY.WRITE,
 ]
+
+export const PRIORITIES_IN_ORDER = [
+  ...BEFORE_RENDER_PRIORITIES_IN_ORDER,
+  ...RENDER_PRIORITIES_IN_ORDER,
+]
+
+export enum PHASE {
+  INTERACTING,
+  BEFORE_RENDER,
+  RENDERING,
+}
