@@ -1,10 +1,13 @@
+// TODO: tasks that depend on other tasks
 export enum PRIORITY {
+  BEFORE_RENDER,
   READ,
   COMPUTE,
   WRITE,
 }
 
 export const PRIORITIES_IN_ORDER = [
+  PRIORITY.BEFORE_RENDER,
   PRIORITY.READ,
   PRIORITY.COMPUTE,
   PRIORITY.WRITE,

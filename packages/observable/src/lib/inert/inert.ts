@@ -1,10 +1,10 @@
-import { requestIdleCallback } from '@pavel/requestIdleCallback'
 import { Lambda, ObservedTypeOf } from '../types'
 import { notifyAll, removeFirstElementOccurrence } from '../utils'
 import { observe } from '../observe'
 import { AnimatableTarget, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
 import { createName, wrapName } from '../createName'
+import { PRIORITY,scheduleTask } from '@pavel/scheduling'
 
 const INERT_GROUP = 'Inert'
 
@@ -14,12 +14,13 @@ export const inert =
     const name = wrapName(createName(INERT_GROUP, options), target.name)
     // Can get lazy. Use case for idleUntilUrgent?
     let transition = constructTransition(target.get(), options)
-    let idleCallbackId: undefined | number = undefined
     const observers: Lambda[] = []
+    let notificationScheduled = false
 
-    function notifyAndClearIdleCallback() {
-      notifyAll(observers)
-      idleCallbackId = undefined
+    function notifyBeforeNextRender() {
+      scheduleTask(() => {
+        notifyAll(observers)
+      }, PRIORITY.BEFORE_RENDER)
     }
 
     const get = () => {
@@ -29,8 +30,9 @@ export const inert =
 
       // TODO: don't emit values when there are no observers.
       // Ensure emitting renews if new observers join while transition is in progress
-      if (!transition.hasCompleted() && idleCallbackId === undefined) {
-        idleCallbackId = requestIdleCallback(notifyAndClearIdleCallback)
+      if (!transition.hasCompleted() && !notificationScheduled) {
+        notificationScheduled = true
+        notifyBeforeNextRender()
       }
 
       return value
@@ -39,8 +41,9 @@ export const inert =
     const setTarget = (newTarget: ObservedTypeOf<T>) => {
       transition.setTargetValue(newTarget as any)
 
-      if (!transition.hasCompleted()) {
-        notifyAndClearIdleCallback()
+      if (!transition.hasCompleted() && !notificationScheduled) {
+        notificationScheduled = true
+        notifyBeforeNextRender()
       }
     }
 

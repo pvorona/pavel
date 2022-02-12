@@ -2,24 +2,28 @@ import { QueueByPriority } from './types'
 import { PRIORITY, PRIORITIES_IN_ORDER } from './constants'
 import { createQueue } from './createQueue'
 
-let executionFrameId: undefined | number = undefined
+let animationFrameId: undefined | number = undefined
+// let idleCallbackId: undefined | number = undefined
 
 export const queueByPriority: QueueByPriority = {
+  [PRIORITY.BEFORE_RENDER]: createQueue(),
   [PRIORITY.READ]: createQueue(),
   [PRIORITY.COMPUTE]: createQueue(),
   [PRIORITY.WRITE]: createQueue(),
 }
 
+// Still useful?
 export const futureQueueByPriority: QueueByPriority = {
+  [PRIORITY.BEFORE_RENDER]: createQueue(),
   [PRIORITY.READ]: createQueue(),
   [PRIORITY.COMPUTE]: createQueue(),
   [PRIORITY.WRITE]: createQueue(),
 }
 
 export function scheduleExecutionIfNeeded() {
-  if (executionFrameId) return
+  if (animationFrameId) return
 
-  executionFrameId = requestAnimationFrame(performScheduledTasks)
+  animationFrameId = requestAnimationFrame(performScheduledTasks)
 }
 
 function performScheduledTasks() {
@@ -38,7 +42,7 @@ function performScheduledTasks() {
   }
 
   // Should be cleared before calling `schedulePerformWorkIfNeeded`
-  executionFrameId = undefined
+  animationFrameId = undefined
 
   const anyTaskScheduledDuringExecution =
     futureQueueByPriority[PRIORITY.READ].tasks.length !== 0 ||
