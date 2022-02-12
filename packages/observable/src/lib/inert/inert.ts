@@ -4,7 +4,7 @@ import { observe } from '../observe'
 import { AnimatableTarget, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
 import { createName, wrapName } from '../createName'
-import { PRIORITY, scheduleTask } from '@pavel/scheduling'
+import { PRIORITY, throttleWithFrame } from '@pavel/scheduling'
 
 const INERT_GROUP = 'Inert'
 
@@ -15,21 +15,13 @@ export const inert =
     // Can get lazy. Use case for idleUntilUrgent?
     let transition = constructTransition(target.get(), options)
     const observers: Lambda[] = []
-    let notificationScheduled = false
 
-    function notifyBeforeNextRender() {
-      if (notificationScheduled) {
-        return
-      }
-
-      notificationScheduled = true
-
-      scheduleTask(() => {
+    const throttledNotifyBeforeNextRender = throttleWithFrame(
+      function notifyBeforeNextRender() {
         notifyAll(observers)
-
-        notificationScheduled = false
-      }, PRIORITY.BEFORE_RENDER)
-    }
+      },
+      PRIORITY.BEFORE_RENDER,
+    )
 
     const get = () => {
       // TODO: only compute value once per frame
@@ -40,7 +32,7 @@ export const inert =
       // TODO: don't emit values when there are no observers.
       // Ensure emitting renews if new observers join while transition is in progress
       if (!transition.hasCompleted()) {
-        notifyBeforeNextRender()
+        throttledNotifyBeforeNextRender()
       }
 
       return value
@@ -50,7 +42,7 @@ export const inert =
       transition.setTargetValue(newTarget as any)
 
       if (!transition.hasCompleted()) {
-        notifyBeforeNextRender()
+        throttledNotifyBeforeNextRender()
       }
     }
 
