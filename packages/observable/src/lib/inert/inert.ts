@@ -16,33 +16,46 @@ export const inert =
     let transition = constructTransition(target.get(), options)
     const observers: Lambda[] = []
     let notificationScheduled = false
-    let cancelTask: undefined | Lambda
 
     function notifyBeforeNextRender() {
-      cancelTask = scheduleTask(() => {
-        if (name) {
-          console.log(`notify ${name}`)
+      if (name === '[[Inert#0](startIndex)]') {
+        console.log(`[${performance.now()}] notify try ${name}, notificationScheduled ${notificationScheduled}`)
+      }
+
+      
+      if (notificationScheduled) {
+        return
+      }
+
+      notificationScheduled = true
+      scheduleTask(() => {
+        if (name === '[[Inert#0](startIndex)]') {
+          console.log(`[${performance.now()}] notify start ${name}`)
         }
 
         notifyAll(observers)
+
+        if (name === '[[Inert#0](startIndex)]') {
+          console.log(`[${performance.now()}] notify end ${name}`)
+        }
 
         notificationScheduled = false
       }, PRIORITY.BEFORE_RENDER)
     }
 
     const get = () => {
-      if (name) {
-        console.log(`get ${name}`)
-      }
-
       // TODO: only compute value once per frame
       // TODO: compute value using requestAnimationFrame parameter instead of performance.now()
       const value = transition.getCurrentValue()
 
+      if (name === '[[Inert#0](startIndex)]') {
+        console.log(`[${performance.now()}] get ${name}, hasCompleted: ${transition.hasCompleted()}`)
+      }
+
+      
       // TODO: don't emit values when there are no observers.
       // Ensure emitting renews if new observers join while transition is in progress
-      if (!transition.hasCompleted() && !notificationScheduled) {
-        notificationScheduled = true
+      if (!transition.hasCompleted()) {
         notifyBeforeNextRender()
       }
 
@@ -53,13 +66,7 @@ export const inert =
       transition.setTargetValue(newTarget as any)
 
       if (!transition.hasCompleted()) {
-        notifyAll(observers)
-
-        notificationScheduled = false
-
-        if (cancelTask) {
-          cancelTask()
-        }
+        notifyBeforeNextRender()
       }
     }
 
