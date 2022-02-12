@@ -24,9 +24,11 @@ export const inert =
 
     const get = () => {
       // TODO: only compute value once per frame
+      // TODO: compute value using requestAnimationFrame parameter instead of performance.now()
       const value = transition.getCurrentValue()
 
-      // TODO: don't emit values when there are no observers
+      // TODO: don't emit values when there are no observers.
+      // Ensure emiting renews if new observers join while transition is in progress
       if (!transition.hasCompleted() && idleCallbackId === undefined) {
         idleCallbackId = requestIdleCallback(notifyAndClearIdleCallback)
       }
