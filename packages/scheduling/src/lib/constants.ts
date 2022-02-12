@@ -4,11 +4,6 @@ export enum PRIORITY {
   WRITE,
 }
 
-export enum URGENCY {
-  CURRENT_FRAME,
-  NEXT_FRAME,
-}
-
 export const PRIORITIES_IN_ORDER = [
   PRIORITY.READ,
   PRIORITY.COMPUTE,
