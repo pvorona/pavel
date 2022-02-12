@@ -1,23 +1,16 @@
+import { swap } from '@pavel/swap'
 import { QueueByPriority } from './types'
-import { PRIORITY, PRIORITIES_IN_ORDER } from './constants'
+import { PRIORITIES_IN_ORDER } from './constants'
 import { createQueue } from './createQueue'
+import { initQueue } from './initQueue'
 
 let executionFrameId: undefined | number = undefined
 
-export const queueByPriority: QueueByPriority = {
-  [PRIORITY.READ]: createQueue(),
-  [PRIORITY.COMPUTE]: createQueue(),
-  [PRIORITY.WRITE]: createQueue(),
-}
-
-export const futureQueueByPriority: QueueByPriority = {
-  [PRIORITY.READ]: createQueue(),
-  [PRIORITY.COMPUTE]: createQueue(),
-  [PRIORITY.WRITE]: createQueue(),
-}
+export const queueByPriority: QueueByPriority = initQueue()
+export const futureQueueByPriority: QueueByPriority = initQueue()
 
 export function scheduleExecutionIfNeeded() {
-  if (executionFrameId) return
+  if (executionFrameId !== undefined) return
 
   executionFrameId = requestAnimationFrame(performScheduledTasks)
 }
@@ -34,26 +27,27 @@ function performScheduledTasks() {
       tasks[i]()
     }
 
-    queueByPriority[priority] = createQueue()
+    if (tasks.length !== 0) {
+      queueByPriority[priority] = createQueue()
+    }
   }
 
   // Should be cleared before calling `schedulePerformWorkIfNeeded`
   executionFrameId = undefined
 
-  const anyTaskScheduledDuringExecution =
-    futureQueueByPriority[PRIORITY.READ].tasks.length !== 0 ||
-    futureQueueByPriority[PRIORITY.COMPUTE].tasks.length !== 0 ||
-    futureQueueByPriority[PRIORITY.WRITE].tasks.length !== 0
+  let anyTaskScheduledDuringRendering = false
 
-  if (anyTaskScheduledDuringExecution) {
+  for (const priority of PRIORITIES_IN_ORDER) {
+    // TODO: Check if not all cancelled
+    if (futureQueueByPriority[priority].tasks.length !== 0) {
+      anyTaskScheduledDuringRendering = true
+      // No need to create new queue
+      // Current frame queue already re-initialized
+      swap(queueByPriority, priority, futureQueueByPriority, priority)
+    }
+  }
+
+  if (anyTaskScheduledDuringRendering) {
     scheduleExecutionIfNeeded()
-
-    queueByPriority[PRIORITY.READ] = futureQueueByPriority[PRIORITY.READ]
-    queueByPriority[PRIORITY.COMPUTE] = futureQueueByPriority[PRIORITY.COMPUTE]
-    queueByPriority[PRIORITY.WRITE] = futureQueueByPriority[PRIORITY.WRITE]
-
-    futureQueueByPriority[PRIORITY.READ] = createQueue()
-    futureQueueByPriority[PRIORITY.COMPUTE] = createQueue()
-    futureQueueByPriority[PRIORITY.WRITE] = createQueue()
   }
 }
