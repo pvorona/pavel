@@ -8,6 +8,6 @@
     "easing": "packages/easing",
     "observable": "packages/observable",
     "scheduling": "packages/scheduling",
-    "swap": "packages/swap"
+    "swapElements": "packages/swapElements"
   }
 }

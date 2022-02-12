@@ -20,7 +20,7 @@
       "@pavel/easing": ["packages/easing/src/index.ts"],
       "@pavel/observable": ["packages/observable/src/index.ts"],
       "@pavel/scheduling": ["packages/scheduling/src/index.ts"],
-      "@pavel/swap": ["packages/swap/src/index.ts"]
+      "@pavel/swapElements": ["packages/swapElements/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,4 +1,4 @@
-export function swap<
+export function swapElements<
   Key extends string | number | symbol,
   Value,
   T extends Record<Key, Value>,

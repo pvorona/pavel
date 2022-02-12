@@ -1,4 +1,4 @@
-import { swap } from '@pavel/swap'
+import { swapElements } from '@pavel/swapElements'
 import { QueueByPriority } from './types'
 import { PRIORITIES_IN_ORDER } from './constants'
 import { createQueue } from './createQueue'
@@ -43,7 +43,7 @@ function performScheduledTasks() {
       anyTaskScheduledDuringRendering = true
       // No need to create new queue
       // Current frame queue already re-initialized
-      swap(queueByPriority, priority, futureQueueByPriority, priority)
+      swapElements(queueByPriority, priority, futureQueueByPriority, priority)
     }
   }
 
