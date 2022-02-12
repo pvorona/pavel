@@ -1,18 +1,16 @@
 import { removeFirstElementOccurrence, notifyAllWithValue } from '../utils'
-import { Observer, EagerSubject } from '../types'
+import { Observer, EagerSubject, Named } from '../types'
 import { createName } from '../createName'
 
-export type ObservableOptions = {
-  name?: string
-}
+export type ObservableOptions = Partial<Named>
 
-const GROUP_NAME = 'Observable'
+const OBSERVABLE_GROUP = 'Observable'
 
 export function observable<T>(
   initialValue: T,
-  options?: ObservableOptions
+  options?: ObservableOptions,
 ): EagerSubject<T> {
-  const name = createName(GROUP_NAME, options)
+  const name = createName(OBSERVABLE_GROUP, options)
   let value = initialValue
   const observers: Observer<T>[] = []
 

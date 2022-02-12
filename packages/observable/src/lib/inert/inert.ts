@@ -3,19 +3,18 @@ import { notifyAll, removeFirstElementOccurrence } from '../utils'
 import { observe } from '../observe'
 import { AnimatableTarget, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
-import { requestIdleCallback, cancelIdleCallback } from './requestIdleCallback'
+import { requestIdleCallback } from './requestIdleCallback'
+import { createName, wrapName } from '../createName'
 
-// type State =
-//   | { value: AnimatableValue, transition: Transition<AnimatableValue> }
-//   | { value: AnimatableCollection, transition: Transition<Record<string,AnimatableValue>>}
+const INERT_GROUP = 'Inert'
 
 export const inert =
   (options: InertOptions) =>
   <T extends AnimatableTarget>(target: T): InertSubject<ObservedTypeOf<T>> => {
+    const name = wrapName(createName(INERT_GROUP, options), target.name)
     // Can get lazy. Use case for idleUntilUrgent?
     let transition = constructTransition(target.get(), options)
     let idleCallbackId: undefined | number = undefined
-
     const observers: Lambda[] = []
 
     function notifyAndClearIdleCallback() {
@@ -27,6 +26,7 @@ export const inert =
       // TODO: only compute value once per frame
       const value = transition.getCurrentValue()
 
+      // TODO: don't emit values when there are no observers
       if (!transition.hasCompleted() && idleCallbackId === undefined) {
         idleCallbackId = requestIdleCallback(notifyAndClearIdleCallback)
       }
@@ -37,9 +37,8 @@ export const inert =
     const setTarget = (newTarget: ObservedTypeOf<T>) => {
       transition.setTargetValue(newTarget as any)
 
-      if (!transition.hasCompleted() && idleCallbackId === undefined) {
-        // notifyAndClearIdleCallback()
-        idleCallbackId = requestIdleCallback(notifyAndClearIdleCallback)
+      if (!transition.hasCompleted()) {
+        notifyAndClearIdleCallback()
       }
     }
 
@@ -50,6 +49,7 @@ export const inert =
     }
 
     return {
+      name,
       setTransition,
       get: get as any,
       observe(observer) {

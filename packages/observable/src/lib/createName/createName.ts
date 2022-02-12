@@ -1,18 +1,23 @@
 import { getOrCreate } from '@pavel/cache'
 
-const indexByGroup: Record<string, number> = {}
+const countByGroup: Record<string, number> = {}
 
 export function createName(
   groupName: string,
   options?: { name?: string } | number,
+  name?: string,
 ): string {
-  if (typeof options === 'object' && options !== null && options.name) {
+  if (typeof options === 'object' && options.name) {
     return options.name
   }
 
-  const index = getOrCreate(indexByGroup, groupName, 0)
+  if (name) {
+    return name
+  }
 
-  indexByGroup[groupName]++
+  const index = getOrCreate(countByGroup, groupName, 0)
+
+  countByGroup[groupName]++
 
   return `[${groupName}#${index}]`
 }
