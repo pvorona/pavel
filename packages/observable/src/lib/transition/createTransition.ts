@@ -12,6 +12,10 @@ export const createTransitionV3 = ({
   duration,
   easing = linear,
 }: TransitionOptions): Transition<number> => {
+  if (duration < 0) {
+    throw new Error(`Expected positive duration. Received ${duration}`)
+  }
+
   let hasCompleted = true
   let startTime = 0.0
   let startValue = initialValue

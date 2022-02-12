@@ -1,5 +1,5 @@
 import { QueueByPriority } from './types'
-import { PRIORITY, PRIORITIES_IN_ORDER, PHASE } from './constants'
+import { PRIORITY, PHASE } from './constants'
 import { createQueue } from './createQueue'
 
 let animationFrameId: undefined | number = undefined
