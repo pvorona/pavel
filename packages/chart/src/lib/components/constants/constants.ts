@@ -37,4 +37,3 @@ export const WHEEL_CLEAR_TIMEOUT = 50
 export const WHEEL_MULTIPLIER = 3 / 16
 
 export const DEVIATION_FROM_STRAIGHT_LINE_DEGREES = 45
-

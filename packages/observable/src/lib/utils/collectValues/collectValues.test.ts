@@ -11,7 +11,7 @@ describe('with eager observables', () => {
     [1, 2, 3, 4, 5, 6],
     [1, 2, 3, 4, 5, 6, 7],
   ])('collects latest values from observables', (...values) => {
-    const observables = values.map(observable)
+    const observables = values.map(items => observable(items))
 
     expect(collectValues(observables)).toStrictEqual(values)
   })

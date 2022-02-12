@@ -1,11 +1,11 @@
-import { Easing } from '@pavel/easing'
-import { ReadonlyEagerSubject, ReadonlyLazySubject,Named } from '../types'
+import {
+  TransitionTimingOptions,
+  TransitionTimingOptionsObject,
+} from '../transition'
+import { ReadonlyEagerSubject, ReadonlyLazySubject, Named } from '../types'
 
 export type InertOptions =
-  | ({
-      duration: number
-      easing?: Easing
-    } & Partial<Named>)
+  | (TransitionTimingOptionsObject & Partial<Named>)
   | number
 
 export type AnimatableValue = number
@@ -14,12 +14,12 @@ type Collection<T> = Record<string, T>
 
 export type AnimatableCollection = Collection<AnimatableValue>
 
-export type AnimatableTarget =
+export type AnimatableSubject =
   | ReadonlyEagerSubject<AnimatableValue>
   | ReadonlyEagerSubject<AnimatableCollection>
   | ReadonlyLazySubject<AnimatableValue>
   | ReadonlyLazySubject<AnimatableCollection>
 
 export type InertSubject<T> = ReadonlyLazySubject<T> & {
-  setTransition: (options: InertOptions) => void
+  setTransition: (options: TransitionTimingOptions) => void
 }

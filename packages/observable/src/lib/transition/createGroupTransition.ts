@@ -1,4 +1,4 @@
-import { Transition } from './types'
+import { Transition, TransitionTimingOptions } from './types'
 
 // TODO
 // - [x] Store hasCompleted state internally to avoid unnecessary
@@ -50,9 +50,18 @@ export function createGroupTransition(transitions: {
     return true
   }
 
+  function setOptions(options: TransitionTimingOptions) {
+    for (const key in transitions) {
+      transitions[key].setOptions(options)
+    }
+
+    hasCompleted = areTransitionsCompleted()
+  }
+
   return {
     setTargetValue,
     hasCompleted: () => hasCompleted,
     getCurrentValue,
+    setOptions,
   }
 }

@@ -1,11 +1,11 @@
-import { shallowEqual } from './shallowEqual'
+import { areSameShapeObjectsShallowEqual } from './areSameShapeObjectsShallowEqual'
 
 export function memoizeObjectArgument (fun) {
   let prevObject = {}
   let prevResult
 
   return function memoized (object) {
-    if (shallowEqual(object, prevObject)) {
+    if (areSameShapeObjectsShallowEqual(object, prevObject)) {
       return prevResult
     }
     prevObject = object
