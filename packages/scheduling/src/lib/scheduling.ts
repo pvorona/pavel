@@ -4,10 +4,11 @@ import {
   BEFORE_RENDER_PRIORITIES_IN_ORDER,
   PHASE,
   RENDER_PRIORITIES_IN_ORDER,
+  PRIORITIES_IN_ORDER,
+  PRIORITY,
 } from './constants'
 import { createQueue } from './createQueue'
 import { initQueue } from './initQueue'
-import { PRIORITY } from '.'
 
 let animationFrameId: undefined | number = undefined
 // let idleCallbackId: undefined | number = undefined
@@ -44,7 +45,7 @@ function performScheduledTasks() {
 
   let anyTaskScheduledDuringRendering = false
 
-  for (const priority of RENDER_PRIORITIES_IN_ORDER) {
+  for (const priority of PRIORITIES_IN_ORDER) {
     // TODO: Check if not all cancelled
     if (futureQueueByPriority[priority].tasks.length !== 0) {
       anyTaskScheduledDuringRendering = true
