@@ -22,7 +22,8 @@
       "@pavel/requestIdleCallback": [
         "packages/request-idle-callback/src/index.ts"
       ],
-      "@pavel/scheduling": ["packages/scheduling/src/index.ts"]
+      "@pavel/scheduling": ["packages/scheduling/src/index.ts"],
+      "@pavel/swapElements": ["packages/swapElements/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

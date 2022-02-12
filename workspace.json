@@ -8,6 +8,7 @@
     "easing": "packages/easing",
     "observable": "packages/observable",
     "request-idle-callback": "packages/request-idle-callback",
-    "scheduling": "packages/scheduling"
+    "scheduling": "packages/scheduling",
+    "swapElements": "packages/swapElements"
   }
 }

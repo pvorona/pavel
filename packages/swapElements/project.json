@@ -1,0 +1,33 @@
+{
+  "root": "packages/swapElements",
+  "sourceRoot": "packages/swapElements/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/swapElements",
+        "main": "packages/swapElements/src/index.ts",
+        "tsConfig": "packages/swapElements/tsconfig.lib.json",
+        "assets": ["packages/swapElements/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/swapElements/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/swapElements"],
+      "options": {
+        "jestConfig": "packages/swapElements/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

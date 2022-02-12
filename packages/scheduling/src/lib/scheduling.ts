@@ -1,30 +1,25 @@
+import { swapElements } from '@pavel/swapElements'
 import { QueueByPriority } from './types'
-import { PRIORITY, PHASE } from './constants'
+import {
+  BEFORE_RENDER_PRIORITIES_IN_ORDER,
+  PHASE,
+  RENDER_PRIORITIES_IN_ORDER,
+} from './constants'
 import { createQueue } from './createQueue'
+import { initQueue } from './initQueue'
+import { PRIORITY } from '.'
 
 let animationFrameId: undefined | number = undefined
 // let idleCallbackId: undefined | number = undefined
 export let phase = PHASE.INTERACTING
 
-export const queueByPriority: QueueByPriority = {
-  [PRIORITY.BEFORE_RENDER]: createQueue(),
-  [PRIORITY.READ]: createQueue(),
-  [PRIORITY.COMPUTE]: createQueue(),
-  [PRIORITY.WRITE]: createQueue(),
-}
-
-// Still useful?
-export const futureQueueByPriority: QueueByPriority = {
-  [PRIORITY.BEFORE_RENDER]: createQueue(),
-  [PRIORITY.READ]: createQueue(),
-  [PRIORITY.COMPUTE]: createQueue(),
-  [PRIORITY.WRITE]: createQueue(),
-}
+export const queueByPriority: QueueByPriority = initQueue()
+export const futureQueueByPriority: QueueByPriority = initQueue()
 
 Object.assign(window, { queueByPriority, futureQueueByPriority })
 
 export function scheduleExecutionIfNeeded() {
-  if (animationFrameId) return
+  if (animationFrameId !== undefined) return
 
   animationFrameId = requestAnimationFrame(performScheduledTasks)
 }
@@ -34,61 +29,55 @@ function performScheduledTasks() {
 
   phase = PHASE.BEFORE_RENDER
 
-  for (const priority of [PRIORITY.BEFORE_RENDER]) {
-    const { tasks, isCancelledByIndex } = queueByPriority[priority]
-
-    for (let i = 0; i < tasks.length; i++) {
-      if (isCancelledByIndex[i]) {
-        continue
-      }
-
-      tasks[i]()
-    }
-
-    queueByPriority[priority] = createQueue()
+  for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
+    executeTasksAndReinitializeQueueIfNeeded(queueByPriority, priority)
   }
 
   phase = PHASE.RENDERING
 
-  for (const priority of [PRIORITY.READ, PRIORITY.COMPUTE, PRIORITY.WRITE]) {
-    const { tasks, isCancelledByIndex } = queueByPriority[priority]
-
-    for (let i = 0; i < tasks.length; i++) {
-      if (isCancelledByIndex[i]) {
-        continue
-      }
-
-      tasks[i]()
-    }
-
-    queueByPriority[priority] = createQueue()
+  for (const priority of RENDER_PRIORITIES_IN_ORDER) {
+    executeTasksAndReinitializeQueueIfNeeded(queueByPriority, priority)
   }
 
   // Should be cleared before calling `schedulePerformWorkIfNeeded`
   animationFrameId = undefined
 
-  const anyTaskScheduledDuringExecution =
-    futureQueueByPriority[PRIORITY.BEFORE_RENDER].tasks.length !== 0 ||
-    futureQueueByPriority[PRIORITY.READ].tasks.length !== 0 ||
-    futureQueueByPriority[PRIORITY.COMPUTE].tasks.length !== 0 ||
-    futureQueueByPriority[PRIORITY.WRITE].tasks.length !== 0
+  let anyTaskScheduledDuringRendering = false
 
-  if (anyTaskScheduledDuringExecution) {
+  for (const priority of RENDER_PRIORITIES_IN_ORDER) {
+    // TODO: Check if not all cancelled
+    if (futureQueueByPriority[priority].tasks.length !== 0) {
+      anyTaskScheduledDuringRendering = true
+      // No need to create new queue
+      // Current frame queue already re-initialized
+      swapElements(queueByPriority, priority, futureQueueByPriority, priority)
+    }
+  }
+
+  if (anyTaskScheduledDuringRendering) {
     scheduleExecutionIfNeeded()
-
-    queueByPriority[PRIORITY.BEFORE_RENDER] =
-      futureQueueByPriority[PRIORITY.BEFORE_RENDER]
-    queueByPriority[PRIORITY.READ] = futureQueueByPriority[PRIORITY.READ]
-    queueByPriority[PRIORITY.COMPUTE] = futureQueueByPriority[PRIORITY.COMPUTE]
-    queueByPriority[PRIORITY.WRITE] = futureQueueByPriority[PRIORITY.WRITE]
-
-    futureQueueByPriority[PRIORITY.BEFORE_RENDER] = createQueue()
-    futureQueueByPriority[PRIORITY.READ] = createQueue()
-    futureQueueByPriority[PRIORITY.COMPUTE] = createQueue()
-    futureQueueByPriority[PRIORITY.WRITE] = createQueue()
   }
 
   phase = PHASE.INTERACTING
 
   console.log('------------------END')
+}
+
+function executeTasksAndReinitializeQueueIfNeeded(
+  queue: QueueByPriority,
+  priority: PRIORITY,
+) {
+  const { tasks, isCancelledByIndex } = queue[priority]
+
+  for (let i = 0; i < tasks.length; i++) {
+    if (isCancelledByIndex[i]) {
+      continue
+    }
+
+    tasks[i]()
+  }
+
+  if (tasks.length !== 0) {
+    queue[priority] = createQueue()
+  }
 }
