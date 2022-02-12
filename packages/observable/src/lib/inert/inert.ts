@@ -46,7 +46,7 @@ export const inert =
       }
     }
 
-    observe([target], setTarget as any, { fireImmediately: false })
+    observe([target], setTarget, { fireImmediately: false })
 
     const setTransition = (newOptions: InertOptions) => {
       transition = constructTransition(transition.getCurrentValue(), newOptions)
