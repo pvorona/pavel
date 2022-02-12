@@ -7,18 +7,6 @@ export type TransitionOptions = {
   initialValue: number
 }
 
-type RunningState = 'running' | 'completed'
-
-type TransitionState =
-  | { runningState: 'running'; currentValue: number }
-  | { runningState: 'completed'; lastValue: number }
-
-type TransitionV3 = {
-  // hasCompleted: boolean
-  getCurrentValue: () => number
-  setTargetValue: (target: number) => void
-}
-
 export const createTransitionV3 = ({
   initialValue,
   duration,
@@ -49,7 +37,7 @@ export const createTransitionV3 = ({
     if (newTargetValue === targetValue) {
       return
     }
-    
+
     // Order matters here
     startValue = getCurrentValue()
     hasCompleted = false

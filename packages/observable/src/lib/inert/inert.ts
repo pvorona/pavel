@@ -1,9 +1,9 @@
+import { requestIdleCallback } from '@pavel/requestIdleCallback'
 import { Lambda, ObservedTypeOf } from '../types'
 import { notifyAll, removeFirstElementOccurrence } from '../utils'
 import { observe } from '../observe'
 import { AnimatableTarget, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
-import { requestIdleCallback } from './requestIdleCallback'
 import { createName, wrapName } from '../createName'
 
 const INERT_GROUP = 'Inert'
@@ -28,7 +28,7 @@ export const inert =
       const value = transition.getCurrentValue()
 
       // TODO: don't emit values when there are no observers.
-      // Ensure emiting renews if new observers join while transition is in progress
+      // Ensure emitting renews if new observers join while transition is in progress
       if (!transition.hasCompleted() && idleCallbackId === undefined) {
         idleCallbackId = requestIdleCallback(notifyAndClearIdleCallback)
       }

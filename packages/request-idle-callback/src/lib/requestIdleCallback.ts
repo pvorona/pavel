@@ -1,8 +1,6 @@
-import { Lambda } from '../types'
-
 const supportsIdleCallback = window.requestIdleCallback !== undefined
 
-function requestIdleCallbackFallback(fn: Lambda) {
+function requestIdleCallbackFallback(fn: () => void) {
   return window.setTimeout(fn, 0)
 }
 
