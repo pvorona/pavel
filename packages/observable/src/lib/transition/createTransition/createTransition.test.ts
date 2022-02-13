@@ -71,13 +71,15 @@ describe('createTransition', () => {
           transition.setTargetValue(10)
 
           jest.advanceTimersByTime(5)
-
-          // Should not call getCurrentValue here 
-          // as it changes the result of hasNewValue
-          transition.setTargetValue(currentTransitionValue)
         })
 
         describe('when value was not observed yet', () => {
+          beforeEach(() => {
+            // Should not call getCurrentValue here
+            // as it changes the result of hasNewValue
+            transition.setTargetValue(currentTransitionValue)
+          })
+
           it('hasNewValue returns true', () => {
             expect(transition.hasNewValue()).toBe(true)
           })
@@ -91,6 +93,10 @@ describe('createTransition', () => {
         describe('when value was already observed', () => {
           beforeEach(() => {
             transition.getCurrentValue()
+
+            // Should not call getCurrentValue here
+            // as it changes the result of hasNewValue
+            transition.setTargetValue(currentTransitionValue)
           })
 
           it('hasNewValue returns false', () => {
