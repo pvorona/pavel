@@ -30,7 +30,7 @@ export const inert =
       // TODO: only compute value once per frame
       // TODO: compute value using requestAnimationFrame parameter instead of performance.now()
       // Order matters here:
-      // transition.hasCompleted() may change the value
+      // transition.hasNewValue() may change the value
       // after calling transition.getCurrentValue()
       const value = transition.getCurrentValue()
 

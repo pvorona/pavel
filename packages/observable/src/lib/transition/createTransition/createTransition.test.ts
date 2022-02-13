@@ -33,7 +33,7 @@ describe('createTransition', () => {
       })
     })
 
-    it('hasPendingObservation returns false', () => {
+    it('hasNewValue returns false', () => {
       expect(transition.hasNewValue()).toBe(false)
     })
 
@@ -51,7 +51,7 @@ describe('createTransition', () => {
           transition.setTargetValue(initialValue)
         })
 
-        it('hasPendingObservation returns false', () => {
+        it('hasNewValue returns false', () => {
           expect(transition.hasNewValue()).toBe(false)
         })
 
@@ -73,12 +73,12 @@ describe('createTransition', () => {
           jest.advanceTimersByTime(5)
 
           // Should not call getCurrentValue here 
-          // as it changes the result of hasPendingObservation
+          // as it changes the result of hasNewValue
           transition.setTargetValue(currentTransitionValue)
         })
 
         describe('when value was not observed yet', () => {
-          it('hasPendingObservation returns true', () => {
+          it('hasNewValue returns true', () => {
             expect(transition.hasNewValue()).toBe(true)
           })
 
@@ -93,7 +93,7 @@ describe('createTransition', () => {
             transition.getCurrentValue()
           })
 
-          it('hasPendingObservation returns false', () => {
+          it('hasNewValue returns false', () => {
             expect(transition.hasNewValue()).toBe(false)
           })
         })
@@ -111,7 +111,7 @@ describe('createTransition', () => {
           transition.setTargetValue(newTargetValue)
         })
 
-        it('hasPendingObservation returns true', () => {
+        it('hasNewValue returns true', () => {
           expect(transition.hasNewValue()).toBe(true)
         })
 

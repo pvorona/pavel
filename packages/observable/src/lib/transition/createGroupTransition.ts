@@ -1,7 +1,7 @@
 import { Transition, TransitionTimingOptions } from './types'
 
 // TODO
-// - [x] Store hasCompleted state internally to avoid unnecessary
+// - [x] Store hasNewValue state internally to avoid unnecessary
 //       computations when calling `getCurrentValue`
 // - [ ] Use class to avoid creating new functions for every transition
 // - [ ] Support { [key: string]: number } as initial value argument
