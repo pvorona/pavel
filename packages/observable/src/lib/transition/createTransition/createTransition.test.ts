@@ -1,5 +1,31 @@
+import { assert } from '@pavel/assert'
 import { Transition } from '../types'
 import { createTransition } from './createTransition'
+
+function createTimeUtils({ duration }: { duration: number }) {
+  let currentFraction = 0
+
+  function toTime(fraction: number) {
+    return duration * fraction
+  }
+
+  return {
+    setTimeProgress(newFraction: number) {
+      assert(
+        newFraction >= currentFraction,
+        `Cannot move back in time. Previous time: ${toTime(
+          currentFraction,
+        )}, new time: ${toTime(newFraction)}`,
+      )
+
+      const timeDiff = toTime(newFraction) - toTime(currentFraction)
+
+      jest.advanceTimersByTime(timeDiff)
+
+      currentFraction = newFraction
+    },
+  }
+}
 
 describe('createTransition', () => {
   beforeAll(() => {
@@ -25,8 +51,10 @@ describe('createTransition', () => {
     const duration = 10
 
     let transition: Transition<number>
+    let setTimeProgress: ReturnType<typeof createTimeUtils>['setTimeProgress']
 
     beforeEach(() => {
+      ;({ setTimeProgress } = createTimeUtils({ duration }))
       transition = createTransition({
         initialValue,
         duration,
@@ -44,6 +72,8 @@ describe('createTransition', () => {
     describe('when calling setTargetValue', () => {
       describe('with initial value', () => {
         beforeEach(() => {
+          ;({ setTimeProgress } = createTimeUtils({ duration }))
+
           transition = createTransition({
             initialValue,
             duration,
@@ -64,13 +94,15 @@ describe('createTransition', () => {
         const currentTransitionValue = 5
 
         beforeEach(() => {
+          ;({ setTimeProgress } = createTimeUtils({ duration }))
+
           transition = createTransition({
             initialValue,
             duration,
           })
           transition.setTargetValue(10)
 
-          jest.advanceTimersByTime(5)
+          setTimeProgress(0.5)
         })
 
         describe('when value was not observed yet', () => {
@@ -109,6 +141,8 @@ describe('createTransition', () => {
         const newTargetValue = 10
 
         beforeEach(() => {
+          ;({ setTimeProgress } = createTimeUtils({ duration }))
+
           // TODO: Make this default API?
           transition = createTransition({
             initialValue,
@@ -126,31 +160,31 @@ describe('createTransition', () => {
           expect(transition.getCurrentValue()).toBe(initialValue)
           expect(transition.hasNewValue()).toBe(true)
 
-          jest.advanceTimersByTime(1)
+          setTimeProgress(0.1)
 
           expect(transition.hasNewValue()).toBe(true)
           expect(transition.getCurrentValue()).toBe(1)
           expect(transition.hasNewValue()).toBe(true)
 
-          jest.advanceTimersByTime(4)
+          setTimeProgress(0.5)
 
           expect(transition.hasNewValue()).toBe(true)
           expect(transition.getCurrentValue()).toBe(5)
           expect(transition.hasNewValue()).toBe(true)
 
-          jest.advanceTimersByTime(2)
+          setTimeProgress(0.7)
 
           expect(transition.hasNewValue()).toBe(true)
           expect(transition.getCurrentValue()).toBe(7)
           expect(transition.hasNewValue()).toBe(true)
 
-          jest.advanceTimersByTime(3)
+          setTimeProgress(1)
 
           expect(transition.hasNewValue()).toBe(true)
           expect(transition.getCurrentValue()).toBe(10)
           expect(transition.hasNewValue()).toBe(false)
 
-          jest.advanceTimersByTime(100)
+          setTimeProgress(100)
 
           expect(transition.hasNewValue()).toBe(false)
           expect(transition.getCurrentValue()).toBe(10)
@@ -159,7 +193,7 @@ describe('createTransition', () => {
 
         describe('when calling setTargetValue during the transition', () => {
           beforeEach(() => {
-            jest.advanceTimersByTime(5)
+            setTimeProgress(0.5)
 
             transition.setTargetValue(15)
           })
@@ -169,31 +203,31 @@ describe('createTransition', () => {
             expect(transition.getCurrentValue()).toBe(5)
             expect(transition.hasNewValue()).toBe(true)
 
-            jest.advanceTimersByTime(5)
+            setTimeProgress(1)
 
             expect(transition.hasNewValue()).toBe(true)
             expect(transition.getCurrentValue()).toBe(10)
             expect(transition.hasNewValue()).toBe(true)
 
-            jest.advanceTimersByTime(1)
+            setTimeProgress(1.1)
 
             expect(transition.hasNewValue()).toBe(true)
             expect(transition.getCurrentValue()).toBe(11)
             expect(transition.hasNewValue()).toBe(true)
 
-            jest.advanceTimersByTime(3)
+            setTimeProgress(1.4)
 
             expect(transition.hasNewValue()).toBe(true)
             expect(transition.getCurrentValue()).toBe(14)
             expect(transition.hasNewValue()).toBe(true)
 
-            jest.advanceTimersByTime(1)
+            setTimeProgress(1.5)
 
             expect(transition.hasNewValue()).toBe(true)
             expect(transition.getCurrentValue()).toBe(15)
             expect(transition.hasNewValue()).toBe(false)
 
-            jest.advanceTimersByTime(100)
+            setTimeProgress(10)
 
             expect(transition.hasNewValue()).toBe(false)
             expect(transition.getCurrentValue()).toBe(15)
@@ -206,7 +240,7 @@ describe('createTransition', () => {
             const newDuration = 5
 
             beforeEach(() => {
-              jest.advanceTimersByTime(5)
+              setTimeProgress(0.5)
 
               transition.setOptions({
                 duration: newDuration,
@@ -218,25 +252,25 @@ describe('createTransition', () => {
               expect(transition.getCurrentValue()).toBe(5)
               expect(transition.hasNewValue()).toBe(true)
 
-              jest.advanceTimersByTime(1)
+              setTimeProgress(0.6)
 
               expect(transition.hasNewValue()).toBe(true)
               expect(transition.getCurrentValue()).toBe(6)
               expect(transition.hasNewValue()).toBe(true)
 
-              jest.advanceTimersByTime(1)
+              setTimeProgress(0.7)
 
               expect(transition.hasNewValue()).toBe(true)
               expect(transition.getCurrentValue()).toBe(7)
               expect(transition.hasNewValue()).toBe(true)
 
-              jest.advanceTimersByTime(3)
+              setTimeProgress(1)
 
               expect(transition.hasNewValue()).toBe(true)
               expect(transition.getCurrentValue()).toBe(10)
               expect(transition.hasNewValue()).toBe(false)
 
-              jest.advanceTimersByTime(100)
+              setTimeProgress(10)
 
               expect(transition.hasNewValue()).toBe(false)
               expect(transition.getCurrentValue()).toBe(10)

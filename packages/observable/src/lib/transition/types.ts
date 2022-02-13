@@ -21,8 +21,8 @@ export type Transition<A> = {
 
 type TransitionV4<T> = {
   getCurrentValue: () => { value: T, hasCompleted: boolean }
-  setTargetValue: (target: T) => { hasCompleted: boolean }
-  setOptions: (options: TransitionTimingOptions) => { hasCompleted: boolean }
+  setTargetValue: (target: T) => { value: T, hasCompleted: boolean }
+  setOptions: (options: TransitionTimingOptions) => { value: T, hasCompleted: boolean }
 }
 
 type TimelessTransition<T> = {
