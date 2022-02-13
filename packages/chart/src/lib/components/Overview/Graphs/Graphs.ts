@@ -5,7 +5,7 @@ import {
   setCanvasSize,
 } from '../../renderers'
 import { ChartContext, ChartOptions } from '../../../types'
-import { easeInOutQuart } from '@pavel/easing'
+import { special } from '@pavel/easing'
 import { mapDataToCoords, toBitMapSize } from '../../../util'
 import { Transition } from '../../constants'
 import { Point, Component } from '../../types'
@@ -68,11 +68,11 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
     } else {
       inertGlobalMax.setTransition({
         duration: Transition.Slow,
-        easing: easeInOutQuart,
+        easing: special,
       })
       inertGlobalMin.setTransition({
         duration: Transition.Slow,
-        easing: easeInOutQuart,
+        easing: special,
       })
     }
   })
