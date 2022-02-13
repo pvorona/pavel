@@ -32,9 +32,9 @@ export const inert =
       // Order matters here:
       // transition.hasNewValue() may change the value
       // after calling transition.getCurrentValue()
-      const value = transition.getCurrentValue()
+      const { value, hasCompleted } = transition.getCurrentValue()
 
-      if (transition.hasNewValue()) {
+      if (!hasCompleted) {
         throttledNotifyBeforeNextRender()
       }
 
@@ -42,17 +42,17 @@ export const inert =
     }
 
     const setTarget = (newTarget: ObservedTypeOf<T>) => {
-      transition.setTargetValue(newTarget as any)
+      const { hasCompleted } = transition.setTargetValue(newTarget as any)
 
-      if (transition.hasNewValue()) {
+      if (!hasCompleted) {
         throttledNotifyBeforeNextRender()
       }
     }
 
     const setTransition = (newOptions: TransitionTimingOptions) => {
-      transition.setOptions(newOptions)
+      const { hasCompleted } = transition.setOptions(newOptions)
 
-      if (transition.hasNewValue()) {
+      if (hasCompleted) {
         throttledNotifyBeforeNextRender()
       }
     }

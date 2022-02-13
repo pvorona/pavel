@@ -4,7 +4,7 @@ import { areSameShapeObjectsShallowEqual } from '@pavel/areSameShapeObjectsShall
 import {
   TransitionTimingOptionsObject,
   TransitionTimingOptions,
-  Transition,
+  TransitionV4,
 } from '../types'
 import { createTransitionTimingOptions } from './createTransitionTimingOptions'
 
@@ -21,7 +21,7 @@ export type TransitionOptions = TransitionTimingOptionsObject & {
 
 export const createTransition = (
   options: TransitionOptions,
-): Transition<number> => {
+): TransitionV4<number> => {
   const { initialValue } = options
 
   let timingOptions = createTransitionTimingOptions(options)
@@ -30,70 +30,79 @@ export const createTransition = (
   assert(duration >= 0, `Expected positive duration. Received ${duration}`)
 
   let startTime = 0.0
-  let hasNewValue = false
   let lastObservedValue = initialValue
   let startValue = initialValue
   let targetValue = initialValue
+  let hasCompleted = true
 
-  const getCurrentValueAndUpdateHasNewValue = () => {
-    if (!hasNewValue) {
-      return lastObservedValue
+  const getCurrentValueAndUpdateHasCompleted = () => {
+    if (hasCompleted) {
+      return { value: targetValue, hasCompleted }
     }
 
     const progress = Math.min((performance.now() - startTime) / duration, 1)
 
     if (progress === 1) {
-      hasNewValue = false
+      hasCompleted = true
       lastObservedValue = targetValue
 
-      return lastObservedValue
+      return { value: lastObservedValue, hasCompleted }
     }
 
     const currentValue =
       startValue + (targetValue - startValue) * easing(progress)
 
     if (!hasOvershoot(easing) && currentValue === targetValue) {
-      hasNewValue = false
-      lastObservedValue = currentValue
-
-      return lastObservedValue
+      hasCompleted = true
+      return { value: currentValue, hasCompleted: true }
     }
 
     lastObservedValue = currentValue
 
-    return lastObservedValue
+    return { value: lastObservedValue, hasCompleted }
   }
+
+  // function computeCurrentValue () {
+  //   const progress = Math.min((performance.now() - startTime) / duration, 1)
+
+  //   return startValue + (targetValue - startValue) * easing(progress)
+  // }
 
   const setTargetValue = (newTargetValue: number) => {
     if (newTargetValue === targetValue) {
-      return
+      return { hasCompleted }
     }
 
     // Order matters here
     const previousLastObservedValue = lastObservedValue
-    startValue = getCurrentValueAndUpdateHasNewValue()
+    const { value } = getCurrentValueAndUpdateHasCompleted()
+    startValue = value
     targetValue = newTargetValue
-    hasNewValue = previousLastObservedValue !== newTargetValue
+    hasCompleted = previousLastObservedValue === newTargetValue
     startTime = performance.now()
+
+    return { hasCompleted }
   }
 
   const setOptions = (newOptions: TransitionTimingOptions) => {
     const newTimingOptions = createTransitionTimingOptions(newOptions)
 
     if (areSameShapeObjectsShallowEqual(timingOptions, newTimingOptions)) {
-      return
+      return { hasCompleted }
     }
 
-    startValue = getCurrentValueAndUpdateHasNewValue()
+    const { value } = getCurrentValueAndUpdateHasCompleted()
+    startValue = value
     startTime = performance.now()
     timingOptions = newTimingOptions
     duration = newTimingOptions.duration
     easing = newTimingOptions.easing
+
+    return { hasCompleted: lastObservedValue === targetValue }
   }
 
   return {
-    hasNewValue: () => hasNewValue,
-    getCurrentValue: getCurrentValueAndUpdateHasNewValue,
+    getCurrentValue: getCurrentValueAndUpdateHasCompleted,
     setTargetValue,
     setOptions,
   }

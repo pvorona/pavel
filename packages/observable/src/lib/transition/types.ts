@@ -19,14 +19,14 @@ export type Transition<A> = {
   setOptions: (options: TransitionTimingOptions) => void
 }
 
-type TransitionV4<T> = {
+export type TransitionV4<T> = {
   getCurrentValue: () => { value: T, hasCompleted: boolean }
-  setTargetValue: (target: T) => { value: T, hasCompleted: boolean }
-  setOptions: (options: TransitionTimingOptions) => { value: T, hasCompleted: boolean }
+  setTargetValue: (target: T) => { hasCompleted: boolean }
+  setOptions: (options: TransitionTimingOptions) => { hasCompleted: boolean }
 }
 
-type TimelessTransition<T> = {
-  getValueAt: (timestamp: number) => { value: T, hasCompleted: boolean }
-  setTargetValueAt: (timestamp: number, target: T) => { hasCompleted: boolean }
-  setOptionsAt: (timestamp: number, options: TransitionTimingOptions) => { hasCompleted: boolean }
+export type TimelessTransition<T> = {
+  getValue: (timestamp: number) => { value: T, hasCompleted: boolean }
+  setTargetValue: (timestamp: number, target: T) => { hasCompleted: boolean }
+  setOptions: (timestamp: number, options: TransitionTimingOptions) => { hasCompleted: boolean }
 }

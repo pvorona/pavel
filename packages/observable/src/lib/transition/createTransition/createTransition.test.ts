@@ -1,4 +1,4 @@
-import { Transition } from '../types'
+import { TransitionV4 } from '../types'
 import { createTransition } from './createTransition'
 import { createTimeUtils } from './__test__/createTimeUtils'
 
@@ -25,7 +25,7 @@ describe('createTransition', () => {
     const initialValue = 0
     const duration = 10
 
-    let transition: Transition<number>
+    let transition: TransitionV4<number>
     let setTimeProgress: ReturnType<typeof createTimeUtils>['setTimeProgress']
 
     beforeEach(() => {
@@ -36,13 +36,11 @@ describe('createTransition', () => {
       })
     })
 
-    it('hasNewValue returns false', () => {
-      expect(transition.hasNewValue()).toBe(false)
-    })
-
-    it('getCurrentValue returns initialValue', () => {
-      expect(transition.getCurrentValue()).toBe(initialValue)
-      expect(transition.hasNewValue()).toBe(false)
+    it('getCurrentValue returns { value: initialValue, hasCompleted: true }', () => {
+      expect(transition.getCurrentValue()).toStrictEqual({
+        value: initialValue,
+        hasCompleted: true,
+      })
     })
 
     describe('when calling setTargetValue', () => {
@@ -57,12 +55,11 @@ describe('createTransition', () => {
           transition.setTargetValue(initialValue)
         })
 
-        it('hasNewValue returns false', () => {
-          expect(transition.hasNewValue()).toBe(false)
-        })
-
-        it('getCurrentValue returns initialValue', () => {
-          expect(transition.getCurrentValue()).toBe(initialValue)
+        it('getCurrentValue returns { value: initialValue, hasCompleted: true }', () => {
+          expect(transition.getCurrentValue()).toStrictEqual({
+            value: initialValue,
+            hasCompleted: true,
+          })
         })
       })
 
@@ -88,13 +85,11 @@ describe('createTransition', () => {
             transition.setTargetValue(currentTransitionValue)
           })
 
-          it('hasNewValue returns true', () => {
-            expect(transition.hasNewValue()).toBe(true)
-          })
-
-          it('getCurrentValue returns current transition value and completed transition', () => {
-            expect(transition.getCurrentValue()).toBe(currentTransitionValue)
-            expect(transition.hasNewValue()).toBe(false)
+          it('getCurrentValue returns { value: currentTransitionValue, hasCompleted: true }', () => {
+            expect(transition.getCurrentValue()).toStrictEqual({
+              value: currentTransitionValue,
+              hasCompleted: true,
+            })
           })
         })
 
@@ -102,14 +97,14 @@ describe('createTransition', () => {
           beforeEach(() => {
             // Observe latest value
             transition.getCurrentValue()
-
-            // Should not call getCurrentValue here
-            // as it changes the result of hasNewValue
-            transition.setTargetValue(currentTransitionValue)
           })
 
-          it('hasNewValue returns false', () => {
-            expect(transition.hasNewValue()).toBe(false)
+          it('returns { hasCompleted: true }', () => {
+            // Should not call getCurrentValue here
+            // as it changes the result of hasNewValue
+            expect(
+              transition.setTargetValue(currentTransitionValue),
+            ).toStrictEqual({ hasCompleted: true })
           })
         })
       })
@@ -120,95 +115,107 @@ describe('createTransition', () => {
         beforeEach(() => {
           ;({ setTimeProgress } = createTimeUtils({ duration }))
 
-          // TODO: Make this default API?
           transition = createTransition({
             initialValue,
             duration,
           })
-          transition.setTargetValue(newTargetValue)
         })
 
-        it('hasNewValue returns true', () => {
-          expect(transition.hasNewValue()).toBe(true)
-        })
+        it('returns { hasCompleted: true } and transitions from initial value to target value', () => {
+          expect(transition.setTargetValue(newTargetValue)).toStrictEqual({
+            hasCompleted: false,
+          })
 
-        it('transitions from initial value to target value', () => {
-          expect(transition.hasNewValue()).toBe(true)
-          expect(transition.getCurrentValue()).toBe(initialValue)
-          expect(transition.hasNewValue()).toBe(true)
+          expect(transition.getCurrentValue()).toStrictEqual({
+            value: initialValue,
+            hasCompleted: false,
+          })
 
           setTimeProgress(0.1)
 
-          expect(transition.hasNewValue()).toBe(true)
-          expect(transition.getCurrentValue()).toBe(1)
-          expect(transition.hasNewValue()).toBe(true)
+          expect(transition.getCurrentValue()).toStrictEqual({
+            value: 1,
+            hasCompleted: false,
+          })
 
           setTimeProgress(0.5)
 
-          expect(transition.hasNewValue()).toBe(true)
-          expect(transition.getCurrentValue()).toBe(5)
-          expect(transition.hasNewValue()).toBe(true)
+          expect(transition.getCurrentValue()).toStrictEqual({
+            value: 5,
+            hasCompleted: false,
+          })
 
           setTimeProgress(0.7)
 
-          expect(transition.hasNewValue()).toBe(true)
-          expect(transition.getCurrentValue()).toBe(7)
-          expect(transition.hasNewValue()).toBe(true)
+          expect(transition.getCurrentValue()).toStrictEqual({
+            value: 7,
+            hasCompleted: false,
+          })
 
           setTimeProgress(1)
 
-          expect(transition.hasNewValue()).toBe(true)
-          expect(transition.getCurrentValue()).toBe(10)
-          expect(transition.hasNewValue()).toBe(false)
+          expect(transition.getCurrentValue()).toStrictEqual({
+            value: 10,
+            hasCompleted: true,
+          })
 
           setTimeProgress(100)
 
-          expect(transition.hasNewValue()).toBe(false)
-          expect(transition.getCurrentValue()).toBe(10)
-          expect(transition.hasNewValue()).toBe(false)
+          expect(transition.getCurrentValue()).toStrictEqual({
+            value: 10,
+            hasCompleted: true,
+          })
         })
 
         describe('when calling setTargetValue during the transition', () => {
           beforeEach(() => {
             setTimeProgress(0.5)
-
-            transition.setTargetValue(15)
           })
 
-          it('transitions from latest value to new target value', () => {
-            expect(transition.hasNewValue()).toBe(true)
-            expect(transition.getCurrentValue()).toBe(5)
-            expect(transition.hasNewValue()).toBe(true)
+          it('returns { hasCompleted: false } and transitions from latest value to new target value', () => {
+            expect(transition.setTargetValue(15)).toStrictEqual({
+              hasCompleted: false,
+            })
+
+            expect(transition.getCurrentValue()).toStrictEqual({
+              value: 5,
+              hasCompleted: false,
+            })
 
             setTimeProgress(1)
 
-            expect(transition.hasNewValue()).toBe(true)
-            expect(transition.getCurrentValue()).toBe(10)
-            expect(transition.hasNewValue()).toBe(true)
+            expect(transition.getCurrentValue()).toStrictEqual({
+              value: 10,
+              hasCompleted: false,
+            })
 
             setTimeProgress(1.1)
 
-            expect(transition.hasNewValue()).toBe(true)
-            expect(transition.getCurrentValue()).toBe(11)
-            expect(transition.hasNewValue()).toBe(true)
+            expect(transition.getCurrentValue()).toStrictEqual({
+              value: 11,
+              hasCompleted: false,
+            })
 
             setTimeProgress(1.4)
 
-            expect(transition.hasNewValue()).toBe(true)
-            expect(transition.getCurrentValue()).toBe(14)
-            expect(transition.hasNewValue()).toBe(true)
+            expect(transition.getCurrentValue()).toStrictEqual({
+              value: 14,
+              hasCompleted: false,
+            })
 
             setTimeProgress(1.5)
 
-            expect(transition.hasNewValue()).toBe(true)
-            expect(transition.getCurrentValue()).toBe(15)
-            expect(transition.hasNewValue()).toBe(false)
+            expect(transition.getCurrentValue()).toStrictEqual({
+              value: 15,
+              hasCompleted: true,
+            })
 
             setTimeProgress(10)
 
-            expect(transition.hasNewValue()).toBe(false)
-            expect(transition.getCurrentValue()).toBe(15)
-            expect(transition.hasNewValue()).toBe(false)
+            expect(transition.getCurrentValue()).toStrictEqual({
+              value: 15,
+              hasCompleted: true,
+            })
           })
         })
 
@@ -218,40 +225,46 @@ describe('createTransition', () => {
 
             beforeEach(() => {
               setTimeProgress(0.5)
-
-              transition.setOptions({
-                duration: newDuration,
-              })
             })
 
             it('continues transition from the latest value to target value using new options', () => {
-              expect(transition.hasNewValue()).toBe(true)
-              expect(transition.getCurrentValue()).toBe(5)
-              expect(transition.hasNewValue()).toBe(true)
+              expect(transition.setOptions({
+                duration: newDuration,
+              })).toStrictEqual({ hasCompleted: false })
+
+              
+              expect(transition.getCurrentValue()).toStrictEqual({
+                value: 5,
+                hasCompleted: false,
+              })
 
               setTimeProgress(0.6)
 
-              expect(transition.hasNewValue()).toBe(true)
-              expect(transition.getCurrentValue()).toBe(6)
-              expect(transition.hasNewValue()).toBe(true)
+              expect(transition.getCurrentValue()).toStrictEqual({
+                value: 6,
+                hasCompleted: false,
+              })
 
               setTimeProgress(0.7)
 
-              expect(transition.hasNewValue()).toBe(true)
-              expect(transition.getCurrentValue()).toBe(7)
-              expect(transition.hasNewValue()).toBe(true)
+              expect(transition.getCurrentValue()).toStrictEqual({
+                value: 7,
+                hasCompleted: false,
+              })
 
               setTimeProgress(1)
 
-              expect(transition.hasNewValue()).toBe(true)
-              expect(transition.getCurrentValue()).toBe(10)
-              expect(transition.hasNewValue()).toBe(false)
+              expect(transition.getCurrentValue()).toStrictEqual({
+                value: 10,
+                hasCompleted: true,
+              })
 
               setTimeProgress(10)
 
-              expect(transition.hasNewValue()).toBe(false)
-              expect(transition.getCurrentValue()).toBe(10)
-              expect(transition.hasNewValue()).toBe(false)
+              expect(transition.getCurrentValue()).toStrictEqual({
+                value: 10,
+                hasCompleted: true,
+              })
             })
           })
         })

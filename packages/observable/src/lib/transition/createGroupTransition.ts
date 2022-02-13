@@ -1,4 +1,4 @@
-import { Transition, TransitionTimingOptions } from './types'
+import { TransitionV4, TransitionTimingOptions } from './types'
 
 // TODO
 // - [x] Store hasNewValue state internally to avoid unnecessary
@@ -6,31 +6,20 @@ import { Transition, TransitionTimingOptions } from './types'
 // - [ ] Use class to avoid creating new functions for every transition
 // - [ ] Support { [key: string]: number } as initial value argument
 export function createGroupTransition(transitions: {
-  [key: string]: Transition<number>
-}): Transition<{ [key: string]: number }> {
-  let lastComputedValue = computeCurrentValue()
-  let hasNewValue = checkTransitionsHaveNewValue()
-
-  function computeCurrentValue() {
-    const newState: { [key: string]: number } = {}
+  [key: string]: TransitionV4<number>
+}): TransitionV4<{ [key: string]: number }> {
+  function getCurrentValue() {
+    const newValue: { [key: string]: number } = {}
+    let hasCompleted = true
 
     for (const key in transitions) {
-      newState[key] = transitions[key].getCurrentValue()
+      const { value, hasCompleted: localHasCompleted } =
+        transitions[key].getCurrentValue()
+      newValue[key] = value
+      hasCompleted &&= localHasCompleted
     }
 
-    return newState
-  }
-
-  function getCurrentValue() {
-    if (!hasNewValue) {
-      return lastComputedValue
-    }
-
-    // Order matters here
-    lastComputedValue = computeCurrentValue()
-    hasNewValue = checkTransitionsHaveNewValue()
-
-    return lastComputedValue
+    return { value: newValue, hasCompleted }
   }
 
   function setTargetValue(target: { [key: string]: number }) {
@@ -38,17 +27,7 @@ export function createGroupTransition(transitions: {
       transitions[key].setTargetValue(target[key])
     }
 
-    hasNewValue = checkTransitionsHaveNewValue()
-  }
-
-  function checkTransitionsHaveNewValue() {
-    for (const key in transitions) {
-      if (transitions[key].hasNewValue()) {
-        return true
-      }
-    }
-
-    return false
+    return getCurrentValue()
   }
 
   function setOptions(options: TransitionTimingOptions) {
@@ -56,12 +35,11 @@ export function createGroupTransition(transitions: {
       transitions[key].setOptions(options)
     }
 
-    hasNewValue = checkTransitionsHaveNewValue()
+    return getCurrentValue()
   }
 
   return {
     setTargetValue,
-    hasNewValue: () => hasNewValue,
     getCurrentValue,
     setOptions,
   }

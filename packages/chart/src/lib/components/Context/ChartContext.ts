@@ -32,6 +32,9 @@ export const ChartContext = (options: ChartOptions) => {
   const startIndex = observable(options.viewBox.startIndex, {
     name: 'startIndex',
   })
+
+  ;(window as any).startIndex = startIndex
+  
   const endIndex = observable(options.viewBox.endIndex, { name: 'endIndex' })
   const mouseX = observable(0, { name: 'mouseX' })
   const isHovering = observable(false, { name: 'isHovering' })
