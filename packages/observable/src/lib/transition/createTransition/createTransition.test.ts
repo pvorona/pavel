@@ -42,6 +42,7 @@ describe('createTransition', () => {
 
     it('getCurrentValue returns initialValue', () => {
       expect(transition.getCurrentValue()).toBe(initialValue)
+      expect(transition.hasNewValue()).toBe(false)
     })
 
     describe('when calling setTargetValue', () => {
@@ -99,6 +100,7 @@ describe('createTransition', () => {
 
         describe('when value was already observed', () => {
           beforeEach(() => {
+            // Observe latest value
             transition.getCurrentValue()
 
             // Should not call getCurrentValue here

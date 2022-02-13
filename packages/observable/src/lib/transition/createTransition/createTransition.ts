@@ -1,4 +1,6 @@
+import { assert } from '@pavel/assert'
 import { hasOvershoot } from '@pavel/easing'
+import { areSameShapeObjectsShallowEqual } from '@pavel/areSameShapeObjectsShallowEqual'
 import {
   TransitionTimingOptionsObject,
   TransitionTimingOptions,
@@ -22,15 +24,14 @@ export const createTransition = (
 ): Transition<number> => {
   const { initialValue } = options
 
-  let { duration, easing } = createTransitionTimingOptions(options)
+  let timingOptions = createTransitionTimingOptions(options)
+  let { duration, easing } = timingOptions
 
-  if (duration < 0) {
-    throw new Error(`Expected positive duration. Received ${duration}`)
-  }
+  assert(duration >= 0, `Expected positive duration. Received ${duration}`)
 
+  let startTime = 0.0
   let hasNewValue = false
   let lastObservedValue = initialValue
-  let startTime = 0.0
   let startValue = initialValue
   let targetValue = initialValue
 
@@ -48,15 +49,17 @@ export const createTransition = (
       return lastObservedValue
     }
 
-    lastObservedValue =
+    const currentValue =
       startValue + (targetValue - startValue) * easing(progress)
 
-    if (!hasOvershoot(easing) && lastObservedValue === targetValue) {
+    if (!hasOvershoot(easing) && currentValue === targetValue) {
       hasNewValue = false
-      lastObservedValue = targetValue
+      lastObservedValue = currentValue
 
       return lastObservedValue
     }
+
+    lastObservedValue = currentValue
 
     return lastObservedValue
   }
@@ -77,12 +80,13 @@ export const createTransition = (
   const setOptions = (newOptions: TransitionTimingOptions) => {
     const newTimingOptions = createTransitionTimingOptions(newOptions)
 
-    // if (newOptions.duration === duration && getEasing(newOptions) === easing) {
-    //   return
-    // }
+    if (areSameShapeObjectsShallowEqual(timingOptions, newTimingOptions)) {
+      return
+    }
 
     startValue = getCurrentValueAndUpdateHasNewValue()
     startTime = performance.now()
+    timingOptions = newTimingOptions
     duration = newTimingOptions.duration
     easing = newTimingOptions.easing
   }

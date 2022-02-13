@@ -1,9 +1,9 @@
 import { Easing } from '@pavel/easing'
-import { TransitionTimingOptionsObject } from '../types'
+import { TransitionTimingOptions } from '../types'
 import { DEFAULT_EASING } from './constants'
 
-export function getEasing(options: TransitionTimingOptionsObject): Easing {
-  if (options.easing) {
+export function getEasing(options: TransitionTimingOptions): Easing {
+  if (typeof options === 'object' && options.easing) {
     return options.easing
   }
 

@@ -1,18 +1,12 @@
-import { TransitionTimingOptions, TransitionTiming } from "../types"
-import { DEFAULT_EASING } from "./constants"
-import { getEasing } from "./getEasing"
+import { TransitionTimingOptions, TransitionTiming } from '../types'
+import { getDuration } from './getDuration'
+import { getEasing } from './getEasing'
 
 export function createTransitionTimingOptions(
   optionsOrDuration: TransitionTimingOptions,
 ): TransitionTiming {
-  if (typeof optionsOrDuration === 'number') {
-    return {
-      duration: optionsOrDuration,
-      easing: DEFAULT_EASING,
-    }
+  return {
+    duration: getDuration(optionsOrDuration),
+    easing: getEasing(optionsOrDuration),
   }
-
-  const easing = getEasing(optionsOrDuration)
-
-  return { ...optionsOrDuration, easing }
 }
