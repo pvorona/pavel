@@ -1,6 +1,8 @@
 {
   "version": 2,
   "projects": {
+    "are-same-shape-objects-shallow-equal": "packages/are-same-shape-objects-shallow-equal",
+    "assert": "packages/assert",
     "cache": "packages/cache",
     "chart": "packages/chart",
     "chart-demo": "packages/chart-demo",

@@ -11,10 +11,7 @@ const kSampleStepSize = 1.0 / (kSplineTableSize - 1.0)
 const float32ArraySupported = typeof Float32Array === 'function'
 
 export const linear: Easing = progress => progress
-export const easeInOutQuart = bezier(0.6, 0, 0.15, 1.05)
-// export const easeInOutQuart = bezier(.6, 0, .2, 1)
-// export const easeInOutQuart = (t: number) => t<.5 ? 8*t*t*t*t : 1-8*(--t)*t*t*t
-// export const easeInOutQuad = t => t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t
+export const special: Easing = bezier(0.6, 0, 0.15, 1.05)
 
 /**
  * https://github.com/gre/bezier-easing

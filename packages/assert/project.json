@@ -1,0 +1,33 @@
+{
+  "root": "packages/assert",
+  "sourceRoot": "packages/assert/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/assert",
+        "main": "packages/assert/src/index.ts",
+        "tsConfig": "packages/assert/tsconfig.lib.json",
+        "assets": ["packages/assert/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/assert/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/assert"],
+      "options": {
+        "jestConfig": "packages/assert/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

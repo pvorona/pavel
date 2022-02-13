@@ -15,6 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@pavel/areSameShapeObjectsShallowEqual": [
+        "packages/are-same-shape-objects-shallow-equal/src/index.ts"
+      ],
+      "@pavel/assert": ["packages/assert/src/index.ts"],
       "@pavel/cache": ["packages/cache/src/index.ts"],
       "@pavel/chart": ["packages/chart/src/index.ts"],
       "@pavel/easing": ["packages/easing/src/index.ts"],

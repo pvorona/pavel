@@ -1,15 +1,15 @@
-import { Transition } from './types'
+import { Transition, TransitionTimingOptions } from './types'
 
 // TODO
-// - [x] Store hasCompleted state internally to avoid unnecessary
+// - [x] Store hasNewValue state internally to avoid unnecessary
 //       computations when calling `getCurrentValue`
 // - [ ] Use class to avoid creating new functions for every transition
 // - [ ] Support { [key: string]: number } as initial value argument
 export function createGroupTransition(transitions: {
   [key: string]: Transition<number>
 }): Transition<{ [key: string]: number }> {
-  let currentValue = computeCurrentValue()
-  let hasCompleted = areTransitionsCompleted()
+  let lastComputedValue = computeCurrentValue()
+  let hasNewValue = checkTransitionsHaveNewValue()
 
   function computeCurrentValue() {
     const newState: { [key: string]: number } = {}
@@ -22,14 +22,15 @@ export function createGroupTransition(transitions: {
   }
 
   function getCurrentValue() {
-    if (hasCompleted) {
-      return currentValue
+    if (!hasNewValue) {
+      return lastComputedValue
     }
 
-    currentValue = computeCurrentValue()
-    hasCompleted = areTransitionsCompleted()
+    // Order matters here
+    lastComputedValue = computeCurrentValue()
+    hasNewValue = checkTransitionsHaveNewValue()
 
-    return currentValue
+    return lastComputedValue
   }
 
   function setTargetValue(target: { [key: string]: number }) {
@@ -37,22 +38,31 @@ export function createGroupTransition(transitions: {
       transitions[key].setTargetValue(target[key])
     }
 
-    hasCompleted = areTransitionsCompleted()
+    hasNewValue = checkTransitionsHaveNewValue()
   }
 
-  function areTransitionsCompleted() {
+  function checkTransitionsHaveNewValue() {
     for (const key in transitions) {
-      if (!transitions[key].hasCompleted()) {
-        return false
+      if (transitions[key].hasNewValue()) {
+        return true
       }
     }
 
-    return true
+    return false
+  }
+
+  function setOptions(options: TransitionTimingOptions) {
+    for (const key in transitions) {
+      transitions[key].setOptions(options)
+    }
+
+    hasNewValue = checkTransitionsHaveNewValue()
   }
 
   return {
     setTargetValue,
-    hasCompleted: () => hasCompleted,
+    hasNewValue: () => hasNewValue,
     getCurrentValue,
+    setOptions,
   }
 }

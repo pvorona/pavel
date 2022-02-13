@@ -15,7 +15,7 @@ import {
 } from '../constants'
 import { OpacityState, Point, EnabledGraphNames } from '../types'
 import { mapDataToCoords, createMinMaxView } from '../../util'
-import { easeInOutQuart } from '@pavel/easing'
+import { special } from '@pavel/easing'
 
 export const ChartContext = (options: ChartOptions) => {
   const globalStartIndex = observable(0, {
@@ -97,12 +97,12 @@ export const ChartContext = (options: ChartOptions) => {
 
   const inertVisibleMax = inert({
     duration: Transition.Slow,
-    easing: easeInOutQuart,
+    easing: special,
   })(visibleMax)
 
   const inertVisibleMin = inert({
     duration: Transition.Slow,
-    easing: easeInOutQuart,
+    easing: special,
   })(visibleMin)
 
   const { max: globalMax, min: globalMin } = createMinMaxView(
@@ -114,12 +114,12 @@ export const ChartContext = (options: ChartOptions) => {
 
   const inertGlobalMax = inert({
     duration: Transition.Slow,
-    easing: easeInOutQuart,
+    easing: special,
   })(globalMax)
 
   const inertGlobalMin = inert({
     duration: Transition.Slow,
-    easing: easeInOutQuart,
+    easing: special,
   })(globalMin)
 
   // why lazy
@@ -138,7 +138,7 @@ export const ChartContext = (options: ChartOptions) => {
 
   const inertOpacityStateByGraphName = inert({
     duration: Transition.Slow,
-    easing: easeInOutQuart,
+    easing: special,
   })(opacityStateByGraphName)
 
   const mainGraphPoints = computeLazy(
@@ -188,11 +188,11 @@ export const ChartContext = (options: ChartOptions) => {
       } else {
         inertVisibleMax.setTransition({
           duration: Transition.Slow,
-          easing: easeInOutQuart,
+          easing: special,
         })
         inertVisibleMin.setTransition({
           duration: Transition.Slow,
-          easing: easeInOutQuart,
+          easing: special,
         })
       }
     },
