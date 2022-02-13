@@ -29,10 +29,12 @@ export const inert =
     const get = () => {
       // TODO: only compute value once per frame
       // TODO: compute value using requestAnimationFrame parameter instead of performance.now()
-      // Order matters here
+      // Order matters here:
+      // transition.hasCompleted() may change the value
+      // after calling transition.getCurrentValue()
       const value = transition.getCurrentValue()
 
-      if (!transition.hasCompleted()) {
+      if (!transition.hasPendingObservation()) {
         throttledNotifyBeforeNextRender()
       }
 
@@ -42,7 +44,7 @@ export const inert =
     const setTarget = (newTarget: ObservedTypeOf<T>) => {
       transition.setTargetValue(newTarget as any)
 
-      if (!transition.hasCompleted()) {
+      if (!transition.hasPendingObservation()) {
         throttledNotifyBeforeNextRender()
       }
     }
@@ -50,7 +52,7 @@ export const inert =
     const setTransition = (newOptions: TransitionTimingOptions) => {
       transition.setOptions(newOptions)
 
-      if (!transition.hasCompleted()) {
+      if (!transition.hasPendingObservation()) {
         throttledNotifyBeforeNextRender()
       }
     }

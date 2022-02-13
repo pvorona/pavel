@@ -28,25 +28,41 @@ export const createTransition = (
     throw new Error(`Expected positive duration. Received ${duration}`)
   }
 
+  let hasPendingObservation = false
+  let lastObservedValue = initialValue
   let hasCompleted = true
   let startTime = 0.0
   let startValue = initialValue
   let targetValue = initialValue
 
-  const getCurrentValue = () => {
-    if (hasCompleted) {
-      return targetValue
+  const getCurrentValueAndUpdateHasPendingObservation = () => {
+    if (!hasPendingObservation) {
+      return lastObservedValue
     }
 
     const progress = Math.min((performance.now() - startTime) / duration, 1)
 
     if (progress === 1) {
       hasCompleted = true
+      hasPendingObservation = false
+      lastObservedValue = targetValue
 
-      return targetValue
+      return lastObservedValue
     }
 
-    return startValue + (targetValue - startValue) * easing(progress)
+    lastObservedValue =
+      startValue + (targetValue - startValue) * easing(progress)
+
+    // This breaks with overshoot easings
+    if (lastObservedValue === targetValue) {
+      hasCompleted = true
+      hasPendingObservation = false
+      lastObservedValue = targetValue
+
+      return lastObservedValue
+    }
+
+    return lastObservedValue
   }
 
   const setTargetValue = (newTargetValue: number) => {
@@ -55,9 +71,11 @@ export const createTransition = (
     }
 
     // Order matters here
-    startValue = getCurrentValue()
+    const previousLastObservedValue = lastObservedValue
+    startValue = getCurrentValueAndUpdateHasPendingObservation()
     targetValue = newTargetValue
     hasCompleted = startValue === newTargetValue
+    hasPendingObservation = previousLastObservedValue !== newTargetValue
     startTime = performance.now()
   }
 
@@ -68,15 +86,15 @@ export const createTransition = (
     //   return
     // }
 
-    startValue = getCurrentValue()
+    startValue = getCurrentValueAndUpdateHasPendingObservation()
     startTime = performance.now()
     duration = newTimingOptions.duration
     easing = newTimingOptions.easing
   }
 
   return {
-    hasCompleted: () => hasCompleted,
-    getCurrentValue,
+    hasPendingObservation: () => hasPendingObservation,
+    getCurrentValue: getCurrentValueAndUpdateHasPendingObservation,
     setTargetValue,
     setOptions,
   }

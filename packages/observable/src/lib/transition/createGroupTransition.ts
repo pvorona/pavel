@@ -9,7 +9,7 @@ export function createGroupTransition(transitions: {
   [key: string]: Transition<number>
 }): Transition<{ [key: string]: number }> {
   let currentValue = computeCurrentValue()
-  let hasCompleted = areTransitionsCompleted()
+  let hasEmittedLastValue = areTransitionsEmittedLastValue()
 
   function computeCurrentValue() {
     const newState: { [key: string]: number } = {}
@@ -22,12 +22,12 @@ export function createGroupTransition(transitions: {
   }
 
   function getCurrentValue() {
-    if (hasCompleted) {
+    if (hasEmittedLastValue) {
       return currentValue
     }
 
     currentValue = computeCurrentValue()
-    hasCompleted = areTransitionsCompleted()
+    hasEmittedLastValue = areTransitionsEmittedLastValue()
 
     return currentValue
   }
@@ -37,12 +37,12 @@ export function createGroupTransition(transitions: {
       transitions[key].setTargetValue(target[key])
     }
 
-    hasCompleted = areTransitionsCompleted()
+    hasEmittedLastValue = areTransitionsEmittedLastValue()
   }
 
-  function areTransitionsCompleted() {
+  function areTransitionsEmittedLastValue() {
     for (const key in transitions) {
-      if (!transitions[key].hasCompleted()) {
+      if (!transitions[key].hasPendingObservation()) {
         return false
       }
     }
@@ -55,12 +55,12 @@ export function createGroupTransition(transitions: {
       transitions[key].setOptions(options)
     }
 
-    hasCompleted = areTransitionsCompleted()
+    hasEmittedLastValue = areTransitionsEmittedLastValue()
   }
 
   return {
     setTargetValue,
-    hasCompleted: () => hasCompleted,
+    hasPendingObservation: () => hasEmittedLastValue,
     getCurrentValue,
     setOptions,
   }
