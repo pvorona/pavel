@@ -34,7 +34,7 @@ describe('createTransition', () => {
     })
 
     it('hasPendingObservation returns false', () => {
-      expect(transition.hasPendingObservation()).toBe(false)
+      expect(transition.hasNewValue()).toBe(false)
     })
 
     it('getCurrentValue returns initialValue', () => {
@@ -52,7 +52,7 @@ describe('createTransition', () => {
         })
 
         it('hasPendingObservation returns false', () => {
-          expect(transition.hasPendingObservation()).toBe(false)
+          expect(transition.hasNewValue()).toBe(false)
         })
 
         it('getCurrentValue returns initialValue', () => {
@@ -79,12 +79,12 @@ describe('createTransition', () => {
 
         describe('when value was not observed yet', () => {
           it('hasPendingObservation returns true', () => {
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
           })
 
           it('getCurrentValue returns current transition value and completed transition', () => {
             expect(transition.getCurrentValue()).toBe(currentTransitionValue)
-            expect(transition.hasPendingObservation()).toBe(false)
+            expect(transition.hasNewValue()).toBe(false)
           })
         })
 
@@ -94,7 +94,7 @@ describe('createTransition', () => {
           })
 
           it('hasPendingObservation returns false', () => {
-            expect(transition.hasPendingObservation()).toBe(false)
+            expect(transition.hasNewValue()).toBe(false)
           })
         })
       })
@@ -112,43 +112,43 @@ describe('createTransition', () => {
         })
 
         it('hasPendingObservation returns true', () => {
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
         })
 
         it('transitions from initial value to target value', () => {
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
           expect(transition.getCurrentValue()).toBe(initialValue)
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
 
           jest.advanceTimersByTime(1)
 
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
           expect(transition.getCurrentValue()).toBe(1)
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
 
           jest.advanceTimersByTime(4)
 
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
           expect(transition.getCurrentValue()).toBe(5)
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
 
           jest.advanceTimersByTime(2)
 
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
           expect(transition.getCurrentValue()).toBe(7)
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
 
           jest.advanceTimersByTime(3)
 
-          expect(transition.hasPendingObservation()).toBe(true)
+          expect(transition.hasNewValue()).toBe(true)
           expect(transition.getCurrentValue()).toBe(10)
-          expect(transition.hasPendingObservation()).toBe(false)
+          expect(transition.hasNewValue()).toBe(false)
 
           jest.advanceTimersByTime(100)
 
-          expect(transition.hasPendingObservation()).toBe(false)
+          expect(transition.hasNewValue()).toBe(false)
           expect(transition.getCurrentValue()).toBe(10)
-          expect(transition.hasPendingObservation()).toBe(false)
+          expect(transition.hasNewValue()).toBe(false)
         })
 
         describe('when calling setTargetValue during the transition', () => {
@@ -159,39 +159,39 @@ describe('createTransition', () => {
           })
 
           it('transitions from latest value to new target value', () => {
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
             expect(transition.getCurrentValue()).toBe(5)
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
 
             jest.advanceTimersByTime(5)
 
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
             expect(transition.getCurrentValue()).toBe(10)
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
 
             jest.advanceTimersByTime(1)
 
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
             expect(transition.getCurrentValue()).toBe(11)
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
 
             jest.advanceTimersByTime(3)
 
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
             expect(transition.getCurrentValue()).toBe(14)
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
 
             jest.advanceTimersByTime(1)
 
-            expect(transition.hasPendingObservation()).toBe(true)
+            expect(transition.hasNewValue()).toBe(true)
             expect(transition.getCurrentValue()).toBe(15)
-            expect(transition.hasPendingObservation()).toBe(false)
+            expect(transition.hasNewValue()).toBe(false)
 
             jest.advanceTimersByTime(100)
 
-            expect(transition.hasPendingObservation()).toBe(false)
+            expect(transition.hasNewValue()).toBe(false)
             expect(transition.getCurrentValue()).toBe(15)
-            expect(transition.hasPendingObservation()).toBe(false)
+            expect(transition.hasNewValue()).toBe(false)
           })
         })
 
@@ -208,33 +208,33 @@ describe('createTransition', () => {
             })
 
             it('continues transition from the latest value to target value using new options', () => {
-              expect(transition.hasPendingObservation()).toBe(true)
+              expect(transition.hasNewValue()).toBe(true)
               expect(transition.getCurrentValue()).toBe(5)
-              expect(transition.hasPendingObservation()).toBe(true)
+              expect(transition.hasNewValue()).toBe(true)
 
               jest.advanceTimersByTime(1)
 
-              expect(transition.hasPendingObservation()).toBe(true)
+              expect(transition.hasNewValue()).toBe(true)
               expect(transition.getCurrentValue()).toBe(6)
-              expect(transition.hasPendingObservation()).toBe(true)
+              expect(transition.hasNewValue()).toBe(true)
 
               jest.advanceTimersByTime(1)
 
-              expect(transition.hasPendingObservation()).toBe(true)
+              expect(transition.hasNewValue()).toBe(true)
               expect(transition.getCurrentValue()).toBe(7)
-              expect(transition.hasPendingObservation()).toBe(true)
+              expect(transition.hasNewValue()).toBe(true)
 
               jest.advanceTimersByTime(3)
 
-              expect(transition.hasPendingObservation()).toBe(true)
+              expect(transition.hasNewValue()).toBe(true)
               expect(transition.getCurrentValue()).toBe(10)
-              expect(transition.hasPendingObservation()).toBe(false)
+              expect(transition.hasNewValue()).toBe(false)
 
               jest.advanceTimersByTime(100)
 
-              expect(transition.hasPendingObservation()).toBe(false)
+              expect(transition.hasNewValue()).toBe(false)
               expect(transition.getCurrentValue()).toBe(10)
-              expect(transition.hasPendingObservation()).toBe(false)
+              expect(transition.hasNewValue()).toBe(false)
             })
           })
         })

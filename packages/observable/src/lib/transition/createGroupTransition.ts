@@ -8,8 +8,8 @@ import { Transition, TransitionTimingOptions } from './types'
 export function createGroupTransition(transitions: {
   [key: string]: Transition<number>
 }): Transition<{ [key: string]: number }> {
-  let currentValue = computeCurrentValue()
-  let hasEmittedLastValue = areTransitionsEmittedLastValue()
+  let lastComputedValue = computeCurrentValue()
+  let hasNewValue = checkTransitionsHaveNewValue()
 
   function computeCurrentValue() {
     const newState: { [key: string]: number } = {}
@@ -22,14 +22,15 @@ export function createGroupTransition(transitions: {
   }
 
   function getCurrentValue() {
-    if (hasEmittedLastValue) {
-      return currentValue
+    if (!hasNewValue) {
+      return lastComputedValue
     }
 
-    currentValue = computeCurrentValue()
-    hasEmittedLastValue = areTransitionsEmittedLastValue()
+    // Order matters here
+    lastComputedValue = computeCurrentValue()
+    hasNewValue = checkTransitionsHaveNewValue()
 
-    return currentValue
+    return lastComputedValue
   }
 
   function setTargetValue(target: { [key: string]: number }) {
@@ -37,17 +38,17 @@ export function createGroupTransition(transitions: {
       transitions[key].setTargetValue(target[key])
     }
 
-    hasEmittedLastValue = areTransitionsEmittedLastValue()
+    hasNewValue = checkTransitionsHaveNewValue()
   }
 
-  function areTransitionsEmittedLastValue() {
+  function checkTransitionsHaveNewValue() {
     for (const key in transitions) {
-      if (!transitions[key].hasPendingObservation()) {
-        return false
+      if (transitions[key].hasNewValue()) {
+        return true
       }
     }
 
-    return true
+    return false
   }
 
   function setOptions(options: TransitionTimingOptions) {
@@ -55,12 +56,12 @@ export function createGroupTransition(transitions: {
       transitions[key].setOptions(options)
     }
 
-    hasEmittedLastValue = areTransitionsEmittedLastValue()
+    hasNewValue = checkTransitionsHaveNewValue()
   }
 
   return {
     setTargetValue,
-    hasPendingObservation: () => hasEmittedLastValue,
+    hasNewValue: () => hasNewValue,
     getCurrentValue,
     setOptions,
   }

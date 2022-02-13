@@ -34,7 +34,7 @@ export const inert =
       // after calling transition.getCurrentValue()
       const value = transition.getCurrentValue()
 
-      if (!transition.hasPendingObservation()) {
+      if (transition.hasNewValue()) {
         throttledNotifyBeforeNextRender()
       }
 
@@ -44,7 +44,7 @@ export const inert =
     const setTarget = (newTarget: ObservedTypeOf<T>) => {
       transition.setTargetValue(newTarget as any)
 
-      if (!transition.hasPendingObservation()) {
+      if (transition.hasNewValue()) {
         throttledNotifyBeforeNextRender()
       }
     }
@@ -52,7 +52,7 @@ export const inert =
     const setTransition = (newOptions: TransitionTimingOptions) => {
       transition.setOptions(newOptions)
 
-      if (!transition.hasPendingObservation()) {
+      if (transition.hasNewValue()) {
         throttledNotifyBeforeNextRender()
       }
     }

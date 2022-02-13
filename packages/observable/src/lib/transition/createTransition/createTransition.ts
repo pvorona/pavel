@@ -1,10 +1,10 @@
-import { Easing, linear } from '@pavel/easing'
+import { hasOvershoot } from '@pavel/easing'
 import {
   TransitionTimingOptionsObject,
   TransitionTimingOptions,
   Transition,
-  TransitionTiming,
 } from '../types'
+import { createTransitionTimingOptions } from './createTransitionTimingOptions'
 
 export type TransitionOptions = TransitionTimingOptionsObject & {
   initialValue: number
@@ -28,23 +28,21 @@ export const createTransition = (
     throw new Error(`Expected positive duration. Received ${duration}`)
   }
 
-  let hasPendingObservation = false
+  let hasNewValue = false
   let lastObservedValue = initialValue
-  let hasCompleted = true
   let startTime = 0.0
   let startValue = initialValue
   let targetValue = initialValue
 
-  const getCurrentValueAndUpdateHasPendingObservation = () => {
-    if (!hasPendingObservation) {
+  const getCurrentValueAndUpdateHasNewValue = () => {
+    if (!hasNewValue) {
       return lastObservedValue
     }
 
     const progress = Math.min((performance.now() - startTime) / duration, 1)
 
     if (progress === 1) {
-      hasCompleted = true
-      hasPendingObservation = false
+      hasNewValue = false
       lastObservedValue = targetValue
 
       return lastObservedValue
@@ -53,10 +51,8 @@ export const createTransition = (
     lastObservedValue =
       startValue + (targetValue - startValue) * easing(progress)
 
-    // This breaks with overshoot easings
-    if (lastObservedValue === targetValue) {
-      hasCompleted = true
-      hasPendingObservation = false
+    if (!hasOvershoot(easing) && lastObservedValue === targetValue) {
+      hasNewValue = false
       lastObservedValue = targetValue
 
       return lastObservedValue
@@ -72,10 +68,9 @@ export const createTransition = (
 
     // Order matters here
     const previousLastObservedValue = lastObservedValue
-    startValue = getCurrentValueAndUpdateHasPendingObservation()
+    startValue = getCurrentValueAndUpdateHasNewValue()
     targetValue = newTargetValue
-    hasCompleted = startValue === newTargetValue
-    hasPendingObservation = previousLastObservedValue !== newTargetValue
+    hasNewValue = previousLastObservedValue !== newTargetValue
     startTime = performance.now()
   }
 
@@ -86,41 +81,16 @@ export const createTransition = (
     //   return
     // }
 
-    startValue = getCurrentValueAndUpdateHasPendingObservation()
+    startValue = getCurrentValueAndUpdateHasNewValue()
     startTime = performance.now()
     duration = newTimingOptions.duration
     easing = newTimingOptions.easing
   }
 
   return {
-    hasPendingObservation: () => hasPendingObservation,
-    getCurrentValue: getCurrentValueAndUpdateHasPendingObservation,
+    hasNewValue: () => hasNewValue,
+    getCurrentValue: getCurrentValueAndUpdateHasNewValue,
     setTargetValue,
     setOptions,
   }
-}
-
-const DEFAULT_EASING = linear
-
-function getEasing(options: TransitionTimingOptionsObject): Easing {
-  if (options.easing) {
-    return options.easing
-  }
-
-  return DEFAULT_EASING
-}
-
-export function createTransitionTimingOptions(
-  optionsOrDuration: TransitionTimingOptions,
-): TransitionTiming {
-  if (typeof optionsOrDuration === 'number') {
-    return {
-      duration: optionsOrDuration,
-      easing: DEFAULT_EASING,
-    }
-  }
-
-  const easing = getEasing(optionsOrDuration)
-
-  return { ...optionsOrDuration, easing }
 }

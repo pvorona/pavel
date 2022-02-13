@@ -15,7 +15,7 @@ export type TransitionTiming = {
 export type Transition<A> = {
   getCurrentValue: () => A
   setTargetValue: (target: A) => void
-  hasPendingObservation: () => boolean
+  hasNewValue: () => boolean
   setOptions: (options: TransitionTimingOptions) => void
 }
 
