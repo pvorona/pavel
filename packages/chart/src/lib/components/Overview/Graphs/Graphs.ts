@@ -10,6 +10,7 @@ import { mapDataToCoords, toBitMapSize } from '../../../util'
 import { Transition } from '../../constants'
 import { Point, Component } from '../../types'
 import { createGraphs } from '../../Graphs/createGraphs'
+import { scheduleTask } from '@pavel/scheduling'
 
 const VIEWBOX_TOP_BOTTOM_BORDER_WIDTH = 2
 
@@ -79,7 +80,9 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
 
   const graphs = createDOM()
 
-  renderPoints(overviewGraphPoints.get(), inertOpacityStateByGraphName.get())
+  scheduleTask(() => {
+    renderPoints(overviewGraphPoints.get(), inertOpacityStateByGraphName.get())
+  })
 
   effect(
     [width],

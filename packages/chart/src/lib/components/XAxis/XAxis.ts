@@ -1,5 +1,6 @@
 import { createCache } from '@pavel/cache'
 import { computeLazy, effect } from '@pavel/observable'
+import { scheduleTask } from '@pavel/scheduling'
 import { ChartContext, ChartOptions } from '../../types'
 import {
   toScreenX,
@@ -62,7 +63,9 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
     marginTop,
   })
 
-  renderLabels(inertStartIndex.get(), inertEndIndex.get(), factor.get())
+  scheduleTask(() => {
+    renderLabels(inertStartIndex.get(), inertEndIndex.get(), factor.get())
+  })
 
   effect(
     [width],

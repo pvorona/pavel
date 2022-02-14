@@ -1,4 +1,5 @@
 import { computeLazy, effect } from '@pavel/observable'
+import { scheduleTask } from '@pavel/scheduling'
 import { BitMapSize, ChartContext, ChartOptions } from '../../types'
 import {
   getClosestGreaterOrEqualDivisibleInt,
@@ -31,13 +32,15 @@ export const YAxis = (
     },
   )
 
-  renderLabelsAndGrid(
-    inertVisibleMin.get(),
-    inertVisibleMax.get(),
-    factor.get(),
-    width.get(),
-    height.get(),
-  )
+  scheduleTask(() => {
+    renderLabelsAndGrid(
+      inertVisibleMin.get(),
+      inertVisibleMax.get(),
+      factor.get(),
+      width.get(),
+      height.get(),
+    )
+  })
 
   effect(
     [width, height],
