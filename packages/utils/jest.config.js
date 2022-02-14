@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'are-same-shape-objects-shallow-equal',
+  displayName: 'utils',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -10,6 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory:
-    '../../coverage/packages/are-same-shape-objects-shallow-equal',
+  coverageDirectory: '../../coverage/packages/utils',
 }

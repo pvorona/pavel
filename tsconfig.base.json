@@ -22,12 +22,14 @@
       "@pavel/cache": ["packages/cache/src/index.ts"],
       "@pavel/chart": ["packages/chart/src/index.ts"],
       "@pavel/easing": ["packages/easing/src/index.ts"],
+      "@pavel/functions": ["packages/functions/src/index.ts"],
       "@pavel/observable": ["packages/observable/src/index.ts"],
       "@pavel/requestIdleCallback": [
         "packages/request-idle-callback/src/index.ts"
       ],
       "@pavel/scheduling": ["packages/scheduling/src/index.ts"],
-      "@pavel/swapElements": ["packages/swapElements/src/index.ts"]
+      "@pavel/types": ["packages/types/src/index.ts"],
+      "@pavel/utils": ["packages/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

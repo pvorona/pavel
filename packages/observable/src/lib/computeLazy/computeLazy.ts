@@ -1,10 +1,6 @@
+import { collectValues } from '../utils'
+import { Lambda } from '@pavel/types'
 import {
-  collectValues,
-  notifyAll,
-  removeFirstElementOccurrence,
-} from '../utils'
-import {
-  Lambda,
   ReadonlyLazySubject,
   ObservedTypesOf,
   Named,
@@ -12,6 +8,7 @@ import {
 } from '../types'
 import { observe } from '../observe'
 import { createName } from '../createName'
+import { createFunctions } from '@pavel/functions'
 
 const COMPUTE_LAZY_GROUP = 'ComputeLazy'
 
@@ -23,7 +20,7 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
   options?: ComputeLazyOptions,
 ): ReadonlyLazySubject<T> {
   const name = createName(COMPUTE_LAZY_GROUP, options, compute.name)
-  const observers: Lambda[] = []
+  const observers = createFunctions<Lambda>()
   let value: T
   let dirty = true
 
@@ -31,7 +28,7 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
 
   function markDirty() {
     dirty = true
-    notifyAll(observers)
+    observers.invoke()
   }
 
   function recompute() {
@@ -47,14 +44,9 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
         value = recompute()
         dirty = false
       }
+
       return value
     },
-    observe(observer: Lambda) {
-      observers.push(observer)
-
-      return () => {
-        removeFirstElementOccurrence(observers, observer)
-      }
-    },
+    observe: observers.add,
   }
 }

@@ -1,4 +1,5 @@
-import { Easing, linear, special } from './easing'
+import { Easing } from './types'
+import { linear, special } from './easing'
 
 const EASINGS_WITHOUT_OVERSHOOT = new Set([linear, special])
 

@@ -1,4 +1,5 @@
-import { effect, computeLazy, Lambda } from '@pavel/observable'
+import { Lambda } from '@pavel/types'
+import { effect, computeLazy } from '@pavel/observable'
 import { ChartContext, ChartOptions } from '../../types'
 import { getTooltipDateText } from '../../util'
 import { DOT_SIZE, CENTER_OFFSET as DOT_CENTER_OFFSET } from '../constants'
