@@ -1,6 +1,7 @@
-import { removeFirstElementOccurrence, notifyAllWithValue } from '../utils'
 import { Observer, EagerSubject, Named } from '../types'
 import { createName } from '../createName'
+import { getValue } from './getValue'
+import { createFunctions } from '@pavel/functions'
 
 export type ObservableOptions = Partial<Named>
 
@@ -11,39 +12,24 @@ export function observable<T>(
   options?: ObservableOptions,
 ): EagerSubject<T> {
   const name = createName(OBSERVABLE_GROUP, options)
+  const observers = createFunctions<Observer<T>>()
   let value = initialValue
-  const observers: Observer<T>[] = []
-
-  function notify() {
-    notifyAllWithValue(observers, value)
-  }
 
   return {
     name,
     set(newValueOrFactory) {
-      const newValue =
-        newValueOrFactory instanceof Function
-          ? newValueOrFactory(value)
-          : newValueOrFactory
+      const newValue = getValue(newValueOrFactory, value)
 
       if (newValue === value) {
         return
       }
 
       value = newValue
-
-      notify()
+      observers.invoke(value)
     },
     get() {
       return value
     },
-    // fire immediately can solve Gettable dependency
-    observe(observer) {
-      observers.push(observer)
-
-      return () => {
-        removeFirstElementOccurrence(observers, observer)
-      }
-    },
+    observe: observers.add,
   }
 }

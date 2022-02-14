@@ -1,4 +1,4 @@
-import { swapElements } from '@pavel/swapElements'
+import { swapElements } from '@pavel/utils'
 import { QueueByPriority } from './types'
 import {
   BEFORE_RENDER_PRIORITIES_IN_ORDER,

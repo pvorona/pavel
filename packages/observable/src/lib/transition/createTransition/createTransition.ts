@@ -1,6 +1,6 @@
 import { assert } from '@pavel/assert'
 import { hasOvershoot } from '@pavel/easing'
-import { areSameShapeObjectsShallowEqual } from '@pavel/areSameShapeObjectsShallowEqual'
+import { areSameShapeObjectsShallowEqual } from '@pavel/utils'
 import {
   TransitionTimingOptionsObject,
   TransitionTimingOptions,

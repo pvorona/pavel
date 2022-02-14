@@ -1,4 +1,4 @@
-import { areSameShapeObjectsShallowEqual } from '@pavel/areSameShapeObjectsShallowEqual'
+import { areSameShapeObjectsShallowEqual } from '@pavel/utils'
 
 export function memoizeObjectArgument(fun) {
   let prevObject = {}
