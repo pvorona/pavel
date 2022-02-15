@@ -2,7 +2,7 @@ import { Controls } from '../Controls'
 import { ChartOptions } from '../../types'
 import { Overview } from '../Overview'
 import { XAxis } from '../XAxis'
-import { YAxis } from '../YAxisV2'
+import { YAxis } from '../YAxis'
 import { Tooltip } from '../Tooltip'
 import { Series } from '../Series'
 import { ChartContext } from '../Context'
@@ -15,13 +15,10 @@ export const Chart = (uncheckedOptions: ChartOptions) => {
   const { width, height } = context
   const { element } = createDOM()
 
-  const resizeListener = throttleWithFrame(
-    function measureContainerSize() {
-      width.set(element.offsetWidth)
-      height.set(element.offsetHeight)
-    },
-    PRIORITY.READ,
-  )
+  const resizeListener = throttleWithFrame(function measureContainerSize() {
+    width.set(element.offsetWidth)
+    height.set(element.offsetHeight)
+  }, PRIORITY.READ)
 
   window.addEventListener('resize', resizeListener)
 

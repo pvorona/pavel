@@ -1,4 +1,4 @@
-export type Lambda = () => void
+import { Lambda } from '@pavel/types'
 
 export type Observer<A> = (value: A) => void
 

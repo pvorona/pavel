@@ -1,4 +1,4 @@
-import { swapElements } from '@pavel/swapElements'
+import { swapElements } from '@pavel/utils'
 import { QueueByPriority } from './types'
 import {
   BEFORE_RENDER_PRIORITIES_IN_ORDER,
@@ -13,6 +13,7 @@ import { initQueue } from './initQueue'
 let animationFrameId: undefined | number = undefined
 
 export let phase = PHASE.INTERACTING
+export let currentFrameTimestamp: number | undefined
 
 export const queueByPriority: QueueByPriority = initQueue()
 export const futureQueueByPriority: QueueByPriority = initQueue()
@@ -25,7 +26,8 @@ export function scheduleExecutionIfNeeded() {
   animationFrameId = requestAnimationFrame(performScheduledTasks)
 }
 
-function performScheduledTasks() {
+function performScheduledTasks(timestamp: number) {
+  currentFrameTimestamp = timestamp
   phase = PHASE.BEFORE_RENDER
 
   for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
@@ -58,6 +60,7 @@ function performScheduledTasks() {
   }
 
   phase = PHASE.INTERACTING
+  currentFrameTimestamp = undefined
 }
 
 function executeTasksAndReinitializeQueueIfNeeded(

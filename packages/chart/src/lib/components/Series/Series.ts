@@ -20,6 +20,7 @@ import {
 } from '../constants'
 import { Component, Point } from '../types'
 import { createGraphs } from '../Graphs/createGraphs'
+import { scheduleTask } from '@pavel/scheduling'
 
 export const Series: Component<ChartOptions, ChartContext> = (
   options,
@@ -39,7 +40,9 @@ export const Series: Component<ChartOptions, ChartContext> = (
 ) => {
   const { element, canvas, context } = createDOM()
 
-  renderPoints(mainGraphPoints.get(), inertOpacityStateByGraphName.get())
+  scheduleTask(() => {
+    renderPoints(mainGraphPoints.get(), inertOpacityStateByGraphName.get())
+  })
 
   effect(
     [width, canvasHeight],

@@ -1,16 +1,17 @@
 {
   "version": 2,
   "projects": {
-    "are-same-shape-objects-shallow-equal": "packages/are-same-shape-objects-shallow-equal",
     "assert": "packages/assert",
     "cache": "packages/cache",
     "chart": "packages/chart",
     "chart-demo": "packages/chart-demo",
     "chart-demo-e2e": "packages/chart-demo-e2e",
     "easing": "packages/easing",
+    "functions": "packages/functions",
     "observable": "packages/observable",
     "request-idle-callback": "packages/request-idle-callback",
     "scheduling": "packages/scheduling",
-    "swapElements": "packages/swapElements"
+    "types": "packages/types",
+    "utils": "packages/utils"
   }
 }

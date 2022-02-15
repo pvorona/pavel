@@ -1,5 +1,6 @@
 import { collectValues as collectValuesUtil } from '../utils'
-import { Lambda, ObservedTypesOf, ReadonlySubject } from '../types'
+import { Lambda } from '@pavel/types'
+import { ObservedTypesOf, ReadonlySubject } from '../types'
 
 export type ObserveOptions = {
   readonly collectValues?: boolean

@@ -1,11 +1,12 @@
-import { Lambda, ObservedTypeOf } from '../types'
-import { notifyAll, removeFirstElementOccurrence } from '../utils'
+import { ObservedTypeOf } from '../types'
 import { observe } from '../observe'
 import { AnimatableSubject, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
 import { createName, wrapName } from '../createName'
 import { PRIORITY, throttleWithFrame } from '@pavel/scheduling'
+import { Lambda } from '@pavel/types'
 import { TransitionTimingOptions } from '../transition'
+import { createFunctions } from '@pavel/functions'
 
 const INERT_GROUP = 'Inert'
 
@@ -15,14 +16,12 @@ export const inert =
     const name = wrapName(createName(INERT_GROUP, options), target.name)
     // Can get lazy. Use case for idleUntilUrgent?
     const transition = constructTransition(target.get(), options)
-    const observers: Lambda[] = []
+    const observers = createFunctions<Lambda>()
 
     // TODO: don't emit values when there are no observers.
     // Ensure emitting renews if new observers join while transition is in progress
     const throttledNotifyBeforeNextRender = throttleWithFrame(
-      function notifyBeforeNextRender() {
-        notifyAll(observers)
-      },
+      observers.invoke,
       PRIORITY.BEFORE_RENDER,
     )
 
@@ -63,12 +62,6 @@ export const inert =
       name,
       setTransition,
       get: get as any,
-      observe(observer) {
-        observers.push(observer)
-
-        return () => {
-          removeFirstElementOccurrence(observers, observer)
-        }
-      },
+      observe: observers.add,
     }
   }
