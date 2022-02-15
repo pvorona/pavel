@@ -1,4 +1,4 @@
-import { TransitionV4 } from '../types'
+import { Transition } from '../types'
 import { createTransition } from './createTransition'
 import { createTimeUtils } from './__test__/createTimeUtils'
 
@@ -25,7 +25,7 @@ describe('createTransition', () => {
     const initialValue = 0
     const duration = 10
 
-    let transition: TransitionV4<number>
+    let transition: Transition<number>
     let setTimeProgress: ReturnType<typeof createTimeUtils>['setTimeProgress']
 
     beforeEach(() => {
@@ -121,7 +121,7 @@ describe('createTransition', () => {
           })
         })
 
-        it('returns { hasCompleted: true } and transitions from initial value to target value', () => {
+        it('returns { hasCompleted: false } and transitions from initial value to target value', () => {
           expect(transition.setTargetValue(newTargetValue)).toStrictEqual({
             hasCompleted: false,
           })
@@ -169,6 +169,7 @@ describe('createTransition', () => {
 
         describe('when calling setTargetValue during the transition', () => {
           beforeEach(() => {
+            transition.setTargetValue(newTargetValue)
             setTimeProgress(0.5)
           })
 
@@ -224,15 +225,18 @@ describe('createTransition', () => {
             const newDuration = 5
 
             beforeEach(() => {
+              transition.setTargetValue(newTargetValue)
+
               setTimeProgress(0.5)
             })
 
             it('continues transition from the latest value to target value using new options', () => {
-              expect(transition.setOptions({
-                duration: newDuration,
-              })).toStrictEqual({ hasCompleted: false })
+              expect(
+                transition.setOptions({
+                  duration: newDuration,
+                }),
+              ).toStrictEqual({ hasCompleted: false })
 
-              
               expect(transition.getCurrentValue()).toStrictEqual({
                 value: 5,
                 hasCompleted: false,

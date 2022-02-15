@@ -28,9 +28,6 @@ export const inert =
     const get = () => {
       // TODO: only compute value once per frame
       // TODO: compute value using requestAnimationFrame parameter instead of performance.now()
-      // Order matters here:
-      // transition.hasNewValue() may change the value
-      // after calling transition.getCurrentValue()
       const { value, hasCompleted } = transition.getCurrentValue()
 
       if (!hasCompleted) {

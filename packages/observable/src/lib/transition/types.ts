@@ -12,21 +12,17 @@ export type TransitionTiming = {
   easing: Easing
 }
 
-export type Transition<A> = {
-  getCurrentValue: () => A
-  setTargetValue: (target: A) => void
-  hasNewValue: () => boolean
-  setOptions: (options: TransitionTimingOptions) => void
-}
-
-export type TransitionV4<T> = {
-  getCurrentValue: () => { value: T, hasCompleted: boolean }
+export type Transition<T> = {
+  getCurrentValue: () => { value: T; hasCompleted: boolean }
   setTargetValue: (target: T) => { hasCompleted: boolean }
   setOptions: (options: TransitionTimingOptions) => { hasCompleted: boolean }
 }
 
 export type TimelessTransition<T> = {
-  getValue: (timestamp: number) => { value: T, hasCompleted: boolean }
+  getValue: (timestamp: number) => { value: T; hasCompleted: boolean }
   setTargetValue: (timestamp: number, target: T) => { hasCompleted: boolean }
-  setOptions: (timestamp: number, options: TransitionTimingOptions) => { hasCompleted: boolean }
+  setOptions: (
+    timestamp: number,
+    options: TransitionTimingOptions,
+  ) => { hasCompleted: boolean }
 }
