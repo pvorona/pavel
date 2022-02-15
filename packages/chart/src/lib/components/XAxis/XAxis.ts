@@ -157,12 +157,11 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
 
 function computeScaleFactor(number: number, ticks: number) {
   let factor = 1
-  while (true) {
-    if (number / factor <= ticks) {
-      break
-    }
+
+  while (number / factor > ticks) {
     factor *= 2
   }
+
   return factor
 }
 

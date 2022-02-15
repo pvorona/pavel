@@ -156,12 +156,11 @@ const PREFERRED_FACTORS = [
 ]
 
 function computeScaleFactor(number: number, ticks: number) {
-  let factorIndex = -1
-  while (true) {
-    if (number / PREFERRED_FACTORS[factorIndex] <= ticks) {
-      break
-    }
+  let factorIndex = 0
+
+  while (number / PREFERRED_FACTORS[factorIndex] > ticks) {
     factorIndex++
   }
+
   return PREFERRED_FACTORS[factorIndex]
 }
