@@ -1,4 +1,4 @@
-import { RecordKey } from "@pavel/types"
+import { RecordKey } from '@pavel/types'
 
 export function getOrCreate<Key extends RecordKey, Value>(
   source: Record<Key, Value>,
@@ -21,4 +21,3 @@ function createValue<Key extends RecordKey, Value>(
 
   return createOrDefaultValue
 }
-

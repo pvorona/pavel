@@ -1,4 +1,4 @@
-export function areSameShapeObjectsShallowEqual<
+export function shallowEqual<
   T extends Record<string | number | symbol, unknown>,
 >(a: T, b: T) {
   for (const key in a) {

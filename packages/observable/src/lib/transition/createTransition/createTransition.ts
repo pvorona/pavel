@@ -1,6 +1,6 @@
 import { assert } from '@pavel/assert'
 import { hasOvershoot } from '@pavel/easing'
-import { areSameShapeObjectsShallowEqual } from '@pavel/utils'
+import { shallowEqual } from '@pavel/utils'
 import {
   TransitionTimingOptionsObject,
   TransitionTimingOptions,
@@ -19,82 +19,97 @@ export type TransitionOptions = TransitionTimingOptionsObject & {
 // - [x] Dont compute when completed
 // - [ ] Stateless transition
 
+// I don't like it at all
 export const createTransition = (
   options: TransitionOptions,
 ): Transition<number> => {
-  const { initialValue } = options
-
   let timingOptions = createTransitionTimingOptions(options)
-  let { duration, easing } = timingOptions
+
+  let startTime = 0.0
+  let duration = timingOptions.duration
+  let easing = timingOptions.easing
+
+  let startValue = options.initialValue
+  let targetValue = options.initialValue
+  let lastObservedValue = options.initialValue
+
+  let hasCompleted = true
 
   assert(duration >= 0, `Expected positive duration. Received ${duration}`)
 
-  let startTime = 0.0
-  let hasNewValue = false
-  let lastObservedValue = initialValue
-  let startValue = initialValue
-  let targetValue = initialValue
-
-  const getCurrentValueAndUpdateHasNewValue = () => {
-    if (!hasNewValue) {
-      return lastObservedValue
+  const getCurrentValueAndUpdateHasCompleted = () => {
+    // Smells
+    if (hasCompleted) {
+      return { value: targetValue, hasCompleted: true }
     }
 
-    const progress = Math.min((performance.now() - startTime) / duration, 1)
+    const progress = getProgress(startTime, duration, performance.now())
 
     if (progress === 1) {
-      hasNewValue = false
+      hasCompleted = true
       lastObservedValue = targetValue
 
-      return lastObservedValue
+      return { value: targetValue, hasCompleted: true }
     }
 
-    const currentValue =
-      startValue + (targetValue - startValue) * easing(progress)
+    const currentValue = computeCurrentValue()
 
-    if (!hasOvershoot(easing) && currentValue === targetValue) {
-      hasNewValue = false
-      lastObservedValue = currentValue
+    if (currentValue === targetValue && !hasOvershoot(easing)) {
+      hasCompleted = true
+      lastObservedValue = targetValue
 
-      return lastObservedValue
+      return { value: targetValue, hasCompleted: true }
     }
 
     lastObservedValue = currentValue
 
-    return lastObservedValue
+    return { value: lastObservedValue, hasCompleted: false }
+  }
+
+  function computeCurrentValue() {
+    const progress = getProgress(startTime, duration, performance.now())
+
+    return startValue + (targetValue - startValue) * easing(progress)
   }
 
   const setTargetValue = (newTargetValue: number) => {
     if (newTargetValue === targetValue) {
-      return
+      return { hasCompleted }
     }
 
     // Order matters here
-    const previousLastObservedValue = lastObservedValue
-    startValue = getCurrentValueAndUpdateHasNewValue()
-    targetValue = newTargetValue
-    hasNewValue = previousLastObservedValue !== newTargetValue
+    startValue = computeCurrentValue()
     startTime = performance.now()
+    targetValue = newTargetValue
+    hasCompleted = lastObservedValue === newTargetValue
+
+    return { hasCompleted }
   }
 
   const setOptions = (newOptions: TransitionTimingOptions) => {
     const newTimingOptions = createTransitionTimingOptions(newOptions)
 
-    if (areSameShapeObjectsShallowEqual(timingOptions, newTimingOptions)) {
-      return
+    if (shallowEqual(timingOptions, newTimingOptions)) {
+      return { hasCompleted }
     }
 
-    startValue = getCurrentValueAndUpdateHasNewValue()
+    startValue = computeCurrentValue()
     startTime = performance.now()
     timingOptions = newTimingOptions
     duration = newTimingOptions.duration
     easing = newTimingOptions.easing
+    hasCompleted = lastObservedValue === targetValue
+
+    return { hasCompleted }
   }
 
   return {
-    hasNewValue: () => hasNewValue,
-    getCurrentValue: getCurrentValueAndUpdateHasNewValue,
+    getCurrentValue: getCurrentValueAndUpdateHasCompleted,
     setTargetValue,
     setOptions,
   }
+}
+
+function getProgress(startTime: number, duration: number, currentTime: number) {
+  return Math.min((currentTime - startTime) / duration, 1)
 }

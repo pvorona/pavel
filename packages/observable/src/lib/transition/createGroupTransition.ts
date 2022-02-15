@@ -1,67 +1,54 @@
 import { Transition, TransitionTimingOptions } from './types'
 
 // TODO
-// - [x] Store hasNewValue state internally to avoid unnecessary
+// - [ ] Store hasCompleted state internally to avoid unnecessary
 //       computations when calling `getCurrentValue`
 // - [ ] Use class to avoid creating new functions for every transition
 // - [ ] Support { [key: string]: number } as initial value argument
 export function createGroupTransition(transitions: {
   [key: string]: Transition<number>
 }): Transition<{ [key: string]: number }> {
-  let lastComputedValue = computeCurrentValue()
-  let hasNewValue = checkTransitionsHaveNewValue()
-
-  function computeCurrentValue() {
-    const newState: { [key: string]: number } = {}
-
-    for (const key in transitions) {
-      newState[key] = transitions[key].getCurrentValue()
-    }
-
-    return newState
-  }
-
-  function getCurrentValue() {
-    if (!hasNewValue) {
-      return lastComputedValue
-    }
-
-    // Order matters here
-    lastComputedValue = computeCurrentValue()
-    hasNewValue = checkTransitionsHaveNewValue()
-
-    return lastComputedValue
-  }
-
   function setTargetValue(target: { [key: string]: number }) {
+    let hasCompleted = true
+
     for (const key in target) {
-      transitions[key].setTargetValue(target[key])
+      const { hasCompleted: localHasCompleted } = transitions[
+        key
+      ].setTargetValue(target[key])
+      hasCompleted &&= localHasCompleted
     }
 
-    hasNewValue = checkTransitionsHaveNewValue()
-  }
-
-  function checkTransitionsHaveNewValue() {
-    for (const key in transitions) {
-      if (transitions[key].hasNewValue()) {
-        return true
-      }
-    }
-
-    return false
+    return { hasCompleted }
   }
 
   function setOptions(options: TransitionTimingOptions) {
+    let hasCompleted = true
+
     for (const key in transitions) {
-      transitions[key].setOptions(options)
+      const { hasCompleted: localHasCompleted } =
+        transitions[key].setOptions(options)
+      hasCompleted &&= localHasCompleted
     }
 
-    hasNewValue = checkTransitionsHaveNewValue()
+    return { hasCompleted }
+  }
+
+  function getCurrentValue() {
+    const newValue: { [key: string]: number } = {}
+    let hasCompleted = true
+
+    for (const key in transitions) {
+      const { value, hasCompleted: localHasCompleted } =
+        transitions[key].getCurrentValue()
+      newValue[key] = value
+      hasCompleted &&= localHasCompleted
+    }
+
+    return { value: newValue, hasCompleted }
   }
 
   return {
     setTargetValue,
-    hasNewValue: () => hasNewValue,
     getCurrentValue,
     setOptions,
   }

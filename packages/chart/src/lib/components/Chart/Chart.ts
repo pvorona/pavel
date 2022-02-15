@@ -15,13 +15,10 @@ export const Chart = (uncheckedOptions: ChartOptions) => {
   const { width, height } = context
   const { element } = createDOM()
 
-  const resizeListener = throttleWithFrame(
-    function measureContainerSize() {
-      width.set(element.offsetWidth)
-      height.set(element.offsetHeight)
-    },
-    PRIORITY.READ,
-  )
+  const resizeListener = throttleWithFrame(function measureContainerSize() {
+    width.set(element.offsetWidth)
+    height.set(element.offsetHeight)
+  }, PRIORITY.READ)
 
   window.addEventListener('resize', resizeListener)
 
