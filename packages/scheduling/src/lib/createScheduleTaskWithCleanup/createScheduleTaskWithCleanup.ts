@@ -1,4 +1,4 @@
-import { Lambda } from '../types'
+import { Lambda } from '@pavel/types'
 import { PRIORITY } from '../constants'
 import { scheduleTask } from '../scheduleTask'
 

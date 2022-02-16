@@ -5,7 +5,7 @@ import {
   futureQueueByPriority,
   phase,
 } from '../scheduling'
-import { Lambda } from '../types'
+import { Lambda } from '@pavel/types'
 
 export function scheduleTask(task: Lambda, priority = PRIORITY.WRITE): Lambda {
   // Capture queue of the current frame

@@ -1,6 +1,5 @@
+import { Lambda } from '@pavel/types'
 import { PRIORITY } from './constants'
-
-export type Lambda = () => void
 
 export type QueueByPriority = {
   [value in PRIORITY]: {
