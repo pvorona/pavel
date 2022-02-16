@@ -4,11 +4,10 @@ import {
   renderLineSeriesWithAreaGradient,
   setCanvasSize,
 } from '../../renderers'
-import { ChartContext, ChartOptions } from '../../../types'
+import { Point, Component, ChartContext, ChartOptions } from '../../../types'
 import { special } from '@pavel/easing'
 import { mapDataToCoords, toBitMapSize } from '../../../util'
 import { Transition } from '../../constants'
-import { Point, Component } from '../../types'
 import { createGraphs } from '../../Graphs/createGraphs'
 import { scheduleTask } from '@pavel/scheduling'
 

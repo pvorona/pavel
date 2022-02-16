@@ -1,6 +1,7 @@
 import { collectValues as collectValuesUtil } from '../utils'
 import { Lambda } from '@pavel/types'
-import { ObservedTypesOf, ReadonlySubject } from '../types'
+import { isObservable, ObservedTypesOf, ReadonlySubject } from '../types'
+import { invokeAll } from '@pavel/utils'
 
 export type ObserveOptions = {
   readonly collectValues?: boolean
@@ -22,26 +23,51 @@ const DEFAULT_OPTIONS: ObserveOptions = {
   fireImmediately: true,
 }
 
-export function observe<T extends ReadonlySubject<unknown>[]>(
-  deps: readonly [...T],
+export function observe<
+  T extends ReadonlySubject<unknown>[] | ReadonlySubject<unknown[]>,
+>(
+  dependencies: T,
   observer: (...args: ObservedTypesOf<T>) => void,
   options?: CollectingValuesOptions,
 ): Lambda
-export function observe<T extends ReadonlySubject<unknown>[]>(
-  deps: readonly [...T],
+export function observe<
+  T extends ReadonlySubject<unknown>[] | ReadonlySubject<unknown[]>,
+>(
+  dependencies: T,
   observer: () => void,
   options?: NotCollectingValuesOptions,
 ): Lambda
 export function observe(
-  deps: readonly ReadonlySubject<unknown>[],
+  dependencies: ReadonlySubject<unknown>[] | ReadonlySubject<unknown[]>,
   externalObserver: (...args: unknown[]) => void,
   {
     fireImmediately = DEFAULT_OPTIONS.fireImmediately,
     collectValues = DEFAULT_OPTIONS.collectValues,
   }: ObserveOptions = DEFAULT_OPTIONS,
 ): Lambda {
-  const observer = createObserver(externalObserver, deps, collectValues)
-  const unobserves = deps.map(dep => dep.observe(observer))
+  const observer = createObserver(externalObserver, dependencies, collectValues)
+  let unobserves: Lambda[] = []
+
+  if (Array.isArray(dependencies)) {
+    unobserves = dependencies.map(dep => dep.observe(observer))
+  } else {
+    dependencies.observe(() => {
+      observer()
+
+      if (unobserves.length !== 0) {
+        invokeAll(unobserves)
+        unobserves.length = 0
+      }
+
+      // No need to re-observe all dependencies
+      // Only changed ones is enough
+      dependencies.get().map(dependency => {
+        if (isObservable(dependency)) {
+          unobserves.push(dependency.observe(observer))
+        }
+      })
+    })
+  }
 
   if (fireImmediately) {
     observer()
@@ -54,12 +80,30 @@ export function observe(
 
 function createObserver(
   observer: (...args: unknown[]) => void,
-  deps: readonly ReadonlySubject<unknown>[],
+  deps: ReadonlySubject<unknown>[] | ReadonlySubject<unknown[]>,
   collectValues: boolean | undefined,
-): (...args: unknown[]) => void {
+): (...args: never[]) => void {
   if (collectValues) {
-    return () => observer(...collectValuesUtil(deps))
+    return function collectingObserver() {
+      if (Array.isArray(deps)) {
+        return observer(...collectValuesUtil(deps))
+      }
+
+      return observer(...deps.get())
+    }
   }
 
   return observer
 }
+
+// function getDependenciesArray(
+//   dependenciesOrObservableArray:
+//     | ReadonlySubject<unknown>[]
+//     | ReadonlySubject<unknown[]>,
+// ) {
+//   if (Array.isArray(dependenciesOrObservableArray)) {
+//     return dependenciesOrObservableArray
+//   }
+
+//   return dependenciesOrObservableArray.get()
+// }

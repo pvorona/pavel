@@ -6,21 +6,22 @@ import {
   ObservedTypesOf,
   ReadonlySubject,
   Named,
+  ObservableTag,
 } from '../types'
 
 const COMPUTE_GROUP = 'Compute'
 
 export type ComputeOptions = Partial<Named>
 
-export function compute<A extends ReadonlySubject<unknown>[], T>(
-  deps: readonly [...A],
-  compute: (...args: ObservedTypesOf<A>) => T,
+export function compute<D extends ReadonlySubject<unknown>[], T>(
+  dependencies: D,
+  compute: (...args: ObservedTypesOf<D>) => T,
   options?: ComputeOptions,
 ): ReadonlyEagerSubject<T> {
   const name = createName(COMPUTE_GROUP, options, compute.name)
   const obs = observable(undefined as unknown as T)
 
-  observe(deps, (...values) => {
+  observe(dependencies, (...values) => {
     obs.set(compute(...values))
   })
 
@@ -28,5 +29,6 @@ export function compute<A extends ReadonlySubject<unknown>[], T>(
     name,
     get: obs.get,
     observe: obs.observe,
+    [ObservableTag]: true,
   }
 }

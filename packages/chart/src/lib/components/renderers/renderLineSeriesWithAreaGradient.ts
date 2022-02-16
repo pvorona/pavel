@@ -1,5 +1,5 @@
 import { hexToRGB, toBitMapSize } from "../../util";
-import { Point } from "../types";
+import { Point } from "../../types";
 import { lineTo } from "./lineTo";
 
 const MARGIN_OVERSHOOT = 1;

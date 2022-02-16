@@ -7,6 +7,7 @@ import { PRIORITY, throttleWithFrame } from '@pavel/scheduling'
 import { Lambda } from '@pavel/types'
 import { TransitionTimingOptions } from '../transition'
 import { createFunctions } from '@pavel/functions'
+import { ObservableTag } from '..'
 
 const INERT_GROUP = 'Inert'
 
@@ -41,7 +42,7 @@ export const inert =
     }
 
     const setTarget = (newTarget: ObservedTypeOf<T>) => {
-      transition.setTargetValue(newTarget as any)
+      transition.setTargetValue(newTarget as never)
 
       if (transition.hasNewValue()) {
         throttledNotifyBeforeNextRender()
@@ -61,7 +62,8 @@ export const inert =
     return {
       name,
       setTransition,
-      get: get as any,
+      get: get as never,
       observe: observers.add,
+      [ObservableTag]: true,
     }
   }

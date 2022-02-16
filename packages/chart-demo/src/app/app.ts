@@ -1,4 +1,4 @@
-import { Chart, ChartOptions } from '@pavel/chart'
+import { Chart, ChartOptions, render } from '@pavel/chart'
 import './app.scss'
 
 type DataEntry = { timestamp: number; value: number }
@@ -214,4 +214,5 @@ async function startApp() {
   })
 }
 
-startApp()
+// startApp()
+render()

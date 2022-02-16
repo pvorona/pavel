@@ -13,7 +13,7 @@ const DEFAULT_OPTIONS: Options = {
 }
 
 export function effect<T extends ReadonlySubject<unknown>[]>(
-  deps: readonly [...T],
+  deps: [...T],
   observer: (...args: ObservedTypesOf<T>) => void,
   options = DEFAULT_OPTIONS,
 ): Lambda {

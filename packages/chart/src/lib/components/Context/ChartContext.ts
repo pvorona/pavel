@@ -6,14 +6,14 @@ import {
   resetWhenInactive,
   inert,
 } from '@pavel/observable'
-import { ChartOptions } from '../../types'
+import { ChartOptions, Point } from '../../types'
 import {
   cursor,
   Transition,
   MIN_HEIGHT,
   WHEEL_CLEAR_TIMEOUT,
 } from '../constants'
-import { OpacityState, Point, EnabledGraphNames } from '../types'
+import { OpacityState, EnabledGraphNames } from '../types'
 import { mapDataToCoords, createMinMaxView } from '../../util'
 import { special } from '@pavel/easing'
 

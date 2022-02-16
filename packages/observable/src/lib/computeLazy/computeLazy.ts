@@ -9,13 +9,14 @@ import {
 import { observe } from '../observe'
 import { createName } from '../createName'
 import { createFunctions } from '@pavel/functions'
+import { ObservableTag } from '..'
 
 const COMPUTE_LAZY_GROUP = 'ComputeLazy'
 
 export type ComputeLazyOptions = Partial<Named>
 
 export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
-  deps: readonly [...A],
+  deps: [...A],
   compute: (...args: ObservedTypesOf<A>) => T,
   options?: ComputeLazyOptions,
 ): ReadonlyLazySubject<T> {
@@ -48,5 +49,6 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
       return value
     },
     observe: observers.add,
+    [ObservableTag]: true,
   }
 }

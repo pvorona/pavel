@@ -1,34 +1,33 @@
-import { ChartContext, ChartOptions } from "../../../types";
-import { Component } from "../../types";
-import { Graphs } from "../Graphs";
-import { RangeSlider } from "../RangeSlider";
+import { Component, ChartContext, ChartOptions } from '../../../types'
+import { Graphs } from '../Graphs'
+import { RangeSlider } from '../RangeSlider'
 
-import "./overview.css";
+import './overview.css'
 
 export const Overview: Component<ChartOptions, ChartContext> = (
   options,
-  context
+  context,
 ) => {
-  const { element } = createDom();
+  const { element } = createDom()
 
-  return { element };
+  return { element }
 
   function createDom() {
-    const containerClassName = "overview";
-    const element = document.createElement("div");
+    const containerClassName = 'overview'
+    const element = document.createElement('div')
 
-    element.className = containerClassName;
-    element.style.height = `${options.overview.height}px`;
+    element.className = containerClassName
+    element.style.height = `${options.overview.height}px`
 
-    const graphs = Graphs(options, context);
-    const rangeSlider = RangeSlider(options, context);
+    const graphs = Graphs(options, context)
+    const rangeSlider = RangeSlider(options, context)
 
-    element.appendChild(graphs.element);
-    element.appendChild(rangeSlider.element);
+    element.appendChild(graphs.element)
+    element.appendChild(rangeSlider.element)
 
     return {
       element,
       graphs,
-    };
+    }
   }
-};
+}

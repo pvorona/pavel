@@ -4,7 +4,7 @@ import {
   renderLineSeriesWithAreaGradient,
   setCanvasSize,
 } from '../renderers'
-import { ChartContext, ChartOptions } from '../../types'
+import { Component, Point, ChartContext, ChartOptions } from '../../types'
 import {
   ensureInBounds,
   handleDrag,
@@ -18,7 +18,6 @@ import {
   cursor,
   MIN_HEIGHT,
 } from '../constants'
-import { Component, Point } from '../types'
 import { createGraphs } from '../Graphs/createGraphs'
 import { scheduleTask } from '@pavel/scheduling'
 

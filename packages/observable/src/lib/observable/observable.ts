@@ -1,6 +1,6 @@
-import { Observer, EagerSubject, Named } from '../types'
+import { Observer, EagerSubject, Named, ObservableTag } from '../types'
 import { createName } from '../createName'
-import { getValue } from './getValue'
+import { getValue } from '../utils'
 import { createFunctions } from '@pavel/functions'
 
 export type ObservableOptions = Partial<Named>
@@ -31,5 +31,6 @@ export function observable<T>(
       return value
     },
     observe: observers.add,
+    [ObservableTag]: true,
   }
 }

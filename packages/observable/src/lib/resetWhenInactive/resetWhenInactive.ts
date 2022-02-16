@@ -1,3 +1,4 @@
+import { ObservableTag } from '..'
 import { createName, wrapName } from '../createName'
 import { EagerSubject, Named } from '../types'
 
@@ -38,6 +39,7 @@ export const resetWhenInactive =
       },
       get: target.get,
       observe: target.observe,
+      [ObservableTag]: true,
     }
   }
 

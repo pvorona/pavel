@@ -193,3 +193,14 @@ describe('observe', () => {
     })
   })
 })
+
+describe('with array', () => {
+  it('works', () => {
+    const observer = jest.fn()
+    const o = observable([1, 2, 3])
+
+    observe(o, observer)
+
+    expect(observer).toHaveBeenCalledWith(1, 2, 3)
+  })
+})

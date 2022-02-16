@@ -1,14 +1,13 @@
 import { createCache } from '@pavel/cache'
 import { computeLazy, effect } from '@pavel/observable'
 import { scheduleTask } from '@pavel/scheduling'
-import { ChartContext, ChartOptions } from '../../types'
+import { Component, ChartContext, ChartOptions } from '../../types'
 import {
   toScreenX,
   toBitMapSize,
   getClosestGreaterOrEqualDivisibleInt,
 } from '../../util'
 import { clearRect, setCanvasSize } from '../renderers'
-import { Component } from '../types'
 
 // - Rsi realStartIndex
 // - Si startIndex

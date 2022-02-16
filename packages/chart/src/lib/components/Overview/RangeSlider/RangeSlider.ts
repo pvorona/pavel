@@ -1,5 +1,5 @@
 import { effect, observable, observe } from '@pavel/observable'
-import { ChartContext, ChartOptions } from '../../../types'
+import { Component, ChartContext, ChartOptions } from '../../../types'
 import { handleDrag, ensureInBounds, areNumbersClose } from '../../../util'
 import {
   cursor,
@@ -7,7 +7,6 @@ import {
   MIN_VIEWBOX,
   WHEEL_MULTIPLIER,
 } from '../../constants'
-import { Component } from '../../types'
 
 import './overview-resize-handler.css'
 import './overview-viewbox.css'

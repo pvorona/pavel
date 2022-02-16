@@ -1,9 +1,8 @@
 import { Lambda } from '@pavel/types'
 import { effect, computeLazy } from '@pavel/observable'
-import { ChartContext, ChartOptions } from '../../types'
+import { Component, Point, ChartContext, ChartOptions } from '../../types'
 import { getTooltipDateText } from '../../util'
 import { DOT_SIZE, CENTER_OFFSET as DOT_CENTER_OFFSET } from '../constants'
-import { Component, Point } from '../types'
 
 import './TooltipLine.css'
 import './Title.css'
