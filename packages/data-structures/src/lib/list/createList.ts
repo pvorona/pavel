@@ -4,36 +4,46 @@ export type ListNode<T> = {
   value: T
 }
 
-export function createList<T>() {
+export type List<T> = Readonly<{
+  moveToTheEnd: (node: ListNode<T>) => void
+  remove: (node: ListNode<T>) => void
+  append: (node: ListNode<T>) => void
+  getFirst: () => ListNode<T> | null
+  getLast: () => ListNode<T> | null
+  toJSON: () => string
+}>
+
+export const EMPTY_LIST_STRING = 'EMPTY_LIST'
+export const TOKEN_SEPARATOR = ' -> '
+
+export function createList<T>(): List<T> {
   let first: ListNode<T> | null = null
   let last: ListNode<T> | null = null
 
   function append(node: ListNode<T>) {
-    if (last) {
-      last.next = node
+    if (first === null && last === null) {
+      first = node
+      last = node
+
+      return
     }
 
+    ;(last as ListNode<T>).next = node
     node.prev = last
     last = node
-
-    if (first === null) {
-      first = node
-    }
   }
 
   function moveToTheEnd(node: ListNode<T>) {
-    // check first last
     remove(node)
     append(node)
   }
 
   function remove(node: ListNode<T>) {
-    // Check if it's first or last
-    if (node.prev) {
+    if (node.prev !== null) {
       node.prev.next = node.next
     }
 
-    if (node.next) {
+    if (node.next !== null) {
       node.next.prev = node.prev
     }
 
@@ -49,12 +59,29 @@ export function createList<T>() {
     node.next = null
   }
 
+  function toJSON() {
+    if (first === null) {
+      return EMPTY_LIST_STRING
+    }
+
+    const tokens = []
+    let current: null | ListNode<T> = first
+
+    while (current) {
+      tokens.push(current.value)
+      current = current.next
+    }
+
+    return tokens.join(TOKEN_SEPARATOR)
+  }
+
   return {
     moveToTheEnd,
     remove,
     append,
     getFirst: () => first,
     getLast: () => last,
+    toJSON,
   }
 }
 
