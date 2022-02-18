@@ -1,3 +1,4 @@
+import { assert } from '@pavel/assert'
 import { createNode } from './createNode'
 import { List, ListNode } from './types'
 
@@ -27,6 +28,16 @@ export function createDoublyLinkedList<T>(): List<T> {
     ;(last as ListNode<T>).next = node
     node.prev = last
     last = node
+  }
+
+  function shift() {
+    assert(first !== null, 'Cannot shift empty list')
+
+    const node = first
+
+    removeNode(node as ListNode<T>)
+
+    return node as ListNode<T>
   }
 
   function removeNode(node: ListNode<T>) {
@@ -72,6 +83,7 @@ export function createDoublyLinkedList<T>(): List<T> {
     removeNode,
     pushNode,
     push,
+    shift,
     first: () => first,
     last: () => last,
     toJSON,

@@ -26,8 +26,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
   function get(key: Key) {
     assert(valueByKey.has(key), `Trying to get by non-existent key: ${key}`)
 
-    const node = nodeByKey.get(key)
-    moveToEnd(keys, node as ListNode<Key>)
+    updateRecency(key)
 
     return valueByKey.get(key) as Value
   }
@@ -40,25 +39,28 @@ export function createLRUCache<Key extends RecordKey, Value>(
     if (valueByKey.has(key)) {
       valueByKey.set(key, value)
 
-      const node = nodeByKey.get(key)
-
-      moveToEnd(keys, node as ListNode<Key>)
+      updateRecency(key)
 
       return
     }
 
     if (valueByKey.size === size) {
-      const first = keys.first() as ListNode<Key>
-      const { value: removedKey } = first
+      const { value: removedKey } = keys.shift()
 
-      keys.removeNode(first)
       valueByKey.delete(removedKey as Key)
       nodeByKey.delete(removedKey)
     }
 
-    valueByKey.set(key, value)
     const node = keys.push(key)
+
     nodeByKey.set(key, node)
+    valueByKey.set(key, value)
+  }
+
+  function updateRecency(key: Key) {
+    const node = nodeByKey.get(key)
+
+    moveToEnd(keys, node as ListNode<Key>)
   }
 
   return { get, set, has }
