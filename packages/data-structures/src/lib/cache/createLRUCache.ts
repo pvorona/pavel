@@ -1,10 +1,5 @@
 import { assert, isInteger, isPositive } from '@pavel/assert'
-import {
-  createDoublyLinkedList,
-  ListNode,
-  createNode,
-  moveToEnd,
-} from '../list'
+import { createDoublyLinkedList, ListNode, moveToEnd } from '../list'
 import { RecordKey } from '@pavel/types'
 import { CacheOptions, Cache } from './types'
 
@@ -21,7 +16,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
 
   assert(
     isPositive(size) && isInteger(size),
-    `Expected positive size, received ${size}`,
+    `Expected positive integer, received: ${size}`,
   )
 
   const keys = createDoublyLinkedList<Key>()
@@ -29,10 +24,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
   const valueByKey = new Map<Key, Value>()
 
   function get(key: Key) {
-    assert(
-      valueByKey.has(key),
-      `Trying to get by non-existent key. Key: ${key}`,
-    )
+    assert(valueByKey.has(key), `Trying to get by non-existent key: ${key}`)
 
     const node = nodeByKey.get(key)
     moveToEnd(keys, node as ListNode<Key>)
