@@ -1,10 +1,11 @@
 import { assert } from '@pavel/assert'
-import { hasOvershoot } from '@pavel/easing'
+import { hasOvershoot, linear } from '@pavel/easing'
 import { shallowEqual } from '@pavel/utils'
 import {
   TransitionTimingOptionsObject,
   TransitionTimingOptions,
   Transition,
+  TransitionTiming,
 } from '../types'
 import { createTransitionTimingOptions } from './createTransitionTimingOptions'
 
@@ -13,7 +14,7 @@ export type TransitionOptions = TransitionTimingOptionsObject & {
 }
 
 // TODO:
-// - [ ] Use class to avoid creating new functions for every transition
+// - [-] Use class to avoid creating new functions for every transition
 // - [ ] Get timestamp from requestAnimationFrame
 // - [ ] Compute value once per frame
 // - [x] Dont compute when completed
