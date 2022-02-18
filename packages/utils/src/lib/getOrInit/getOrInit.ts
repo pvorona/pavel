@@ -1,6 +1,6 @@
 import { RecordKey } from '@pavel/types'
 
-export function getOrCreate<Key extends RecordKey, Value>(
+export function getOrInit<Key extends RecordKey, Value>(
   source: Record<Key, Value>,
   key: Key,
   createOrDefaultValue: ((key: Key) => Value) | Value,

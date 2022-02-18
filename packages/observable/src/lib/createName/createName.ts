@@ -1,4 +1,4 @@
-import { getOrCreate } from '@pavel/cache'
+import { getOrInit } from '@pavel/utils'
 
 const countByGroup: Record<string, number> = {}
 
@@ -15,7 +15,7 @@ export function createName(
     return name
   }
 
-  const index = getOrCreate(countByGroup, groupName, 0)
+  const index = getOrInit(countByGroup, groupName, 0)
 
   countByGroup[groupName]++
 
