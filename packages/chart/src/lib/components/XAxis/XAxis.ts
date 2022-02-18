@@ -1,4 +1,4 @@
-import { createCache } from '@pavel/cache'
+import { makeCached } from '@pavel/data-structures'
 import { computeLazy, effect } from '@pavel/observable'
 import { scheduleTask } from '@pavel/scheduling'
 import { ChartContext, ChartOptions } from '../../types'
@@ -41,7 +41,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
   options,
   { inertStartIndex, inertEndIndex, width },
 ) => {
-  const labels = createCache(formatTimestamp)
+  const labels = makeCached(formatTimestamp)
   const {
     x: {
       color,

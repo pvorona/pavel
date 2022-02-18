@@ -1,5 +1,5 @@
 export function assert(condition: boolean, message?: string): void {
   if (!condition) {
-    throw new Error(`Assertion Failed: ${message}`)
+    throw new Error(message || 'Assertion Failed')
   }
 }

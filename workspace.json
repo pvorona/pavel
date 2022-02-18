@@ -2,10 +2,10 @@
   "version": 2,
   "projects": {
     "assert": "packages/assert",
-    "cache": "packages/cache",
     "chart": "packages/chart",
     "chart-demo": "packages/chart-demo",
     "chart-demo-e2e": "packages/chart-demo-e2e",
+    "data-structures": "packages/data-structures",
     "easing": "packages/easing",
     "functions": "packages/functions",
     "observable": "packages/observable",
