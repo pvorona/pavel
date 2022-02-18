@@ -1,5 +1,10 @@
 import { assert, isInteger, isPositive } from '@pavel/assert'
-import { createList, ListNode, createNode } from '../list'
+import {
+  createDoublyLinkedList,
+  ListNode,
+  createNode,
+  moveToEnd,
+} from '../list'
 import { RecordKey } from '@pavel/types'
 import { CacheOptions, Cache } from './types'
 
@@ -19,7 +24,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
     `Expected positive size, received ${size}`,
   )
 
-  const keys = createList<Key>()
+  const keys = createDoublyLinkedList<Key>()
   const nodeByKey = new Map<Key, ListNode<Key>>()
   const valueByKey = new Map<Key, Value>()
 
@@ -30,7 +35,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
     )
 
     const node = nodeByKey.get(key)
-    keys.moveToTheEnd(node as ListNode<Key>)
+    moveToEnd(keys, node as ListNode<Key>)
 
     return valueByKey.get(key) as Value
   }
@@ -45,24 +50,23 @@ export function createLRUCache<Key extends RecordKey, Value>(
 
       const node = nodeByKey.get(key)
 
-      keys.moveToTheEnd(node as ListNode<Key>)
+      moveToEnd(keys, node as ListNode<Key>)
 
       return
     }
 
     if (valueByKey.size === size) {
-      const first = keys.getFirst() as ListNode<Key>
+      const first = keys.first() as ListNode<Key>
       const { value: removedKey } = first
 
-      keys.remove(first)
+      keys.removeNode(first)
       valueByKey.delete(removedKey as Key)
       nodeByKey.delete(removedKey)
     }
 
     valueByKey.set(key, value)
-    const node = createNode(key)
+    const node = keys.push(key)
     nodeByKey.set(key, node)
-    keys.append(node)
   }
 
   return { get, set, has }
