@@ -1,4 +1,13 @@
 import { Chart, ChartOptions } from '@pavel/chart'
+import { LazyObservable } from '@pavel/observable'
+import { scheduleTask } from '@pavel/scheduling'
+import {
+  animationFrameScheduler,
+  BehaviorSubject,
+  combineLatest,
+  map,
+  scheduled,
+} from 'rxjs'
 import './app.scss'
 
 type DataEntry = { timestamp: number; value: number }
@@ -214,4 +223,21 @@ async function startApp() {
   })
 }
 
-startApp()
+// startApp()
+
+// [ ] Custom scheduler
+
+function main() {
+  const s1 = ((window as any).s1 = new BehaviorSubject(1))
+  const s2 = ((window as any).s2 = new BehaviorSubject(2))
+
+  scheduled(
+    combineLatest([s1, s2]).pipe(map(([s1, s2]) => [s1 * 2, s2 * 2])),
+    animationFrameScheduler,
+  ).subscribe(([s1, s2]) => {
+    console.log(Date.now(), s1, s2)
+  })
+}
+
+main()
+

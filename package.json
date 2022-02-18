@@ -9,6 +9,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "regenerator-runtime": "0.13.7",
+    "rxjs": "^7.5.4",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
