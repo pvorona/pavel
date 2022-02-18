@@ -11,6 +11,7 @@ export type List<T> = Readonly<{
   getFirst: () => ListNode<T> | null
   getLast: () => ListNode<T> | null
   toJSON: () => string
+  // [Symbol.iterator]: Iterator<T>
 }>
 
 export const EMPTY_LIST_STRING = 'EMPTY_LIST'

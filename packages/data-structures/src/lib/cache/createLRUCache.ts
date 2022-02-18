@@ -1,18 +1,23 @@
-import { assert } from '@pavel/assert'
+import { assert, isInteger, isPositive } from '@pavel/assert'
 import { createList, ListNode, createNode } from '../list'
 import { RecordKey } from '@pavel/types'
 import { CacheOptions, Cache } from './types'
 
-const DEFAULT_OPTIONS: CacheOptions = {
-  size: Infinity,
-}
+// const DEFAULT_OPTIONS: CacheOptions = {
+// size: Infinity,
+// updateRecencyOnHas: false,
+// updateRecencyOnGet: false,
+// }
 
 export function createLRUCache<Key extends RecordKey, Value>(
   options: CacheOptions,
 ): Cache<Key, Value> {
-  const { size } = { ...DEFAULT_OPTIONS, ...options }
+  const { size } = options
 
-  assert(size > 0, `Expected positive cache size, received ${size}`)
+  assert(
+    isPositive(size) && isInteger(size),
+    `Expected positive size, received ${size}`,
+  )
 
   const keys = createList<Key>()
   const nodeByKey = new Map<Key, ListNode<Key>>()
@@ -23,6 +28,9 @@ export function createLRUCache<Key extends RecordKey, Value>(
       valueByKey.has(key),
       `Trying to get by non-existent key. Key: ${key}`,
     )
+
+    const node = nodeByKey.get(key)
+    keys.moveToTheEnd(node as ListNode<Key>)
 
     return valueByKey.get(key) as Value
   }

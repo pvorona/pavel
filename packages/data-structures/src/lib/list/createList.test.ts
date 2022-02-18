@@ -1,5 +1,10 @@
-import { ListNode } from '.'
-import { createList, EMPTY_LIST_STRING, List, createNode } from './createList'
+import {
+  ListNode,
+  createList,
+  EMPTY_LIST_STRING,
+  List,
+  createNode,
+} from './createList'
 
 describe('createList', () => {
   describe('when initialized', () => {
@@ -30,10 +35,6 @@ describe('createList', () => {
         list.append(node)
       })
 
-      it('adds node to the end', () => {
-        expect(list.getLast()).toBe(node)
-      })
-
       it('sets first and last pointers', () => {
         expect(list.getFirst()).toBe(node)
         expect(list.getLast()).toBe(node)
@@ -58,6 +59,8 @@ describe('createList', () => {
         list.append(node2)
         list.append(node3)
       })
+
+      it.todo('remove a node from single node list')
 
       it('check', () => {
         expect(list.getFirst()).toBe(node1)
