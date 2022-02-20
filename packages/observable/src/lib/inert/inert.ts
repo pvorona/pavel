@@ -1,4 +1,4 @@
-import { ObservedTypeOf } from '../types'
+import { ObservedTypeOf, ValueOrUpdater } from '../types'
 import { observe } from '../observe'
 import { AnimatableSubject, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
@@ -7,6 +7,7 @@ import { PRIORITY, throttleWithFrame } from '@pavel/scheduling'
 import { Lambda } from '@pavel/types'
 import { TransitionTimingOptions } from '../transition'
 import { createFunctions } from '@pavel/functions'
+import { getValue } from '../utils'
 
 const INERT_GROUP = 'Inert'
 
@@ -38,7 +39,7 @@ export const inert =
     }
 
     const setTarget = (newTarget: ObservedTypeOf<T>) => {
-      const { hasCompleted } = transition.setTargetValue(newTarget as any)
+      const { hasCompleted } = transition.setTargetValue(newTarget as never)
 
       if (!hasCompleted) {
         throttledNotifyBeforeNextRender()
@@ -48,9 +49,25 @@ export const inert =
     const setTransition = (newOptions: TransitionTimingOptions) => {
       const { hasCompleted } = transition.setOptions(newOptions)
 
-      if (hasCompleted) {
+      if (!hasCompleted) {
         throttledNotifyBeforeNextRender()
       }
+    }
+
+    function set(valueOrUpdater: ValueOrUpdater<ObservedTypeOf<T>>) {
+      const value = getValue(
+        valueOrUpdater,
+        transition.getCurrentValue().value as never,
+      )
+      const { hasCompleted } = transition.setInstant(value as never)
+
+      if (!hasCompleted) {
+        throttledNotifyBeforeNextRender()
+      }
+    }
+
+    function complete() {
+      set(target.get() as never)
     }
 
     observe([target], setTarget, { fireImmediately: false })
@@ -58,7 +75,9 @@ export const inert =
     return {
       name,
       setTransition,
-      get: get as any,
+      get: get as never,
+      set,
+      complete,
       observe: observers.add,
     }
   }
