@@ -3,64 +3,58 @@ import { createDoublyLinkedList, ListNode, moveToEnd } from '../list'
 import { RecordKey } from '@pavel/types'
 import { CacheOptions, Cache } from './types'
 
-// const DEFAULT_OPTIONS: CacheOptions = {
-// size: Infinity,
-// updateRecencyOnHas: false,
-// updateRecencyOnGet: false,
-// }
+type CacheNode<Key, Value> = {
+  key: Key
+  value: Value
+}
 
 export function createLRUCache<Key extends RecordKey, Value>(
   options: CacheOptions,
 ): Cache<Key, Value> {
-  const { size } = options
+  const { max } = options
 
   assert(
-    isPositive(size) && isInteger(size),
-    `Expected positive integer, received: ${size}`,
+    isPositive(max) && isInteger(max),
+    `Expected positive integer, received: ${max}`,
   )
 
-  const keys = createDoublyLinkedList<Key>()
-  const nodeByKey = new Map<Key, ListNode<Key>>()
-  const valueByKey = new Map<Key, Value>()
+  const nodes = createDoublyLinkedList<CacheNode<Key, Value>>()
+  const nodeByKey = new Map<Key, ListNode<CacheNode<Key, Value>>>()
 
   function get(key: Key) {
-    assert(valueByKey.has(key), `Trying to get by non-existent key: ${key}`)
+    assert(nodeByKey.has(key), `Trying to get by non-existent key: ${key}`)
 
     updateRecency(key)
 
-    return valueByKey.get(key) as Value
+    return (nodeByKey.get(key) as ListNode<CacheNode<Key, Value>>).value.value
   }
 
   function has(key: Key) {
-    return valueByKey.has(key)
+    return nodeByKey.has(key)
   }
 
   function set(key: Key, value: Value) {
-    if (valueByKey.has(key)) {
-      valueByKey.set(key, value)
+    if (nodeByKey.has(key)) {
+      const node = nodeByKey.get(key)
+      nodes.removeNode(node as ListNode<CacheNode<Key, Value>>)
+      nodeByKey.delete(key)
+    } else if (nodeByKey.size === max) {
+      const {
+        value: { key: keyToRemove },
+      } = nodes.shift()
 
-      updateRecency(key)
-
-      return
+      nodeByKey.delete(keyToRemove)
     }
 
-    if (valueByKey.size === size) {
-      const { value: removedKey } = keys.shift()
-
-      valueByKey.delete(removedKey as Key)
-      nodeByKey.delete(removedKey)
-    }
-
-    const node = keys.push(key)
+    const node = nodes.push({ key, value })
 
     nodeByKey.set(key, node)
-    valueByKey.set(key, value)
   }
 
   function updateRecency(key: Key) {
     const node = nodeByKey.get(key)
 
-    moveToEnd(keys, node as ListNode<Key>)
+    moveToEnd(nodes, node as ListNode<CacheNode<Key, Value>>)
   }
 
   return { get, set, has }

@@ -1,1 +1,2 @@
-export * from './getOrInit'
+export * from './getOrInitRecord'
+export * from './getOrInitMap'
