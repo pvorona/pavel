@@ -3,16 +3,9 @@ import { createDoublyLinkedList, ListNode, moveToEnd } from '../list'
 import { RecordKey } from '@pavel/types'
 import { CacheOptions, Cache } from './types'
 
-// const DEFAULT_OPTIONS: CacheOptions = {
-// max: Infinity,
-// updateRecencyOnHas: false,
-// }
-
 type CacheNode<Key, Value> = {
   key: Key
   value: Value
-  // left: CacheNode<Key, Value> | null
-  // right: CacheNode<Key, Value> | null
 }
 
 export function createLRUCache<Key extends RecordKey, Value>(

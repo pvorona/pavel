@@ -1,4 +1,4 @@
-import { getOrInitV2 } from '@pavel/utils'
+import { getOrInitMap } from '@pavel/utils'
 
 const countByGroup = new Map<string, number>()
 
@@ -15,7 +15,7 @@ export function createName(
     return name
   }
 
-  const index = getOrInitV2(countByGroup, groupName, 0)
+  const index = getOrInitMap(countByGroup, groupName, 0)
 
   countByGroup.set(groupName, index + 1)
 
