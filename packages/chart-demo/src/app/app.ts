@@ -207,9 +207,7 @@ async function startApp() {
           color: theme.tooltipColor,
         },
       }
-      const { element } = Chart(options)
-
-      chartContainer.appendChild(element)
+      const { element } = Chart(chartContainer, options)
     } catch (error) {
       console.error(error)
     }

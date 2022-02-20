@@ -45,6 +45,9 @@ export const YAxis = (
   effect(
     [width, height],
     (width, height) => {
+      element.style.height = `${height}px`
+      element.style.width = `${width}px`
+
       setCanvasSize(element, toBitMapSize(width), toBitMapSize(height))
       setCanvasStyle(
         context,

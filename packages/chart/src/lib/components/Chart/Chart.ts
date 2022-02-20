@@ -9,15 +9,17 @@ import { ChartContext } from '../Context'
 import { throttleWithFrame, PRIORITY } from '@pavel/scheduling'
 import { validateConfig } from '../../config'
 
-export const Chart = (uncheckedOptions: ChartOptions) => {
+export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
   const options = validateConfig(uncheckedOptions)
   const context = ChartContext(options)
   const { width, height } = context
   const { element } = createDOM()
 
+  parent.appendChild(element)
+
   const resizeListener = throttleWithFrame(function measureContainerSize() {
-    width.set(element.offsetWidth)
-    height.set(element.offsetHeight)
+    width.set(parent.offsetWidth)
+    height.set(parent.offsetHeight)
   }, PRIORITY.READ)
 
   window.addEventListener('resize', resizeListener)
