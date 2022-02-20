@@ -3,13 +3,10 @@ import { getOrInitV2 } from '@pavel/utils'
 import { createLRUCache } from './createLRUCache'
 import { Cached, CacheOptions } from './types'
 
-// TODO
-// - [x] Allow to specify max size (LRU/LRC)
 export function makeCached<Key extends RecordKey, Value>(
   create: (key: Key) => Value,
   options: CacheOptions,
 ): Cached<Key, Value> {
-  // const cache = {} as Record<Key, Value>
   const cache = createLRUCache<Key, Value>(options)
 
   return {
