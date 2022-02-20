@@ -1,8 +1,8 @@
 import { createLRUCache } from './createLRUCache'
 
 describe('cache (LRU)', () => {
-  describe.each([0, -1, -10])(
-    'when initialized with non-positive size (%s)',
+  describe.each([0, -1.5, 10.1])(
+    'when initialized with non-positive or non-integer size (%s)',
     max => {
       it('throws', () => {
         expect(() => createLRUCache({ max })).toThrow(
