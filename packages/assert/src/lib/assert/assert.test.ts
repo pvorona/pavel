@@ -1,4 +1,4 @@
-import { assert, DEFAULT_MESSAGE } from '.'
+import { assert, DEFAULT_MESSAGE } from './assert'
 
 describe('Default assertion message', () => {
   it("is 'Assertion Error'", () => {
