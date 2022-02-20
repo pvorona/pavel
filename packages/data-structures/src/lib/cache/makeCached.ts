@@ -1,6 +1,6 @@
 import { RecordKey } from '@pavel/types'
-import { getOrInitV2 } from '@pavel/utils'
 import { createLRUCache } from './createLRUCache'
+import { getOrInitCache } from './getOrInitCache'
 import { Cached, CacheOptions } from './types'
 
 export function makeCached<Key extends RecordKey, Value>(
@@ -10,6 +10,6 @@ export function makeCached<Key extends RecordKey, Value>(
   const cache = createLRUCache<Key, Value>(options)
 
   return {
-    get: (key: Key) => getOrInitV2<Key, Value>(cache, key, create),
+    get: (key: Key) => getOrInitCache<Key, Value>(cache, key, create),
   }
 }
