@@ -4,12 +4,13 @@ export type ListNode<T> = {
   value: T
 }
 
-export type List<T> = Readonly<{
-  first: () => ListNode<T> | null
-  last: () => ListNode<T> | null
-  pushNode: (node: ListNode<T>) => void
-  push: (value: T) => ListNode<T>
-  removeNode: (node: ListNode<T>) => void
-  shift: () => ListNode<T>
-  toJSON: () => string
-}>
+export type List<T> = Iterable<T> &
+  Readonly<{
+    head: () => ListNode<T> | null
+    tail: () => ListNode<T> | null
+    pushNode: (node: ListNode<T>) => void
+    push: (value: T) => ListNode<T>
+    removeNode: (node: ListNode<T>) => void
+    shift: () => ListNode<T>
+    toArray: () => T[]
+  }>

@@ -1,27 +1,24 @@
-import {
-  createDoublyLinkedList,
-  EMPTY_LIST_STRING,
-} from './createDoublyLinkedList'
+import { DoublyLinkedList } from './DoublyLinkedList'
 import { List, ListNode } from './types'
 
 describe('createDoublyLinkedList', () => {
   let list: List<number>
 
   beforeEach(() => {
-    list = createDoublyLinkedList<number>()
+    list = DoublyLinkedList<number>()
   })
 
   describe('when initialized', () => {
     it('first is null', () => {
-      expect(list.first()).toBeNull()
+      expect(list.head()).toBeNull()
     })
 
     it('last is null', () => {
-      expect(list.last()).toBeNull()
+      expect(list.tail()).toBeNull()
     })
 
     it('serializes to empty', () => {
-      expect(list.toJSON()).toBe(EMPTY_LIST_STRING)
+      expect([...list]).toStrictEqual([])
     })
   })
 
@@ -29,25 +26,25 @@ describe('createDoublyLinkedList', () => {
     const node = list.push(1)
     list.removeNode(node)
 
-    expect(list.first()).toBe(null)
-    expect(list.last()).toBe(null)
+    expect(list.head()).toBe(null)
+    expect(list.tail()).toBe(null)
   })
 
   describe('when pushing single value', () => {
     let node: ListNode<number>
 
     beforeEach(() => {
-      list = createDoublyLinkedList<number>()
+      list = DoublyLinkedList<number>()
       node = list.push(1)
     })
 
     it('sets first and last pointers', () => {
-      expect(list.first()).toBe(node)
-      expect(list.last()).toBe(node)
+      expect(list.head()).toBe(node)
+      expect(list.tail()).toBe(node)
     })
 
     it('serializes to new node', () => {
-      expect(list.toJSON()).toBe('1')
+      expect([...list]).toStrictEqual([1])
     })
   })
 
@@ -63,11 +60,11 @@ describe('createDoublyLinkedList', () => {
     })
 
     it('sets first, last and serializes to all values', () => {
-      expect(list.first()).toBe(node1)
-      expect((list.first() as ListNode<number>).next).toBe(node2)
-      expect(list.last()).toBe(node3)
-      expect((list.last() as ListNode<number>).prev).toBe(node2)
-      expect(list.toJSON()).toBe('1 <-> 2 <-> 3')
+      expect(list.head()).toBe(node1)
+      expect((list.head() as ListNode<number>).next).toBe(node2)
+      expect(list.tail()).toBe(node3)
+      expect((list.tail() as ListNode<number>).prev).toBe(node2)
+      expect([...list]).toStrictEqual([1, 2, 3])
     })
   })
 
@@ -85,31 +82,31 @@ describe('createDoublyLinkedList', () => {
     it('updates first pointer if removing first node', () => {
       list.removeNode(node1)
 
-      expect(list.first()).toBe(node2)
-      expect((list.first() as ListNode<number>).next).toBe(node3)
-      expect(list.last()).toBe(node3)
-      expect((list.last() as ListNode<number>).prev).toBe(node2)
-      expect(list.toJSON()).toBe('2 <-> 3')
+      expect(list.head()).toBe(node2)
+      expect((list.head() as ListNode<number>).next).toBe(node3)
+      expect(list.tail()).toBe(node3)
+      expect((list.tail() as ListNode<number>).prev).toBe(node2)
+      expect([...list]).toStrictEqual([2, 3])
     })
 
     it('updates last pointer if removing last node', () => {
       list.removeNode(node3)
 
-      expect(list.first()).toBe(node1)
-      expect((list.first() as ListNode<number>).next).toBe(node2)
-      expect(list.last()).toBe(node2)
-      expect((list.last() as ListNode<number>).prev).toBe(node1)
-      expect(list.toJSON()).toBe('1 <-> 2')
+      expect(list.head()).toBe(node1)
+      expect((list.head() as ListNode<number>).next).toBe(node2)
+      expect(list.tail()).toBe(node2)
+      expect((list.tail() as ListNode<number>).prev).toBe(node1)
+      expect([...list]).toStrictEqual([1, 2])
     })
 
     it('updates nearby nodes pointer when removing node in the middle', () => {
       list.removeNode(node2)
 
-      expect(list.first()).toBe(node1)
-      expect((list.first() as ListNode<number>).next).toBe(node3)
-      expect(list.last()).toBe(node3)
-      expect((list.last() as ListNode<number>).prev).toBe(node1)
-      expect(list.toJSON()).toBe('1 <-> 3')
+      expect(list.head()).toBe(node1)
+      expect((list.head() as ListNode<number>).next).toBe(node3)
+      expect(list.tail()).toBe(node3)
+      expect((list.tail() as ListNode<number>).prev).toBe(node1)
+      expect([...list]).toStrictEqual([1, 3])
     })
   })
 })
