@@ -37,11 +37,15 @@ import { Component } from '../types'
 //       opacity -> progress between int factors
 //       animating multiple factor groups?
 
+const CACHE_TICKS_MULTIPLIER = 100
+
 export const XAxis: Component<ChartOptions, ChartContext> = (
   options,
   { inertStartIndex, inertEndIndex, width },
 ) => {
-  const labels = makeCached(formatTimestamp)
+  const labels = makeCached(formatTimestamp, {
+    max: options.x.ticks * CACHE_TICKS_MULTIPLIER,
+  })
   const {
     x: {
       color,

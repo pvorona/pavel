@@ -9,58 +9,82 @@ import { CacheOptions, Cache } from './types'
 // updateRecencyOnGet: false,
 // }
 
+type CacheNode<Key, Value> = {
+  key: Key
+  value: Value
+  // left: CacheNode<Key, Value> | null
+  // right: CacheNode<Key, Value> | null
+}
+
 export function createLRUCache<Key extends RecordKey, Value>(
   options: CacheOptions,
 ): Cache<Key, Value> {
-  const { size } = options
+  const { max } = options
 
   assert(
-    isPositive(size) && isInteger(size),
-    `Expected positive integer, received: ${size}`,
+    isPositive(max) && isInteger(max),
+    `Expected positive integer, received: ${max}`,
   )
 
-  const keys = createDoublyLinkedList<Key>()
-  const nodeByKey = new Map<Key, ListNode<Key>>()
-  const valueByKey = new Map<Key, Value>()
+  // const keys = createDoublyLinkedList<Key>()
+  const nodes = createDoublyLinkedList<CacheNode<Key, Value>>()
+  const nodeByKey = new Map<Key, ListNode<CacheNode<Key, Value>>>()
+  // const valueByKey = new Map<Key, Value>()
 
   function get(key: Key) {
-    assert(valueByKey.has(key), `Trying to get by non-existent key: ${key}`)
+    // assert(valueByKey.has(key), `Trying to get by non-existent key: ${key}`)
+    assert(nodeByKey.has(key), `Trying to get by non-existent key: ${key}`)
 
     updateRecency(key)
 
-    return valueByKey.get(key) as Value
+    // return valueByKey.get(key) as Value
+    return (nodeByKey.get(key) as ListNode<CacheNode<Key, Value>>).value.value
   }
 
   function has(key: Key) {
-    return valueByKey.has(key)
+    // return valueByKey.has(key)
+    return nodeByKey.has(key)
   }
 
   function set(key: Key, value: Value) {
-    if (valueByKey.has(key)) {
-      valueByKey.set(key, value)
+    // if (valueByKey.has(key)) {
+    if (nodeByKey.has(key)) {
+      // valueByKey.set(key, value)
+      // // const node = nodeByKey.get(key) as ListNode<CacheNode<Key,Value>>
+      // // nodeByKey.set(key, { ...node,value:{key, value} })
 
-      updateRecency(key)
+      // // updateRecency(key)
+      const node = nodeByKey.get(key)
+      nodes.removeNode(node as ListNode<CacheNode<Key, Value>>)
+      nodeByKey.delete(key)
 
-      return
+      // return
     }
 
-    if (valueByKey.size === size) {
-      const { value: removedKey } = keys.shift()
+    // if (valueByKey.size === size) {
+    else if (nodeByKey.size === max) {
+      // const { value: removedKey } = keys.shift()
+      const {
+        value: { key: keyToRemove },
+      } = nodes.shift()
 
-      valueByKey.delete(removedKey as Key)
-      nodeByKey.delete(removedKey)
+      // valueByKey.delete(removedKey as Key)
+      nodeByKey.delete(keyToRemove)
     }
 
-    const node = keys.push(key)
+    // const node = keys.push(key)
+    const node = nodes.push({ key, value })
 
+    // nodeByKey.set(key, node)
     nodeByKey.set(key, node)
-    valueByKey.set(key, value)
+    // valueByKey.set(key, value)
   }
 
   function updateRecency(key: Key) {
     const node = nodeByKey.get(key)
 
-    moveToEnd(keys, node as ListNode<Key>)
+    // moveToEnd(keys, node as ListNode<Key>)
+    moveToEnd(nodes, node as ListNode<CacheNode<Key, Value>>)
   }
 
   return { get, set, has }
