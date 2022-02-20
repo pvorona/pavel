@@ -22,10 +22,10 @@ export function getOrInitV2<Key extends RecordKey, Value>(
   key: Key,
   createOrDefaultValue: ((key: Key) => Value) | Value,
 ) {
-  if (!has(source, key)) {
-    set(source, key, createValue(createOrDefaultValue, key))
+  if (!source.has(key)) {
+    source.set(key, createValue(createOrDefaultValue, key))
   }
-  return get(source, key)
+  return source.get(key)
 }
 
 function createValue<Key extends RecordKey, Value>(
@@ -37,26 +37,4 @@ function createValue<Key extends RecordKey, Value>(
   }
 
   return createOrDefaultValue
-}
-
-function has<Key extends RecordKey, Value>(
-  source: MapLike<Key, Value> | Record<Key, Value>,
-  key: Key,
-) {
-  return 'has' in source ? source.has(key) : key in source
-}
-
-function set<Key extends RecordKey, Value>(
-  source: MapLike<Key, Value> | Record<Key, Value>,
-  key: Key,
-  value: Value,
-) {
-  return 'set' in source ? source.set(key, value) : (source[key] = value)
-}
-
-function get<Key extends RecordKey, Value>(
-  source: MapLike<Key, Value> | Record<Key, Value>,
-  key: Key,
-) {
-  return 'get' in source ? source.get(key) : source[key]
 }
