@@ -18,7 +18,7 @@ type MapLike<K, V> = {
 }
 
 export function getOrInitV2<Key extends RecordKey, Value>(
-  source: Record<Key, Value> | MapLike<Key, Value>,
+  source: MapLike<Key, Value>,
   key: Key,
   createOrDefaultValue: ((key: Key) => Value) | Value,
 ) {

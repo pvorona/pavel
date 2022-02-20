@@ -4,7 +4,7 @@ import { createLRUCache } from './createLRUCache'
 import { Cached, CacheOptions } from './types'
 
 // TODO
-// - [ ] Allow to specify max size (LRU/LRC)
+// - [x] Allow to specify max size (LRU/LRC)
 export function makeCached<Key extends RecordKey, Value>(
   create: (key: Key) => Value,
   options: CacheOptions,
