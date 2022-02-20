@@ -39,9 +39,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
       nodes.removeNode(node as ListNode<CacheNode<Key, Value>>)
       nodeByKey.delete(key)
     } else if (nodeByKey.size === max) {
-      const {
-        value: { key: keyToRemove },
-      } = nodes.shift()
+      const { key: keyToRemove } = nodes.shift()
 
       nodeByKey.delete(keyToRemove)
     }

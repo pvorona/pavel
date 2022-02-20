@@ -34,7 +34,7 @@ export function DoublyLinkedList<T>(): List<T> {
 
     removeNode(node as ListNode<T>)
 
-    return node as ListNode<T>
+    return (node as ListNode<T>).value
   }
 
   function removeNode(node: ListNode<T>) {

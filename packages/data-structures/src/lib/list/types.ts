@@ -11,6 +11,6 @@ export type List<T> = Iterable<T> &
     pushNode: (node: ListNode<T>) => void
     push: (value: T) => ListNode<T>
     removeNode: (node: ListNode<T>) => void
-    shift: () => ListNode<T>
+    shift: () => T
     toArray: () => T[]
   }>
