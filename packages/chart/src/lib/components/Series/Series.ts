@@ -21,6 +21,7 @@ import {
 import { Component, Point } from '../types'
 import { createGraphs } from '../Graphs/createGraphs'
 import { scheduleTask } from '@pavel/scheduling'
+import { addEventListeners } from '@pavel/utils'
 
 export const Series: Component<ChartOptions, ChartContext> = (
   options,
@@ -105,17 +106,18 @@ export const Series: Component<ChartOptions, ChartContext> = (
   }
 
   function initDragListeners() {
-    element.addEventListener('wheel', onWheel)
-
-    element.addEventListener('mouseenter', function (e) {
-      isHovering.set(true)
-      mouseX.set(e.clientX)
-    })
-    element.addEventListener('mouseleave', function () {
-      isHovering.set(false)
-    })
-    element.addEventListener('mousemove', function (e) {
-      mouseX.set(e.clientX)
+    addEventListeners(element, {
+      wheel: onWheel,
+      mouseenter(e) {
+        isHovering.set(true)
+        mouseX.set(e.clientX)
+      },
+      mouseleave() {
+        isHovering.set(false)
+      },
+      mousemove(e) {
+        mouseX.set(e.clientX)
+      },
     })
 
     let prevMouseX = 0
@@ -161,11 +163,11 @@ export const Series: Component<ChartOptions, ChartContext> = (
     })
   }
 
-  function onWheel(e: WheelEvent) {
-    e.preventDefault()
+  function onWheel(event: WheelEvent) {
+    event.preventDefault()
     isWheeling.set(true)
 
-    const angle = (Math.atan(e.deltaY / e.deltaX) * 180) / Math.PI
+    const angle = (Math.atan(event.deltaY / event.deltaX) * 180) / Math.PI
 
     const viewBoxWidth = endIndex.get() - startIndex.get()
     const dynamicFactor = (viewBoxWidth / MIN_VIEWBOX) * WHEEL_MULTIPLIER
@@ -174,7 +176,7 @@ export const Series: Component<ChartOptions, ChartContext> = (
       (angle < -(90 - DEVIATION_FROM_STRAIGHT_LINE_DEGREES) && angle >= -90) || // top right, bottom left
       (angle > 90 - DEVIATION_FROM_STRAIGHT_LINE_DEGREES && angle <= 90) // top left, bottom right
     ) {
-      const deltaY = e.deltaY
+      const deltaY = event.deltaY
 
       if (
         deltaY < 0 &&
@@ -220,7 +222,7 @@ export const Series: Component<ChartOptions, ChartContext> = (
     ) {
       startIndex.set(
         ensureInBounds(
-          startIndex.get() + e.deltaX * dynamicFactor,
+          startIndex.get() + event.deltaX * dynamicFactor,
           0,
           options.total - 1 - viewBoxWidth,
         ),
