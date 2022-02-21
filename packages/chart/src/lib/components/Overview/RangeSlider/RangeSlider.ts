@@ -18,8 +18,18 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
   options,
   context,
 ) => {
-  const { startIndex, endIndex, width, isDragging, activeCursor, isWheeling } =
-    context
+  const {
+    startIndex,
+    endIndex,
+    width,
+    isDragging,
+    activeCursor,
+    isWheeling,
+    inertStartIndex,
+    inertEndIndex,
+    inertVisibleMax,
+    inertVisibleMin,
+  } = context
 
   const {
     viewBoxElement,
@@ -102,6 +112,10 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
 
     left.set(newLeft)
     right.set(newRight)
+    inertStartIndex.complete()
+    inertEndIndex.complete()
+    inertVisibleMax.complete()
+    inertVisibleMin.complete()
   }
 
   function onRightSideClick(event: MouseEvent) {
@@ -115,6 +129,10 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
 
     left.set(newLeft)
     right.set(newRight)
+    inertStartIndex.complete()
+    inertEndIndex.complete()
+    inertVisibleMax.complete()
+    inertVisibleMin.complete()
   }
 
   handleDrag(leftResizeHandler, {

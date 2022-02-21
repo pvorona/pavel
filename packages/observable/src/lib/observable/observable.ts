@@ -1,6 +1,6 @@
 import { Observer, EagerSubject, Named } from '../types'
 import { createName } from '../createName'
-import { getValue } from './getValue'
+import { getValue } from '../utils'
 import { createFunctions } from '@pavel/functions'
 
 export type ObservableOptions = Partial<Named>

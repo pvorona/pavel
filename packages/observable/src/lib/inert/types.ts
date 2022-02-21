@@ -1,8 +1,14 @@
+import { Lambda } from '@pavel/types'
 import {
   TransitionTimingOptions,
   TransitionTimingOptionsObject,
 } from '../transition'
-import { ReadonlyEagerSubject, ReadonlyLazySubject, Named } from '../types'
+import {
+  ReadonlyEagerSubject,
+  ReadonlyLazySubject,
+  Named,
+  LazySubject,
+} from '../types'
 
 export type InertOptions =
   | (TransitionTimingOptionsObject & Partial<Named>)
@@ -20,6 +26,7 @@ export type AnimatableSubject =
   | ReadonlyLazySubject<AnimatableValue>
   | ReadonlyLazySubject<AnimatableCollection>
 
-export type InertSubject<T> = ReadonlyLazySubject<T> & {
+export type InertSubject<T> = LazySubject<T> & {
   setTransition: (options: TransitionTimingOptions) => void
+  complete: Lambda
 }

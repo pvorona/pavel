@@ -47,9 +47,23 @@ export function createGroupTransition(transitions: {
     return { value: newValue, hasCompleted }
   }
 
+  function setInstant(newValue: { [key: string]: number }) {
+    let hasCompleted = true
+
+    for (const key in transitions) {
+      const { hasCompleted: localHasCompleted } = transitions[key].setInstant(
+        newValue[key],
+      )
+      hasCompleted &&= localHasCompleted
+    }
+
+    return { hasCompleted }
+  }
+
   return {
     setTargetValue,
     getCurrentValue,
     setOptions,
+    setInstant,
   }
 }

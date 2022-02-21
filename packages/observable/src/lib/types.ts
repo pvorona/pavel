@@ -10,8 +10,10 @@ export type LazyObservable = {
   observe: (observer: Lambda) => Lambda
 }
 
-export type Settable<A> = {
-  set: (value: A | ((prevValue: A) => A)) => void
+export type ValueOrUpdater<T> = T | ((prevValue: T) => T)
+
+export type Settable<T> = {
+  set: (valueOrUpdater: ValueOrUpdater<T>) => void
 }
 
 export type Gettable<A> = {
@@ -24,6 +26,8 @@ export type EagerSubject<T> = EagerObservable<T> &
   Settable<T> &
   Gettable<T> &
   Named
+
+export type LazySubject<T> = LazyObservable & Settable<T> & Gettable<T> & Named
 
 export type ReadonlyEagerSubject<T> = EagerObservable<T> & Gettable<T> & Named
 

@@ -1,4 +1,4 @@
-import { assert } from '@pavel/assert'
+import { assert, isPositive } from '@pavel/assert'
 import { hasOvershoot } from '@pavel/easing'
 import { shallowEqual } from '@pavel/utils'
 import {
@@ -35,7 +35,10 @@ export const createTransition = (
 
   let hasCompleted = true
 
-  assert(duration >= 0, `Expected positive duration. Received ${duration}`)
+  assert(
+    isPositive(duration),
+    `Expected positive duration. Received ${duration}`,
+  )
 
   const getCurrentValueAndUpdateHasCompleted = () => {
     // Smells
@@ -103,10 +106,19 @@ export const createTransition = (
     return { hasCompleted }
   }
 
+  function setInstant(newValue: number) {
+    startValue = newValue
+    targetValue = newValue
+    hasCompleted = newValue === lastObservedValue
+
+    return { hasCompleted }
+  }
+
   return {
     getCurrentValue: getCurrentValueAndUpdateHasCompleted,
     setTargetValue,
     setOptions,
+    setInstant,
   }
 }
 
