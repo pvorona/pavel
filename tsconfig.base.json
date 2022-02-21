@@ -22,7 +22,6 @@
       "@pavel/chart": ["packages/chart/src/index.ts"],
       "@pavel/data-structures": ["packages/data-structures/src/index.ts"],
       "@pavel/easing": ["packages/easing/src/index.ts"],
-      "@pavel/functions": ["packages/functions/src/index.ts"],
       "@pavel/observable": ["packages/observable/src/index.ts"],
       "@pavel/requestIdleCallback": [
         "packages/request-idle-callback/src/index.ts"

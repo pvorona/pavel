@@ -1,7 +1,8 @@
 import { Lambda } from '@pavel/types'
-import { invokeAll, removeFirstElementOccurrence } from '@pavel/utils'
+import { invokeAll } from '../invokeAll'
+import { removeFirstElementOccurrence } from '../removeFirstElementOccurrence'
 
-export function createFunctions<T extends (...args: never[]) => void>() {
+export function Listeners<T extends (...args: never[]) => void>() {
   const functions: T[] = []
 
   function add(fn: T): Lambda {

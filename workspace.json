@@ -7,7 +7,6 @@
     "chart-demo-e2e": "packages/chart-demo-e2e",
     "data-structures": "packages/data-structures",
     "easing": "packages/easing",
-    "functions": "packages/functions",
     "observable": "packages/observable",
     "request-idle-callback": "packages/request-idle-callback",
     "scheduling": "packages/scheduling",

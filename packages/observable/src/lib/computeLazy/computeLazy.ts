@@ -8,8 +8,7 @@ import {
 } from '../types'
 import { observe } from '../observe'
 import { createName } from '../createName'
-import { createFunctions } from '@pavel/functions'
-import { lazyValue } from '@pavel/utils'
+import { Listeners, lazyValue } from '@pavel/utils'
 
 const COMPUTE_LAZY_GROUP = 'ComputeLazy'
 
@@ -22,7 +21,7 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
 ): ReadonlyLazySubject<T> {
   const name = createName(COMPUTE_LAZY_GROUP, options, compute.name)
   const holder = lazyValue(recompute)
-  const observers = createFunctions<Lambda>()
+  const observers = Listeners<Lambda>()
 
   observe(deps, markDirty, { fireImmediately: false, collectValues: false })
 
