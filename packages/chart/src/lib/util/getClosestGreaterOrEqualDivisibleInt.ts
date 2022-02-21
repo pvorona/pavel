@@ -1,3 +1,5 @@
+import { floor } from './math'
+
 export function getClosestGreaterOrEqualDivisibleInt(
   n: number,
   divisor: number,
@@ -5,9 +7,12 @@ export function getClosestGreaterOrEqualDivisibleInt(
   const closestSmallerOrEqualDivisibleInt =
     getClosestSmallerOrEqualDivisibleInt(n, divisor)
 
-  return closestSmallerOrEqualDivisibleInt >= n
-    ? closestSmallerOrEqualDivisibleInt
-    : getClosestGreaterDivisibleInt(n, divisor)
+  // Does not work with floats
+  return floor(
+    closestSmallerOrEqualDivisibleInt >= n
+      ? closestSmallerOrEqualDivisibleInt
+      : getClosestGreaterDivisibleInt(n, divisor),
+  )
 }
 
 export function getClosestSmallerOrEqualDivisibleInt(

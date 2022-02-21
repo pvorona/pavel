@@ -136,12 +136,12 @@ export const Series: Component<ChartOptions, ChartContext> = (
       startIndex.value = ensureInBounds(
         newStartIndex,
         0,
-        options.total - 1 - visibleIndexRange,
+        options.total.value - 1 - visibleIndexRange,
       )
       endIndex.value = ensureInBounds(
         startIndex.value + visibleIndexRange,
         0,
-        options.total - 1,
+        options.total.value - 1,
       )
 
       prevMouseX = e.clientX
@@ -190,23 +190,23 @@ export const Series: Component<ChartOptions, ChartContext> = (
         startIndex.value = ensureInBounds(
           center - MIN_VIEWBOX / 2,
           0,
-          options.total - 1 - MIN_VIEWBOX,
+          options.total.value - 1 - MIN_VIEWBOX,
         )
         endIndex.value = ensureInBounds(
           center + MIN_VIEWBOX / 2,
           MIN_VIEWBOX,
-          options.total - 1,
+          options.total.value - 1,
         )
       } else {
         startIndex.value = ensureInBounds(
           startIndex.value - deltaY * dynamicFactor,
           0,
-          options.total - 1 - MIN_VIEWBOX,
+          options.total.value - 1 - MIN_VIEWBOX,
         )
         endIndex.value = ensureInBounds(
           endIndex.value + deltaY * dynamicFactor,
           startIndex.value + MIN_VIEWBOX,
-          options.total - 1,
+          options.total.value - 1,
         )
       }
     } else if (
@@ -216,12 +216,12 @@ export const Series: Component<ChartOptions, ChartContext> = (
       startIndex.value = ensureInBounds(
         startIndex.value + event.deltaX * dynamicFactor,
         0,
-        options.total - 1 - viewBoxWidth,
+        options.total.value - 1 - viewBoxWidth,
       )
       endIndex.value = ensureInBounds(
         startIndex.value + viewBoxWidth,
         MIN_VIEWBOX,
-        options.total - 1,
+        options.total.value - 1,
       )
     }
   }

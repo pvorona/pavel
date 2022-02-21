@@ -145,11 +145,11 @@ export const Tooltip: Component<ChartOptions, ChartContext> = (
         x + DOT_CENTER_OFFSET
       }px) translateY(${y + DOT_CENTER_OFFSET}px)`
       tooltipValues[enabledGraphNames[i]].innerText = String(
-        options.data[enabledGraphNames[i]][dataIndex],
+        options.data.value[enabledGraphNames[i]][dataIndex],
       )
       // tooltipValues[enabledGraphNames[i]].innerText = getShortNumber(options.data[enabledGraphNames[i]][dataIndex])
     }
-    tooltipDate.innerText = getTooltipDateText(options.domain[dataIndex])
+    tooltipDate.innerText = getTooltipDateText(options.domain.value[dataIndex])
     tooltip.style.transform = `translateX(calc(${x}px - 50%))`
   }
 

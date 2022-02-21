@@ -1,5 +1,5 @@
 import { Controls } from '../Controls'
-import { ChartOptions } from '../../types'
+import { ChartOptionsUnvalidated } from '../../types'
 import { Overview } from '../Overview'
 import { XAxis } from '../XAxis'
 import { YAxis } from '../YAxis'
@@ -9,10 +9,13 @@ import { ChartContext } from '../Context'
 import { throttleWithFrame, PRIORITY } from '@pavel/scheduling'
 import { validateConfig } from '../../config'
 
-export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
+export const Chart = (
+  parent: HTMLElement,
+  uncheckedOptions: ChartOptionsUnvalidated,
+) => {
   const options = validateConfig(uncheckedOptions)
   const context = ChartContext(options)
-  const { width, height } = context
+  const { width, height, append } = context
   const { element } = createDOM()
 
   parent.appendChild(element)
@@ -24,7 +27,7 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
 
   window.addEventListener('resize', resizeListener)
 
-  return { element, destroy }
+  return { element, destroy, append }
 
   function destroy() {
     window.removeEventListener('resize', resizeListener)

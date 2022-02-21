@@ -42,12 +42,12 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
   // Compute with set
   const left = observable(
     // interpolate
-    (startIndex.value / (options.total - 1)) * width.value,
+    (startIndex.value / (options.total.value - 1)) * width.value,
   )
 
   const right = observable(
     // interpolate
-    (endIndex.value / (options.total - 1)) * width.value,
+    (endIndex.value / (options.total.value - 1)) * width.value,
   )
 
   effect([left], left => {
@@ -58,18 +58,18 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     viewBoxElement.style.right = `${width - right}px`
   })
 
-  observe([startIndex, width], (startIndex, width) => {
+  observe([startIndex, options.total, width], (startIndex, total, width) => {
     // interpolate
-    const newLeft = (startIndex / (options.total - 1)) * width
+    const newLeft = (startIndex / (total - 1)) * width
 
     if (!areNumbersClose(left.value, newLeft)) {
       left.value = newLeft
     }
   })
 
-  observe([endIndex, width], (endIndex, width) => {
+  observe([endIndex, options.total, width], (endIndex, total, width) => {
     // interpolate
-    const newRight = (endIndex / (options.total - 1)) * width
+    const newRight = (endIndex / (total - 1)) * width
 
     if (!areNumbersClose(right.value, newRight)) {
       right.value = newRight
@@ -78,7 +78,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
 
   observe([left], left => {
     // interpolate
-    const newStartIndex = (left / width.value) * (options.total - 1)
+    const newStartIndex = (left / width.value) * (options.total.value - 1)
 
     if (!areNumbersClose(startIndex.value, newStartIndex)) {
       startIndex.value = newStartIndex
@@ -88,8 +88,8 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
   observe([right], right => {
     // interpolate
     const newEndIndex = Math.min(
-      (right / width.value) * (options.total - 1),
-      options.total - 1,
+      (right / width.value) * (options.total.value - 1),
+      options.total.value - 1,
     )
 
     if (!areNumbersClose(endIndex.value, newEndIndex)) {
@@ -244,24 +244,24 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
         startIndex.value = ensureInBounds(
           center - MIN_VIEWBOX / 2,
           0,
-          options.total - 1 - MIN_VIEWBOX,
+          options.total.value - 1 - MIN_VIEWBOX,
         )
 
         endIndex.value = ensureInBounds(
           center + MIN_VIEWBOX / 2,
           MIN_VIEWBOX,
-          options.total - 1,
+          options.total.value - 1,
         )
       } else {
         startIndex.value = ensureInBounds(
           startIndex.value - deltaY * dynamicFactor,
           0,
-          options.total - 1 - MIN_VIEWBOX,
+          options.total.value - 1 - MIN_VIEWBOX,
         )
         endIndex.value = ensureInBounds(
           endIndex.value + deltaY * dynamicFactor,
           startIndex.value + MIN_VIEWBOX,
-          options.total - 1,
+          options.total.value - 1,
         )
       }
     } else if (
@@ -271,12 +271,12 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       startIndex.value = ensureInBounds(
         startIndex.value + e.deltaX * dynamicFactor,
         0,
-        options.total - 1 - viewBoxWidth,
+        options.total.value - 1 - viewBoxWidth,
       )
       endIndex.value = ensureInBounds(
         startIndex.value + viewBoxWidth,
         MIN_VIEWBOX,
-        options.total - 1,
+        options.total.value - 1,
       )
     }
   }

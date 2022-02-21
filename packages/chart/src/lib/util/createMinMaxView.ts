@@ -5,17 +5,18 @@ import {
   EagerSubject,
   ReadonlySubject,
 } from '@pavel/observable'
+import { DataByGraphName } from '..'
 import { getMinMax } from './getMinMax'
 
 export function createMinMaxView(
   startIndex: EagerSubject<number>,
   endIndex: EagerSubject<number>,
   enabledGraphNames: ReadonlySubject<string[]>,
-  dataByGraphName: { [graphName: string]: number[] },
+  dataByGraphName: DataByGraphName,
 ) {
   const minMaxByGraphName = computeLazy(
-    [startIndex, endIndex, enabledGraphNames],
-    (startIndex, endIndex, enabledGraphNames) => {
+    [startIndex, endIndex, enabledGraphNames, dataByGraphName],
+    (startIndex, endIndex, enabledGraphNames, dataByGraphName) => {
       const result: { [graphName: string]: { min: number; max: number } } = {}
 
       for (let i = 0; i < enabledGraphNames.length; i++) {

@@ -7,7 +7,7 @@ import {
   inert,
   compute,
 } from '@pavel/observable'
-import { ChartOptions } from '../../types'
+import { ChartOptions, TimeSeriesDataPoint } from '../../types'
 import {
   cursor,
   Transition,
@@ -22,7 +22,10 @@ export const ChartContext = (options: ChartOptions) => {
   const globalStartIndex = observable(0, {
     name: 'globalStartIndex',
   })
-  const globalEndIndex = observable(options.total - 1, {
+  // const globalEndIndex = observable(options.total.value - 1, {
+  //   name: 'globalEndIndex',
+  // })
+  const globalEndIndex = compute([options.total], total => total - 1, {
     name: 'globalEndIndex',
   })
   const width = observable(options.width, { name: 'width' })
@@ -146,6 +149,8 @@ export const ChartContext = (options: ChartOptions) => {
       inertVisibleMin,
       width,
       canvasHeight,
+      options.domain,
+      options.data,
     ],
     function computeVisibleSeriesPoints(
       startIndex,
@@ -154,13 +159,15 @@ export const ChartContext = (options: ChartOptions) => {
       min,
       width,
       canvasHeight,
+      domain,
+      dataByGraphName,
     ) {
       return options.graphNames.reduce(
         (points, graphName) => ({
           ...points,
           [graphName]: mapDataToCoords(
-            options.data[graphName],
-            options.domain,
+            dataByGraphName[graphName],
+            domain,
             max,
             min,
             {
@@ -209,7 +216,13 @@ export const ChartContext = (options: ChartOptions) => {
     }
   })
 
+  function append(graphName: string, data: TimeSeriesDataPoint[]) {
+    options.data.value[graphName].push(...data.map(item => item.value))
+    options.domain.value.push(...data.map(item => item.timestamp))
+  }
+
   return {
+    append,
     isHovering,
     isDragging,
     isWheeling,

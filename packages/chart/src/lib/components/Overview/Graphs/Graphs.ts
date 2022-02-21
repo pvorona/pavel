@@ -33,20 +33,30 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
     options.overview.height - 2 * VIEWBOX_TOP_BOTTOM_BORDER_WIDTH
 
   const overviewGraphPoints = computeLazy(
-    [globalStartIndex, globalEndIndex, inertGlobalMax, inertGlobalMin, width],
+    [
+      globalStartIndex,
+      globalEndIndex,
+      inertGlobalMax,
+      inertGlobalMin,
+      width,
+      options.domain,
+      options.data,
+    ],
     (
       globalStartIndex,
       globalEndIndex,
       inertGlobalMax,
       inertGlobalMin,
       width,
+      domain,
+      dataByGraphName,
     ) => {
-      return options.graphNames.reduce(
+      const result = options.graphNames.reduce(
         (points, graphName) => ({
           ...points,
           [graphName]: mapDataToCoords(
-            options.data[graphName],
-            options.domain,
+            dataByGraphName[graphName],
+            domain,
             inertGlobalMax,
             inertGlobalMin,
             {
@@ -59,6 +69,10 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
         }),
         {} as { [key: string]: Point[] },
       )
+
+      // console.log(result)
+
+      return result
     },
   )
 

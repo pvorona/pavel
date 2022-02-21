@@ -1,18 +1,21 @@
 import { Nominal } from '@pavel/types'
+import { EagerSubject, ReadonlyEagerSubject } from '@pavel/observable'
 import { ChartContext } from './components'
 
-export interface ChartData {
-  columns: (number | string)[][]
-  types: { [key: string]: string }
-  colors: { [key: string]: string }
-  names: { [key: string]: string }
-}
+export type TimeSeriesDataPoint = { timestamp: number; value: number }
 
 export interface VisibilityState {
   [key: string]: boolean
 }
 
-export interface DataByGraphName {
+export type DataByGraphName = EagerSubject<{
+  [key: string]: number[]
+}>
+
+export type DomainOptionsUnvalidated = number[]
+export type DomainOptions = EagerSubject<number[]>
+
+export interface DataByGraphNameUnvalidated {
   [key: string]: number[]
 }
 
@@ -71,24 +74,43 @@ export type LineCapOptions = {
   [series: string]: CanvasLineCap
 }
 
-export type ChartOptions = Readonly<{
+export type ChartOptionsUnvalidated = Readonly<{
   x: XOptions
   y: YOptions
   overview: OverviewOptions
   tooltip: TooltipOptions
   viewBox: ViewBoxOptions
   visibility: VisibilityState
-  total: number
   width: number
   height: number
   lineWidth: number
   colors: ColorsOptions
-  data: DataByGraphName
+  data: DataByGraphNameUnvalidated
   lineJoin: LineJoinOptions
   lineCap: LineCapOptions
   domain: number[]
   graphNames: string[]
 }>
+
+export type ChartOptions = {
+  width: number
+  height: number
+
+  x: XOptions
+  y: YOptions
+  overview: OverviewOptions
+  tooltip: TooltipOptions
+  viewBox: ViewBoxOptions
+  visibility: VisibilityState
+  lineJoin: LineJoinOptions
+  lineCap: LineCapOptions
+  colors: ColorsOptions
+  graphNames: string[]
+  lineWidth: number
+  data: DataByGraphName
+  domain: DomainOptions
+  total: ReadonlyEagerSubject<number>
+}
 
 // type Series = {
 //   title?: string
