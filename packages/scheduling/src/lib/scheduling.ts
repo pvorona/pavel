@@ -18,8 +18,6 @@ export let currentFrameTimestamp: number | undefined
 export const queueByPriority: QueueByPriority = initQueue()
 export const futureQueueByPriority: QueueByPriority = initQueue()
 
-Object.assign(window, { queueByPriority, futureQueueByPriority })
-
 export function scheduleExecutionIfNeeded() {
   if (animationFrameId !== undefined) return
 
