@@ -1,88 +1,93 @@
-import { ChartContext } from "./components";
+import { ChartContext } from './components'
 
 export interface ChartData {
-  columns: (number | string)[][];
-  types: { [key: string]: string };
-  colors: { [key: string]: string };
-  names: { [key: string]: string };
+  columns: (number | string)[][]
+  types: { [key: string]: string }
+  colors: { [key: string]: string }
+  names: { [key: string]: string }
 }
 
 export interface VisibilityState {
-  [key: string]: boolean;
+  [key: string]: boolean
 }
 
 export interface DataByGraphName {
-  [key: string]: number[];
+  [key: string]: number[]
 }
 
 export type XOptions = {
-  color: string;
-  ticks: number;
+  color: string
+  ticks: number
   tick: {
-    height: number;
-    margin: number;
-  };
+    height: number
+    margin: number
+  }
   label: {
-    fontSize: number;
-    fontFamily: string;
-  };
-  marginBottom: number;
-  marginTop: number;
-};
+    fontSize: number
+    fontFamily: string
+  }
+  marginBottom: number
+  marginTop: number
+}
 
 export type YOptions = {
-  color: string;
-  ticks: number;
+  color: string
+  ticks: number
   label: {
-    color: string;
-    fontSize: number;
-    fontFamily: string;
-    marginBottom: number;
-    marginLeft: number;
-  };
-};
+    color: string
+    fontSize: number
+    fontFamily: string
+    marginBottom: number
+    marginLeft: number
+  }
+}
 
 export type OverviewOptions = {
-  height: number;
-  lineWidth: number;
-  overlayColor: string;
-  edgeColor: string;
-};
+  height: number
+  lineWidth: number
+  overlayColor: string
+  edgeColor: string
+}
 
 export type TooltipOptions = {
-  lineColor: string;
-  backgroundColor: string;
-  color: string;
-};
+  lineColor: string
+  backgroundColor: string
+  color: string
+}
 
 export type ViewBoxOptions = {
-  startIndex: number;
-  endIndex: number;
-};
+  startIndex: number
+  endIndex: number
+}
 
-export type ColorsOptions = { [key: string]: string };
+export type ColorsOptions = { [key: string]: string }
 
 export type LineJoinOptions = {
-  [series: string]: CanvasLineJoin;
-};
+  [series: string]: CanvasLineJoin
+}
+
+export type LineCapOptions = {
+  [series: string]: CanvasLineCap
+}
 
 export type ChartOptions = Readonly<{
-  x: XOptions;
-  y: YOptions;
-  overview: OverviewOptions;
-  tooltip: TooltipOptions;
-  viewBox: ViewBoxOptions;
-  visibility: VisibilityState;
-  total: number;
-  width: number;
-  height: number;
-  lineWidth: number;
-  colors: ColorsOptions;
-  data: DataByGraphName;
-  lineJoin: LineJoinOptions;
-  domain: number[];
-  graphNames: string[];
-}>;
+  x: XOptions
+  y: YOptions
+  overview: OverviewOptions
+  tooltip: TooltipOptions
+  viewBox: ViewBoxOptions
+  visibility: VisibilityState
+  total: number
+  width: number
+  height: number
+  lineWidth: number
+  colors: ColorsOptions
+  data: DataByGraphName
+  lineJoin: LineJoinOptions
+  lineCap: LineCapOptions
+  domain: number[]
+  graphNames: string[]
+}>
 
 // type Series = {
 //   title?: string
@@ -115,9 +120,9 @@ export type ChartOptions = Readonly<{
 // };
 
 export type Nominal<Source, Label extends string> = Source & {
-  __kind__: Label;
-};
+  __kind__: Label
+}
 
-export type BitMapSize = Nominal<number, "BitMapSize">;
+export type BitMapSize = Nominal<number, 'BitMapSize'>
 
-export type ChartContext = ReturnType<typeof ChartContext>;
+export type ChartContext = ReturnType<typeof ChartContext>

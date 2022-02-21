@@ -50,7 +50,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
             inertGlobalMax,
             inertGlobalMin,
             {
-              width: width,
+              width,
               height: canvasHeight,
             },
             { startIndex: globalStartIndex, endIndex: globalEndIndex },
@@ -128,6 +128,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       width: width.get(),
       // Use `miter` line join in overview?
       lineJoinByName: options.lineJoin,
+      lineCapByName: options.lineCap,
     })
   }
 
