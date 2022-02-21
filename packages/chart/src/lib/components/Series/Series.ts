@@ -81,6 +81,7 @@ export const Series: Component<ChartOptions, ChartContext> = (
       height: canvasHeight.get(),
       width: width.get(),
       lineJoinByName: options.lineJoin,
+      lineCapByName: options.lineCap,
     })
   }
 

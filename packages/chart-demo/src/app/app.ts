@@ -192,8 +192,12 @@ async function startApp() {
           B: data2.map(d => d.value),
         },
         lineJoin: {
-          A: 'round',
-          B: 'round',
+          A: 'bevel',
+          B: 'bevel',
+        },
+        lineCap: {
+          A: 'butt',
+          B: 'butt',
         },
         colors: { A: theme.series[0], B: theme.series[1] },
         total: data1.length,
@@ -207,7 +211,8 @@ async function startApp() {
           color: theme.tooltipColor,
         },
       }
-      const { element } = Chart(chartContainer, options)
+
+      Chart(chartContainer, options)
     } catch (error) {
       console.error(error)
     }
