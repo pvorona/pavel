@@ -9,6 +9,7 @@ import {
 import { observe } from '../observe'
 import { createName } from '../createName'
 import { createFunctions } from '@pavel/functions'
+import { lazyValue } from '@pavel/utils'
 
 const COMPUTE_LAZY_GROUP = 'ComputeLazy'
 
@@ -20,14 +21,13 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
   options?: ComputeLazyOptions,
 ): ReadonlyLazySubject<T> {
   const name = createName(COMPUTE_LAZY_GROUP, options, compute.name)
+  const holder = lazyValue(recompute)
   const observers = createFunctions<Lambda>()
-  let value: T
-  let dirty = true
 
   observe(deps, markDirty, { fireImmediately: false, collectValues: false })
 
   function markDirty() {
-    dirty = true
+    holder.notifyChanged()
     observers.invoke()
   }
 
@@ -39,14 +39,7 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
 
   return {
     name,
-    get() {
-      if (dirty) {
-        value = recompute()
-        dirty = false
-      }
-
-      return value
-    },
+    get: holder.get,
     observe: observers.add,
   }
 }
