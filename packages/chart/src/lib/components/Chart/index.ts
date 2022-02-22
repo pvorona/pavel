@@ -1,2 +1,2 @@
-export * from "./Chart";
-export * from "../Context/ChartContext";
+export * from './Chart'
+export * from '../Context/ChartContext'

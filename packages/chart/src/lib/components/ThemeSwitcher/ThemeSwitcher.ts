@@ -7,7 +7,7 @@ import {
 
 const ELEMENT_CLASS_NAME = 'theme-switcher'
 
-export function ThemeSwitcher (initialTheme: THEME) {
+export function ThemeSwitcher(initialTheme: THEME) {
   let theme = initialTheme
   const button = createDOM()
 
@@ -20,7 +20,7 @@ export function ThemeSwitcher (initialTheme: THEME) {
 
   return button
 
-  function createDOM () {
+  function createDOM() {
     const button = document.createElement('button')
     button.innerText = LABELS[theme]
     button.classList.add(ELEMENT_CLASS_NAME)

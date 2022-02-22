@@ -7,4 +7,3 @@ export function shallowEqual(
   }
   return true
 }
-

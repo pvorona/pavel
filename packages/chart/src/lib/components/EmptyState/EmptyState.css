@@ -7,7 +7,7 @@
   height: 100%;
   position: absolute;
   justify-content: center;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 
 .theme-light .empty-state {
@@ -15,5 +15,5 @@
 }
 
 .theme-dark .empty-state {
-  color: #96A2AA;
+  color: #96a2aa;
 }

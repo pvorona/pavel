@@ -1,11 +1,11 @@
 .title {
   font-size: 28px;
   margin-bottom: 50px;
-  transition: color .3s ease-in-out;
+  transition: color 0.3s ease-in-out;
 }
 
 .theme-dark .title {
-  color: #FFF;
+  color: #fff;
 }
 
 .theme-light .title {

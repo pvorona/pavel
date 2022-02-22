@@ -1,4 +1,4 @@
-import { floor, ceil } from "./math";
+import { floor, ceil } from './math'
 
 export function interpolatePoint(point: number, values: number[]): number {
   return interpolate(
@@ -6,8 +6,8 @@ export function interpolatePoint(point: number, values: number[]): number {
     ceil(point),
     values[floor(point)],
     values[ceil(point)],
-    point
-  );
+    point,
+  )
 }
 
 export function interpolate<T extends number>(
@@ -15,8 +15,8 @@ export function interpolate<T extends number>(
   x2: number,
   y1: T,
   y2: T,
-  x: number
+  x: number,
 ): T {
-  if (x === x2) return y2;
-  return (((y2 - y1) / (x2 - x1)) * (x - x1) + y1) as T;
+  if (x === x2) return y2
+  return (((y2 - y1) / (x2 - x1)) * (x - x1) + y1) as T
 }

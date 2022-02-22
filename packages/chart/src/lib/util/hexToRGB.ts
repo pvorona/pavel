@@ -1,6 +1,6 @@
 const cache: { [key: string]: string } = {}
 
-export function hexToRGB (hex: string) {
+export function hexToRGB(hex: string) {
   if (cache[hex]) {
     return cache[hex]
   }

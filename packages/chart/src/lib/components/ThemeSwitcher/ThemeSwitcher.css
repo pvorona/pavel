@@ -4,12 +4,12 @@
   border: none;
   outline: none;
   cursor: pointer;
-  transition: color .3s ease-in-out;
+  transition: color 0.3s ease-in-out;
   will-change: contents;
 }
 
 .theme-light .theme-switcher {
-  color: #0087E6;
+  color: #0087e6;
 }
 
 .theme-dark .theme-switcher {

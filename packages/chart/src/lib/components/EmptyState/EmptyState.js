@@ -1,4 +1,4 @@
-export function EmptyState () {
+export function EmptyState() {
   const element = document.createElement('div')
   element.className = 'empty-state'
   element.innerText = 'Nothing to show'
@@ -6,7 +6,7 @@ export function EmptyState () {
 
   return { element, setVisibile }
 
-  function setVisibile (visible) {
+  function setVisibile(visible) {
     element.style.opacity = visible ? 0 : 1
   }
 }

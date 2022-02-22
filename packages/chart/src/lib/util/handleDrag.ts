@@ -1,22 +1,23 @@
-function isMouseEvent (e: MouseEvent | TouchEvent): e is MouseEvent {
+function isMouseEvent(e: MouseEvent | TouchEvent): e is MouseEvent {
   return ['mousedown', 'mousemove', 'mouseup'].includes(e.type)
 }
 
-export function handleDrag (
-  element: HTMLElement, {
+export function handleDrag(
+  element: HTMLElement,
+  {
     onDragStart,
     onDragMove,
     onDragEnd,
-  } : {
+  }: {
     onDragStart(e: MouseEvent | Touch): void
     onDragMove(e: MouseEvent | Touch): void
     onDragEnd(e: MouseEvent | Touch): void
-  }
+  },
 ) {
   element.addEventListener('mousedown', onStart)
   element.addEventListener('touchstart', onStart)
 
-  function onStart (e: MouseEvent | TouchEvent) {
+  function onStart(e: MouseEvent | TouchEvent) {
     e.preventDefault()
     e.stopPropagation()
     if (isMouseEvent(e)) {
@@ -32,7 +33,7 @@ export function handleDrag (
     }
   }
 
-  function onMove (e: MouseEvent | TouchEvent) {
+  function onMove(e: MouseEvent | TouchEvent) {
     if (isMouseEvent(e)) {
       onDragMove(e)
     } else {
@@ -40,7 +41,7 @@ export function handleDrag (
     }
   }
 
-  function onEnd (e: MouseEvent | TouchEvent) {
+  function onEnd(e: MouseEvent | TouchEvent) {
     if (isMouseEvent(e)) {
       document.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseup', onEnd)

@@ -1,4 +1,4 @@
-export function createElement (type, attributes = {}, children = []) {
+export function createElement(type, attributes = {}, children = []) {
   const element = document.createElement(type)
   Object.assign(element, attributes)
   children.forEach(child => element.appendChild(child))

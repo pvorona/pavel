@@ -31,7 +31,7 @@ describe('with numbers', () => {
     expect(o.get()).toStrictEqual(animation.get())
   })
 
-  it("transitions to the end value using the transition", () => {
+  it('transitions to the end value using the transition', () => {
     const o = observable(0)
     const animation = inert(DURATION)(o)
     const endValue = 100

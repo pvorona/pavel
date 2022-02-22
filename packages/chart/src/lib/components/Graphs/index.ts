@@ -1,1 +1,1 @@
-export * from "./createGraphs";
+export * from './createGraphs'
