@@ -112,6 +112,7 @@ const CanvasObject = <T>(
 // Usage
 
 type Rectangle = {
+  fill?: string | CanvasGradient | CanvasPattern
   x: number
   y: number
   width: number
@@ -119,7 +120,7 @@ type Rectangle = {
 }
 
 function renderRectangle(context: CanvasRenderingContext2D, state: Rectangle) {
-  context.fillStyle = '#FFF'
+  context.fillStyle = state.fill || '#FFF'
   context.fillRect(state.x, state.y, state.width, state.height)
 }
 
@@ -140,6 +141,7 @@ const object1 = CanvasObject(
     y: 400,
     width: 10,
     height: 10,
+    fill: 'red',
   },
   renderRectangle,
 )
@@ -149,6 +151,7 @@ const object2 = CanvasObject(
     y: 400,
     width: 10,
     height: 10,
+    fill: '#3a6fcc',
   },
   renderRectangle,
 )
