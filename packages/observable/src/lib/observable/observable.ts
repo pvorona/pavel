@@ -1,7 +1,7 @@
 import { Observer, EagerSubject, Named } from '../types'
 import { createName } from '../createName'
 import { getValue } from '../utils'
-import { Listeners } from '@pavel/utils'
+import { createObservers } from '@pavel/utils'
 
 export type ObservableOptions = Partial<Named>
 
@@ -12,7 +12,7 @@ export function observable<T>(
   options?: ObservableOptions,
 ): EagerSubject<T> {
   const name = createName(OBSERVABLE_GROUP, options)
-  const observers = Listeners<Observer<T>>()
+  const observers = createObservers<Observer<T>>()
   let value = initialValue
 
   return {
