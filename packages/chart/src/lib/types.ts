@@ -1,3 +1,4 @@
+import { Nominal } from '@pavel/types'
 import { ChartContext } from './components'
 
 export interface ChartData {
@@ -118,10 +119,6 @@ export type ChartOptions = Readonly<{
 //   lineWidth: LineWidth;
 //   lineStyle?: LineStyle
 // };
-
-export type Nominal<Source, Label extends string> = Source & {
-  __kind__: Label
-}
 
 export type BitMapSize = Nominal<number, 'BitMapSize'>
 
