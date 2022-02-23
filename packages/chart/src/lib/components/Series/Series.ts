@@ -42,14 +42,14 @@ export const Series: Component<ChartOptions, ChartContext> = (
   const { element, canvas, context } = createDOM()
 
   scheduleTask(() => {
-    renderPoints(mainGraphPoints.get(), inertOpacityStateByGraphName.get())
+    renderPoints(mainGraphPoints.value, inertOpacityStateByGraphName.value)
   })
 
   effect(
     [width, canvasHeight],
     (width, height) => {
       setCanvasSize(canvas, toBitMapSize(width), toBitMapSize(height))
-      renderPoints(mainGraphPoints.get(), inertOpacityStateByGraphName.get())
+      renderPoints(mainGraphPoints.value, inertOpacityStateByGraphName.value)
     },
     { fireImmediately: false },
   )
@@ -59,8 +59,8 @@ export const Series: Component<ChartOptions, ChartContext> = (
     (mainGraphPoints, inertOpacityStateByGraphName) => {
       clearRect(
         context,
-        toBitMapSize(width.get()),
-        toBitMapSize(canvasHeight.get()),
+        toBitMapSize(width.value),
+        toBitMapSize(canvasHeight.value),
       )
       renderPoints(mainGraphPoints, inertOpacityStateByGraphName)
     },
@@ -78,8 +78,8 @@ export const Series: Component<ChartOptions, ChartContext> = (
       graphNames: options.graphNames,
       lineWidth: options.lineWidth,
       strokeStyles: options.colors,
-      height: canvasHeight.get(),
-      width: width.get(),
+      height: canvasHeight.value,
+      width: width.value,
       lineJoinByName: options.lineJoin,
       lineCapByName: options.lineCap,
     })
@@ -100,8 +100,8 @@ export const Series: Component<ChartOptions, ChartContext> = (
   function createDOM() {
     return createGraphs({
       width: options.width,
-      height: canvasHeight.get(),
-      containerHeight: canvasHeight.get(),
+      height: canvasHeight.value,
+      containerHeight: canvasHeight.value,
       containerMinHeight: MIN_HEIGHT,
     })
   }
@@ -110,38 +110,38 @@ export const Series: Component<ChartOptions, ChartContext> = (
     addEventListeners(element, {
       wheel: onWheel,
       mouseenter(e) {
-        isHovering.set(true)
-        mouseX.set(e.clientX)
+        isHovering.value = true
+        mouseX.value = e.clientX
       },
       mouseleave() {
-        isHovering.set(false)
+        isHovering.value = false
       },
       mousemove(e) {
-        mouseX.set(e.clientX)
+        mouseX.value = e.clientX
       },
     })
 
     let prevMouseX = 0
 
     const onGraphsDrag = (e: MouseEvent) => {
-      const visibleIndexRange = endIndex.get() - startIndex.get()
+      const visibleIndexRange = endIndex.value - startIndex.value
       const newStartIndex = interpolate(
         0,
-        width.get(),
-        startIndex.get(),
-        endIndex.get(),
+        width.value,
+        startIndex.value,
+        endIndex.value,
         prevMouseX - e.clientX,
       )
 
-      startIndex.set(
-        ensureInBounds(newStartIndex, 0, options.total - 1 - visibleIndexRange),
+      startIndex.value = ensureInBounds(
+        newStartIndex,
+        0,
+        options.total - 1 - visibleIndexRange,
       )
-      endIndex.set(
-        ensureInBounds(
-          startIndex.get() + visibleIndexRange,
-          0,
-          options.total - 1,
-        ),
+      endIndex.value = ensureInBounds(
+        startIndex.value + visibleIndexRange,
+        0,
+        options.total - 1,
       )
 
       prevMouseX = e.clientX
@@ -149,14 +149,14 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
     handleDrag(element, {
       onDragStart: (e: MouseEvent) => {
-        isGrabbingGraphs.set(true)
-        activeCursor.set(cursor.grabbing)
+        isGrabbingGraphs.value = true
+        activeCursor.value = cursor.grabbing
 
         prevMouseX = e.clientX
       },
       onDragEnd: () => {
-        isGrabbingGraphs.set(false)
-        activeCursor.set(cursor.default)
+        isGrabbingGraphs.value = false
+        activeCursor.value = cursor.default
 
         prevMouseX = 0
       },
@@ -166,11 +166,11 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
   function onWheel(event: WheelEvent) {
     event.preventDefault()
-    isWheeling.set(true)
+    isWheeling.value = true
 
     const angle = (Math.atan(event.deltaY / event.deltaX) * 180) / Math.PI
 
-    const viewBoxWidth = endIndex.get() - startIndex.get()
+    const viewBoxWidth = endIndex.value - startIndex.value
     const dynamicFactor = (viewBoxWidth / MIN_VIEWBOX) * WHEEL_MULTIPLIER
 
     if (
@@ -181,59 +181,47 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
       if (
         deltaY < 0 &&
-        endIndex.get() -
-          startIndex.get() -
+        endIndex.value -
+          startIndex.value -
           2 * Math.abs(deltaY * dynamicFactor) <
           MIN_VIEWBOX
       ) {
-        const center = (endIndex.get() + startIndex.get()) / 2
-        startIndex.set(
-          ensureInBounds(
-            center - MIN_VIEWBOX / 2,
-            0,
-            options.total - 1 - MIN_VIEWBOX,
-          ),
+        const center = (endIndex.value + startIndex.value) / 2
+        startIndex.value = ensureInBounds(
+          center - MIN_VIEWBOX / 2,
+          0,
+          options.total - 1 - MIN_VIEWBOX,
         )
-        endIndex.set(
-          ensureInBounds(
-            center + MIN_VIEWBOX / 2,
-            MIN_VIEWBOX,
-            options.total - 1,
-          ),
+        endIndex.value = ensureInBounds(
+          center + MIN_VIEWBOX / 2,
+          MIN_VIEWBOX,
+          options.total - 1,
         )
       } else {
-        startIndex.set(
-          ensureInBounds(
-            startIndex.get() - deltaY * dynamicFactor,
-            0,
-            options.total - 1 - MIN_VIEWBOX,
-          ),
+        startIndex.value = ensureInBounds(
+          startIndex.value - deltaY * dynamicFactor,
+          0,
+          options.total - 1 - MIN_VIEWBOX,
         )
-        endIndex.set(
-          ensureInBounds(
-            endIndex.get() + deltaY * dynamicFactor,
-            startIndex.get() + MIN_VIEWBOX,
-            options.total - 1,
-          ),
+        endIndex.value = ensureInBounds(
+          endIndex.value + deltaY * dynamicFactor,
+          startIndex.value + MIN_VIEWBOX,
+          options.total - 1,
         )
       }
     } else if (
       angle >= -DEVIATION_FROM_STRAIGHT_LINE_DEGREES &&
       angle <= DEVIATION_FROM_STRAIGHT_LINE_DEGREES // left, right
     ) {
-      startIndex.set(
-        ensureInBounds(
-          startIndex.get() + event.deltaX * dynamicFactor,
-          0,
-          options.total - 1 - viewBoxWidth,
-        ),
+      startIndex.value = ensureInBounds(
+        startIndex.value + event.deltaX * dynamicFactor,
+        0,
+        options.total - 1 - viewBoxWidth,
       )
-      endIndex.set(
-        ensureInBounds(
-          startIndex.get() + viewBoxWidth,
-          MIN_VIEWBOX,
-          options.total - 1,
-        ),
+      endIndex.value = ensureInBounds(
+        startIndex.value + viewBoxWidth,
+        MIN_VIEWBOX,
+        options.total - 1,
       )
     }
   }

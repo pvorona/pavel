@@ -1,7 +1,7 @@
 import { bezier } from './bezier'
 import { Easing } from './types'
 
-export const special: Easing = bezier(0.6, 0, 0.15, 1.05)
+export const special: Easing = bezier(0.6, 0, 0.15, 1)
 export const linear: Easing = t => t
 export const easeIn: Easing = t => t ** 1.675
 export const easeOut: Easing = t => 1 - (1 - t ** 1.675)

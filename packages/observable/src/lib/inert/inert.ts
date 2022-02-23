@@ -1,13 +1,11 @@
-import { ObservedTypeOf, ValueOrUpdater } from '../types'
+import { ObservedTypeOf } from '../types'
 import { observe } from '../observe'
 import { AnimatableSubject, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
 import { createName, wrapName } from '../createName'
 import { PRIORITY, throttleWithFrame } from '@pavel/scheduling'
-import { Lambda } from '@pavel/types'
 import { TransitionTimingOptions } from '../transition'
 import { createObservers } from '@pavel/utils'
-import { getValue } from '../utils'
 
 const INERT_GROUP = 'Inert'
 
@@ -16,13 +14,13 @@ export const inert =
   <T extends AnimatableSubject>(target: T): InertSubject<ObservedTypeOf<T>> => {
     const name = wrapName(createName(INERT_GROUP, options), target.name)
     // Can get lazy. Use case for idleUntilUrgent?
-    const transition = constructTransition(target.get(), options)
-    const observers = createObservers<Lambda>()
+    const transition = constructTransition(target.value, options)
+    const observers = createObservers()
 
     // TODO: don't emit values when there are no observers.
     // Ensure emitting renews if new observers join while transition is in progress
     const throttledNotifyBeforeNextRender = throttleWithFrame(
-      observers.invoke,
+      observers.notify,
       PRIORITY.BEFORE_RENDER,
     )
 
@@ -54,11 +52,7 @@ export const inert =
       }
     }
 
-    function set(valueOrUpdater: ValueOrUpdater<ObservedTypeOf<T>>) {
-      const value = getValue(
-        valueOrUpdater,
-        transition.getCurrentValue().value as never,
-      )
+    function set(value: ObservedTypeOf<T>) {
       const { hasCompleted } = transition.setInstant(value as never)
 
       if (!hasCompleted) {
@@ -67,7 +61,7 @@ export const inert =
     }
 
     function complete() {
-      set(target.get() as never)
+      set(target.value as never)
     }
 
     observe([target], setTarget, { fireImmediately: false })
@@ -75,9 +69,13 @@ export const inert =
     return {
       name,
       setTransition,
-      get: get as never,
-      set,
+      get value() {
+        return get() as never
+      },
+      set value(newValue) {
+        set(newValue)
+      },
       complete,
-      observe: observers.add,
+      observe: observers.register,
     }
   }

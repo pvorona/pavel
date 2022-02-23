@@ -18,8 +18,8 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
   parent.appendChild(element)
 
   const resizeListener = throttleWithFrame(function measureContainerSize() {
-    width.set(parent.offsetWidth)
-    height.set(parent.offsetHeight)
+    width.value = parent.offsetWidth
+    height.value = parent.offsetHeight
   }, PRIORITY.READ)
 
   window.addEventListener('resize', resizeListener)

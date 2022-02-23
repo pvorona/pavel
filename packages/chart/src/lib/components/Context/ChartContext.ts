@@ -5,6 +5,7 @@ import {
   observe,
   resetWhenInactive,
   inert,
+  compute,
 } from '@pavel/observable'
 import { ChartOptions } from '../../types'
 import {
@@ -26,7 +27,7 @@ export const ChartContext = (options: ChartOptions) => {
   })
   const width = observable(options.width, { name: 'width' })
   const height = observable(options.height, { name: 'height' })
-  const canvasHeight = observable(computeCanvasHeight(height.get()), {
+  const canvasHeight = compute([height], computeCanvasHeight, {
     name: 'canvasHeight',
   })
   const startIndex = observable(options.viewBox.startIndex, {
@@ -64,10 +65,6 @@ export const ChartContext = (options: ChartOptions) => {
       MIN_HEIGHT,
     )
   }
-
-  observe([height], height => {
-    canvasHeight.set(computeCanvasHeight(height))
-  })
 
   const enabledGraphNames = computeLazy(
     [enabledStateByGraphName],

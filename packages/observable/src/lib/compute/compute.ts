@@ -18,15 +18,11 @@ export function compute<A extends ReadonlySubject<unknown>[], T>(
   options?: ComputeOptions,
 ): ReadonlyEagerSubject<T> {
   const name = createName(COMPUTE_GROUP, options, compute.name)
-  const obs = observable(undefined as unknown as T)
+  const holder = observable(undefined as unknown as T, { name })
 
   observe(deps, (...values) => {
-    obs.set(compute(...values))
+    holder.value = compute(...values)
   })
 
-  return {
-    name,
-    get: obs.get,
-    observe: obs.observe,
-  }
+  return holder
 }

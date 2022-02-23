@@ -1,7 +1,7 @@
-import { Observer, EagerSubject, Named } from '../types'
+import { EagerSubject, Named } from '../types'
 import { createName } from '../createName'
-import { getValue } from '../utils'
 import { createObservers } from '@pavel/utils'
+import { createProxy } from './createProxy'
 
 export type ObservableOptions = Partial<Named>
 
@@ -11,25 +11,31 @@ export function observable<T>(
   initialValue: T,
   options?: ObservableOptions,
 ): EagerSubject<T> {
+  const observers = createObservers<[T]>()
   const name = createName(OBSERVABLE_GROUP, options)
-  const observers = createObservers<Observer<T>>()
-  let value = initialValue
+
+  let rawValue = initialValue
+  let reactiveValue = createProxy(rawValue, notify)
+
+  function notify() {
+    observers.notify(reactiveValue)
+  }
 
   return {
     name,
-    set(newValueOrFactory) {
-      const newValue = getValue(newValueOrFactory, value)
-
-      if (newValue === value) {
+    get value() {
+      return reactiveValue
+    },
+    set value(newValue: T) {
+      if (Object.is(rawValue, newValue)) {
         return
       }
 
-      value = newValue
-      observers.invoke(value)
+      rawValue = newValue
+      reactiveValue = createProxy(rawValue, notify)
+
+      notify()
     },
-    get() {
-      return value
-    },
-    observe: observers.add,
+    observe: observers.register,
   }
 }

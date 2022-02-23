@@ -35,7 +35,7 @@ export function createMinMaxView(
   const max = computeLazy(
     [minMaxByGraphName, enabledGraphNames],
     (visibleMinMaxByGraphName, enabledGraphNames) => {
-      if (enabledGraphNames.length === 0) return prevVisibleMax.get()
+      if (enabledGraphNames.length === 0) return prevVisibleMax.value
 
       let result = -Infinity
 
@@ -50,7 +50,7 @@ export function createMinMaxView(
   const min = computeLazy(
     [minMaxByGraphName, enabledGraphNames],
     (visibleMinMaxByGraphName, enabledGraphNames) => {
-      if (enabledGraphNames.length === 0) return prevVisibleMin.get()
+      if (enabledGraphNames.length === 0) return prevVisibleMin.value
 
       let result = +Infinity
 
@@ -65,13 +65,13 @@ export function createMinMaxView(
   const prevVisibleMax = observable(+Infinity)
 
   effect([max], visibleMax => {
-    prevVisibleMax.set(visibleMax)
+    prevVisibleMax.value = visibleMax
   })
 
   const prevVisibleMin = observable(-Infinity)
 
   effect([min], visibleMin => {
-    prevVisibleMin.set(visibleMin)
+    prevVisibleMin.value = visibleMin
   })
 
   return { minMaxByGraphName, min, max }

@@ -39,7 +39,7 @@ describe('observe', () => {
 
         observe([o1, o2, o3, o4, l1, l2, l3], observer)
 
-        o1.set(5)
+        o1.value = 5
 
         expect(observer).toHaveBeenCalledTimes(
           1 + // initialization
@@ -50,7 +50,7 @@ describe('observe', () => {
         )
         expect(observer).toHaveBeenNthCalledWith(2, 5, 2, 3, 4, 7, 10, 14)
 
-        o3.set(6)
+        o3.value = 6
 
         expect(observer).toHaveBeenCalledTimes(
           1 + // initialization
@@ -64,7 +64,7 @@ describe('observe', () => {
         )
         expect(observer).toHaveBeenNthCalledWith(8, 5, 2, 6, 4, 7, 13, 17)
 
-        o4.set(7)
+        o4.value = 7
 
         expect(observer).toHaveBeenCalledTimes(
           1 + // initialization
@@ -93,21 +93,21 @@ describe('observe', () => {
 
         observe([o1, o2, o3, o4, l1, l2, l3], observer)
 
-        o1.set(1)
-        o1.set(1)
-        o1.set(1)
+        o1.value = 1
+        o1.value = 1
+        o1.value = 1
 
-        o2.set(2)
-        o2.set(2)
-        o2.set(2)
+        o2.value = 2
+        o2.value = 2
+        o2.value = 2
 
-        o3.set(3)
-        o3.set(3)
-        o3.set(3)
+        o3.value = 3
+        o3.value = 3
+        o3.value = 3
 
-        o4.set(4)
-        o4.set(4)
-        o4.set(4)
+        o4.value = 4
+        o4.value = 4
+        o4.value = 4
 
         expect(observer).toHaveBeenCalledTimes(1)
       })
@@ -125,10 +125,10 @@ describe('observe', () => {
 
         unobserve()
 
-        o1.set(5)
-        o2.set(6)
-        o3.set(7)
-        o4.set(8)
+        o1.value = 5
+        o2.value = 6
+        o3.value = 7
+        o4.value = 8
 
         expect(observer).toHaveBeenCalledTimes(1)
       })
@@ -274,7 +274,7 @@ describe('observe', () => {
         fireImmediately: false,
       })
 
-      o1.set(5)
+      o1.value = 5
 
       expect(observer).toHaveBeenLastCalledWith(5, 2, 3, 4, 7, 10, 14)
     })

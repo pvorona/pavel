@@ -68,7 +68,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
   })
 
   scheduleTask(() => {
-    renderLabels(inertStartIndex.get(), inertEndIndex.get(), factor.get())
+    renderLabels(inertStartIndex.value, inertEndIndex.value, factor.value)
   })
 
   effect(
@@ -76,7 +76,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
     width => {
       setCanvasSize(canvas, toBitMapSize(width), toBitMapSize(height))
       setCanvasStyle(context)
-      renderLabels(inertStartIndex.get(), inertEndIndex.get(), factor.get())
+      renderLabels(inertStartIndex.value, inertEndIndex.value, factor.value)
     },
     { fireImmediately: false },
   )
@@ -84,7 +84,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
   effect(
     [inertStartIndex, inertEndIndex, factor],
     (inertStartIndex, inertEndIndex, factor) => {
-      clearRect(context, toBitMapSize(width.get()), toBitMapSize(height))
+      clearRect(context, toBitMapSize(width.value), toBitMapSize(height))
       renderLabels(inertStartIndex, inertEndIndex, factor)
     },
     { fireImmediately: false },
@@ -108,7 +108,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
       const screenX = toBitMapSize(
         toScreenX(
           options.domain,
-          width.get(),
+          width.value,
           inertStartIndex,
           inertEndIndex,
           i,
@@ -118,7 +118,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
       const { width: labelWidth } = context.measureText(label)
 
       if (screenX < labelWidth / 2) continue
-      if (toBitMapSize(width.get()) - screenX < labelWidth / 2) continue
+      if (toBitMapSize(width.value) - screenX < labelWidth / 2) continue
 
       context.fillText(label, screenX, 0)
     }
@@ -144,7 +144,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
       throw new Error('Failed to acquire context')
     }
 
-    setCanvasSize(canvas, toBitMapSize(width.get()), toBitMapSize(height))
+    setCanvasSize(canvas, toBitMapSize(width.value), toBitMapSize(height))
     setCanvasStyle(context)
 
     return { element: canvas, canvas, context }
