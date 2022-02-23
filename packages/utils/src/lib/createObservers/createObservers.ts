@@ -2,20 +2,22 @@ import { Lambda } from '@pavel/types'
 import { invokeAll } from '../invokeAll'
 import { removeFirstElementOccurrence } from '../removeFirstElementOccurrence'
 
+// Todo
+// [] Lift type param
 export function createObservers<T extends (...args: never[]) => void>() {
-  const functions: T[] = []
+  const observers: T[] = []
 
-  function add(fn: T): Lambda {
-    functions.push(fn)
+  function addObserver(observer: T): Lambda {
+    observers.push(observer)
 
     return () => {
-      removeFirstElementOccurrence(functions, fn)
+      removeFirstElementOccurrence(observers, observer)
     }
   }
 
-  function invoke(...args: Parameters<T>) {
-    invokeAll(functions, ...args)
+  function notify(...args: Parameters<T>) {
+    invokeAll(observers, ...args)
   }
 
-  return { add, invoke }
+  return { register: addObserver, notify }
 }

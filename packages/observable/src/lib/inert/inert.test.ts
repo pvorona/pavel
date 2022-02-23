@@ -17,8 +17,8 @@ describe('with numbers', () => {
     const o = observable(0)
     const animation = inert(DURATION)(o)
 
-    expect(animation.get()).toStrictEqual(0)
-    expect(o.get()).toStrictEqual(animation.get())
+    expect(animation.value).toStrictEqual(0)
+    expect(o.value).toStrictEqual(animation.value)
   })
 
   it('does not change over time if the source is stationary', () => {
@@ -27,8 +27,8 @@ describe('with numbers', () => {
 
     jest.advanceTimersByTime(DURATION * 10)
 
-    expect(animation.get()).toStrictEqual(0)
-    expect(o.get()).toStrictEqual(animation.get())
+    expect(animation.value).toStrictEqual(0)
+    expect(o.value).toStrictEqual(animation.value)
   })
 
   it('transitions to the end value using the transition', () => {
@@ -36,94 +36,94 @@ describe('with numbers', () => {
     const animation = inert(DURATION)(o)
     const endValue = 100
 
-    o.set(endValue)
+    o.value = endValue
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(endValue * 0.1)
+    expect(animation.value).toStrictEqual(endValue * 0.1)
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(endValue * 0.2)
+    expect(animation.value).toStrictEqual(endValue * 0.2)
 
     jest.advanceTimersByTime(DURATION * 0.3)
 
-    expect(animation.get()).toStrictEqual(endValue * 0.5)
+    expect(animation.value).toStrictEqual(endValue * 0.5)
 
     jest.advanceTimersByTime(DURATION * 0.4)
 
-    expect(animation.get()).toStrictEqual(endValue * 0.9)
+    expect(animation.value).toStrictEqual(endValue * 0.9)
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(endValue * 1.0)
+    expect(animation.value).toStrictEqual(endValue * 1.0)
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(endValue * 1.0)
+    expect(animation.value).toStrictEqual(endValue * 1.0)
 
     jest.advanceTimersByTime(DURATION * 10)
 
-    expect(animation.get()).toStrictEqual(endValue * 1.0)
+    expect(animation.value).toStrictEqual(endValue * 1.0)
 
-    o.set(200)
-
-    jest.advanceTimersByTime(DURATION * 0.1)
-
-    expect(animation.get()).toStrictEqual(110)
+    o.value = 200
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(120)
+    expect(animation.value).toStrictEqual(110)
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(130)
+    expect(animation.value).toStrictEqual(120)
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(140)
+    expect(animation.value).toStrictEqual(130)
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(150)
+    expect(animation.value).toStrictEqual(140)
+
+    jest.advanceTimersByTime(DURATION * 0.1)
+
+    expect(animation.value).toStrictEqual(150)
 
     jest.advanceTimersByTime(DURATION * 0.5)
 
-    expect(animation.get()).toStrictEqual(200)
+    expect(animation.value).toStrictEqual(200)
 
     jest.advanceTimersByTime(DURATION * 10)
 
-    expect(animation.get()).toStrictEqual(200)
+    expect(animation.value).toStrictEqual(200)
   })
 
   it('transitions to the new end value if the target changed during the animation', () => {
     const o = observable(0)
     const animation = inert(DURATION)(o)
 
-    o.set(1000)
+    o.value = 1000
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(100)
+    expect(animation.value).toStrictEqual(100)
 
-    o.set(2000)
-
-    jest.advanceTimersByTime(DURATION * 0.1)
-
-    expect(animation.get()).toStrictEqual(290)
+    o.value = 2000
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(290 + 190)
+    expect(animation.value).toStrictEqual(290)
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual(290 + 190 + 190)
+    expect(animation.value).toStrictEqual(290 + 190)
+
+    jest.advanceTimersByTime(DURATION * 0.1)
+
+    expect(animation.value).toStrictEqual(290 + 190 + 190)
 
     jest.advanceTimersByTime(DURATION)
 
-    expect(animation.get()).toStrictEqual(2000)
+    expect(animation.value).toStrictEqual(2000)
   })
 })
 
@@ -145,7 +145,7 @@ describe('with objects', () => {
     })
     const animation = inert(DURATION)(o)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 0,
       b: 0,
       c: 0,
@@ -162,21 +162,21 @@ describe('with objects', () => {
     })
     const animation = inert(DURATION)(o)
 
-    o.set({
+    o.value = {
+      a: 10,
+      b: 20,
+      c: 30,
+      d: 40,
+    }
+
+    expect(o.value).toStrictEqual({
       a: 10,
       b: 20,
       c: 30,
       d: 40,
     })
 
-    expect(o.get()).toStrictEqual({
-      a: 10,
-      b: 20,
-      c: 30,
-      d: 40,
-    })
-
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 0,
       b: 0,
       c: 0,
@@ -185,7 +185,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 1,
       b: 2,
       c: 3,
@@ -194,7 +194,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 2,
       b: 4,
       c: 6,
@@ -203,7 +203,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 3,
       b: 6,
       c: 9,
@@ -212,7 +212,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 4,
       b: 8,
       c: 12,
@@ -221,7 +221,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION * 0.6)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 10,
       b: 20,
       c: 30,
@@ -230,7 +230,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 10,
       b: 20,
       c: 30,
@@ -247,14 +247,14 @@ describe('with objects', () => {
     })
     const animation = inert(DURATION)(o)
 
-    o.set({
+    o.value = {
       a: 10,
       b: 20,
       c: 30,
       d: 40,
-    })
+    }
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 0,
       b: 0,
       c: 0,
@@ -263,23 +263,23 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 1,
       b: 2,
       c: 3,
       d: 4,
     })
 
-    o.set({
+    o.value = {
       a: 101,
       b: 202,
       c: 303,
       d: 404,
-    })
+    }
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 11,
       b: 22,
       c: 33,
@@ -288,7 +288,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 21,
       b: 42,
       c: 63,
@@ -297,7 +297,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 31,
       b: 62,
       c: 93,
@@ -306,7 +306,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION * 0.1)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 41,
       b: 82,
       c: 123,
@@ -315,7 +315,7 @@ describe('with objects', () => {
 
     jest.advanceTimersByTime(DURATION)
 
-    expect(animation.get()).toStrictEqual({
+    expect(animation.value).toStrictEqual({
       a: 101,
       b: 202,
       c: 303,

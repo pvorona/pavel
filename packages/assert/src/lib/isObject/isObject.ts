@@ -1,3 +1,5 @@
-export function isObject(target: unknown): target is object {
-  return target !== null && typeof target === 'object'
+import { RecordKey } from '@pavel/types'
+
+export function isObject(value: unknown): value is Record<RecordKey, unknown> {
+  return value !== null && typeof value === 'object'
 }

@@ -81,7 +81,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
   const graphs = createDOM()
 
   scheduleTask(() => {
-    renderPoints(overviewGraphPoints.get(), inertOpacityStateByGraphName.get())
+    renderPoints(overviewGraphPoints.value, inertOpacityStateByGraphName.value)
   })
 
   effect(
@@ -93,8 +93,8 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
         toBitMapSize(canvasHeight),
       )
       renderPoints(
-        overviewGraphPoints.get(),
-        inertOpacityStateByGraphName.get(),
+        overviewGraphPoints.value,
+        inertOpacityStateByGraphName.value,
       )
     },
     { fireImmediately: false },
@@ -105,7 +105,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
     (overviewGraphPoints, inertOpacityStateByGraphName) => {
       clearRect(
         graphs.context,
-        toBitMapSize(width.get()),
+        toBitMapSize(width.value),
         toBitMapSize(canvasHeight),
       )
       renderPoints(overviewGraphPoints, inertOpacityStateByGraphName)
@@ -125,7 +125,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       lineWidth: options.overview.lineWidth,
       strokeStyles: options.colors,
       height: canvasHeight,
-      width: width.get(),
+      width: width.value,
       // Use `miter` line join in overview?
       lineJoinByName: options.lineJoin,
       lineCapByName: options.lineCap,
@@ -136,7 +136,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
 
   function createDOM() {
     const graphs = createGraphs({
-      width: width.get(),
+      width: width.value,
       height: canvasHeight,
     })
     graphs.element.style.marginTop = `${VIEWBOX_TOP_BOTTOM_BORDER_WIDTH}px`

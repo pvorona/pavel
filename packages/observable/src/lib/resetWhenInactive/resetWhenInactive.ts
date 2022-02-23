@@ -9,6 +9,7 @@ type ResetWhenInactiveOptions =
 
 const RESET_WHEN_INACTIVE_GROUP = 'ResetWhenInactive'
 
+// Interceptor with read/write hooks
 export const resetWhenInactive =
   (options: ResetWhenInactiveOptions) =>
   <T>(target: EagerSubject<T>): EagerSubject<T> => {
@@ -17,26 +18,28 @@ export const resetWhenInactive =
       target.name,
     )
     const delay = getDelay(options)
-    const initialValue = target.get()
+    const initialValue = target.value
 
     let timeoutId: undefined | number
 
     function reset() {
-      target.set(initialValue)
+      target.value = initialValue
     }
 
     return {
       name,
-      set(newValueOrFactory) {
+      set value(newValue) {
         if (timeoutId) {
           clearTimeout(timeoutId)
         }
 
         timeoutId = window.setTimeout(reset, delay)
 
-        target.set(newValueOrFactory)
+        target.value = newValue
       },
-      get: target.get,
+      get value() {
+        return target.value
+      },
       observe: target.observe,
     }
   }

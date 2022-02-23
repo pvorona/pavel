@@ -18,8 +18,8 @@ export const YAxis = (
   }: ChartContext,
 ) => {
   const { element, context } = createDOM(
-    width.get(),
-    height.get(),
+    width.value,
+    height.value,
     options.y.color,
   )
 
@@ -34,11 +34,11 @@ export const YAxis = (
 
   scheduleTask(() => {
     renderLabelsAndGrid(
-      inertVisibleMin.get(),
-      inertVisibleMax.get(),
-      factor.get(),
-      width.get(),
-      height.get(),
+      inertVisibleMin.value,
+      inertVisibleMax.value,
+      factor.value,
+      width.value,
+      height.value,
     )
   })
 
@@ -57,9 +57,9 @@ export const YAxis = (
         options.y.label.fontFamily,
       )
       renderLabelsAndGrid(
-        inertVisibleMin.get(),
-        inertVisibleMax.get(),
-        factor.get(),
+        inertVisibleMin.value,
+        inertVisibleMax.value,
+        factor.value,
         width,
         height,
       )
@@ -70,13 +70,13 @@ export const YAxis = (
   effect(
     [inertVisibleMin, inertVisibleMax, factor],
     (inertVisibleMin, inertVisibleMax, factor) => {
-      clearRect(context, toBitMapSize(width.get()), toBitMapSize(height.get()))
+      clearRect(context, toBitMapSize(width.value), toBitMapSize(height.value))
       renderLabelsAndGrid(
         inertVisibleMin,
         inertVisibleMax,
         factor,
-        width.get(),
-        height.get(),
+        width.value,
+        height.value,
       )
     },
     { fireImmediately: false },
