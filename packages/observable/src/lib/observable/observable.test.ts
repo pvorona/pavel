@@ -1,4 +1,5 @@
-import { observable, isProxy } from './observable'
+import { isProxy } from '../internal'
+import { observable } from './observable'
 
 it('initializes with the value', () => {
   const o = observable(1)
