@@ -91,7 +91,7 @@ export function observable<T>(
   initialValue: T,
   options?: ObservableOptions,
 ): EagerSubject<T> {
-  const observers = createObservers<Observer<T>>()
+  const observers = createObservers<[T]>()
   const name = createName(OBSERVABLE_GROUP, options)
 
   let rawValue = initialValue

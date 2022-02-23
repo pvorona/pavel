@@ -4,7 +4,6 @@ import { AnimatableSubject, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
 import { createName, wrapName } from '../createName'
 import { PRIORITY, throttleWithFrame } from '@pavel/scheduling'
-import { Lambda } from '@pavel/types'
 import { TransitionTimingOptions } from '../transition'
 import { createObservers } from '@pavel/utils'
 
@@ -16,7 +15,7 @@ export const inert =
     const name = wrapName(createName(INERT_GROUP, options), target.name)
     // Can get lazy. Use case for idleUntilUrgent?
     const transition = constructTransition(target.value, options)
-    const observers = createObservers<Lambda>()
+    const observers = createObservers()
 
     // TODO: don't emit values when there are no observers.
     // Ensure emitting renews if new observers join while transition is in progress

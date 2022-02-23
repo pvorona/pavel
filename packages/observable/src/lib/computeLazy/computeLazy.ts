@@ -21,7 +21,7 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
   const name = createName(COMPUTE_LAZY_GROUP, options, compute.name)
   const holder = observableLazy(recompute, { name })
 
-  observe(deps, holder.markDirty, {
+  observe(deps, holder.notifyChanged, {
     fireImmediately: false,
     collectValues: false,
   })

@@ -1,4 +1,3 @@
-import { Lambda } from '@pavel/types'
 import { createObservers, lazyValue } from '@pavel/utils'
 import { createName } from '../createName'
 import { Named } from '../types'
@@ -13,16 +12,16 @@ export function observableLazy<T>(
 ) {
   const name = createName(OBSERVABLE_LAZY_GROUP, options)
   const holder = lazyValue(compute)
-  const observers = createObservers<Lambda>()
+  const observers = createObservers()
 
-  function markDirty() {
+  function notifyChanged() {
     holder.notifyChanged()
     observers.notify()
   }
 
   return {
     name,
-    markDirty,
+    notifyChanged,
     observe: observers.register,
     get value() {
       return holder.get()
