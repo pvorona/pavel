@@ -1,0 +1,28 @@
+{
+  "root": "packages/comparator-e2e",
+  "sourceRoot": "packages/comparator-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "packages/comparator-e2e/cypress.json",
+        "devServerTarget": "comparator:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "comparator:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/comparator-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["comparator"]
+}
