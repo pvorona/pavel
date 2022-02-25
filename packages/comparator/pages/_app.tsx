@@ -8,7 +8,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Comparator</title>
       </Head>
-      <main className="app">
+      <main className="app h-screen">
         <Component {...pageProps} />
       </main>
     </>
