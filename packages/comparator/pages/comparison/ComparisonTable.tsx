@@ -14,7 +14,7 @@ export function ComparisonTable() {
               {options.map(option => (
                 <th
                   key={option.id}
-                  className="sticky top-0 px-3 py-4 bg-white dark:bg-[#202124] z-10"
+                  className="sticky top-0 px-3 py-4 bg-white dark:bg-dark-1 z-10"
                   style={{ width: `${100 / options.length}%` }}
                 >
                   {option.name}
@@ -28,7 +28,7 @@ export function ComparisonTable() {
                 <tr className={`sticky left-3 top-[56px]`}>
                   <td className={`pt-10`} colSpan="100%">
                     <span
-                      className={`sticky left-0 px-3  bg-white dark:bg-[#202124]`}
+                      className={`sticky left-0 px-3  bg-white dark:bg-dark-1`}
                     >
                       {feature}
                     </span>

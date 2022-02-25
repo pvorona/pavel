@@ -11,7 +11,7 @@ export function Main() {
 
 export default function Comparison() {
   return (
-    <div className="h-full flex flex-col dark:bg-[#202124] dark:text-[#e7eaed]">
+    <div className="h-full flex flex-col dark:bg-dark-1 dark:text-dark-text">
       <Header />
       <Main />
     </div>
