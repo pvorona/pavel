@@ -28,6 +28,7 @@ function performScheduledTasks(timestamp: number) {
   currentFrameTimestamp = timestamp
   phase = PHASE.BEFORE_RENDER
 
+  // Can be performed before raf
   for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
     executeTasksAndReinitializeQueueIfNeeded(queueByPriority, priority)
   }
@@ -68,6 +69,7 @@ function executeTasksAndReinitializeQueueIfNeeded(
   const { tasks, isCancelledByIndex } = queue[priority]
 
   for (let i = 0; i < tasks.length; i++) {
+    // Can be replaced with queue
     if (isCancelledByIndex[i]) {
       continue
     }

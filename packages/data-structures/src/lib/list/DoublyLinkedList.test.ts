@@ -23,7 +23,7 @@ describe('createDoublyLinkedList', () => {
   })
 
   it('removes a node from single node list', () => {
-    const node = list.push(1)
+    const node = list.append(1)
     list.removeNode(node)
 
     expect(list.head()).toBe(null)
@@ -35,7 +35,7 @@ describe('createDoublyLinkedList', () => {
 
     beforeEach(() => {
       list = DoublyLinkedList<number>()
-      node = list.push(1)
+      node = list.append(1)
     })
 
     it('sets first and last pointers', () => {
@@ -54,9 +54,9 @@ describe('createDoublyLinkedList', () => {
     let node3: ListNode<number>
 
     beforeEach(() => {
-      node1 = list.push(1)
-      node2 = list.push(2)
-      node3 = list.push(3)
+      node1 = list.append(1)
+      node2 = list.append(2)
+      node3 = list.append(3)
     })
 
     it('sets first, last and serializes to all values', () => {
@@ -74,9 +74,9 @@ describe('createDoublyLinkedList', () => {
     let node3: ListNode<number>
 
     beforeEach(() => {
-      node1 = list.push(1)
-      node2 = list.push(2)
-      node3 = list.push(3)
+      node1 = list.append(1)
+      node2 = list.append(2)
+      node3 = list.append(3)
     })
 
     it('updates first pointer if removing first node', () => {
@@ -107,6 +107,24 @@ describe('createDoublyLinkedList', () => {
       expect(list.tail()).toBe(node3)
       expect((list.tail() as ListNode<number>).prev).toBe(node1)
       expect([...list]).toStrictEqual([1, 3])
+    })
+  })
+
+  describe('prepend', () => {
+    it('adds node to the beginning of the array', () => {
+      expect(list.toArray()).toStrictEqual([])
+
+      list.prepend(1)
+
+      expect(list.toArray()).toStrictEqual([1])
+
+      list.prepend(2)
+
+      expect(list.toArray()).toStrictEqual([2, 1])
+
+      list.prepend(3)
+
+      expect(list.toArray()).toStrictEqual([3, 2, 1])
     })
   })
 })

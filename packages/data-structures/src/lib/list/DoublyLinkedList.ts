@@ -2,19 +2,40 @@ import { assert } from '@pavel/assert'
 import { createListNode } from './createListNode'
 import { List, ListNode } from './types'
 
-export function DoublyLinkedList<T>(): List<T> {
+export function createDoublyLinkedList<T>(): List<T> {
   let head: ListNode<T> | null = null
   let tail: ListNode<T> | null = null
 
-  function push(value: T) {
+  function prepend(value: T) {
     const node = createListNode(value)
 
-    pushNode(node)
+    prependNode(node)
 
     return node
   }
 
-  function pushNode(node: ListNode<T>) {
+  function append(value: T) {
+    const node = createListNode(value)
+
+    appendNode(node)
+
+    return node
+  }
+
+  function prependNode(node: ListNode<T>) {
+    if (head === null && tail === null) {
+      head = node
+      tail = node
+
+      return
+    }
+
+    ;(head as ListNode<T>).prev = node
+    node.next = head
+    head = node
+  }
+
+  function appendNode(node: ListNode<T>) {
     if (head === null && tail === null) {
       head = node
       tail = node
@@ -75,8 +96,10 @@ export function DoublyLinkedList<T>(): List<T> {
 
   return {
     removeNode,
-    pushNode,
-    push,
+    prepend,
+    append,
+    prependNode,
+    appendNode,
     shift,
     head: () => head,
     tail: () => tail,
