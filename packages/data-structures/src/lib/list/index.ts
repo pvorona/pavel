@@ -1,4 +1,4 @@
 export * from './DoublyLinkedList'
-export * from './createListNode'
+export * from './ListNode'
 export * from './moveToEnd'
 export * from './types'

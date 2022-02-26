@@ -6,8 +6,10 @@ export type ListNode<T> = {
 
 export type List<T> = Iterable<T> &
   Readonly<{
-    head: () => ListNode<T> | null
-    tail: () => ListNode<T> | null
+    head: ListNode<T> | null
+    tail: ListNode<T> | null
+    size: number
+    isEmpty: boolean
     appendNode: (node: ListNode<T>) => void
     prependNode: (node: ListNode<T>) => void
     append: (value: T) => ListNode<T>

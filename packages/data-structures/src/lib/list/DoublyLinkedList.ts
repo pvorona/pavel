@@ -1,10 +1,11 @@
 import { assert } from '@pavel/assert'
-import { createListNode } from './createListNode'
+import { createListNode } from './ListNode'
 import { List, ListNode } from './types'
 
 export function createDoublyLinkedList<T>(): List<T> {
   let head: ListNode<T> | null = null
   let tail: ListNode<T> | null = null
+  let size = 0
 
   function prepend(value: T) {
     const node = createListNode(value)
@@ -23,6 +24,8 @@ export function createDoublyLinkedList<T>(): List<T> {
   }
 
   function prependNode(node: ListNode<T>) {
+    size++
+
     if (head === null && tail === null) {
       head = node
       tail = node
@@ -36,6 +39,8 @@ export function createDoublyLinkedList<T>(): List<T> {
   }
 
   function appendNode(node: ListNode<T>) {
+    size++
+
     if (head === null && tail === null) {
       head = node
       tail = node
@@ -61,6 +66,11 @@ export function createDoublyLinkedList<T>(): List<T> {
   function removeNode(node: ListNode<T>) {
     const { next, prev } = node
 
+    if (prev === null && next === null && head !== node && tail !== node) {
+      // node is detached
+      return
+    }
+
     if (prev !== null) {
       prev.next = next
     }
@@ -77,6 +87,7 @@ export function createDoublyLinkedList<T>(): List<T> {
       tail = prev
     }
 
+    size--
     node.prev = null
     node.next = null
   }
@@ -101,8 +112,18 @@ export function createDoublyLinkedList<T>(): List<T> {
     prependNode,
     appendNode,
     shift,
-    head: () => head,
-    tail: () => tail,
+    get head() {
+      return head
+    },
+    get tail() {
+      return tail
+    },
+    get size() {
+      return size
+    },
+    get isEmpty() {
+      return size === 0
+    },
     [Symbol.iterator]: iterate,
     toArray,
   }
