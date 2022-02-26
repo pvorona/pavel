@@ -1,4 +1,6 @@
-import { isBrowser, noop } from '@pavel/utils'
+import { always } from '../always'
+import { isBrowser } from '../isBrowser'
+import { noop } from '../noop'
 
 const supportsIdleCallback =
   isBrowser && window.requestIdleCallback !== undefined
@@ -9,7 +11,7 @@ function requestIdleCallbackFallback(fn: () => void) {
 
 export const requestIdleCallback = (() => {
   if (!isBrowser) {
-    return noop
+    return always(1)
   }
 
   if (supportsIdleCallback) {

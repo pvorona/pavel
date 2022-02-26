@@ -1,7 +1,4 @@
-import {
-  requestIdleCallback,
-  cancelIdleCallback,
-} from '@pavel/requestIdleCallback'
+import { requestIdleCallback, cancelIdleCallback } from '../requestIdleCallback'
 
 export type IdleValue<T> = {
   get: () => T

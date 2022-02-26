@@ -1,23 +1,35 @@
-export const breadcrumbs = [
-  { id: 'directory 1', title: 'Directory 1' },
-  { id: 'directory 2', title: 'Nested Directory 1' },
-  { id: 'directory 3', title: 'Nested Directory 2' },
-  // { id: 'directory 4', title: 'Nested Directory 3' },
-  // { id: 'directory 5', title: 'Nested Directory 4' },
-  // { id: 'directory 6', title: 'Nested Directory 5' },
-  // { id: 'directory 7', title: 'Nested Directory 6' },
-  // { id: 'directory 8', title: 'Nested Directory 7' },
-  // { id: 'directory 9', title: 'Nested Directory 8' },
-  // { id: 'directory 10', title: 'Nested Directory 9' },
-]
+import { Comparison, Option } from '../types'
 
-export const avatars = [{ id: 'avatar 1' }, { id: 'avatar 2' }]
+// export const breadcrumbs = [
+//   { id: 'directory 1', title: 'Directory 1' },
+//   { id: 'directory 2', title: 'Nested Directory 1' },
+//   { id: 'directory 3', title: 'Nested Directory 2' },
+//   // { id: 'directory 4', title: 'Nested Directory 3' },
+//   // { id: 'directory 5', title: 'Nested Directory 4' },
+//   // { id: 'directory 6', title: 'Nested Directory 5' },
+//   // { id: 'directory 7', title: 'Nested Directory 6' },
+//   // { id: 'directory 8', title: 'Nested Directory 7' },
+//   // { id: 'directory 9', title: 'Nested Directory 8' },
+//   // { id: 'directory 10', title: 'Nested Directory 9' },
+// ]
 
-export const currentComparison = {
-  features: ['Price', 'Diagonal', 'Offer', 'Contact', 'Website', 'Note'],
+// export const avatars = [{ id: 'avatar 1' }, { id: 'avatar 2' }]
+
+export const currentComparison: Comparison = {
+  id: '1',
+  name: 'current comparison',
+  optionIds: ['option 1', 'option 2'],
+  features: [
+    { name: 'Price', type: 'text', expanded: true },
+    { name: 'Diagonal', type: 'text', expanded: true },
+    { name: 'Offer', type: 'text', expanded: true },
+    { name: 'Contact', type: 'text', expanded: true },
+    { name: 'Website', type: 'text', expanded: true },
+    { name: 'Note', type: 'text', expanded: true },
+  ],
 }
 
-export const options = [
+export const options: Option[] = [
   {
     id: 'option 1',
     name: 'Option 1',
@@ -87,7 +99,7 @@ export const options = [
   //     Offer: 'DOCX',
   //     Contact: 'ted@google.com',
   //     Website: 'https://duckduckgo.com',
-  //     Note: 'This one fits pretty well with the rest of the room',
+  //     Note: 'This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. ',
   //   },
   // },
 ]

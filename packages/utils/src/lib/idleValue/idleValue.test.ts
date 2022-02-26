@@ -1,8 +1,5 @@
 import { IdleValue, idleValue } from './idleValue'
-import {
-  requestIdleCallback,
-  cancelIdleCallback,
-} from '@pavel/requestIdleCallback'
+import { requestIdleCallback, cancelIdleCallback } from '../requestIdleCallback'
 import { Lambda } from '@pavel/types'
 
 const INITIAL_IDLE_CALLBACK_ID = 1
