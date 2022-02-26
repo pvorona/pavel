@@ -7,7 +7,6 @@ import {
   PRIORITIES_IN_ORDER,
   PRIORITY,
 } from './constants'
-import { createQueue } from './createQueue'
 import { initQueue } from './initQueue'
 
 let animationFrameId: undefined | number = undefined
@@ -28,6 +27,7 @@ function performScheduledTasks(timestamp: number) {
   currentFrameTimestamp = timestamp
   phase = PHASE.BEFORE_RENDER
 
+  // Can be performed before raf
   for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
     executeTasksAndReinitializeQueueIfNeeded(queueByPriority, priority)
   }
@@ -44,8 +44,7 @@ function performScheduledTasks(timestamp: number) {
   let anyTaskScheduledDuringRendering = false
 
   for (const priority of PRIORITIES_IN_ORDER) {
-    // TODO: Check if not all cancelled
-    if (futureQueueByPriority[priority].tasks.length !== 0) {
+    if (!futureQueueByPriority[priority].isEmpty) {
       anyTaskScheduledDuringRendering = true
       // No need to create new queue
       // Current frame queue already re-initialized
@@ -65,17 +64,7 @@ function executeTasksAndReinitializeQueueIfNeeded(
   queue: QueueByPriority,
   priority: PRIORITY,
 ) {
-  const { tasks, isCancelledByIndex } = queue[priority]
-
-  for (let i = 0; i < tasks.length; i++) {
-    if (isCancelledByIndex[i]) {
-      continue
-    }
-
-    tasks[i]()
-  }
-
-  if (tasks.length !== 0) {
-    queue[priority] = createQueue()
+  for (const task of queue[priority]) {
+    task()
   }
 }
