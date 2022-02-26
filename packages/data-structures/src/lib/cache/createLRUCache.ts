@@ -1,5 +1,5 @@
 import { assert, isInteger, isPositive } from '@pavel/assert'
-import { DoublyLinkedList, ListNode, moveToEnd } from '../list'
+import { createDoublyLinkedList, ListNode, moveToEnd } from '../list'
 import { RecordKey } from '@pavel/types'
 import { CacheOptions, Cache } from './types'
 
@@ -18,7 +18,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
     `Expected positive integer, received: ${max}`,
   )
 
-  const nodes = DoublyLinkedList<CacheNode<Key, Value>>()
+  const nodes = createDoublyLinkedList<CacheNode<Key, Value>>()
   const nodeByKey = new Map<Key, ListNode<CacheNode<Key, Value>>>()
 
   function get(key: Key) {
@@ -44,7 +44,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
       nodeByKey.delete(keyToRemove)
     }
 
-    const node = nodes.push({ key, value })
+    const node = nodes.append({ key, value })
 
     nodeByKey.set(key, node)
   }

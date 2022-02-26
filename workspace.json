@@ -5,6 +5,8 @@
     "chart": "packages/chart",
     "chart-demo": "packages/chart-demo",
     "chart-demo-e2e": "packages/chart-demo-e2e",
+    "comparator": "packages/comparator",
+    "comparator-e2e": "packages/comparator-e2e",
     "data-structures": "packages/data-structures",
     "easing": "packages/easing",
     "observable": "packages/observable",

@@ -11,13 +11,14 @@ export function scheduleTask(task: Lambda, priority = PRIORITY.WRITE): Lambda {
   // Capture queue of the current frame
   // to prevent modifications of the future queues
   // when cancelling this task
-  const { isCancelledByIndex, tasks } = getQueue(priority)[priority]
-  const nextIndex = tasks.push(task)
+  const queue = getQueue(priority)[priority]
+
+  const node = queue.enqueue(task)
 
   scheduleExecutionIfNeeded()
 
   return function cancelTask() {
-    isCancelledByIndex[nextIndex - 1] = true
+    queue.removeNode(node)
   }
 }
 
