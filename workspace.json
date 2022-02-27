@@ -10,6 +10,7 @@
     "data-structures": "packages/data-structures",
     "easing": "packages/easing",
     "observable": "packages/observable",
+    "redux-slice": "packages/redux-slice",
     "request-idle-callback": "packages/request-idle-callback",
     "scheduling": "packages/scheduling",
     "types": "packages/types",
