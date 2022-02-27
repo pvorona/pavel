@@ -23,6 +23,7 @@
       "@pavel/data-structures": ["packages/data-structures/src/index.ts"],
       "@pavel/easing": ["packages/easing/src/index.ts"],
       "@pavel/observable": ["packages/observable/src/index.ts"],
+      "@pavel/redux-slice": ["packages/redux-slice/src/index.ts"],
       "@pavel/requestIdleCallback": [
         "packages/request-idle-callback/src/index.ts"
       ],
