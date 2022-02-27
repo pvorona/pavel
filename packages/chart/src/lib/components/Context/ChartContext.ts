@@ -217,8 +217,19 @@ export const ChartContext = (options: ChartOptions) => {
   })
 
   function append(graphName: string, data: TimeSeriesDataPoint[]) {
+    const isAtEnd = endIndex.value === globalEndIndex.value
+    const viewBox = endIndex.value - startIndex.value
+
     options.data.value[graphName].push(...data.map(item => item.value))
     options.domain.value.push(...data.map(item => item.timestamp))
+
+    if (isAtEnd) {
+      endIndex.value = globalEndIndex.value
+
+      if (startIndex.value !== 0) {
+        startIndex.value = endIndex.value - viewBox
+      }
+    }
   }
 
   return {

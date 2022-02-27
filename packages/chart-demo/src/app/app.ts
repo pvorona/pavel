@@ -8,9 +8,10 @@ import './app.scss'
 
 document.body.style.background = theme.body || theme.background
 
-const TIME_STEP = 250
+const TIME_STEP = 1_000
 const MAX_VALUE = 10_000
 const startTime = 0
+const NEW_ITEMS = 50
 
 let currentIteration = 0
 
@@ -127,7 +128,7 @@ async function startApp() {
       const chart = Chart(chartContainer, options)
 
       setInterval(() => {
-        const newData = generateData(1)
+        const newData = generateData(NEW_ITEMS)
 
         chart.append('A', newData)
       }, TIME_STEP)
