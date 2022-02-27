@@ -1,3 +1,4 @@
+import { createSlice } from '@pavel/redux-slice'
 import { Comparison, Option } from '../types'
 
 // export const breadcrumbs = [
@@ -15,10 +16,32 @@ import { Comparison, Option } from '../types'
 
 // export const avatars = [{ id: 'avatar 1' }, { id: 'avatar 2' }]
 
+const optionsSlice = createSlice({
+  name: 'options',
+  initialState: {
+    byId: {},
+    ids: [],
+  },
+  handlers: {},
+  // selectors: {
+  //   selectIdsState: state => state.ids,
+  //   selectByIdState: state => state.byId,
+  //   selectOptionById: (id: string) =>
+  //     createSelector(this.selectByIdState, byId => byId[id]),
+  // },
+})
+
+const currentComparisonSlice = createSlice({
+  name: 'currentComparison',
+  initialState: undefined as undefined | string,
+  handlers: {},
+})
+
 export const currentComparison: Comparison = {
   id: '1',
   name: 'current comparison',
   optionIds: ['option 1', 'option 2'],
+  isLocked: false,
   features: [
     { name: 'Price', type: 'text', expanded: true },
     { name: 'Diagonal', type: 'text', expanded: true },

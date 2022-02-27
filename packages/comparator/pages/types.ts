@@ -9,6 +9,7 @@ export type Comparison = {
   name: string
   features: Feature[]
   optionIds: string[]
+  isLocked: boolean
 }
 
 export type Feature = {
