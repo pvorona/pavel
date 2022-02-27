@@ -1,19 +1,25 @@
-import { always } from '../always'
-import { isBrowser } from '../isBrowser'
-import { noop } from '../noop'
+import { ensureGreaterThanOrEqual } from '../ensureGreaterThanOrEqual'
+import { supportsIdleCallback } from './constants'
 
-const supportsIdleCallback =
-  isBrowser && window.requestIdleCallback !== undefined
+const MAX_RUNNING_TIME = 1_000 / 120
 
-function requestIdleCallbackFallback(fn: () => void) {
-  return window.setTimeout(fn, 0)
+function createIdleDeadline(initialTime: DOMHighResTimeStamp): IdleDeadline {
+  return {
+    didTimeout: false,
+    timeRemaining() {
+      return ensureGreaterThanOrEqual(
+        0,
+        MAX_RUNNING_TIME - (performance.now() - initialTime),
+      )
+    },
+  }
+}
+
+function requestIdleCallbackFallback(fn: IdleRequestCallback) {
+  return window.setTimeout(() => fn(createIdleDeadline(performance.now())), 0)
 }
 
 export const requestIdleCallback = (() => {
-  if (!isBrowser) {
-    return always(1)
-  }
-
   if (supportsIdleCallback) {
     return window.requestIdleCallback
   }
@@ -22,10 +28,6 @@ export const requestIdleCallback = (() => {
 })()
 
 export const cancelIdleCallback = (() => {
-  if (!isBrowser) {
-    return noop
-  }
-
   if (supportsIdleCallback) {
     return window.cancelIdleCallback
   }

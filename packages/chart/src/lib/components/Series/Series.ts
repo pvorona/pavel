@@ -5,12 +5,7 @@ import {
   setCanvasSize,
 } from '../renderers'
 import { ChartContext, ChartOptions } from '../../types'
-import {
-  ensureInBounds,
-  handleDrag,
-  interpolate,
-  toBitMapSize,
-} from '../../util'
+import { handleDrag, interpolate, toBitMapSize } from '../../util'
 import {
   MIN_VIEWBOX,
   WHEEL_MULTIPLIER,
@@ -21,7 +16,7 @@ import {
 import { Component, Point } from '../types'
 import { createGraphs } from '../Graphs/createGraphs'
 import { scheduleTask } from '@pavel/scheduling'
-import { addEventListeners } from '@pavel/utils'
+import { addEventListeners, ensureInBounds } from '@pavel/utils'
 
 export const Series: Component<ChartOptions, ChartContext> = (
   options,

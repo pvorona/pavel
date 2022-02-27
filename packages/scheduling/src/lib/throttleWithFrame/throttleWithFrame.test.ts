@@ -1,13 +1,9 @@
-/**
- * @jest-environment jsdom
- */
-
-import { createScheduleTaskWithCleanup } from './createScheduleTaskWithCleanup'
+import { throttleWithFrame } from './throttleWithFrame'
 import { PRIORITY } from '../constants'
 
 const FRAME_INTERVAL = 100
 
-describe('createScheduleTaskWithCleanup', () => {
+describe('throttleWithFrame', () => {
   let frameIndex = 0
 
   beforeAll(() => {
@@ -23,18 +19,9 @@ describe('createScheduleTaskWithCleanup', () => {
   it('schedules tasks and executes them in specified order', () => {
     const mock = jest.fn()
 
-    const write = createScheduleTaskWithCleanup(
-      () => mock('write'),
-      PRIORITY.WRITE,
-    )
-    const compute = createScheduleTaskWithCleanup(
-      () => mock('compute'),
-      PRIORITY.COMPUTE,
-    )
-    const read = createScheduleTaskWithCleanup(
-      () => mock('read'),
-      PRIORITY.READ,
-    )
+    const write = throttleWithFrame(() => mock('write'), PRIORITY.WRITE)
+    const compute = throttleWithFrame(() => mock('compute'), PRIORITY.COMPUTE)
+    const read = throttleWithFrame(() => mock('read'), PRIORITY.READ)
 
     write()
     compute()

@@ -7,7 +7,7 @@ const IDLE_CALLBACK_DELAY = 1000
 
 let nextIdleCallbackId = INITIAL_IDLE_CALLBACK_ID
 
-jest.mock('@pavel/requestIdleCallback', () => ({
+jest.mock('../requestIdleCallback', () => ({
   requestIdleCallback: jest.fn((fn: Lambda) => {
     setTimeout(fn, IDLE_CALLBACK_DELAY)
 
