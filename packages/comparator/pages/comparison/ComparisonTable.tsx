@@ -325,8 +325,8 @@ export function ComparisonTable() {
                   </tr>
                 )}
 
-                {/* <tr className={`sticky left-3 top-[56px]`}> */}
-                <tr className={`top-[56px]`}>
+                {/* <tr className={`sticky left-3 top-[58px]`}> */}
+                <tr className={`top-[58px]`}>
                   <td className="pt-10" colSpan={options.length}>
                     <FeatureHeader feature={feature} />
                   </td>
