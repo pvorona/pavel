@@ -1,19 +1,70 @@
 import { Button } from '../../common'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { currentComparison, options as initialOptions } from './Comparison.data'
 import styles from './Comparison.module.css'
 import { Feature, Option } from '../types'
 import { uuid } from '@pavel/utils'
-import { pointerPosition } from '@pavel/observable'
+import { effect, pointerPosition, windowHeight } from '@pavel/observable'
+import classNames from 'classnames'
 
-function OptionName({ option, index }: { option: Option; index: number }) {
+const ENTER = 'Enter'
+const ESCAPE = 'Escape'
+
+function TextField({
+  className,
+  ...props
+}: {
+  className?: string
+  onInput: (e: React.FormEvent<HTMLSpanElement>) => void
+  children: React.ReactNode
+}) {
+  const [span, setSpan] = useState<HTMLSpanElement | undefined>()
+
+  function onKeyDown(e: React.KeyboardEvent) {
+    if (!span) {
+      return
+    }
+
+    if (e.code === ENTER) {
+      span.blur()
+    }
+
+    if (e.code === ESCAPE) {
+      span.blur()
+    }
+  }
+
+  return (
+    <span
+      {...props}
+      ref={setSpan}
+      className={classNames(className, 'rounded', styles.TextField)}
+      contentEditable
+      onKeyDown={onKeyDown}
+      suppressContentEditableWarning={true}
+    />
+  )
+}
+
+function OptionHeader({
+  option,
+  index,
+  isLast,
+}: {
+  option: Option
+  index: number
+  isLast: boolean
+}) {
   return (
     <>
-      {/* <button onClick={() => addOption(index)}>Add option</button> */}
-      {/* <span contentEditable>{option.name}</span> */}
-      <span>{option.name}</span>
-      {/* <button onClick={() => addOption(index + 1)}>Add option</button>
-      <button onClick={() => removeOption(option)}>X</button> */}
+      <AddOptionLine attachment="left" />
+      <TextField
+        className="px-3 py-4 w-full inline-block"
+        onInput={console.log}
+      >
+        {option.name}
+      </TextField>
+      {isLast && <AddOptionLine attachment="right" />}
     </>
   )
 }
@@ -36,14 +87,88 @@ function FeatureHeader({ feature }: { feature: Feature }) {
   )
 }
 
-function AddFeatureLine() {
-  const lineHeight = 1
-  const hoverTrapSizeFromOneSide = 20
-  const yTranslate = 25
-  const lineColor = '#CCCCCC'
-  const circleColor = '#B2B2B2'
-  const textColor = '#666666'
+const lineHeight = 1
+const hoverTrapSizeFromOneSide = 20
+const yTranslate = '20px'
+const lineColor = '#CCCCCC'
+const circleColor = '#B2B2B2'
+const textColor = '#666666'
 
+function AddOptionLine({ attachment }: { attachment: 'left' | 'right' }) {
+  const [svg, setSvg] = useState<SVGSVGElement>()
+  const [button, setButton] = useState<SVGTextElement>()
+  const [circle, setCircle] = useState<SVGCircleElement>()
+
+  useEffect(() => {
+    if (!button || !circle || !svg) {
+      return
+    }
+
+    return pointerPosition.observe(({ y }) => {
+      const { top } = svg.getBoundingClientRect()
+
+      button.style.transform = `translateY(${y - top}px)`
+      circle.style.transform = `translateY(${y - top}px)`
+    })
+  }, [button, circle, svg])
+
+  useEffect(() => {
+    if (!svg) {
+      return
+    }
+
+    return effect([windowHeight], height => {
+      svg.setAttribute('height', `${height}`)
+    })
+  }, [svg])
+
+  return (
+    <svg
+      ref={setSvg}
+      // Init with 0 to match the hydrated server state
+      height={0}
+      width={`${lineHeight + 2 * hoverTrapSizeFromOneSide}px`}
+      className="opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+      style={{
+        position: 'absolute',
+        top: 0,
+        margin: `0 -${hoverTrapSizeFromOneSide}px`,
+        ...(attachment === 'left' ? { left: 0 } : { right: 0 }),
+        // transform: 'translateX(-50%)',
+      }}
+    >
+      <line
+        x1={hoverTrapSizeFromOneSide}
+        y1="0"
+        x2={hoverTrapSizeFromOneSide}
+        y2="100%"
+        stroke={lineColor}
+        strokeDasharray="20"
+      />
+      <circle
+        ref={setCircle}
+        cx={hoverTrapSizeFromOneSide}
+        cy={0}
+        r={hoverTrapSizeFromOneSide - 1}
+        stroke={circleColor}
+        fill="white"
+      ></circle>
+      <text
+        ref={setButton}
+        x={hoverTrapSizeFromOneSide}
+        y={0}
+        dominantBaseline="middle"
+        alignmentBaseline="central"
+        color={textColor}
+        textAnchor="middle"
+      >
+        +
+      </text>
+    </svg>
+  )
+}
+
+function AddFeatureLine() {
   const [svg, setSvg] = useState<SVGSVGElement>()
   const [button, setButton] = useState<SVGTextElement>()
   const [circle, setCircle] = useState<SVGCircleElement>()
@@ -68,7 +193,7 @@ function AddFeatureLine() {
       height={`${lineHeight + 2 * hoverTrapSizeFromOneSide}px`}
       className="opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
       style={{
-        transform: `translateY(${yTranslate}px)`,
+        transform: `translateY(${yTranslate})`,
         margin: `-${hoverTrapSizeFromOneSide}px 0`,
       }}
     >
@@ -167,14 +292,24 @@ export function ComparisonTable() {
       >
         <table className="min-w-[640px] mb-16 mx-auto">
           <thead>
-            <tr>
+            <tr
+              className="sticky top-0 z-20 bg-white dark:bg-[#202124]"
+              style={{
+                backgroundImage:
+                  'linear-gradient(to top, hsl(0deg 0% 0% / 10%) 1px, transparent 0)',
+              }}
+            >
               {options.map((option, index) => (
                 <th
                   key={option.id}
-                  className="sticky top-0 px-3 py-4 bg-white dark:bg-[#202124] z-20"
+                  className="relative"
                   style={{ width: `${100 / options.length}%` }}
                 >
-                  <OptionName option={option} index={index} />
+                  <OptionHeader
+                    option={option}
+                    index={index}
+                    isLast={index === options.length - 1}
+                  />
                 </th>
               ))}
             </tr>
@@ -205,9 +340,12 @@ export function ComparisonTable() {
                         style={{ width: `${100 / options.length}%` }}
                         className="align-top"
                       >
-                        <div className="flex justify-center px-12 pt-2">
+                        <TextField
+                          onInput={console.log}
+                          className="flex justify-center px-12 py-2"
+                        >
                           {option.features[feature.name]}
-                        </div>
+                        </TextField>
                       </td>
                     ))}
                   </tr>
