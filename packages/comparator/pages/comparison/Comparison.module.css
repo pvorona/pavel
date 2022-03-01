@@ -31,3 +31,12 @@
 .TextField:focus {
   box-shadow: 0 0 0 1px var(--focus-color);
 }
+
+.TextField[placeholder]:empty:before {
+  content: attr(placeholder);
+  color: #555;
+}
+
+.TextField[placeholder]:empty:focus:before {
+  content: '';
+}

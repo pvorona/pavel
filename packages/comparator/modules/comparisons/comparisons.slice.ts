@@ -63,9 +63,9 @@ export const comparisonsSlice = createSlice({
   handlers: {
     addFeatureToCurrentComparison: (state, index: number) => {
       const newFeature: Feature = {
-        name: 'Feature name',
+        name: '',
         type: 'text',
-        description: 'Feature description',
+        description: '',
         isDescriptionExpanded: false,
         isExpanded: true,
         // new: true,

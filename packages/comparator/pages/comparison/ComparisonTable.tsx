@@ -25,6 +25,7 @@ function TextField({
   ...props
 }: {
   className?: string
+  placeholder?: string
   onInput?: (e: React.FormEvent<HTMLSpanElement>) => void
   children: React.ReactNode
 }) {
@@ -65,10 +66,10 @@ function OptionActions({ option }: { option: Option }) {
   }
 
   return (
-    <div className={classNames('flex mt-2')}>
-      <FeatureHeaderIcon />
-      <FeatureHeaderIcon className="ml-2" />
-      <FeatureHeaderIcon onClick={onRemoveOptionClick} className="ml-2" />
+    <div className={classNames('flex py-2 px-8')}>
+      <IconButton />
+      <IconButton className="ml-2" />
+      <IconButton color="red" onClick={onRemoveOptionClick} className="ml-2" />
     </div>
   )
 }
@@ -101,9 +102,10 @@ function OptionHeader({
 
 function FeatureActions({
   index,
+  feature,
   className,
   ...props
-}: { index: number } & React.DetailedHTMLProps<
+}: { index: number; feature: Feature } & React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 >) {
@@ -129,25 +131,40 @@ function FeatureActions({
       )}
       {...props}
     >
-      <FeatureHeaderIcon onClick={onDescriptionExpandedClick} />
-      <FeatureHeaderIcon onClick={onToggleExpandedClick} className="ml-2" />
-      <FeatureHeaderIcon onClick={onRemoveFeatureClick} className="ml-2" />
+      <IconButton color="gray" onClick={onToggleExpandedClick} />
+      {feature.isExpanded && (
+        <IconButton
+          color="green"
+          onClick={onDescriptionExpandedClick}
+          className="ml-2"
+        />
+      )}
+      <IconButton color="red" onClick={onRemoveFeatureClick} className="ml-2" />
     </div>
   )
 }
 
-function FeatureHeaderIcon({
+function IconButton({
   className,
+  color = 'white',
   ...props
-}: React.DetailedHTMLProps<
+}: {
+  color?: 'red' | 'white' | 'gray' | 'green'
+} & React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 >) {
   return (
     <div
       className={classNames(
-        'inline-block w-6 h-6 border rounded-full',
+        'inline-block w-5 h-5 border border-current rounded-full bg-current',
         className,
+        {
+          'text-red-500': color === 'red',
+          'text-white': color === 'white',
+          'text-gray-500': color === 'gray',
+          'text-green-400': color === 'green',
+        },
       )}
       {...props}
     />
@@ -169,16 +186,24 @@ function FeatureHeader({
     <div className="inline-block sticky left-0">
       <div className="flex flex-row items-center group">
         <TextField
+          placeholder="Feature name..."
           className={classNames('px-3 py-2', {
             'opacity-50': !feature.isExpanded,
           })}
         >
           {feature.name}
         </TextField>
-        <FeatureActions index={index} className="group-hover:opacity-100" />
+        <FeatureActions
+          index={index}
+          feature={feature}
+          className="group-hover:opacity-100"
+        />
       </div>
       {isDescriptionVisible && (
-        <TextField className="px-3 inline-block min-w-[100px]">
+        <TextField
+          placeholder="Feature description..."
+          className="px-3 inline-block min-w-[100px] text-xs"
+        >
           {feature.description}
         </TextField>
       )}
@@ -418,6 +443,7 @@ export function ComparisonTable() {
                         className="align-top"
                       >
                         <TextField
+                          placeholder="Option feature value..."
                           onInput={console.log}
                           className="flex justify-center px-12 py-2"
                         >
