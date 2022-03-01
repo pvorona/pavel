@@ -13,7 +13,7 @@ import {
   toggleDescriptionExpandedInCurrentComparison,
   removeOptionFromCurrentComparison,
 } from '../../modules/comparisons'
-import { animateOnce } from '@pavel/utils'
+import { animateOnce, selectElementContent } from '@pavel/utils'
 import { effect, pointerPosition, windowHeight } from '@pavel/observable'
 import classNames from 'classnames'
 
@@ -46,13 +46,21 @@ function TextField({
     }
   }
 
+  function onFocus(e: React.FocusEvent<HTMLSpanElement>) {
+    selectElementContent(e.target)
+  }
+
   return (
     <span
       {...props}
       ref={setSpan}
-      className={classNames(className, 'rounded', styles.TextField)}
+      className={classNames(className, 'rounded-sm', styles.TextField)}
       contentEditable
       onKeyDown={onKeyDown}
+      onFocus={onFocus}
+      spellCheck="false"
+      autoCorrect="off"
+      autoCapitalize="off"
       suppressContentEditableWarning={true}
     />
   )
@@ -67,9 +75,7 @@ function OptionActions({ option }: { option: Option }) {
 
   return (
     <div className={classNames('flex py-2 px-8')}>
-      <IconButton />
-      <IconButton className="ml-2" />
-      <IconButton color="red" onClick={onRemoveOptionClick} className="ml-2" />
+      <IconButton color="red" onClick={onRemoveOptionClick} />
     </div>
   )
 }
@@ -87,7 +93,7 @@ function OptionHeader({
     <>
       <AddOptionLine attachment="left" index={index} />
       <TextField
-        className="px-3 py-4 w-full inline-block peer"
+        className="px-3 py-4 w-full inline-block peer font-extralight text-4xl"
         onInput={console.log}
       >
         {option.name}
@@ -157,7 +163,7 @@ function IconButton({
   return (
     <div
       className={classNames(
-        'inline-block w-5 h-5 border border-current rounded-full bg-current',
+        'inline-block cursor-pointer w-5 h-5 border border-current rounded-full bg-current',
         className,
         {
           'text-red-500': color === 'red',
@@ -187,8 +193,8 @@ function FeatureHeader({
       <div className="flex flex-row items-center group">
         <TextField
           placeholder="Feature name..."
-          className={classNames('px-3 py-2', {
-            'opacity-50': !feature.isExpanded,
+          className={classNames('px-3 py-2 opacity-50 font-extralight', {
+            'opacity-20': !feature.isExpanded,
           })}
         >
           {feature.name}
@@ -202,7 +208,7 @@ function FeatureHeader({
       {isDescriptionVisible && (
         <TextField
           placeholder="Feature description..."
-          className="px-3 inline-block min-w-[100px] text-xs"
+          className="px-3 inline-block min-w-[100px] text-xs opacity-30 font-extralight"
         >
           {feature.description}
         </TextField>
@@ -211,12 +217,15 @@ function FeatureHeader({
   )
 }
 
-const lineHeight = 1
+const lineThickness = 1
 const hoverTrapSizeFromOneSide = 20
 const yTranslate = '20px'
-const lineColor = '#CCCCCC'
-const circleColor = '#B2B2B2'
+const lineColor = 'hsla(0, 0%, 80%, 0.7)'
+// const circleColor = 'hsl(0, 0%, 70%)'
+const circleColor = 'hsl(0, 0%, 80%)'
 const textColor = '#666666'
+// const STROKE_DASHARRAY = '40 20'
+const STROKE_DASHARRAY = '34 17'
 
 function AddOptionLine({
   attachment,
@@ -263,7 +272,7 @@ function AddOptionLine({
       ref={setSvg}
       // Init with 0 to match the hydrated server state
       height={0}
-      width={`${lineHeight + 2 * hoverTrapSizeFromOneSide}px`}
+      width={`${lineThickness + 2 * hoverTrapSizeFromOneSide}px`}
       className="opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
       style={{
         position: 'absolute',
@@ -279,7 +288,7 @@ function AddOptionLine({
         x2={hoverTrapSizeFromOneSide}
         y2="100%"
         stroke={lineColor}
-        strokeDasharray="20"
+        strokeDasharray={STROKE_DASHARRAY}
       />
       <circle
         ref={setCircle}
@@ -287,7 +296,7 @@ function AddOptionLine({
         cy={0}
         r={hoverTrapSizeFromOneSide - 1}
         stroke={circleColor}
-        fill="white"
+        fill={circleColor}
       ></circle>
       <text
         ref={setButton}
@@ -332,7 +341,7 @@ function AddFeatureLine({ index }: { index: number }) {
       onClick={onClick}
       ref={setSvg}
       width="100%"
-      height={`${lineHeight + 2 * hoverTrapSizeFromOneSide}px`}
+      height={`${lineThickness + 2 * hoverTrapSizeFromOneSide}px`}
       className="opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
       style={{
         transform: `translateY(${yTranslate})`,
@@ -345,7 +354,7 @@ function AddFeatureLine({ index }: { index: number }) {
         x2="100%"
         y2={hoverTrapSizeFromOneSide}
         stroke={lineColor}
-        strokeDasharray="20"
+        strokeDasharray={STROKE_DASHARRAY}
       />
       <circle
         ref={setCircle}
@@ -353,7 +362,7 @@ function AddFeatureLine({ index }: { index: number }) {
         cy={hoverTrapSizeFromOneSide}
         r={hoverTrapSizeFromOneSide - 1}
         stroke={circleColor}
-        fill="white"
+        fill={circleColor}
       ></circle>
       <text
         ref={setButton}
@@ -428,7 +437,7 @@ export function ComparisonTable() {
                   </tr>
                 )}
 
-                <tr className={`top-[58px]`}>
+                <tr className={`top-[72px]`}>
                   <td className="pt-10" colSpan={options.length}>
                     <FeatureHeader index={index} feature={feature} />
                   </td>
@@ -445,7 +454,7 @@ export function ComparisonTable() {
                         <TextField
                           placeholder="Option feature value..."
                           onInput={console.log}
-                          className="flex justify-center px-12 py-2"
+                          className="flex justify-center px-12 py-2 font-extralight"
                         >
                           {option.features[feature.name]}
                         </TextField>
