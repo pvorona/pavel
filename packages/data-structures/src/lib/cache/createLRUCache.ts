@@ -18,6 +18,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
     `Expected positive integer, received: ${max}`,
   )
 
+  // Can use single linked list instead
   const nodes = createDoublyLinkedList<CacheNode<Key, Value>>()
   const nodeByKey = new Map<Key, ListNode<CacheNode<Key, Value>>>()
 

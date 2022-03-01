@@ -1,8 +1,5 @@
 import { IdleValue, idleValue } from './idleValue'
-import {
-  requestIdleCallback,
-  cancelIdleCallback,
-} from '@pavel/requestIdleCallback'
+import { requestIdleCallback, cancelIdleCallback } from '../requestIdleCallback'
 import { Lambda } from '@pavel/types'
 
 const INITIAL_IDLE_CALLBACK_ID = 1
@@ -10,7 +7,7 @@ const IDLE_CALLBACK_DELAY = 1000
 
 let nextIdleCallbackId = INITIAL_IDLE_CALLBACK_ID
 
-jest.mock('@pavel/requestIdleCallback', () => ({
+jest.mock('../requestIdleCallback', () => ({
   requestIdleCallback: jest.fn((fn: Lambda) => {
     setTimeout(fn, IDLE_CALLBACK_DELAY)
 

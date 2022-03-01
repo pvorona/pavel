@@ -21,6 +21,5 @@ export const PRIORITIES_IN_ORDER = [
 
 export enum PHASE {
   INTERACTING,
-  BEFORE_RENDER,
   RENDERING,
 }

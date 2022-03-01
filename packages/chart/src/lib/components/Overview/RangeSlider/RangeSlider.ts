@@ -1,6 +1,7 @@
 import { effect, observable, observe } from '@pavel/observable'
+import { ensureInBounds } from '@pavel/utils'
 import { ChartContext, ChartOptions } from '../../../types'
-import { handleDrag, ensureInBounds, areNumbersClose } from '../../../util'
+import { handleDrag, areNumbersClose } from '../../../util'
 import {
   cursor,
   DEVIATION_FROM_STRAIGHT_LINE_DEGREES,

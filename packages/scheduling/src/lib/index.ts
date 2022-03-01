@@ -1,6 +1,4 @@
-export * from './scheduling'
+export * from './taskQueue'
 export * from './constants'
 export * from './types'
-export * from './createScheduleTaskWithCleanup'
-export * from './scheduleTask'
 export * from './throttleWithFrame'

@@ -1,17 +1,33 @@
 .scrollContainer {
-  --header-height: 56px;
-  --shadow-height: 30px;
-  --shadow-color: rgba(0, 0, 0, 0.15);
+  --header-height: 58px;
+  --shadow-height: 8px;
+  --shadow-color: hsla(0, 0, 0, 0.14);
   --background-color: white;
+  /* --background-color: #202124; */
 
-  /* background: 
-    linear-gradient(white 30%, rgba(0, 0, 0, 0)) 0 56px,
-    radial-gradient(
-      farthest-side at 50% 0,
-      rgba(0, 0, 0, 0.2),
-      rgba(0, 0, 0, 0)
-    ) 0 56px; */
+  background: linear-gradient(var(--background-color) 30%, rgba(0, 0, 0, 0)) 0
+      var(--header-height),
+    linear-gradient(rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0)) 0
+      var(--header-height);
   background-repeat: no-repeat;
-  background-size: 100% 40px, 100% 14px;
+  background-size: 100% calc(2 * var(--shadow-height)),
+    100% var(--shadow-height);
   background-attachment: local, scroll;
+}
+
+.TextField {
+  --hover-color: #cccccc;
+  --focus-color: #808080;
+
+  transition: box-shadow 0.125s;
+  cursor: text;
+  outline: none;
+}
+
+.TextField:hover {
+  box-shadow: 0 0 0 1px var(--hover-color);
+}
+
+.TextField:focus {
+  box-shadow: 0 0 0 1px var(--focus-color);
 }

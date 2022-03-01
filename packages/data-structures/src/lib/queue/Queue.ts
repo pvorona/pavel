@@ -29,6 +29,9 @@ export function createQueue<T>(): Queue<T> {
     get isEmpty() {
       return container.isEmpty
     },
+    get size() {
+      return container.size
+    },
     [Symbol.iterator]: iterate,
   }
 }

@@ -1,9 +1,11 @@
 import classnames from 'classnames'
+import React from 'react'
 
 export type ButtonProps = {
   children: React.ReactNode
   className?: string
   type?: 'button' | 'link'
+  onClick?: (event: React.MouseEvent) => void
 }
 
 export function Button({ className, type = 'button', ...props }: ButtonProps) {

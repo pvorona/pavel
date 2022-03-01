@@ -1,5 +1,5 @@
 import { Lambda } from '@pavel/types'
-import { scheduleTask } from '../scheduleTask'
+import { scheduleTask } from '../taskQueue'
 import { PRIORITY } from '../constants'
 
 export function throttleWithFrame(

@@ -5,4 +5,5 @@ export type Queue<T> = Iterable<T> & {
   dequeue: () => T
   removeNode: (node: ListNode<T>) => void
   isEmpty: boolean
+  size: number
 }
