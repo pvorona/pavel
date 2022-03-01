@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { currentComparison, options as initialOptions } from './Comparison.data'
 import styles from './Comparison.module.css'
 import { Feature, Option } from '../types'
-import { uuid } from '@pavel/utils'
+import { animateOnce, uuid } from '@pavel/utils'
 import { effect, pointerPosition, windowHeight } from '@pavel/observable'
 import classNames from 'classnames'
 
@@ -15,7 +15,7 @@ function TextField({
   ...props
 }: {
   className?: string
-  onInput: (e: React.FormEvent<HTMLSpanElement>) => void
+  onInput?: (e: React.FormEvent<HTMLSpanElement>) => void
   children: React.ReactNode
 }) {
   const [span, setSpan] = useState<HTMLSpanElement | undefined>()
@@ -27,6 +27,7 @@ function TextField({
 
     if (e.code === ENTER) {
       span.blur()
+      animateOnce(span, 'animate-success')
     }
 
     if (e.code === ESCAPE) {
@@ -69,20 +70,63 @@ function OptionHeader({
   )
 }
 
+function FeatureActions({
+  className,
+  ...props
+}: React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>) {
+  return (
+    <div
+      className={classNames(
+        'flex ml-2 opacity-0 transition-opacity',
+        className,
+      )}
+      {...props}
+    >
+      <FeatureHeaderIcon />
+      <FeatureHeaderIcon className="ml-2" />
+      <FeatureHeaderIcon className="ml-2" />
+    </div>
+  )
+}
+
+function FeatureHeaderIcon({
+  className,
+  ...props
+}: React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>) {
+  return (
+    <div
+      className={classNames(
+        'inline-block w-6 h-6 border rounded-full',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
 function FeatureHeader({ feature }: { feature: Feature }) {
   return (
     // <div className="inline-block sticky left-0 px-3 bg-white dark:bg-[#202124]">
-    <div className="inline-block px-3">
-      {/* <span contentEditable>{feature.name}</span> */}
-      <span>{feature.name}</span>
-      {/* <button onClick={() => removeFeature(feature)}>X</button>
+    <div className="inline-block sticky left-0">
+      <div className="flex flex-row items-center group">
+        {/* <span contentEditable>{feature.name}</span> */}
+        <TextField className="px-3 py-2">{feature.name}</TextField>
+        <FeatureActions className="group-hover:opacity-100" />
+
+        {/* <button onClick={() => removeFeature(feature)}>X</button>
   <button onClick={() => toggleVisibility(feature)}>
     Toggle visibility
   </button> */}
-      {feature.description && (
-        // <div contentEditable>{feature.description}</div>
+        {/* {feature.description && (
         <div>{feature.description}</div>
-      )}
+      )} */}
+      </div>
     </div>
   )
 }
@@ -241,7 +285,7 @@ export function ComparisonTable() {
   function toggleVisibility(feature: Feature) {
     const newFeature: Feature = {
       ...feature,
-      expanded: !feature.expanded,
+      isExpanded: !feature.isExpanded,
     }
     setFeatures(features => features.map(f => (f === feature ? newFeature : f)))
   }
@@ -251,7 +295,7 @@ export function ComparisonTable() {
       name: `Feature ${features.length}`,
       type: 'text',
       description: 'sample',
-      expanded: true,
+      isExpanded: true,
     } as const
     setFeatures(features => [...features, newFeature])
     setShouldScrollToBottom(true)
@@ -325,14 +369,13 @@ export function ComparisonTable() {
                   </tr>
                 )}
 
-                {/* <tr className={`sticky left-3 top-[58px]`}> */}
                 <tr className={`top-[58px]`}>
                   <td className="pt-10" colSpan={options.length}>
                     <FeatureHeader feature={feature} />
                   </td>
                 </tr>
 
-                {feature.expanded && (
+                {feature.isExpanded && (
                   <tr>
                     {options.map(option => (
                       <td

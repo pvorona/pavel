@@ -16,7 +16,7 @@ export type Feature = {
   name: string
   type: FeatureType
   description?: string
-  expanded: boolean
+  isExpanded: boolean
 }
 
 export type FeatureType = 'text'

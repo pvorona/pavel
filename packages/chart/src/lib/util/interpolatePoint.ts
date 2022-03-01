@@ -1,5 +1,6 @@
 import { floor, ceil } from './math'
 
+// Only works with evenly-spaced series
 export function interpolatePoint(point: number, values: number[]): number {
   return interpolate(
     floor(point),
