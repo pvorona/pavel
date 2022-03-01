@@ -29,7 +29,10 @@ type ActionHandlers<State> = {
     | ActionHandlerWithoutPayload<State>
 }
 
-export function createSlice<State, Handlers extends ActionHandlers<State>>({
+export function createSlice<
+  State,
+  Handlers extends ActionHandlers<State> = ActionHandlers<State>,
+>({
   initialState,
   name,
   handlers,
@@ -41,7 +44,9 @@ export function createSlice<State, Handlers extends ActionHandlers<State>>({
   function reducer(state = initialState, action: any) {
     const handler = handlers[action.type]
 
-    return typeof handler === 'function' ? handler(state, action) : state
+    return typeof handler === 'function'
+      ? handler(state, action.payload)
+      : state
   }
 
   const actions = extractActions(name, handlers)

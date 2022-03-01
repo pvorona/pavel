@@ -1,7 +1,6 @@
-export type Option = {
-  id: string
-  name: string
-  features: Record<string, OptionFeature>
+export type ComparisonsState = {
+  byId: Record<string, Comparison>
+  currentComparisonId: string
 }
 
 export type Comparison = {
@@ -15,10 +14,9 @@ export type Comparison = {
 export type Feature = {
   name: string
   type: FeatureType
-  description?: string
+  description: string
+  isDescriptionExpanded: boolean
   isExpanded: boolean
 }
 
 export type FeatureType = 'text'
-
-export type OptionFeature = string

@@ -1,9 +1,19 @@
 import { Button } from '../../common'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
-import { currentComparison, options as initialOptions } from './Comparison.data'
 import styles from './Comparison.module.css'
-import { Feature, Option } from '../types'
-import { animateOnce, uuid } from '@pavel/utils'
+import { Option, selectCurrentComparisonOptions } from '../../modules/options'
+import {
+  Feature,
+  selectCurrentComparison,
+  addFeatureToCurrentComparison,
+  addOptionToCurrentComparison,
+  removeFeatureFromCurrentComparison,
+  toggleFeatureExpandedInCurrentComparison,
+  toggleDescriptionExpandedInCurrentComparison,
+  removeOptionFromCurrentComparison,
+} from '../../modules/comparisons'
+import { animateOnce } from '@pavel/utils'
 import { effect, pointerPosition, windowHeight } from '@pavel/observable'
 import classNames from 'classnames'
 
@@ -47,6 +57,22 @@ function TextField({
   )
 }
 
+function OptionActions({ option }: { option: Option }) {
+  const dispatch = useDispatch()
+
+  function onRemoveOptionClick() {
+    dispatch(removeOptionFromCurrentComparison(option.id))
+  }
+
+  return (
+    <div className={classNames('flex mt-2')}>
+      <FeatureHeaderIcon />
+      <FeatureHeaderIcon className="ml-2" />
+      <FeatureHeaderIcon onClick={onRemoveOptionClick} className="ml-2" />
+    </div>
+  )
+}
+
 function OptionHeader({
   option,
   index,
@@ -58,25 +84,43 @@ function OptionHeader({
 }) {
   return (
     <>
-      <AddOptionLine attachment="left" />
+      <AddOptionLine attachment="left" index={index} />
       <TextField
-        className="px-3 py-4 w-full inline-block"
+        className="px-3 py-4 w-full inline-block peer"
         onInput={console.log}
       >
         {option.name}
       </TextField>
-      {isLast && <AddOptionLine attachment="right" />}
+      <div className="absolute bottom-0 translate-y-full invisible hover:visible peer-hover:visible left-1/2 -translate-x-1/2">
+        <OptionActions option={option} />
+      </div>
+      {isLast && <AddOptionLine attachment="right" index={index + 1} />}
     </>
   )
 }
 
 function FeatureActions({
+  index,
   className,
   ...props
-}: React.DetailedHTMLProps<
+}: { index: number } & React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 >) {
+  const dispatch = useDispatch()
+
+  function onToggleExpandedClick() {
+    dispatch(toggleFeatureExpandedInCurrentComparison(index))
+  }
+
+  function onRemoveFeatureClick() {
+    dispatch(removeFeatureFromCurrentComparison(index))
+  }
+
+  function onDescriptionExpandedClick() {
+    dispatch(toggleDescriptionExpandedInCurrentComparison(index))
+  }
+
   return (
     <div
       className={classNames(
@@ -85,9 +129,9 @@ function FeatureActions({
       )}
       {...props}
     >
-      <FeatureHeaderIcon />
-      <FeatureHeaderIcon className="ml-2" />
-      <FeatureHeaderIcon className="ml-2" />
+      <FeatureHeaderIcon onClick={onDescriptionExpandedClick} />
+      <FeatureHeaderIcon onClick={onToggleExpandedClick} className="ml-2" />
+      <FeatureHeaderIcon onClick={onRemoveFeatureClick} className="ml-2" />
     </div>
   )
 }
@@ -110,23 +154,34 @@ function FeatureHeaderIcon({
   )
 }
 
-function FeatureHeader({ feature }: { feature: Feature }) {
+function FeatureHeader({
+  feature,
+  index,
+}: {
+  feature: Feature
+  index: number
+}) {
+  const isDescriptionVisible =
+    feature.isExpanded && feature.isDescriptionExpanded
+
   return (
     // <div className="inline-block sticky left-0 px-3 bg-white dark:bg-[#202124]">
     <div className="inline-block sticky left-0">
       <div className="flex flex-row items-center group">
-        {/* <span contentEditable>{feature.name}</span> */}
-        <TextField className="px-3 py-2">{feature.name}</TextField>
-        <FeatureActions className="group-hover:opacity-100" />
-
-        {/* <button onClick={() => removeFeature(feature)}>X</button>
-  <button onClick={() => toggleVisibility(feature)}>
-    Toggle visibility
-  </button> */}
-        {/* {feature.description && (
-        <div>{feature.description}</div>
-      )} */}
+        <TextField
+          className={classNames('px-3 py-2', {
+            'opacity-50': !feature.isExpanded,
+          })}
+        >
+          {feature.name}
+        </TextField>
+        <FeatureActions index={index} className="group-hover:opacity-100" />
       </div>
+      {isDescriptionVisible && (
+        <TextField className="px-3 inline-block min-w-[100px]">
+          {feature.description}
+        </TextField>
+      )}
     </div>
   )
 }
@@ -138,10 +193,17 @@ const lineColor = '#CCCCCC'
 const circleColor = '#B2B2B2'
 const textColor = '#666666'
 
-function AddOptionLine({ attachment }: { attachment: 'left' | 'right' }) {
+function AddOptionLine({
+  attachment,
+  index,
+}: {
+  attachment: 'left' | 'right'
+  index: number
+}) {
   const [svg, setSvg] = useState<SVGSVGElement>()
   const [button, setButton] = useState<SVGTextElement>()
   const [circle, setCircle] = useState<SVGCircleElement>()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (!button || !circle || !svg) {
@@ -166,8 +228,13 @@ function AddOptionLine({ attachment }: { attachment: 'left' | 'right' }) {
     })
   }, [svg])
 
+  function onClick() {
+    dispatch(addOptionToCurrentComparison(index))
+  }
+
   return (
     <svg
+      onClick={onClick}
       ref={setSvg}
       // Init with 0 to match the hydrated server state
       height={0}
@@ -212,7 +279,8 @@ function AddOptionLine({ attachment }: { attachment: 'left' | 'right' }) {
   )
 }
 
-function AddFeatureLine() {
+function AddFeatureLine({ index }: { index: number }) {
+  const dispatch = useDispatch()
   const [svg, setSvg] = useState<SVGSVGElement>()
   const [button, setButton] = useState<SVGTextElement>()
   const [circle, setCircle] = useState<SVGCircleElement>()
@@ -230,8 +298,13 @@ function AddFeatureLine() {
     })
   }, [button, circle, svg])
 
+  function onClick() {
+    dispatch(addFeatureToCurrentComparison(index))
+  }
+
   return (
     <svg
+      onClick={onClick}
       ref={setSvg}
       width="100%"
       height={`${lineHeight + 2 * hoverTrapSizeFromOneSide}px`}
@@ -273,50 +346,11 @@ function AddFeatureLine() {
 }
 
 export function ComparisonTable() {
-  const scrollContainerRef = useRef<HTMLDivElement | undefined>()
-  const [features, setFeatures] = useState(currentComparison.features)
+  const options = useSelector(selectCurrentComparisonOptions)
+  const currentComparison = useSelector(selectCurrentComparison)
+
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
-  const [options, setOptions] = useState(initialOptions)
-
-  function removeFeature(feature: Feature) {
-    setFeatures(features => features.filter(f => f !== feature))
-  }
-
-  function toggleVisibility(feature: Feature) {
-    const newFeature: Feature = {
-      ...feature,
-      isExpanded: !feature.isExpanded,
-    }
-    setFeatures(features => features.map(f => (f === feature ? newFeature : f)))
-  }
-
-  function addFeature() {
-    const newFeature: Feature = {
-      name: `Feature ${features.length}`,
-      type: 'text',
-      description: 'sample',
-      isExpanded: true,
-    } as const
-    setFeatures(features => [...features, newFeature])
-    setShouldScrollToBottom(true)
-  }
-
-  function addOption(index: number) {
-    const newOption: Option = {
-      id: uuid(),
-      name: `Option ${index}`,
-      features: {},
-    }
-
-    const newOptions = [...options]
-    newOptions.splice(index, 0, newOption)
-
-    setOptions(newOptions)
-  }
-
-  function removeOption(option: Option) {
-    setOptions(options => options.filter(o => o !== option))
-  }
+  const scrollContainerRef = useRef<HTMLDivElement | undefined>()
 
   useEffect(() => {
     if (shouldScrollToBottom && scrollContainerRef.current) {
@@ -359,19 +393,19 @@ export function ComparisonTable() {
             </tr>
           </thead>
           <tbody>
-            {features.map((feature, index) => (
+            {currentComparison.features.map((feature, index) => (
               <Fragment key={`${feature.name}${index}`}>
                 {index === 0 && (
                   <tr className="relative z-10">
                     <td colSpan={options.length}>
-                      <AddFeatureLine />
+                      <AddFeatureLine index={index} />
                     </td>
                   </tr>
                 )}
 
                 <tr className={`top-[58px]`}>
                   <td className="pt-10" colSpan={options.length}>
-                    <FeatureHeader feature={feature} />
+                    <FeatureHeader index={index} feature={feature} />
                   </td>
                 </tr>
 
@@ -396,7 +430,7 @@ export function ComparisonTable() {
 
                 <tr className="relative z-10">
                   <td colSpan={options.length}>
-                    <AddFeatureLine />
+                    <AddFeatureLine index={index + 1} />
                   </td>
                 </tr>
               </Fragment>
@@ -404,15 +438,6 @@ export function ComparisonTable() {
           </tbody>
         </table>
       </div>
-
-      {/* <div className="w-full mt-auto px-3 mb-3">
-        <Button
-          onClick={addFeature}
-          className="bg-black text-white py-1 px-8 h-12 whitespace-nowrap w-full"
-        >
-          + Add Feature
-        </Button>
-      </div> */}
     </div>
   )
 }
