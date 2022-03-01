@@ -1,6 +1,5 @@
 import { createSlice } from '@pavel/redux-slice'
 import { insertAt, remove, removeAt, uuid } from '@pavel/utils'
-import { batch } from 'react-redux'
 import { Option, addOption } from '../options'
 import { ComparisonsState, Feature } from './types'
 
@@ -190,10 +189,10 @@ export function addOptionToCurrentComparison(index: number) {
   }
 
   return function (dispatch) {
-    batch(() => {
-      dispatch(addOption(newOption))
-      dispatch(addOptionIdToCurrentComparison({ id, index }))
-    })
+    dispatch([
+      addOption(newOption),
+      addOptionIdToCurrentComparison({ id, index }),
+    ])
   }
 }
 
