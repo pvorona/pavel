@@ -1,28 +1,13 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { memo } from 'react'
 import styles from './Comparison.module.css'
-import { FeatureRows } from './FeatureRows'
+import { TableBody } from './TableBody'
 import { TableHeader } from './TableHeader'
 
 export const ComparisonTable = memo(function ComparisonTable() {
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
-  const scrollContainerRef = useRef<HTMLDivElement | undefined>()
-
-  useEffect(() => {
-    if (shouldScrollToBottom && scrollContainerRef.current) {
-      setShouldScrollToBottom(false)
-
-      scrollContainerRef.current.scrollTop =
-        scrollContainerRef.current.scrollHeight
-    }
-  }, [shouldScrollToBottom])
-
   return (
     // <div className='mt-8 flex flex-col items-center overflow-hidden'>
     <div className="flex flex-col items-center overflow-hidden">
-      <div
-        className={`overflow-auto w-full ${styles.scrollContainer}`}
-        ref={scrollContainerRef}
-      >
+      <div className={`overflow-auto w-full ${styles.scrollContainer}`}>
         <table className="min-w-[640px] mb-16 mx-auto">
           <thead>
             <tr
@@ -36,7 +21,7 @@ export const ComparisonTable = memo(function ComparisonTable() {
             </tr>
           </thead>
           <tbody>
-            <FeatureRows />
+            <TableBody />
           </tbody>
         </table>
       </div>

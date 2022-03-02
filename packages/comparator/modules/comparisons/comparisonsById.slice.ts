@@ -1,85 +1,20 @@
 import { createSlice } from '@pavel/redux-slice'
-import { insertAt, remove, removeAt, uuid } from '@pavel/utils'
-import { Option, addOption } from '../options'
+import { insertAt, remove, removeAt } from '@pavel/utils'
+import { createFeature } from './factories'
+import { Comparison, ComparisonsState, Feature } from './types'
+import { addOption } from '../options'
 import { selectCurrentComparisonId } from './comparisons.selectors'
-import { ComparisonsState, Feature } from './types'
-
-function createFeature(): Feature {
-  return {
-    id: uuid(),
-    name: '',
-    type: 'text',
-    description: '',
-    isDescriptionExpanded: false,
-    isExpanded: true,
-    // new: true,
-    // TODO
-    // Highlight new features
-    // Focus input and select text when new feature is added
-  }
-}
+import { createComparison, createOption } from './factories'
+import { setCurrentComparisonId } from './currentComparisonId.slice'
 
 export const comparisonsByIdSlice = createSlice({
   name: 'comparisons.byId',
-  initialState: {
-    'comparison 1': {
-      id: 'comparison 1',
-      name: 'current comparison',
-      optionIds: ['option 1', 'option 2'],
-      isLocked: false,
-      features: [
-        {
-          id: 'feature 1',
-          name: 'Price',
-          description: '',
-          type: 'text',
-          isExpanded: true,
-          isDescriptionExpanded: false,
-        },
-        {
-          id: 'feature 2',
-          name: 'Diagonal',
-          description: '',
-          type: 'text',
-          isExpanded: true,
-          isDescriptionExpanded: false,
-        },
-        {
-          id: 'feature 3',
-          name: 'Offer',
-          description: '',
-          type: 'text',
-          isExpanded: true,
-          isDescriptionExpanded: false,
-        },
-        {
-          id: 'feature 4',
-          name: 'Contact',
-          description: '',
-          type: 'text',
-          isExpanded: true,
-          isDescriptionExpanded: false,
-        },
-        {
-          id: 'feature 5',
-          name: 'Website',
-          description: '',
-          type: 'text',
-          isExpanded: true,
-          isDescriptionExpanded: false,
-        },
-        {
-          id: 'feature 6',
-          name: 'Note',
-          description: '',
-          type: 'text',
-          isExpanded: true,
-          isDescriptionExpanded: false,
-        },
-      ],
-    },
-  } as ComparisonsState['byId'],
+  initialState: {} as ComparisonsState['byId'],
   handlers: {
+    addComparison: (state, comparison: Comparison) => ({
+      ...state,
+      [comparison.id]: comparison,
+    }),
     addFeatureToComparison: (
       state,
       { id, index }: { id: string; index: number },
@@ -206,21 +141,27 @@ export const comparisonsByIdSlice = createSlice({
   },
 })
 
+export const {
+  addComparison,
+  addFeatureToComparison,
+  addOptionIdToComparison,
+  removeFeatureFromComparison,
+  toggleFeatureExpandedInComparison,
+  toggleDescriptionExpandedInComparison,
+  removeOptionIdFromComparison,
+  setFeaturePropertyInComparison,
+} = comparisonsByIdSlice.actions
+
 export function addOptionToCurrentComparison(index: number) {
-  const optionId = uuid()
-  const newOption: Option = {
-    id: optionId,
-    name: `Option ${index}`,
-    features: {},
-  }
   return function (dispatch, getState) {
     const currentComparisonId = selectCurrentComparisonId(getState())
+    const option = createOption()
 
     dispatch([
-      addOption(newOption),
+      addOption(option),
       addOptionIdToComparison({
         index,
-        optionId,
+        optionId: option.id,
         id: currentComparisonId,
       }),
     ])
@@ -327,12 +268,21 @@ export function toggleDescriptionExpandedInCurrentComparison(index: number) {
   }
 }
 
-export const {
-  addFeatureToComparison,
-  addOptionIdToComparison,
-  removeFeatureFromComparison,
-  toggleFeatureExpandedInComparison,
-  toggleDescriptionExpandedInComparison,
-  removeOptionIdFromComparison,
-  setFeaturePropertyInComparison,
-} = comparisonsByIdSlice.actions
+export function initNewComparison() {
+  return function (dispatch) {
+    const option1 = createOption({ name: 'Option A' })
+    const option2 = createOption({ name: 'Option B' })
+    const comparison: Comparison = {
+      ...createComparison(),
+      optionIds: [option1.id, option2.id],
+      features: [createFeature()],
+    }
+
+    dispatch([
+      addOption(option1),
+      addOption(option2),
+      addComparison(comparison),
+      setCurrentComparisonId(comparison.id),
+    ])
+  }
+}

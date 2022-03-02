@@ -1,6 +1,7 @@
 import { ComparisonsState } from './types'
 import { createSelector } from 'reselect'
 import { getLast } from '@pavel/utils'
+import { selectOptionsByIdState } from '../options'
 
 const selectComparisonsState = (state): ComparisonsState => state.comparisons
 
@@ -64,3 +65,11 @@ export const selectCurrentComparisonFeatureIndexById = (featureId: string) =>
   createSelector(selectCurrentComparisonFeatures, features =>
     features.findIndex(feature => feature.id === featureId),
   )
+
+export const selectCurrentComparisonOptions = createSelector(
+  selectCurrentComparisonOptionIds,
+  selectOptionsByIdState,
+  (optionIds, optionById) => {
+    return optionIds.map(optionId => optionById[optionId])
+  },
+)

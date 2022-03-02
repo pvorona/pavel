@@ -3,5 +3,10 @@ import { ComparisonsState } from '.'
 
 export const currentComparisonIdSlice = createSlice({
   name: 'comparisons.currentComparisonId',
-  initialState: 'comparison 1' as ComparisonsState['currentComparisonId'],
+  initialState: null as ComparisonsState['currentComparisonId'],
+  handlers: {
+    setCurrentComparisonId: (_, id: string) => id,
+  },
 })
+
+export const { setCurrentComparisonId } = currentComparisonIdSlice.actions

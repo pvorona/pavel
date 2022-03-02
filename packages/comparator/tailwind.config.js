@@ -14,5 +14,5 @@ module.exports = {
     },
   },
   plugins: [],
-  content: [join(__dirname, 'pages/**/*.{js,ts,jsx,tsx}')],
+  content: [join(__dirname, '**/*.{js,ts,jsx,tsx}')],
 }

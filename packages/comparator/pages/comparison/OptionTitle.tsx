@@ -1,17 +1,21 @@
-import { TextField } from '../../shared/TextField'
+import { TextField } from '../../shared'
 import { selectOptionNameById, setOptionProperty } from '../../modules/options'
-import { FormEvent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { memo } from 'react'
 
-export function OptionTitle({ optionId }: { optionId: string }) {
+export const OptionTitle = memo(function OptionTitle({
+  optionId,
+}: {
+  optionId: string
+}) {
   const optionName = useSelector(selectOptionNameById(optionId))
   const dispatch = useDispatch()
 
-  function onOptionNameChanged(event: FormEvent<HTMLInputElement>) {
+  function onOptionNameChanged(value: string) {
     dispatch(
       setOptionProperty({
         id: optionId,
-        name: event.currentTarget.value,
+        name: value,
       }),
     )
   }
@@ -24,4 +28,4 @@ export function OptionTitle({ optionId }: { optionId: string }) {
       {optionName}
     </TextField>
   )
-}
+})

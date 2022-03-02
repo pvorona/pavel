@@ -4,7 +4,6 @@ import {
   setFeaturePropertyInCurrentComparison,
 } from '../../modules/comparisons'
 import { TextField } from '../../shared'
-import { FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FeatureActions } from './FeatureActions'
 
@@ -14,20 +13,20 @@ export function FeatureHeader({ id, index }: { id: string; index: number }) {
   const isDescriptionVisible =
     feature.isExpanded && feature.isDescriptionExpanded
 
-  function onFeatureNameChange(e: FormEvent<HTMLInputElement>) {
+  function onFeatureNameChange(value: string) {
     dispatch(
       setFeaturePropertyInCurrentComparison({
         featureId: id,
-        name: e.currentTarget.value,
+        name: value,
       }),
     )
   }
 
-  function onFeatureDescriptionChange(e: FormEvent<HTMLInputElement>) {
+  function onFeatureDescriptionChange(value: string) {
     dispatch(
       setFeaturePropertyInCurrentComparison({
         featureId: id,
-        description: e.currentTarget.value,
+        description: value,
       }),
     )
   }

@@ -12,7 +12,7 @@ export const TableHeader = memo(function TableHeader() {
         <th
           key={optionId}
           className="relative"
-          // style={{ width: `${100 / optionId.length}%` }}
+          // style={{ width: `${(100 / optionIds.length)}%` }}
         >
           <OptionHeader optionId={optionId} />
         </th>

@@ -1,6 +1,6 @@
-import { animateOnce } from '@pavel/utils'
+import { animateOnce, selectElementContent } from '@pavel/utils'
 import classNames from 'classnames'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import styles from './TextField.module.css'
 
 const ENTER = 'Enter'
@@ -8,12 +8,12 @@ const ESCAPE = 'Escape'
 
 export function TextField({
   className,
-  children,
+  onInput,
   ...props
 }: {
   className?: string
   placeholder?: string
-  onInput?: (e: React.FormEvent<HTMLInputElement>) => void
+  onInput?: (value: string) => void
   children: string
 }) {
   const [span, setSpan] = useState<HTMLSpanElement | undefined>()
@@ -33,24 +33,23 @@ export function TextField({
     }
   }
 
-  // function onFocus(e: React.FocusEvent<HTMLSpanElement>) {
-  // selectElementContent(e.target)
-  // }
+  function ownOnInput(e: FormEvent<HTMLDivElement>) {
+    onInput(e.currentTarget.textContent)
+  }
+
+  function onFocus(e: React.FocusEvent<HTMLSpanElement>) {
+    selectElementContent(e.target)
+  }
 
   return (
-    <input
+    <div
       {...props}
-      value={children}
-      type="text"
+      onInput={ownOnInput}
       ref={setSpan}
-      className={classNames(
-        className,
-        'rounded-sm bg-transparent',
-        styles.TextField,
-      )}
-      // contentEditable
+      className={classNames(className, styles.TextField, 'rounded-sm')}
+      contentEditable
       onKeyDown={onKeyDown}
-      // onFocus={onFocus}
+      onFocus={onFocus}
       spellCheck="false"
       autoCorrect="off"
       autoCapitalize="off"
