@@ -517,7 +517,7 @@ export function ComparisonTable() {
                           }
                           className="px-12 py-2 font-extralight"
                         >
-                          {option.features[feature.id]}
+                          {option.features[feature.id] ?? ''}
                         </TextField>
                       </td>
                     ))}

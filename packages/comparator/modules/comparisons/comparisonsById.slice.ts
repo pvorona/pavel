@@ -192,7 +192,7 @@ export const comparisonsByIdSlice = createSlice({
     ) => {
       const comparison = state[id]
       const features = comparison.features.map(feature =>
-        feature.id === id ? { ...feature, ...change } : feature,
+        feature.id === featureId ? { ...feature, ...change } : feature,
       )
 
       return {
@@ -213,11 +213,16 @@ export function addOptionToCurrentComparison(index: number) {
     name: `Option ${index}`,
     features: {},
   }
+  return function (dispatch, getState) {
+    const currentComparisonId = selectCurrentComparisonId(getState())
 
-  return function (dispatch) {
     dispatch([
       addOption(newOption),
-      addOptionIdToCurrentComparison({ optionId, index }),
+      addOptionIdToComparison({
+        index,
+        optionId,
+        id: currentComparisonId,
+      }),
     ])
   }
 }

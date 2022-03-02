@@ -1,3 +1,4 @@
+import { assert, isObject } from '@pavel/assert'
 import { Reducer, AnyAction, Middleware } from 'redux'
 
 const BATCH = 'BATCH'
@@ -10,10 +11,14 @@ export function batchReducer<State>(
       return reducer(state, action)
     }
 
-    return action.actions.reduce(
-      (temporalState, action) => reducer(temporalState, action),
-      state,
-    )
+    return action.actions.reduce((temporalState, action) => {
+      assert(
+        isObject(action),
+        `Only plain actions can be batched. Received: ${action}`,
+      )
+
+      return reducer(temporalState, action)
+    }, state)
   }
 }
 
