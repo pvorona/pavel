@@ -178,7 +178,7 @@ export const comparisonsByIdSlice = createSlice({
         ...state,
         [comparison.id]: {
           ...comparison,
-          optionIds: remove(optionIds, id),
+          optionIds: remove(optionIds, optionId),
         },
       }
     },

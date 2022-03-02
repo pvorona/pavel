@@ -19,7 +19,7 @@ import {
   removeOptionIdFromCurrentComparison,
   setFeaturePropertyInCurrentComparison,
 } from '../../modules/comparisons'
-import { animateOnce, selectElementContent } from '@pavel/utils'
+import { animateOnce } from '@pavel/utils'
 import { effect, pointerPosition, windowHeight } from '@pavel/observable'
 import classNames from 'classnames'
 
@@ -53,9 +53,9 @@ function TextField({
     }
   }
 
-  function onFocus(e: React.FocusEvent<HTMLSpanElement>) {
-    selectElementContent(e.target)
-  }
+  // function onFocus(e: React.FocusEvent<HTMLSpanElement>) {
+  // selectElementContent(e.target)
+  // }
 
   return (
     <input
@@ -63,10 +63,14 @@ function TextField({
       value={children}
       type="text"
       ref={setSpan}
-      className={classNames(className, 'rounded-sm', styles.TextField)}
+      className={classNames(
+        className,
+        'rounded-sm bg-transparent',
+        styles.TextField,
+      )}
       // contentEditable
       onKeyDown={onKeyDown}
-      onFocus={onFocus}
+      // onFocus={onFocus}
       spellCheck="false"
       autoCorrect="off"
       autoCapitalize="off"
