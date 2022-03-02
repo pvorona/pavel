@@ -35,11 +35,11 @@ export function createSlice<
 >({
   initialState,
   name,
-  handlers,
+  handlers = {} as Handlers,
 }: {
   initialState: State
   name: string
-  handlers: Handlers
+  handlers?: Handlers
 }) {
   function reducer(state = initialState, action: any) {
     const handler = handlers[action.type]

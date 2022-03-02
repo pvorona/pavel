@@ -1,9 +1,8 @@
-import { createStore, combineReducers, applyMiddleware, Reducer } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { optionsSlice } from './modules/options'
 import { comparisonsSlice } from './modules/comparisons'
-
-const BATCH = 'BATCH'
+import { batchReducer, batchMiddleware } from '@pavel/redux-slice'
 
 export const store = createStore(
   batchReducer(
@@ -12,28 +11,5 @@ export const store = createStore(
       comparisons: comparisonsSlice.reducer,
     }),
   ),
-  applyMiddleware(thunk, batchMiddleware),
+  applyMiddleware(batchMiddleware, thunk),
 )
-
-function batchReducer(reducer: Reducer): Reducer {
-  return function batchingReducer(state, action) {
-    if (action.type !== BATCH) {
-      return reducer(state, action)
-    }
-
-    return action.actions.reduce(
-      (temporalState, action) => reducer(temporalState, action),
-      state,
-    )
-  }
-}
-
-function batchMiddleware() {
-  return next => action => {
-    if (!Array.isArray(action)) {
-      return next(action)
-    }
-
-    next({ type: BATCH, actions: action })
-  }
-}
