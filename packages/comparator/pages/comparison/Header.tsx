@@ -1,7 +1,8 @@
 import { Fragment } from 'react'
 import { Button } from '../../common'
 import { Avatars } from './Avatars'
-import { breadcrumbs } from './Comparison.data'
+
+const breadcrumbs = []
 
 export function ComparisonBreadcrumbs() {
   return (

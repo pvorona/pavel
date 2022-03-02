@@ -1,5 +1,5 @@
 .scrollContainer {
-  --header-height: 58px;
+  --header-height: 72px;
   --shadow-height: 8px;
   --shadow-color: hsla(0, 0, 0, 0.14);
   --background-color: white;
@@ -30,4 +30,16 @@
 
 .TextField:focus {
   box-shadow: 0 0 0 1px var(--focus-color);
+}
+
+.TextField[placeholder]:empty:before {
+  content: attr(placeholder);
+  white-space: nowrap;
+  color: #555;
+  pointer-events: none;
+}
+
+.TextField[placeholder]:empty:focus:before {
+  content: '';
+  display: none;
 }
