@@ -19,7 +19,7 @@
     "**/*.js",
     "**/*.jsx",
     "next-env.d.ts",
-    "common/Button.tsx"
+    "shared/Button.tsx"
   ],
   "exclude": ["node_modules"]
 }

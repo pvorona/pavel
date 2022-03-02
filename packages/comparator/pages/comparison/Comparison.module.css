@@ -14,32 +14,3 @@
     100% var(--shadow-height);
   background-attachment: local, scroll;
 }
-
-.TextField {
-  --hover-color: #cccccc;
-  --focus-color: #808080;
-
-  transition: box-shadow 0.125s;
-  cursor: text;
-  outline: none;
-}
-
-.TextField:hover {
-  box-shadow: 0 0 0 1px var(--hover-color);
-}
-
-.TextField:focus {
-  box-shadow: 0 0 0 1px var(--focus-color);
-}
-
-.TextField[placeholder]:empty:before {
-  content: attr(placeholder);
-  white-space: nowrap;
-  color: #555;
-  pointer-events: none;
-}
-
-.TextField[placeholder]:empty:focus:before {
-  content: '';
-  display: none;
-}

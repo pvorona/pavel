@@ -1,4 +1,4 @@
-import { Avatar } from '../../common'
+import { Avatar } from '../../shared'
 import { avatars } from './Comparison.data'
 
 export function Avatars() {

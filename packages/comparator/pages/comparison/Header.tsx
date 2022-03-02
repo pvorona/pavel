@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import { Button } from '../../common'
+import { Button } from '../../shared'
 import { Avatars } from './Avatars'
 
 const breadcrumbs = []

@@ -31,6 +31,11 @@ export const selectCurrentComparisonFeatures = createSelector(
   currentComparison => currentComparison.features,
 )
 
+export const selectCurrentComparisonFeatureIds = createSelector(
+  selectCurrentComparisonFeatures,
+  features => features.map(feature => feature.id),
+)
+
 export const selectCurrentComparisonFeatureById = (featureId: string) =>
   createSelector(selectCurrentComparisonFeatures, features =>
     features.find(feature => feature.id === featureId),
@@ -53,4 +58,9 @@ export const selectIsLastOptionInCurrentComparisonById = (optionId: string) =>
 export const selectCurrentComparisonOptionIndexById = (optionId: string) =>
   createSelector(selectCurrentComparisonOptionIds, optionIds =>
     optionIds.indexOf(optionId),
+  )
+
+export const selectCurrentComparisonFeatureIndexById = (featureId: string) =>
+  createSelector(selectCurrentComparisonFeatures, features =>
+    features.findIndex(feature => feature.id === featureId),
   )
