@@ -3,7 +3,7 @@ import { createSelector } from 'reselect'
 
 const selectComparisonsState = (state): ComparisonsState => state.comparisons
 
-const selectCurrentComparisonId = createSelector(
+export const selectCurrentComparisonId = createSelector(
   selectComparisonsState,
   comparisonsState => comparisonsState.currentComparisonId,
 )

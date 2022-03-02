@@ -16,8 +16,8 @@ import {
   removeFeatureFromCurrentComparison,
   toggleFeatureExpandedInCurrentComparison,
   toggleDescriptionExpandedInCurrentComparison,
-  removeOptionFromCurrentComparison,
-  setFeatureProperty,
+  removeOptionIdFromCurrentComparison,
+  setFeaturePropertyInCurrentComparison,
 } from '../../modules/comparisons'
 import { animateOnce, selectElementContent } from '@pavel/utils'
 import { effect, pointerPosition, windowHeight } from '@pavel/observable'
@@ -79,7 +79,7 @@ function OptionActions({ option }: { option: Option }) {
   const dispatch = useDispatch()
 
   function onRemoveOptionClick() {
-    dispatch(removeOptionFromCurrentComparison(option.id))
+    dispatch(removeOptionIdFromCurrentComparison(option.id))
   }
 
   return (
@@ -210,8 +210,8 @@ function FeatureHeader({
 
   function onFeatureNameChange(e: FormEvent<HTMLInputElement>) {
     dispatch(
-      setFeatureProperty({
-        id: feature.id,
+      setFeaturePropertyInCurrentComparison({
+        featureId: feature.id,
         name: e.currentTarget.value,
       }),
     )
@@ -219,8 +219,8 @@ function FeatureHeader({
 
   function onFeatureDescriptionChange(e: FormEvent<HTMLInputElement>) {
     dispatch(
-      setFeatureProperty({
-        id: feature.id,
+      setFeaturePropertyInCurrentComparison({
+        featureId: feature.id,
         description: e.currentTarget.value,
       }),
     )
