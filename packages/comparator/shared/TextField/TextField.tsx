@@ -1,6 +1,6 @@
 import { animateOnce, selectElementContent } from '@pavel/utils'
 import classNames from 'classnames'
-import { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import styles from './TextField.module.css'
 
 const ENTER = 'Enter'
@@ -51,6 +51,10 @@ export function TextField({
     selectElementContent(e.target)
   }
 
+  function onBlur(e: React.FocusEvent<HTMLDivElement>) {
+    // animateOnce(element, 'animate-success')
+  }
+
   return (
     <div
       {...props}
@@ -60,6 +64,7 @@ export function TextField({
       contentEditable
       onKeyDown={onKeyDown}
       onFocus={onFocus}
+      onBlur={onBlur}
       spellCheck="false"
       autoCorrect="off"
       autoCapitalize="off"
