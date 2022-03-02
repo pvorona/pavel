@@ -9,72 +9,73 @@ export const optionsSlice = createSlice({
         id: 'option 1',
         name: 'Option 1',
         features: {
-          Price: '$600',
-          Diagonal: "55''",
-          Offer: 'PDF',
-          Contact: 'ted@google.com',
-          Website: 'https://duckduckgo.com',
-          Note: 'This one takes a bit more space that I’d want.',
+          'feature 1': '$600',
+          'feature 2': "55''",
+          'feature 3': 'PDF',
+          'feature 4': 'ted@google.com',
+          'feature 5': 'https://duckduckgo.com',
+          'feature 6': 'This one takes a bit more space that I’d want.',
         },
       },
       'option 2': {
         id: 'option 2',
         name: 'Option 2',
         features: {
-          Price: '$600',
-          Diagonal: "65''",
-          Offer: 'DOCX',
-          Contact: 'ted@google.com',
-          Website: 'https://duckduckgo.com',
-          Note: 'This one fits pretty well with the rest of the room.',
+          'feature 1': '$600',
+          'feature 2': "65''",
+          'feature 3': 'DOCX',
+          'feature 4': 'ted@google.com',
+          'feature 5': 'https://duckduckgo.com',
+          'feature 6': 'This one fits pretty well with the rest of the room.',
         },
       },
       'option 3': {
         id: 'option 3',
         name: 'Option 3',
         features: {
-          Price: '$6900',
-          Diagonal: "165''",
-          Offer: 'DOCX',
-          Contact: 'ted@google.com',
-          Website: 'https://duckduckgo.com',
-          Note: 'This one fits pretty well with the rest of the room',
+          'feature 1': '$6900',
+          'feature 2': "165''",
+          'feature 3': 'DOCX',
+          'feature 4': 'ted@google.com',
+          'feature 5': 'https://duckduckgo.com',
+          'feature 6': 'This one fits pretty well with the rest of the room',
         },
       },
       'option 4': {
         id: 'option 4',
         name: 'Option 4',
         features: {
-          Price: '$6900',
-          Diagonal: "165''",
-          Offer: 'DOCX',
-          Contact: 'ted@google.com',
-          Website: 'https://duckduckgo.com',
-          Note: 'This one fits pretty well with the rest of the room',
+          'feature 1': '$6900',
+          'feature 2': "165''",
+          'feature 3': 'DOCX',
+          'feature 4': 'ted@google.com',
+          'feature 5': 'https://duckduckgo.com',
+          'feature 6': 'This one fits pretty well with the rest of the room',
         },
       },
       'option 5': {
         id: 'option 5',
         name: 'Option 5',
         features: {
-          Price: '$6900',
-          Diagonal: "165''",
-          Offer: 'DOCX',
-          Contact: 'ted@google.com',
-          Website: 'https://duckduckgo.com',
-          Note: 'This one fits pretty well with the rest of the room',
+          'feature 1': '$6900',
+          'feature 2': "165''",
+          'feature 3': 'DOCX',
+          'feature 4': 'ted@google.com',
+          'feature 5': 'https://duckduckgo.com',
+          'feature 6': 'This one fits pretty well with the rest of the room',
         },
       },
       'option 6': {
         id: 'option 6',
         name: 'Option 6',
         features: {
-          Price: '$6900',
-          Diagonal: "165''",
-          Offer: 'DOCX',
-          Contact: 'ted@google.com',
-          Website: 'https://duckduckgo.com',
-          Note: 'This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. ',
+          'feature 1': '$6900',
+          'feature 2': "165''",
+          'feature 3': 'DOCX',
+          'feature 4': 'ted@google.com',
+          'feature 5': 'https://duckduckgo.com',
+          'feature 6':
+            'This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. This one fits pretty well with the rest of the room. ',
         },
       },
     },
@@ -87,7 +88,46 @@ export const optionsSlice = createSlice({
         [option.id]: option,
       },
     }),
+    setOptionFeatureValue: (
+      state,
+      {
+        optionId,
+        featureId,
+        value,
+      }: { optionId: string; featureId: string; value: string },
+    ) => {
+      const option = state.byId[optionId]
+      const features = {
+        ...option.features,
+        [featureId]: value,
+      }
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [optionId]: {
+            ...option,
+            features,
+          },
+        },
+      }
+    },
+    setOptionProperty: (
+      state,
+      { id, ...change }: Partial<Option> & { id: string },
+    ) => ({
+      ...state,
+      byId: {
+        ...state.byId,
+        [id]: {
+          ...state.byId[id],
+          ...change,
+        },
+      },
+    }),
   },
 })
 
-export const { addOption } = optionsSlice.actions
+export const { addOption, setOptionFeatureValue, setOptionProperty } =
+  optionsSlice.actions

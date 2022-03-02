@@ -14,6 +14,7 @@ export const comparisonsSlice = createSlice({
         isLocked: false,
         features: [
           {
+            id: 'feature 1',
             name: 'Price',
             description: '',
             type: 'text',
@@ -21,6 +22,7 @@ export const comparisonsSlice = createSlice({
             isDescriptionExpanded: false,
           },
           {
+            id: 'feature 2',
             name: 'Diagonal',
             description: '',
             type: 'text',
@@ -28,6 +30,7 @@ export const comparisonsSlice = createSlice({
             isDescriptionExpanded: false,
           },
           {
+            id: 'feature 3',
             name: 'Offer',
             description: '',
             type: 'text',
@@ -35,6 +38,7 @@ export const comparisonsSlice = createSlice({
             isDescriptionExpanded: false,
           },
           {
+            id: 'feature 4',
             name: 'Contact',
             description: '',
             type: 'text',
@@ -42,6 +46,7 @@ export const comparisonsSlice = createSlice({
             isDescriptionExpanded: false,
           },
           {
+            id: 'feature 5',
             name: 'Website',
             description: '',
             type: 'text',
@@ -49,6 +54,7 @@ export const comparisonsSlice = createSlice({
             isDescriptionExpanded: false,
           },
           {
+            id: 'feature 6',
             name: 'Note',
             description: '',
             type: 'text',
@@ -63,6 +69,7 @@ export const comparisonsSlice = createSlice({
   handlers: {
     addFeatureToCurrentComparison: (state, index: number) => {
       const newFeature: Feature = {
+        id: uuid(),
         name: '',
         type: 'text',
         description: '',
@@ -177,6 +184,26 @@ export const comparisonsSlice = createSlice({
         },
       }
     },
+    setFeatureProperty: (
+      state,
+      { id, ...change }: Partial<Feature> & { id: string },
+    ) => {
+      const currentComparison = state.byId[state.currentComparisonId]
+      const features = currentComparison.features.map(f =>
+        f.id === id ? { ...f, ...change } : f,
+      )
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [currentComparison.id]: {
+            ...currentComparison,
+            features,
+          },
+        },
+      }
+    },
   },
 })
 
@@ -203,4 +230,5 @@ export const {
   toggleFeatureExpandedInCurrentComparison,
   toggleDescriptionExpandedInCurrentComparison,
   removeOptionFromCurrentComparison,
+  setFeatureProperty,
 } = comparisonsSlice.actions

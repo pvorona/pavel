@@ -12,6 +12,7 @@ export type Comparison = {
 }
 
 export type Feature = {
+  id: string
   name: string
   type: FeatureType
   description: string

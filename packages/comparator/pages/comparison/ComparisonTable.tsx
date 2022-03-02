@@ -1,8 +1,13 @@
 import { Button } from '../../common'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { FormEvent, Fragment, useEffect, useRef, useState } from 'react'
 import styles from './Comparison.module.css'
-import { Option, selectCurrentComparisonOptions } from '../../modules/options'
+import {
+  Option,
+  selectCurrentComparisonOptions,
+  setOptionFeatureValue,
+  setOptionProperty,
+} from '../../modules/options'
 import {
   Feature,
   selectCurrentComparison,
@@ -12,6 +17,7 @@ import {
   toggleFeatureExpandedInCurrentComparison,
   toggleDescriptionExpandedInCurrentComparison,
   removeOptionFromCurrentComparison,
+  setFeatureProperty,
 } from '../../modules/comparisons'
 import { animateOnce, selectElementContent } from '@pavel/utils'
 import { effect, pointerPosition, windowHeight } from '@pavel/observable'
@@ -22,12 +28,13 @@ const ESCAPE = 'Escape'
 
 function TextField({
   className,
+  children,
   ...props
 }: {
   className?: string
   placeholder?: string
-  onInput?: (e: React.FormEvent<HTMLDivElement>) => void
-  children: React.ReactNode
+  onInput?: (e: React.FormEvent<HTMLInputElement>) => void
+  children: string
 }) {
   const [span, setSpan] = useState<HTMLSpanElement | undefined>()
 
@@ -51,11 +58,13 @@ function TextField({
   }
 
   return (
-    <div
+    <input
       {...props}
+      value={children}
+      type="text"
       ref={setSpan}
       className={classNames(className, 'rounded-sm', styles.TextField)}
-      contentEditable
+      // contentEditable
       onKeyDown={onKeyDown}
       onFocus={onFocus}
       spellCheck="false"
@@ -89,12 +98,23 @@ function OptionHeader({
   index: number
   isLast: boolean
 }) {
+  const dispatch = useDispatch()
+
+  function onOptionNameChanged(event: FormEvent<HTMLInputElement>) {
+    dispatch(
+      setOptionProperty({
+        id: option.id,
+        name: event.currentTarget.value,
+      }),
+    )
+  }
+
   return (
     <>
       <AddOptionLine attachment="left" index={index} />
       <TextField
         className="px-12 py-4 w-full inline-block peer font-extralight text-4xl text-left"
-        onInput={console.log}
+        onInput={onOptionNameChanged}
       >
         {option.name}
       </TextField>
@@ -184,14 +204,34 @@ function FeatureHeader({
   feature: Feature
   index: number
 }) {
+  const dispatch = useDispatch()
   const isDescriptionVisible =
     feature.isExpanded && feature.isDescriptionExpanded
+
+  function onFeatureNameChange(e: FormEvent<HTMLInputElement>) {
+    dispatch(
+      setFeatureProperty({
+        id: feature.id,
+        name: e.currentTarget.value,
+      }),
+    )
+  }
+
+  function onFeatureDescriptionChange(e: FormEvent<HTMLInputElement>) {
+    dispatch(
+      setFeatureProperty({
+        id: feature.id,
+        description: e.currentTarget.value,
+      }),
+    )
+  }
 
   return (
     // <div className="inline-block sticky left-0 px-3 bg-white dark:bg-[#202124]">
     <div className="inline-block sticky left-0">
       <div className="flex flex-row items-center group">
         <TextField
+          onInput={onFeatureNameChange}
           placeholder="Feature name..."
           className={classNames(
             'px-3 py-2 opacity-50 font-extralight tracking-widest',
@@ -210,6 +250,7 @@ function FeatureHeader({
       </div>
       {isDescriptionVisible && (
         <TextField
+          onInput={onFeatureDescriptionChange}
           placeholder="Feature description..."
           className="px-3 inline-block min-w-[100px] text-xs opacity-30 font-extralight"
         >
@@ -383,6 +424,7 @@ function AddFeatureLine({ index }: { index: number }) {
 }
 
 export function ComparisonTable() {
+  const dispatch = useDispatch()
   const options = useSelector(selectCurrentComparisonOptions)
   const currentComparison = useSelector(selectCurrentComparison)
 
@@ -397,6 +439,20 @@ export function ComparisonTable() {
         scrollContainerRef.current.scrollHeight
     }
   }, [shouldScrollToBottom])
+
+  function onOptionFeatureInput(
+    featureId: string,
+    optionId: string,
+    e: React.FormEvent<HTMLInputElement>,
+  ) {
+    dispatch(
+      setOptionFeatureValue({
+        value: e.currentTarget.value,
+        featureId,
+        optionId,
+      }),
+    )
+  }
 
   return (
     // <div className='mt-8 flex flex-col items-center overflow-hidden'>
@@ -431,7 +487,7 @@ export function ComparisonTable() {
           </thead>
           <tbody>
             {currentComparison.features.map((feature, index) => (
-              <Fragment key={`${feature.name}${index}`}>
+              <Fragment key={`${feature.id}${index}`}>
                 {index === 0 && (
                   <tr className="relative z-10">
                     <td colSpan={options.length}>
@@ -456,10 +512,12 @@ export function ComparisonTable() {
                       >
                         <TextField
                           placeholder="Feature value..."
-                          onInput={console.log}
+                          onInput={e =>
+                            onOptionFeatureInput(feature.id, option.id, e)
+                          }
                           className="px-12 py-2 font-extralight"
                         >
-                          {option.features[feature.name]}
+                          {option.features[feature.id]}
                         </TextField>
                       </td>
                     ))}
