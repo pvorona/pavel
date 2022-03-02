@@ -16,3 +16,18 @@ export const selectCurrentComparisonOptions = createSelector(
     return optionIds.map(optionId => optionById[optionId])
   },
 )
+
+export const selectOptionById = (optionId: string) =>
+  createSelector(selectOptionsByIdState, optionsById => optionsById[optionId])
+
+export const selectOptionNameById = (optionId: string) =>
+  createSelector(selectOptionById(optionId), option => option.name)
+
+export const selectOptionFeatures = (optionId: string) =>
+  createSelector(selectOptionById(optionId), option => option.features)
+
+export const selectOptionFeatureValue = (optionId: string, featureId: string) =>
+  createSelector(
+    selectOptionFeatures(optionId),
+    features => features[featureId] ?? '',
+  )

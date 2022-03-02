@@ -2,8 +2,8 @@
   --header-height: 72px;
   --shadow-height: 8px;
   --shadow-color: hsla(0, 0, 0, 0.14);
-  --background-color: white;
-  /* --background-color: #202124; */
+  /* --background-color: white; */
+  --background-color: #202124;
 
   background: linear-gradient(var(--background-color) 30%, rgba(0, 0, 0, 0)) 0
       var(--header-height),

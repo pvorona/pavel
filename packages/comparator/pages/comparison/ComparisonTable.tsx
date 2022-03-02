@@ -1,10 +1,17 @@
 import { Button } from '../../common'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FormEvent, Fragment, useEffect, useRef, useState } from 'react'
+import React, {
+  FormEvent,
+  Fragment,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import styles from './Comparison.module.css'
 import {
-  Option,
-  selectCurrentComparisonOptions,
+  selectOptionFeatureValue,
+  selectOptionNameById,
   setOptionFeatureValue,
   setOptionProperty,
 } from '../../modules/options'
@@ -18,6 +25,11 @@ import {
   toggleDescriptionExpandedInCurrentComparison,
   removeOptionIdFromCurrentComparison,
   setFeaturePropertyInCurrentComparison,
+  selectCurrentComparisonOptionIds,
+  selectCurrentComparisonFeatureById,
+  selectIsCurrentComparisonFeatureExpandedById,
+  selectIsLastOptionInCurrentComparisonById,
+  selectCurrentComparisonOptionIndexById,
 } from '../../modules/comparisons'
 import { animateOnce } from '@pavel/utils'
 import { effect, pointerPosition, windowHeight } from '@pavel/observable'
@@ -79,56 +91,72 @@ function TextField({
   )
 }
 
-function OptionActions({ option }: { option: Option }) {
-  const dispatch = useDispatch()
-
-  function onRemoveOptionClick() {
-    dispatch(removeOptionIdFromCurrentComparison(option.id))
-  }
-
-  return (
-    <div className={classNames('flex py-2 px-8')}>
-      <IconButton color="red" onClick={onRemoveOptionClick} />
-    </div>
-  )
-}
-
-function OptionHeader({
-  option,
-  index,
-  isLast,
-}: {
-  option: Option
-  index: number
-  isLast: boolean
-}) {
+function OptionTitle({ optionId }: { optionId: string }) {
+  const optionName = useSelector(selectOptionNameById(optionId))
   const dispatch = useDispatch()
 
   function onOptionNameChanged(event: FormEvent<HTMLInputElement>) {
     dispatch(
       setOptionProperty({
-        id: option.id,
+        id: optionId,
         name: event.currentTarget.value,
       }),
     )
   }
 
   return (
-    <>
-      <AddOptionLine attachment="left" index={index} />
-      <TextField
-        className="px-12 py-4 w-full inline-block peer font-extralight text-4xl text-left"
-        onInput={onOptionNameChanged}
-      >
-        {option.name}
-      </TextField>
-      <div className="absolute bottom-0 translate-y-full invisible hover:visible peer-hover:visible left-1/2 -translate-x-1/2">
-        <OptionActions option={option} />
-      </div>
-      {isLast && <AddOptionLine attachment="right" index={index + 1} />}
-    </>
+    <TextField
+      className="px-12 py-4 w-full inline-block peer font-extralight text-4xl text-left"
+      onInput={onOptionNameChanged}
+    >
+      {optionName}
+    </TextField>
   )
 }
+
+export const OptionActions = memo(function OptionActions({
+  optionId,
+}: {
+  optionId: string
+}) {
+  const dispatch = useDispatch()
+
+  function onRemoveOptionClick() {
+    dispatch(removeOptionIdFromCurrentComparison(optionId))
+  }
+
+  return (
+    <div className="absolute bottom-0 translate-y-full invisible hover:visible peer-hover:visible left-1/2 -translate-x-1/2">
+      <div className={classNames('flex py-2 px-8')}>
+        <IconButton color="red" onClick={onRemoveOptionClick} />
+      </div>
+    </div>
+  )
+})
+
+const OptionHeader = memo(function OptionHeader({
+  optionId,
+}: {
+  optionId: string
+}) {
+  const isLastOption = useSelector(
+    selectIsLastOptionInCurrentComparisonById(optionId),
+  )
+  const optionIndex = useSelector(
+    selectCurrentComparisonOptionIndexById(optionId),
+  )
+
+  return (
+    <>
+      <AddOptionLine attachment="left" index={optionIndex} />
+      <OptionTitle optionId={optionId} />
+      <OptionActions optionId={optionId} />
+      {isLastOption && (
+        <AddOptionLine attachment="right" index={optionIndex + 1} />
+      )}
+    </>
+  )
+})
 
 function FeatureActions({
   index,
@@ -201,21 +229,16 @@ function IconButton({
   )
 }
 
-function FeatureHeader({
-  feature,
-  index,
-}: {
-  feature: Feature
-  index: number
-}) {
+function FeatureHeader({ id, index }: { id: string; index: number }) {
   const dispatch = useDispatch()
+  const feature = useSelector(selectCurrentComparisonFeatureById(id))
   const isDescriptionVisible =
     feature.isExpanded && feature.isDescriptionExpanded
 
   function onFeatureNameChange(e: FormEvent<HTMLInputElement>) {
     dispatch(
       setFeaturePropertyInCurrentComparison({
-        featureId: feature.id,
+        featureId: id,
         name: e.currentTarget.value,
       }),
     )
@@ -224,7 +247,7 @@ function FeatureHeader({
   function onFeatureDescriptionChange(e: FormEvent<HTMLInputElement>) {
     dispatch(
       setFeaturePropertyInCurrentComparison({
-        featureId: feature.id,
+        featureId: id,
         description: e.currentTarget.value,
       }),
     )
@@ -275,7 +298,7 @@ const textColor = '#666666'
 // const STROKE_DASHARRAY = '40 20'
 const STROKE_DASHARRAY = '34 17'
 
-function AddOptionLine({
+const AddOptionLine = memo(function AddOptionLine({
   attachment,
   index,
 }: {
@@ -359,9 +382,13 @@ function AddOptionLine({
       </text>
     </svg>
   )
-}
+})
 
-function AddFeatureLine({ index }: { index: number }) {
+const AddFeatureLine = memo(function AddFeatureLine({
+  index,
+}: {
+  index: number
+}) {
   const dispatch = useDispatch()
   const [svg, setSvg] = useState<SVGSVGElement>()
   const [button, setButton] = useState<SVGTextElement>()
@@ -425,24 +452,19 @@ function AddFeatureLine({ index }: { index: number }) {
       </text>
     </svg>
   )
-}
+})
 
-export function ComparisonTable() {
+const OptionFeatureCell = memo(function OptionFeatureCell({
+  featureId,
+  optionId,
+}: {
+  featureId: string
+  optionId: string
+}) {
   const dispatch = useDispatch()
-  const options = useSelector(selectCurrentComparisonOptions)
-  const currentComparison = useSelector(selectCurrentComparison)
-
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
-  const scrollContainerRef = useRef<HTMLDivElement | undefined>()
-
-  useEffect(() => {
-    if (shouldScrollToBottom && scrollContainerRef.current) {
-      setShouldScrollToBottom(false)
-
-      scrollContainerRef.current.scrollTop =
-        scrollContainerRef.current.scrollHeight
-    }
-  }, [shouldScrollToBottom])
+  const optionFeatureValue = useSelector(
+    selectOptionFeatureValue(optionId, featureId),
+  )
 
   function onOptionFeatureInput(
     featureId: string,
@@ -457,6 +479,84 @@ export function ComparisonTable() {
       }),
     )
   }
+
+  return (
+    <TextField
+      placeholder="Feature value..."
+      onInput={e => onOptionFeatureInput(featureId, optionId, e)}
+      className="px-12 py-2 font-extralight"
+    >
+      {optionFeatureValue}
+    </TextField>
+  )
+})
+
+const FeatureRow = memo(function FeatureRow({
+  featureId,
+  index,
+}: {
+  featureId: string
+  index: number
+}) {
+  const optionIds = useSelector(selectCurrentComparisonOptionIds)
+  const isFeatureExpanded = useSelector(
+    selectIsCurrentComparisonFeatureExpandedById(featureId),
+  )
+
+  return (
+    <Fragment>
+      {index === 0 && (
+        <tr className="relative z-10">
+          <td colSpan={optionIds.length}>
+            <AddFeatureLine index={index} />
+          </td>
+        </tr>
+      )}
+
+      <tr className={`top-[72px]`}>
+        <td className="pt-10" colSpan={optionIds.length}>
+          <FeatureHeader index={index} id={featureId} />
+        </td>
+      </tr>
+
+      {isFeatureExpanded && (
+        <tr>
+          {optionIds.map(optionId => (
+            <td
+              key={optionId}
+              style={{ width: `${100 / optionIds.length}%` }}
+              className="align-top"
+            >
+              <OptionFeatureCell featureId={featureId} optionId={optionId} />
+            </td>
+          ))}
+        </tr>
+      )}
+
+      <tr className="relative z-10">
+        <td colSpan={optionIds.length}>
+          <AddFeatureLine index={index + 1} />
+        </td>
+      </tr>
+    </Fragment>
+  )
+})
+
+export const ComparisonTable = memo(function ComparisonTable() {
+  const optionIds = useSelector(selectCurrentComparisonOptionIds)
+  const currentComparison = useSelector(selectCurrentComparison)
+
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false)
+  const scrollContainerRef = useRef<HTMLDivElement | undefined>()
+
+  useEffect(() => {
+    if (shouldScrollToBottom && scrollContainerRef.current) {
+      setShouldScrollToBottom(false)
+
+      scrollContainerRef.current.scrollTop =
+        scrollContainerRef.current.scrollHeight
+    }
+  }, [shouldScrollToBottom])
 
   return (
     // <div className='mt-8 flex flex-col items-center overflow-hidden'>
@@ -474,70 +574,28 @@ export function ComparisonTable() {
                   'linear-gradient(to top, hsl(0deg 0% 0% / 10%) 1px, transparent 0)',
               }}
             >
-              {options.map((option, index) => (
+              {optionIds.map(optionId => (
                 <th
-                  key={option.id}
+                  key={optionId}
                   className="relative"
-                  style={{ width: `${100 / options.length}%` }}
+                  style={{ width: `${100 / optionId.length}%` }}
                 >
-                  <OptionHeader
-                    option={option}
-                    index={index}
-                    isLast={index === options.length - 1}
-                  />
+                  <OptionHeader optionId={optionId} />
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {currentComparison.features.map((feature, index) => (
-              <Fragment key={`${feature.id}${index}`}>
-                {index === 0 && (
-                  <tr className="relative z-10">
-                    <td colSpan={options.length}>
-                      <AddFeatureLine index={index} />
-                    </td>
-                  </tr>
-                )}
-
-                <tr className={`top-[72px]`}>
-                  <td className="pt-10" colSpan={options.length}>
-                    <FeatureHeader index={index} feature={feature} />
-                  </td>
-                </tr>
-
-                {feature.isExpanded && (
-                  <tr>
-                    {options.map(option => (
-                      <td
-                        key={`${feature}-${option.id}`}
-                        style={{ width: `${100 / options.length}%` }}
-                        className="align-top"
-                      >
-                        <TextField
-                          placeholder="Feature value..."
-                          onInput={e =>
-                            onOptionFeatureInput(feature.id, option.id, e)
-                          }
-                          className="px-12 py-2 font-extralight"
-                        >
-                          {option.features[feature.id] ?? ''}
-                        </TextField>
-                      </td>
-                    ))}
-                  </tr>
-                )}
-
-                <tr className="relative z-10">
-                  <td colSpan={options.length}>
-                    <AddFeatureLine index={index + 1} />
-                  </td>
-                </tr>
-              </Fragment>
+              <FeatureRow
+                featureId={feature.id}
+                index={index}
+                key={feature.id}
+              />
             ))}
           </tbody>
         </table>
       </div>
     </div>
   )
-}
+})
