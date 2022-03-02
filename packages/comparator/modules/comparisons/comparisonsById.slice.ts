@@ -273,7 +273,7 @@ export function initNewComparison() {
     const option1 = createOption({ name: 'Option A' })
     const option2 = createOption({ name: 'Option B' })
     const comparison: Comparison = {
-      ...createComparison(),
+      ...createComparison({ isNew: true }),
       optionIds: [option1.id, option2.id],
       features: [createFeature()],
     }

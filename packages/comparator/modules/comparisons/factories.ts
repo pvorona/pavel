@@ -27,12 +27,14 @@ export function createOption(values?: Partial<Option>): Option {
   }
 }
 
-export function createComparison(): Comparison {
+export function createComparison(values?: Partial<Comparison>): Comparison {
   return {
     id: uuid(),
     name: '',
     features: [],
     optionIds: [],
     isLocked: false,
+    isNew: false,
+    ...values,
   }
 }

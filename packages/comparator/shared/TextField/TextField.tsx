@@ -1,6 +1,6 @@
 import { animateOnce, selectElementContent } from '@pavel/utils'
 import classNames from 'classnames'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import styles from './TextField.module.css'
 
 const ENTER = 'Enter'
@@ -9,6 +9,7 @@ const ESCAPE = 'Escape'
 export function TextField({
   className,
   onInput,
+  children,
   ...props
 }: {
   className?: string
@@ -16,25 +17,34 @@ export function TextField({
   onInput?: (value: string) => void
   children: string
 }) {
-  const [span, setSpan] = useState<HTMLSpanElement | undefined>()
+  const [element, setElement] = useState<HTMLDivElement | undefined>()
+
+  useEffect(() => {
+    if (!element) {
+      return
+    }
+
+    element.textContent = children
+  }, [element, children])
 
   function onKeyDown(e: React.KeyboardEvent) {
-    if (!span) {
+    if (!element) {
       return
     }
 
     if (e.code === ENTER) {
-      span.blur()
-      animateOnce(span, 'animate-success')
+      element.blur()
+      animateOnce(element, 'animate-success')
     }
 
     if (e.code === ESCAPE) {
-      span.blur()
+      element.blur()
+      animateOnce(element, 'animate-success')
     }
   }
 
   function ownOnInput(e: FormEvent<HTMLDivElement>) {
-    onInput(e.currentTarget.textContent)
+    onInput(e.currentTarget.innerText)
   }
 
   function onFocus(e: React.FocusEvent<HTMLSpanElement>) {
@@ -45,7 +55,7 @@ export function TextField({
     <div
       {...props}
       onInput={ownOnInput}
-      ref={setSpan}
+      ref={setElement}
       className={classNames(className, styles.TextField, 'rounded-sm')}
       contentEditable
       onKeyDown={onKeyDown}
