@@ -34,6 +34,7 @@
 
 .TextField[placeholder]:empty:before {
   content: attr(placeholder);
+  white-space: nowrap;
   color: #555;
   pointer-events: none;
 }

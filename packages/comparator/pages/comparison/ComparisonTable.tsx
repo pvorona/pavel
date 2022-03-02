@@ -26,7 +26,7 @@ function TextField({
 }: {
   className?: string
   placeholder?: string
-  onInput?: (e: React.FormEvent<HTMLSpanElement>) => void
+  onInput?: (e: React.FormEvent<HTMLDivElement>) => void
   children: React.ReactNode
 }) {
   const [span, setSpan] = useState<HTMLSpanElement | undefined>()
@@ -51,7 +51,7 @@ function TextField({
   }
 
   return (
-    <span
+    <div
       {...props}
       ref={setSpan}
       className={classNames(className, 'rounded-sm', styles.TextField)}
@@ -93,7 +93,7 @@ function OptionHeader({
     <>
       <AddOptionLine attachment="left" index={index} />
       <TextField
-        className="px-3 py-4 w-full inline-block peer font-extralight text-4xl"
+        className="px-12 py-4 w-full inline-block peer font-extralight text-4xl text-left"
         onInput={console.log}
       >
         {option.name}
@@ -193,9 +193,12 @@ function FeatureHeader({
       <div className="flex flex-row items-center group">
         <TextField
           placeholder="Feature name..."
-          className={classNames('px-3 py-2 opacity-50 font-extralight', {
-            'opacity-20': !feature.isExpanded,
-          })}
+          className={classNames(
+            'px-3 py-2 opacity-50 font-extralight tracking-widest',
+            {
+              'opacity-20': !feature.isExpanded,
+            },
+          )}
         >
           {feature.name}
         </TextField>
@@ -452,9 +455,9 @@ export function ComparisonTable() {
                         className="align-top"
                       >
                         <TextField
-                          placeholder="Option feature value..."
+                          placeholder="Feature value..."
                           onInput={console.log}
-                          className="flex justify-center px-12 py-2 font-extralight"
+                          className="px-12 py-2 font-extralight"
                         >
                           {option.features[feature.name]}
                         </TextField>
