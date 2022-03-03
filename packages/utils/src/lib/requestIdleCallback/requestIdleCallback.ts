@@ -16,7 +16,7 @@ function createIdleDeadline(initialTime: DOMHighResTimeStamp): IdleDeadline {
 }
 
 function requestIdleCallbackFallback(fn: IdleRequestCallback) {
-  return setTimeout(() => fn(createIdleDeadline(performance.now())), 0)
+  return window.setTimeout(() => fn(createIdleDeadline(performance.now())), 0)
 }
 
 export const requestIdleCallback = (() => {
