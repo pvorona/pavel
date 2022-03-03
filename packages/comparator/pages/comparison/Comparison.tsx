@@ -1,5 +1,6 @@
 // import { initNewComparison } from '../../modules/comparisons'
 // import { useDispatch } from 'react-redux'
+// import { Header } from './Header'
 import { ComparisonTable } from './ComparisonTable'
 
 export function Main() {

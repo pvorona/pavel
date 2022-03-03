@@ -1,5 +1,6 @@
 import { Avatar } from '../../shared'
-import { avatars } from './Comparison.data'
+
+const avatars = [{ id: 'avatar 1' }, { id: 'avatar 2' }]
 
 export function Avatars() {
   return (

@@ -2,7 +2,10 @@ import { Fragment } from 'react'
 import { Button } from '../../shared'
 import { Avatars } from './Avatars'
 
-const breadcrumbs = []
+const breadcrumbs = [
+  { id: 'directory 1', title: 'Directory' },
+  { id: 'comparison 1', title: 'Comparison' },
+]
 
 export function ComparisonBreadcrumbs() {
   return (
