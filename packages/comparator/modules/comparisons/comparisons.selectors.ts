@@ -24,7 +24,7 @@ export const selectCurrentComparison = createSelector(
 
 export const selectCurrentComparisonOptionIds = createSelector(
   selectCurrentComparison,
-  currentComparison => currentComparison.optionIds,
+  currentComparison => (currentComparison ? currentComparison.optionIds : []),
 )
 
 export const selectCurrentComparisonFeatures = createSelector(
