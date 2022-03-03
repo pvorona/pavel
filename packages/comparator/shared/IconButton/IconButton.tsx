@@ -6,7 +6,7 @@ export const IconButton = memo(function IconButton({
   color = 'white',
   ...props
 }: {
-  color?: 'red' | 'white' | 'gray' | 'green'
+  color?: 'red' | 'white' | 'green' | 'yellow'
 } & React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
@@ -14,12 +14,12 @@ export const IconButton = memo(function IconButton({
   return (
     <div
       className={classNames(
-        'inline-block cursor-pointer w-5 h-5 border border-current rounded-full bg-current',
+        'inline-block cursor-pointer w-4 h-4 border border-current rounded-full bg-current',
         className,
         {
           'text-red-500': color === 'red',
           'text-white': color === 'white',
-          'text-gray-500': color === 'gray',
+          'text-yellow-300': color === 'yellow',
           'text-green-400': color === 'green',
         },
       )}

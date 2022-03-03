@@ -1,6 +1,7 @@
 .TextField {
   --hover-color: #cccccc;
   --focus-color: #808080;
+  --text-color: hsl(0deg, 0%, 46%);
 
   transition: box-shadow 0.125s;
   cursor: text;
@@ -18,8 +19,9 @@
 .TextField[placeholder]:empty:before {
   content: attr(placeholder);
   white-space: nowrap;
-  color: #555;
+  color: var(--text-color);
   pointer-events: none;
+  font-weight: 200;
 }
 
 .TextField[placeholder]:empty:focus:before {

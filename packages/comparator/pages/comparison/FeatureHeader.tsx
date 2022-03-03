@@ -39,25 +39,18 @@ export function FeatureHeader({ id, index }: { id: string; index: number }) {
           onInput={onFeatureNameChange}
           placeholder="Feature name"
           className={classNames(
-            'px-3 py-2 opacity-50 font-extralight tracking-widest',
-            {
-              'opacity-20': !feature.isExpanded,
-            },
+            'px-3 py-2 font-extralight tracking-widest transition-colors text-gray-2 dark:text-gray-1',
           )}
         >
           {feature.name}
         </TextField>
-        <FeatureActions
-          index={index}
-          feature={feature}
-          className="group-hover:opacity-100"
-        />
+        <FeatureActions index={index} feature={feature} />
       </div>
       {isDescriptionVisible && (
         <TextField
           onInput={onFeatureDescriptionChange}
           placeholder="Feature description..."
-          className="px-3 inline-block min-w-[100px] text-xs opacity-30 font-extralight"
+          className="px-3 inline-block min-w-[100px] text-xs text-gray-1 font-extralight"
         >
           {feature.description}
         </TextField>

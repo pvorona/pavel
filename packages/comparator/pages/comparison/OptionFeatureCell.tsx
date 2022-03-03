@@ -34,9 +34,9 @@ export const OptionFeatureCell = memo(function OptionFeatureCell({
 
   return (
     <TextField
-      placeholder="Feature value"
+      placeholder="No data"
       onInput={value => onOptionFeatureInput(featureId, optionId, value)}
-      className="px-12 py-2 font-extralight"
+      className="px-12 py-2 font-light dark:font-extralight"
     >
       {optionFeatureValue}
     </TextField>
