@@ -1,4 +1,4 @@
-import { animateOnce, selectElementContent } from '@pavel/utils'
+import { selectElementContent } from '@pavel/utils'
 import classNames from 'classnames'
 import React, { FormEvent, useEffect, useState } from 'react'
 import styles from './TextField.module.css'
@@ -34,12 +34,12 @@ export function TextField({
 
     if (e.code === ENTER) {
       element.blur()
-      animateOnce(element, 'animate-success')
+      // animateOnce(element, 'animate-success')
     }
 
     if (e.code === ESCAPE) {
       element.blur()
-      animateOnce(element, 'animate-success')
+      // animateOnce(element, 'animate-success')
     }
   }
 
@@ -51,9 +51,9 @@ export function TextField({
     selectElementContent(e.target)
   }
 
-  function onBlur(e: React.FocusEvent<HTMLDivElement>) {
-    // animateOnce(element, 'animate-success')
-  }
+  // function onBlur(e: React.FocusEvent<HTMLDivElement>) {
+  // animateOnce(element, 'animate-success')
+  // }
 
   return (
     <div
@@ -63,8 +63,8 @@ export function TextField({
       className={classNames(className, styles.TextField, 'rounded-sm')}
       contentEditable
       onKeyDown={onKeyDown}
+      // onBlur={onBlur}
       onFocus={onFocus}
-      onBlur={onBlur}
       spellCheck="false"
       autoCorrect="off"
       autoCapitalize="off"

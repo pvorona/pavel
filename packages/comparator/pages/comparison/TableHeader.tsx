@@ -11,7 +11,7 @@ export const TableHeader = memo(function TableHeader() {
       {optionIds.map(optionId => (
         <th
           key={optionId}
-          className="relative"
+          className="relative group"
           // style={{ width: `${(100 / optionIds.length)}%` }}
         >
           <OptionHeader optionId={optionId} />

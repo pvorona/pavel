@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import { AddFeatureLine } from './AddFeatureLine'
 import { FeatureHeader } from './FeatureHeader'
 import { OptionFeatureCell } from './OptionFeatureCell'
+import classNames from 'classnames'
 
 export const FeatureRow = memo(function FeatureRow({
   featureId,
@@ -30,8 +31,14 @@ export const FeatureRow = memo(function FeatureRow({
         </tr>
       )}
 
-      <tr className={`top-[72px]`}>
-        <td className="pt-10" colSpan={optionIds.length}>
+      <tr>
+        <td
+          className={classNames({
+            'pt-10': index !== 0,
+            'pt-5': index === 0,
+          })}
+          colSpan={optionIds.length}
+        >
           <FeatureHeader index={index} id={featureId} />
         </td>
       </tr>
