@@ -30,9 +30,9 @@ export function ComparisonName() {
   return (
     <div className="overflow-x-auto flex items-center">
       {/* <Button type="link" className="mx-3"> */}
-      <div className="font-extralight dark:font-thin text-2xl">
+      <PageTitleView className="font-extralight dark:font-thin text-2xl">
         {currentComparisonName}
-      </div>
+      </PageTitleView>
       {/* </Button> */}
     </div>
   )
@@ -68,4 +68,12 @@ export function Header() {
       </div>
     </header>
   )
+}
+
+export function HeaderView(props) {
+  return <header className="flex justify-between mt-2 mx-3" {...props} />
+}
+
+export function PageTitleView(props) {
+  return <div className="font-extralight dark:font-thin text-xl" {...props} />
 }

@@ -1,15 +1,21 @@
 import { firestore } from '../firebase'
-import { doc, setDoc } from 'firebase/firestore'
+import { collection, doc, setDoc } from 'firebase/firestore'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { selectComparisonById } from './comparisons.selectors'
 
+const COMPARISONS_PATH = 'ComparisonSets'
+
 export function getComparisonPath(id: string) {
-  return `ComparisonSets/${id}`
+  return `${COMPARISONS_PATH}/${id}`
 }
 
 export function getComparisonRef(id: string) {
   return doc(firestore, getComparisonPath(id))
+}
+
+export function getComparisonsPath() {
+  return collection(firestore, COMPARISONS_PATH)
 }
 
 export function ComparisonObserver({ comparisonId }: { comparisonId: string }) {
