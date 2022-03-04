@@ -16,7 +16,7 @@ export const OptionActions = memo(function OptionActions({
   }
 
   return (
-    <div className="absolute bottom-0 translate-y-full invisible hover:visible group-hover:visible left-1/2 -translate-x-1/2">
+    <div className="absolute bottom-0 translate-y-full invisible hover:visible group-hover:visible group-focus-within:visible left-1/2 -translate-x-1/2">
       <div className={classNames('flex py-2 px-8')}>
         <IconButton color="red" onClick={onRemoveOptionClick} />
       </div>

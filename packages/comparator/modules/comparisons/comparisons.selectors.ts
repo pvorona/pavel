@@ -24,7 +24,7 @@ export const selectCurrentComparison = createSelector(
 
 export const selectCurrentComparisonOptionIds = createSelector(
   selectCurrentComparison,
-  currentComparison => (currentComparison ? currentComparison.optionIds : []),
+  currentComparison => currentComparison.optionIds,
 )
 
 export const selectCurrentComparisonFeatures = createSelector(
@@ -73,3 +73,14 @@ export const selectCurrentComparisonOptions = createSelector(
     return optionIds.map(optionId => optionById[optionId])
   },
 )
+
+export const selectCurrentComparisonName = createSelector(
+  selectCurrentComparison,
+  currentComparison => currentComparison.name,
+)
+
+export const selectComparisonById = (id: string) =>
+  createSelector(
+    selectComparisonsByIdState,
+    comparisonsByIdState => comparisonsByIdState[id],
+  )

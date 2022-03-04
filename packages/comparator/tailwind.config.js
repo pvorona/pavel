@@ -7,6 +7,8 @@ module.exports = {
         gray: {
           1: 'hsl(210deg, 2%, 55%)',
           2: 'hsl(220deg, 9%, 48%)',
+          3: 'hsla(270, 0%, 35%, 0.6)',
+          4: 'hsl(225, 4%, 20%)',
         },
       },
       animation: {
