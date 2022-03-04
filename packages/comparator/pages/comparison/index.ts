@@ -1,1 +1,1 @@
-export { default } from './Comparison'
+export { default } from './[id]'
