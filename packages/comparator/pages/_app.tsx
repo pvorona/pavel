@@ -11,9 +11,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Comparator</title>
       </Head>
-      <main className="app h-screen  dark:bg-[#202124] dark:text-[#e7eaed] selection:bg-black selection:text-white dark:selection:bg-gray-3">
-        <Component {...pageProps} />
-      </main>
+      <Component {...pageProps} />
     </Provider>
   )
 }
