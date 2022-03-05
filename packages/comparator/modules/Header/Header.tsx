@@ -1,7 +1,7 @@
-import { selectCurrentComparisonName } from '../../modules/comparisons'
+import { selectCurrentComparisonName } from '../comparisons'
 import { useSelector } from 'react-redux'
 import { Button } from '@pavel/components'
-import { Avatars } from './Avatars'
+import { Avatars } from '../Avatars'
 
 export function ComparisonName() {
   const currentComparisonName = useSelector(selectCurrentComparisonName)

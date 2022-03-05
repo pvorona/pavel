@@ -1,15 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { Header } from './Header'
-import { ComparisonTable } from './ComparisonTable'
 import { getDoc } from 'firebase/firestore'
 import {
+  Header,
+  ComparisonTable,
   addComparison,
   ComparisonObserver,
   selectCurrentComparisonId,
   selectCurrentComparisonOptionIds,
   setCurrentComparisonId,
-} from '../../modules/comparisons'
-import { addOption, OptionsObserver } from '../../modules/options'
+  addOption,
+  OptionsObserver,
+} from '../../modules'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import {

@@ -8,7 +8,7 @@ import {
   createComparison,
   getComparisonsCollectionRef,
 } from '@pavel/comparator-shared'
-import { HeaderView, PageTitleView } from './Header'
+import { HeaderView, PageTitleView } from '../../modules'
 
 export default function ComparisonListPageWrapper() {
   const [docsState, setDocsState] = useState<Comparison[]>([])
