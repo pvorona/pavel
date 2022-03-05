@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RecordKey } from '@pavel/types'
+import { AnyAction } from 'redux'
 
 type ActionWithPayload<Type extends RecordKey, Payload> = {
   type: Type
@@ -41,7 +43,7 @@ export function createSlice<
   name: string
   handlers?: Handlers
 }) {
-  function reducer(state = initialState, action: any) {
+  function reducer(state = initialState, action: AnyAction) {
     const handler = handlers[action.type]
 
     return typeof handler === 'function'
@@ -79,7 +81,7 @@ function extractActions<Handlers extends ActionHandlers<any>>(
   sliceName: string,
   handlers: Handlers,
 ): ActionsCreatorsForHandlers<Handlers> {
-  const actions = {} as ActionsCreatorsForHandlers<Handlers>
+  const actionCreators = {} as ActionsCreatorsForHandlers<Handlers>
 
   for (const actionType in handlers) {
     // eslint-disable-next-line no-inner-declarations
@@ -91,10 +93,10 @@ function extractActions<Handlers extends ActionHandlers<any>>(
     }
 
     actionCreator.toString = () => `${sliceName}/${actionType}`
-    ;(actions as any)[actionType as keyof Handlers] = actionCreator
+    ;(actionCreators as any)[actionType as keyof Handlers] = actionCreator
   }
 
-  return actions
+  return actionCreators
 }
 
 // const {

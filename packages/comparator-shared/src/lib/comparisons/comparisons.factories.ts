@@ -1,6 +1,5 @@
 import { uuid } from '@pavel/utils'
-import { Feature } from './types'
-import { Comparison } from '.'
+import { Comparison, Feature } from './types'
 
 export function buildFeature(): Feature {
   return {

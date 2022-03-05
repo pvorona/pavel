@@ -5,22 +5,21 @@ import { ComparisonTable } from './ComparisonTable'
 import { DocumentData, getDoc, QueryDocumentSnapshot } from 'firebase/firestore'
 import {
   addComparison,
-  Comparison as ComparisonModel,
   ComparisonObserver,
-  getComparisonRef,
   selectCurrentComparisonId,
   selectCurrentComparisonOptionIds,
   setCurrentComparisonId,
 } from '../../modules/comparisons'
-import {
-  addOption,
-  getOptionRef,
-  Option,
-  OptionsObserver,
-} from '../../modules/options'
+import { addOption, OptionsObserver } from '../../modules/options'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { RecordKey } from '@pavel/types'
+import {
+  Comparison as ComparisonModel,
+  getComparisonRef,
+  getOptionRef,
+  Option,
+} from '@pavel/comparator-shared'
 
 type LoadingState = 'idle' | 'loading' | 'completed' | 'failed'
 

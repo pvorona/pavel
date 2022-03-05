@@ -1,23 +1,8 @@
-import { firestore } from '../firebase'
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
-import { useEffect, Fragment } from 'react'
+import { getOptionRef } from '@pavel/comparator-shared'
+import { setDoc } from 'firebase/firestore'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { selectOptionById } from './options.selectors'
-import { buildOption } from './options.factories'
-
-const OPTIONS_PATH = 'Options'
-
-export function getOptionPath(id: string) {
-  return `${OPTIONS_PATH}/${id}`
-}
-
-export function getOptionRef(id: string) {
-  return doc(firestore, getOptionPath(id))
-}
-
-export function getOptionsCollectionRef() {
-  return collection(firestore, OPTIONS_PATH)
-}
 
 // Race conditions
 // Options are fetched twice
@@ -48,18 +33,4 @@ export function OptionObserver({ optionId }: { optionId: string }) {
   }, [option])
 
   return null
-}
-
-export function OptionsObserver({ optionIds }: { optionIds: string[] }) {
-  return (
-    <>
-      {optionIds.map(optionId => (
-        <OptionObserver key={optionId} optionId={optionId} />
-      ))}
-    </>
-  )
-}
-
-export function createOption() {
-  return addDoc(getOptionsCollectionRef(), buildOption())
 }

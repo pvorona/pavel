@@ -1,6 +1,6 @@
 import classNames from 'classnames'
+import { Feature } from '@pavel/comparator-shared'
 import {
-  Feature,
   toggleFeatureExpandedInCurrentComparison,
   removeFeatureFromCurrentComparison,
   toggleDescriptionExpandedInCurrentComparison,

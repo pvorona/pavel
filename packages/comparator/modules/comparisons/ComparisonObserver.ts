@@ -1,24 +1,8 @@
-import { firestore } from '../firebase'
-import { collection, doc, setDoc, addDoc } from 'firebase/firestore'
+import { getComparisonRef } from '@pavel/comparator-shared'
+import { setDoc } from 'firebase/firestore'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { selectComparisonById } from './comparisons.selectors'
-import { buildComparison, buildFeature } from './comparisons.factories'
-import { createOption } from '../options'
-
-const COMPARISONS_PATH = 'ComparisonSets'
-
-export function getComparisonPath(id: string) {
-  return `${COMPARISONS_PATH}/${id}`
-}
-
-export function getComparisonRef(id: string) {
-  return doc(firestore, getComparisonPath(id))
-}
-
-export function getComparisonsCollectionRef() {
-  return collection(firestore, COMPARISONS_PATH)
-}
 
 export function ComparisonObserver({ comparisonId }: { comparisonId: string }) {
   // const dispatch = useDispatch()
@@ -48,15 +32,4 @@ export function ComparisonObserver({ comparisonId }: { comparisonId: string }) {
   }, [comparison])
 
   return null
-}
-
-export async function createComparison() {
-  const [option1, option2] = await Promise.all([createOption(), createOption()])
-
-  const comparison = buildComparison({
-    optionIds: [option1.id, option2.id],
-    features: [buildFeature()],
-  })
-
-  return addDoc(getComparisonsCollectionRef(), comparison)
 }

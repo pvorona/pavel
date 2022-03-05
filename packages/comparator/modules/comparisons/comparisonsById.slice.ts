@@ -1,11 +1,14 @@
 import { createSlice } from '@pavel/redux-slice'
 import { insertAt, remove, removeAt } from '@pavel/utils'
-import { buildFeature } from './comparisons.factories'
-import { Comparison, ComparisonsState, Feature } from './types'
+import {
+  buildFeature,
+  Comparison,
+  buildOption,
+  Feature,
+} from '@pavel/comparator-shared'
+import { ComparisonsState } from './types'
 import { addOption } from '../options'
 import { selectCurrentComparisonId } from './comparisons.selectors'
-import { buildComparison, createOption } from './comparisons.factories'
-import { setCurrentComparisonId } from './currentComparisonId.slice'
 
 export const comparisonsByIdSlice = createSlice({
   name: 'comparisons.byId',
@@ -155,7 +158,7 @@ export const {
 export function addOptionToCurrentComparison(index: number) {
   return function (dispatch, getState) {
     const currentComparisonId = selectCurrentComparisonId(getState())
-    const option = createOption()
+    const option = buildOption()
 
     dispatch([
       addOption(option),
@@ -265,24 +268,5 @@ export function toggleDescriptionExpandedInCurrentComparison(index: number) {
         index,
       }),
     )
-  }
-}
-
-export function initNewComparison() {
-  return function (dispatch) {
-    const option1 = createOption({ name: 'Option A' })
-    const option2 = createOption({ name: 'Option B' })
-    const comparison: Comparison = {
-      ...buildComparison({ isNew: true }),
-      optionIds: [option1.id, option2.id],
-      features: [buildFeature()],
-    }
-
-    dispatch([
-      addOption(option1),
-      addOption(option2),
-      addComparison(comparison),
-      setCurrentComparisonId(comparison.id),
-    ])
   }
 }

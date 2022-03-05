@@ -1,0 +1,43 @@
+{
+  "root": "packages/comparator-shared",
+  "sourceRoot": "packages/comparator-shared/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/comparator-shared",
+        "tsConfig": "packages/comparator-shared/tsconfig.lib.json",
+        "project": "packages/comparator-shared/package.json",
+        "entryFile": "packages/comparator-shared/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "packages/comparator-shared/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/comparator-shared/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/comparator-shared"],
+      "options": {
+        "jestConfig": "packages/comparator-shared/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

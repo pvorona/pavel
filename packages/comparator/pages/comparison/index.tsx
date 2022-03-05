@@ -7,7 +7,7 @@ import {
   Comparison,
   createComparison,
   getComparisonsCollectionRef,
-} from '../../modules/comparisons'
+} from '@pavel/comparator-shared'
 import { HeaderView, PageTitleView } from './Header'
 
 export default function ComparisonListPageWrapper() {
