@@ -60,7 +60,11 @@ export function TextField({
       {...props}
       onInput={ownOnInput}
       ref={setElement}
-      className={classNames(className, styles['TextField'], 'rounded-sm')}
+      className={classNames(
+        className,
+        styles['TextField'],
+        'outline-none cursor-text transition-shadow rounded-sm dark:hover:shadow-1 dark:focus:shadow-2 hover:shadow-2 focus:shadow-1',
+      )}
       contentEditable
       onKeyDown={onKeyDown}
       // onBlur={onBlur}

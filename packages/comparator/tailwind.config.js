@@ -12,6 +12,10 @@ module.exports = {
           4: 'hsl(225, 4%, 20%)',
         },
       },
+      boxShadow: {
+        1: '0 0 0 1px hsl(0, 0%, 50%)',
+        2: '0 0 0 1px hsl(0, 0%, 80%)',
+      },
       animation: {
         success: 'success .45s',
       },

@@ -1,27 +1,11 @@
 .TextField {
-  --hover-color: #cccccc;
-  --focus-color: #808080;
-  --text-color: hsl(0deg, 0%, 46%);
-
-  transition: box-shadow 0.2s;
-  cursor: text;
-  outline: none;
-}
-
-.TextField:hover {
-  /* box-shadow: 0 0 0 1px var(--hover-color); */
-  box-shadow: 0 0 0 1px var(--focus-color);
-}
-
-.TextField:focus {
-  /* box-shadow: 0 0 0 1px var(--focus-color); */
-  box-shadow: 0 0 0 1px var(--hover-color);
+  --placeholder-color: hsl(0deg, 0%, 46%);
 }
 
 .TextField[placeholder]:empty:before {
   content: attr(placeholder);
   white-space: nowrap;
-  color: var(--text-color);
+  color: var(--placeholder-color);
   pointer-events: none;
   font-weight: 200;
 }

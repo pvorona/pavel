@@ -4,7 +4,7 @@ import { TableHeader } from './TableHeader'
 
 export const ComparisonTable = memo(function ComparisonTable() {
   return (
-    <div className={`w-full`}>
+    <div className="w-full">
       <table className="min-w-[640px] mb-16 mx-auto">
         <thead>
           <tr
