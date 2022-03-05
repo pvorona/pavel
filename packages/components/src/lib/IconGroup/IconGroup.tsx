@@ -1,15 +1,24 @@
-import React, { ReactNode, ReactElement, PropsWithChildren } from 'react'
-import { IconButton } from '../IconButton'
+import React, { ReactNode } from 'react'
 
 const DELAY = 50
 
-export function IconGroup({ children }: { children: ReactNode }) {
+export enum Direction {
+  Straight = 0,
+  Inverse = 1,
+}
+
+export function IconGroup({
+  children,
+  direction = Direction.Straight,
+}: {
+  children: ReactNode
+  direction: Direction
+}) {
+  const childrenArray = React.Children.toArray(children)
+
   return (
     <>
-      {React.Children.map<
-        ReactElement<PropsWithChildren<typeof IconButton>>,
-        ReactNode
-      >(children, (child, index) => {
+      {childrenArray.map((child, index) => {
         if (!React.isValidElement(child)) {
           return null
         }
@@ -19,7 +28,11 @@ export function IconGroup({ children }: { children: ReactNode }) {
           {
             style: {
               ...child.props.style,
-              transitionDelay: `${DELAY * index}ms`,
+              transitionDelay: getItemDelay(
+                direction === Direction.Straight
+                  ? index
+                  : childrenArray.length - 1 - index,
+              ),
             },
           },
           null,
@@ -27,4 +40,8 @@ export function IconGroup({ children }: { children: ReactNode }) {
       })}
     </>
   )
+}
+
+function getItemDelay(index: number) {
+  return `${DELAY * index}ms`
 }
