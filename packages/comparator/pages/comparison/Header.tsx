@@ -25,7 +25,7 @@ export function AddComparisonButton() {
 
 export function ShareButton() {
   return (
-    <Button className="py-1 px-8 h-full">
+    <Button>
       <span className="hidden md:inline">Share</span>
       <span className="md:hidden">S</span>
     </Button>
