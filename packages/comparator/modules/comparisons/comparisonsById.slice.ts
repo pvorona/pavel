@@ -1,5 +1,5 @@
 import { createSlice } from '@pavel/redux-slice'
-import { insertAt, remove, removeAt } from '@pavel/utils'
+import { insertAt, remove } from '@pavel/utils'
 import {
   buildFeature,
   Comparison,
@@ -53,26 +53,30 @@ export const comparisonsByIdSlice = createSlice({
     },
     removeFeatureFromComparison: (
       state,
-      { id, index }: { id: string; index: number },
+      { id, featureId }: { id: string; featureId: string },
     ) => {
       const comparison = state[id]
-      const features = [...comparison.features]
+      const features = comparison.features.filter(
+        feature => feature.id !== featureId,
+      )
 
       return {
         ...state,
         [comparison.id]: {
           ...comparison,
-          features: removeAt(features, index),
+          features,
         },
       }
     },
     toggleFeatureExpandedInComparison: (
       state,
-      { id, index }: { id: string; index: number },
+      { id, featureId }: { id: string; featureId: string },
     ) => {
       const comparison = state[id]
-      const features = comparison.features.map((feature, i) =>
-        i === index ? { ...feature, isExpanded: !feature.isExpanded } : feature,
+      const features = comparison.features.map(feature =>
+        feature.id === featureId
+          ? { ...feature, isExpanded: !feature.isExpanded }
+          : feature,
       )
 
       return {
@@ -85,11 +89,11 @@ export const comparisonsByIdSlice = createSlice({
     },
     toggleDescriptionExpandedInComparison: (
       state,
-      { id, index }: { id: string; index: number },
+      { id, featureId }: { id: string; featureId: string },
     ) => {
       const comparison = state[id]
-      const features = comparison.features.map((feature, i) =>
-        i === index
+      const features = comparison.features.map(feature =>
+        feature.id === featureId
           ? {
               ...feature,
               isDescriptionExpanded: !feature.isDescriptionExpanded,
@@ -204,27 +208,27 @@ export function addOptionIdToCurrentComparison({
   }
 }
 
-export function removeFeatureFromCurrentComparison(index: number) {
+export function removeFeatureFromCurrentComparison(featureId: string) {
   return function (dispatch, getState) {
     const currentComparisonId = selectCurrentComparisonId(getState())
 
     dispatch(
       removeFeatureFromComparison({
         id: currentComparisonId,
-        index,
+        featureId,
       }),
     )
   }
 }
 
-export function toggleFeatureExpandedInCurrentComparison(index: number) {
+export function toggleFeatureExpandedInCurrentComparison(featureId: string) {
   return function (dispatch, getState) {
     const currentComparisonId = selectCurrentComparisonId(getState())
 
     dispatch(
       toggleFeatureExpandedInComparison({
         id: currentComparisonId,
-        index,
+        featureId,
       }),
     )
   }
@@ -258,14 +262,16 @@ export function removeOptionIdFromCurrentComparison(optionId: string) {
   }
 }
 
-export function toggleDescriptionExpandedInCurrentComparison(index: number) {
+export function toggleDescriptionExpandedInCurrentComparison(
+  featureId: string,
+) {
   return function (dispatch, getState) {
     const currentComparisonId = selectCurrentComparisonId(getState())
 
     dispatch(
       toggleDescriptionExpandedInComparison({
         id: currentComparisonId,
-        index,
+        featureId,
       }),
     )
   }

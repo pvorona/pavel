@@ -10,14 +10,12 @@ import { useDispatch } from 'react-redux'
 import React from 'react'
 
 export function FeatureActions({
-  index,
-  feature,
+  featureId,
   className,
   isOpen,
   ...props
 }: {
-  index: number
-  feature: Feature
+  featureId: string
   isOpen: boolean
 } & React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
@@ -26,15 +24,15 @@ export function FeatureActions({
   const dispatch = useDispatch()
 
   function onToggleExpandedClick() {
-    dispatch(toggleFeatureExpandedInCurrentComparison(index))
+    dispatch(toggleFeatureExpandedInCurrentComparison(featureId))
   }
 
   function onRemoveFeatureClick() {
-    dispatch(removeFeatureFromCurrentComparison(index))
+    dispatch(removeFeatureFromCurrentComparison(featureId))
   }
 
   function onDescriptionExpandedClick() {
-    dispatch(toggleDescriptionExpandedInCurrentComparison(index))
+    dispatch(toggleDescriptionExpandedInCurrentComparison(featureId))
   }
 
   const iconClassName =

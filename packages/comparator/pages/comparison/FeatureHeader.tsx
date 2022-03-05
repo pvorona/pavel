@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import {
   selectCurrentComparisonFeatureById,
   setFeaturePropertyInCurrentComparison,
@@ -8,15 +7,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { FeatureActions } from './FeatureActions'
 import { useState } from 'react'
 
-export function FeatureHeader({ id, index }: { id: string; index: number }) {
+export function FeatureHeader({ featureId }: { featureId: string }) {
   const dispatch = useDispatch()
-  const feature = useSelector(selectCurrentComparisonFeatureById(id))
+  const feature = useSelector(selectCurrentComparisonFeatureById(featureId))
   const [featureActionsShown, setFeatureActionsShown] = useState(false)
 
   function onFeatureNameChange(value: string) {
     dispatch(
       setFeaturePropertyInCurrentComparison({
-        featureId: id,
+        featureId,
         name: value,
       }),
     )
@@ -25,7 +24,7 @@ export function FeatureHeader({ id, index }: { id: string; index: number }) {
   function onFeatureDescriptionChange(value: string) {
     dispatch(
       setFeaturePropertyInCurrentComparison({
-        featureId: id,
+        featureId,
         description: value,
       }),
     )
@@ -54,11 +53,7 @@ export function FeatureHeader({ id, index }: { id: string; index: number }) {
         >
           {feature.name}
         </TextField>
-        <FeatureActions
-          index={index}
-          feature={feature}
-          isOpen={featureActionsShown}
-        />
+        <FeatureActions featureId={featureId} isOpen={featureActionsShown} />
       </div>
       {feature.isDescriptionExpanded && (
         <TextField

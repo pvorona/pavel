@@ -39,18 +39,14 @@ export const FeatureRow = memo(function FeatureRow({
           })}
           colSpan={optionIds.length}
         >
-          <FeatureHeader index={index} id={featureId} />
+          <FeatureHeader featureId={featureId} />
         </td>
       </tr>
 
       {isFeatureExpanded && (
         <tr>
           {optionIds.map(optionId => (
-            <td
-              key={optionId}
-              // style={{ width: `${100 / optionIds.length}%` }}
-              className="align-top"
-            >
+            <td key={optionId} className="align-top">
               <OptionFeatureCell featureId={featureId} optionId={optionId} />
             </td>
           ))}
