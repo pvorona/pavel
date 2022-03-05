@@ -1,5 +1,6 @@
 import { createSlice } from '@pavel/redux-slice'
-import { OptionsState, Option } from './types'
+import { OptionsState } from './types'
+import { Option } from '@pavel/comparator-shared'
 
 export const optionsByIdSlice = createSlice({
   name: 'options.byId',
