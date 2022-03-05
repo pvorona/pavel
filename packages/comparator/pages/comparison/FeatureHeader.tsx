@@ -3,7 +3,7 @@ import {
   selectCurrentComparisonFeatureById,
   setFeaturePropertyInCurrentComparison,
 } from '../../modules/comparisons'
-import { TextField } from '../../shared'
+import { TextField } from '@pavel/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { FeatureActions } from './FeatureActions'
 

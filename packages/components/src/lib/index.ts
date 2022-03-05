@@ -1,4 +1,5 @@
 export * from './Button'
 export * from './Avatar'
 export * from './IconButton'
+export * from './IconGroup'
 export * from './TextField'

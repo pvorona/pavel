@@ -2,7 +2,7 @@ import { selectCurrentComparisonFeatureIds } from '../../modules/comparisons'
 import { memo } from 'react'
 import { useSelector } from 'react-redux'
 import { FeatureRow } from './FeatureRow'
-import { Button } from '../../shared'
+import { Button } from '@pavel/components'
 
 export const TableBody = memo(function FeatureRows() {
   const featureIds = useSelector(selectCurrentComparisonFeatureIds)

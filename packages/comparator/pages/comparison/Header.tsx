@@ -1,28 +1,7 @@
-import {
-  selectCurrentComparisonId,
-  selectCurrentComparisonName,
-} from '../../modules/comparisons'
-import { Fragment } from 'react'
+import { selectCurrentComparisonName } from '../../modules/comparisons'
 import { useSelector } from 'react-redux'
-import { Button, TextField } from '../../shared'
+import { Button } from '@pavel/components'
 import { Avatars } from './Avatars'
-
-const breadcrumbs = [
-  { id: 'directory 1', title: 'Directory' },
-  { id: 'comparison 1', title: 'Comparison' },
-]
-// return (
-//   <div className="overflow-x-auto flex items-center -ml-3">
-//     {breadcrumbs.map((set, index) => (
-//       <Fragment key={set.id}>
-//         <Button type="link" className="mx-3">
-//           {set.title}
-//         </Button>
-//         {index !== breadcrumbs.length - 1 && '/'}
-//       </Fragment>
-//     ))}
-//   </div>
-// )
 
 export function ComparisonName() {
   const currentComparisonName = useSelector(selectCurrentComparisonName)

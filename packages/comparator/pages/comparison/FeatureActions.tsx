@@ -5,10 +5,9 @@ import {
   removeFeatureFromCurrentComparison,
   toggleDescriptionExpandedInCurrentComparison,
 } from '../../modules/comparisons'
-import { IconButton } from '../../shared'
+import { IconButton, IconGroup } from '@pavel/components'
 import { useDispatch } from 'react-redux'
 import React from 'react'
-import { IconGroup } from '../../shared/IconGroup'
 
 export function FeatureActions({
   index,

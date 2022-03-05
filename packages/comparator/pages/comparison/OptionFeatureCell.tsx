@@ -2,7 +2,7 @@ import {
   selectOptionFeatureValue,
   setOptionFeatureValue,
 } from '../../modules/options'
-import { TextField } from '../../shared'
+import { TextField } from '@pavel/components'
 import { memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 

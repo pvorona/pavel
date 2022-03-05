@@ -1,7 +1,7 @@
 import { removeOptionIdFromCurrentComparison } from '../../modules/comparisons'
 import { memo } from 'react'
 import { useDispatch } from 'react-redux'
-import { IconButton } from '../../shared'
+import { IconButton } from '@pavel/components'
 
 export const OptionActions = memo(function OptionActions({
   optionId,
