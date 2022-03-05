@@ -1,4 +1,3 @@
-// import { initNewComparison } from '../../modules/comparisons'
 import { useDispatch, useSelector } from 'react-redux'
 import { Header } from './Header'
 import { ComparisonTable } from './ComparisonTable'
