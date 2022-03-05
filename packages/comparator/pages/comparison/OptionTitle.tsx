@@ -1,4 +1,4 @@
-import { TextField } from '../../shared'
+import { TextField } from '@pavel/components'
 import { selectOptionNameById, setOptionProperty } from '../../modules/options'
 import { useSelector, useDispatch } from 'react-redux'
 import { memo } from 'react'

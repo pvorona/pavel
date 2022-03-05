@@ -20,6 +20,8 @@
       ],
       "@pavel/assert": ["packages/assert/src/index.ts"],
       "@pavel/chart": ["packages/chart/src/index.ts"],
+      "@pavel/comparator-shared": ["packages/comparator-shared/src/index.ts"],
+      "@pavel/components": ["packages/components/src/index.ts"],
       "@pavel/data-structures": ["packages/data-structures/src/index.ts"],
       "@pavel/easing": ["packages/easing/src/index.ts"],
       "@pavel/observable": ["packages/observable/src/index.ts"],

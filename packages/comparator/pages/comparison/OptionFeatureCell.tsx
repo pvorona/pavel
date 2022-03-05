@@ -2,7 +2,7 @@ import {
   selectOptionFeatureValue,
   setOptionFeatureValue,
 } from '../../modules/options'
-import { TextField } from '../../shared'
+import { TextField } from '@pavel/components'
 import { memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -36,7 +36,7 @@ export const OptionFeatureCell = memo(function OptionFeatureCell({
     <TextField
       placeholder="No data"
       onInput={value => onOptionFeatureInput(featureId, optionId, value)}
-      className="px-12 py-2 font-light dark:font-extralight"
+      className="px-12 py-2 font-light dark:font-extralight text-lg"
     >
       {optionFeatureValue}
     </TextField>

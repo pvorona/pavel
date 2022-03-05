@@ -73,3 +73,14 @@ export const selectCurrentComparisonOptions = createSelector(
     return optionIds.map(optionId => optionById[optionId])
   },
 )
+
+export const selectCurrentComparisonName = createSelector(
+  selectCurrentComparison,
+  currentComparison => currentComparison.name,
+)
+
+export const selectComparisonById = (id: string) =>
+  createSelector(
+    selectComparisonsByIdState,
+    comparisonsByIdState => comparisonsByIdState[id],
+  )

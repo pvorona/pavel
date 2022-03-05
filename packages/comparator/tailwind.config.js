@@ -1,3 +1,4 @@
+const { createGlobPatternsForDependencies } = require('@nrwl/react/tailwind')
 const { join } = require('path')
 
 module.exports = {
@@ -5,8 +6,10 @@ module.exports = {
     extend: {
       colors: {
         gray: {
-          1: 'hsl(210deg, 2%, 55%)',
-          2: 'hsl(220deg, 9%, 48%)',
+          1: 'hsl(210, 2%, 55%)',
+          2: 'hsl(220, 9%, 48%)',
+          3: 'hsla(270, 0%, 35%, 0.6)',
+          4: 'hsl(225, 4%, 20%)',
         },
       },
       animation: {
@@ -20,5 +23,8 @@ module.exports = {
     },
   },
   plugins: [],
-  content: [join(__dirname, '**/*.{js,ts,jsx,tsx}')],
+  content: [
+    join(__dirname, '**/!(*.stories|*.spec).{js,ts,jsx,tsx,html}'),
+    ...createGlobPatternsForDependencies(__dirname),
+  ],
 }

@@ -1,23 +1,16 @@
-import { Fragment } from 'react'
-import { Button } from '../../shared'
+import { selectCurrentComparisonName } from '../../modules/comparisons'
+import { useSelector } from 'react-redux'
+import { Button } from '@pavel/components'
 import { Avatars } from './Avatars'
 
-const breadcrumbs = [
-  { id: 'directory 1', title: 'Directory' },
-  { id: 'comparison 1', title: 'Comparison' },
-]
+export function ComparisonName() {
+  const currentComparisonName = useSelector(selectCurrentComparisonName)
 
-export function ComparisonBreadcrumbs() {
   return (
-    <div className="overflow-x-auto flex items-center -ml-3">
-      {breadcrumbs.map((set, index) => (
-        <Fragment key={set.id}>
-          <Button type="link" className="mx-3">
-            {set.title}
-          </Button>
-          {index !== breadcrumbs.length - 1 && '/'}
-        </Fragment>
-      ))}
+    <div className="overflow-x-auto flex items-center">
+      {/* <Button type="link" className="mx-3"> */}
+      <PageTitleView>{currentComparisonName}</PageTitleView>
+      {/* </Button> */}
     </div>
   )
 }
@@ -32,7 +25,7 @@ export function AddComparisonButton() {
 
 export function ShareButton() {
   return (
-    <Button className="text-lg bg-black text-white py-1 px-8 h-full">
+    <Button>
       <span className="hidden md:inline">Share</span>
       <span className="md:hidden">S</span>
     </Button>
@@ -43,8 +36,8 @@ export function Header() {
   return (
     <header className="flex justify-between mt-2 mx-3">
       <div className="whitespace-nowrap overflow-hidden flex">
-        <ComparisonBreadcrumbs />
-        <AddComparisonButton />
+        <ComparisonName />
+        {/* <AddComparisonButton /> */}
       </div>
       <div className="flex items-center">
         <Avatars />
@@ -52,4 +45,12 @@ export function Header() {
       </div>
     </header>
   )
+}
+
+export function HeaderView(props) {
+  return <header className="flex justify-between mt-2 mx-3" {...props} />
+}
+
+export function PageTitleView(props) {
+  return <div className="font-extralight dark:font-thin text-2xl" {...props} />
 }

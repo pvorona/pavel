@@ -12,16 +12,16 @@ const persistConfig = {
 }
 
 export const store = createStore(
-  persistReducer(
-    persistConfig,
-    batchReducer(
-      combineReducers({
-        options: optionsReducer,
-        comparisons: comparisonsReducer,
-      }),
-    ),
+  // persistReducer(
+  // persistConfig,
+  batchReducer(
+    combineReducers({
+      options: optionsReducer,
+      comparisons: comparisonsReducer,
+    }),
   ),
+  // ),
   applyMiddleware(batchMiddleware, thunk),
 )
 
-export const persistor = persistStore(store)
+// export const persistor = persistStore(store)

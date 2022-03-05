@@ -1,4 +1,4 @@
-import { Avatar } from '../../shared'
+import { Avatar } from '@pavel/components'
 
 const avatars = [{ id: 'avatar 1' }, { id: 'avatar 2' }]
 

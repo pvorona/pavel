@@ -1,8 +1,7 @@
-import classNames from 'classnames'
 import { removeOptionIdFromCurrentComparison } from '../../modules/comparisons'
 import { memo } from 'react'
 import { useDispatch } from 'react-redux'
-import { IconButton } from '../../shared'
+import { IconButton } from '@pavel/components'
 
 export const OptionActions = memo(function OptionActions({
   optionId,
@@ -16,9 +15,14 @@ export const OptionActions = memo(function OptionActions({
   }
 
   return (
-    <div className="absolute bottom-0 translate-y-full invisible hover:visible group-hover:visible left-1/2 -translate-x-1/2">
-      <div className={classNames('flex py-2 px-8')}>
-        <IconButton color="red" onClick={onRemoveOptionClick} />
+    <div className="absolute top-1/2 -translate-y-1/2 mt-[2px] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 scale-0 group-hover:scale-100 group-focus-within:scale-100 right-0 -translate-x-1/2 transition-all">
+      <div className="flex flex-col p-2">
+        <IconButton
+          className="mt-2"
+          color="red"
+          onClick={onRemoveOptionClick}
+        />
+        {/* <IconButton className='mt-2' color="yellow" onClick={onRemoveOptionClick} /> */}
       </div>
     </div>
   )

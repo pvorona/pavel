@@ -23,8 +23,10 @@ export const OptionHeader = memo(function OptionHeader({
   return (
     <>
       <AddOptionLine attachment="left" index={optionIndex} />
-      <OptionTitle optionId={optionId} />
-      <OptionActions optionId={optionId} />
+      <div className="group">
+        <OptionTitle optionId={optionId} />
+        <OptionActions optionId={optionId} />
+      </div>
       {isLastOption && (
         <AddOptionLine attachment="right" index={optionIndex + 1} />
       )}

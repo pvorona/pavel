@@ -1,13 +1,13 @@
 import classNames from 'classnames'
+import { Feature } from '@pavel/comparator-shared'
 import {
-  Feature,
   toggleFeatureExpandedInCurrentComparison,
   removeFeatureFromCurrentComparison,
   toggleDescriptionExpandedInCurrentComparison,
 } from '../../modules/comparisons'
-import { IconButton } from '../../shared'
+import { IconButton, IconGroup } from '@pavel/components'
 import { useDispatch } from 'react-redux'
-import React, { PropsWithChildren, ReactElement, ReactNode } from 'react'
+import React from 'react'
 
 export function FeatureActions({
   index,
@@ -32,11 +32,14 @@ export function FeatureActions({
     dispatch(toggleDescriptionExpandedInCurrentComparison(index))
   }
 
+  const iconClassName =
+    'ml-2 opacity-0 scale-0 group-focus-within:opacity-100 group-hover:opacity-100 group-focus-within:scale-100 group-hover:scale-100 transition-all'
+
   return (
     <div
       className={classNames(
         // 'flex opacity-0 transition-opacity group',
-        'flex transition-opacity group',
+        'flex group',
         className,
       )}
       {...props}
@@ -45,50 +48,21 @@ export function FeatureActions({
         {feature.isExpanded && (
           <IconButton
             color="green"
-            className="ml-2 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 transition-opacity duration-200"
+            className={iconClassName}
             onClick={onDescriptionExpandedClick}
           />
         )}
         <IconButton
           color="yellow"
-          className="ml-2 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 transition-opacity duration-200"
+          className={iconClassName}
           onClick={onToggleExpandedClick}
         />
         <IconButton
           color="red"
+          className={iconClassName}
           onClick={onRemoveFeatureClick}
-          className="ml-2 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 transition-opacity duration-200"
         />
       </IconGroup>
     </div>
-  )
-}
-
-const DELAYS = [
-  'delay-[75ms]',
-  'delay-[150ms]',
-  'delay-[225ms]',
-  'delay-[300ms]',
-]
-
-function IconGroup({ children }: { children: ReactNode }) {
-  return (
-    <>
-      {React.Children.map<ReactNode, ReactNode>(children, (child, index) => {
-        child as ReactElement<PropsWithChildren<typeof IconButton>>
-
-        if (!React.isValidElement(child)) {
-          return null
-        }
-
-        return React.cloneElement(
-          child,
-          {
-            className: classNames(child.props.className, DELAYS[index]),
-          },
-          null,
-        )
-      })}
-    </>
   )
 }

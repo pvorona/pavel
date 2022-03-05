@@ -3,7 +3,7 @@ import {
   selectCurrentComparisonFeatureById,
   setFeaturePropertyInCurrentComparison,
 } from '../../modules/comparisons'
-import { TextField } from '../../shared'
+import { TextField } from '@pavel/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { FeatureActions } from './FeatureActions'
 
@@ -39,7 +39,7 @@ export function FeatureHeader({ id, index }: { id: string; index: number }) {
           onInput={onFeatureNameChange}
           placeholder="Feature name"
           className={classNames(
-            'px-3 py-2 font-extralight tracking-widest transition-colors text-gray-2 dark:text-gray-1',
+            'px-3 py-2 font-extralight text-sm tracking-widest transition-colors text-gray-2 dark:text-gray-1',
           )}
         >
           {feature.name}
