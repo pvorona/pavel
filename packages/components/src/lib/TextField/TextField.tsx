@@ -14,10 +14,10 @@ export function TextField({
 }: {
   className?: string
   placeholder?: string
-  onInput?: (value: string) => void
+  onInput: (value: string) => void
   children: string
 }) {
-  const [element, setElement] = useState<HTMLDivElement | undefined>()
+  const [element, setElement] = useState<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (!element) {
@@ -60,7 +60,7 @@ export function TextField({
       {...props}
       onInput={ownOnInput}
       ref={setElement}
-      className={classNames(className, styles.TextField, 'rounded-sm')}
+      className={classNames(className, styles['TextField'], 'rounded-sm')}
       contentEditable
       onKeyDown={onKeyDown}
       // onBlur={onBlur}

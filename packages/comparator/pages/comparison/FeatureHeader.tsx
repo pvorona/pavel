@@ -58,7 +58,7 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
       {feature.isDescriptionExpanded && (
         <TextField
           onInput={onFeatureDescriptionChange}
-          placeholder="Feature description..."
+          placeholder="No description"
           className="px-3 inline-block min-w-[100px] text-xs text-gray-1 font-extralight tracking-wider"
         >
           {feature.description}
