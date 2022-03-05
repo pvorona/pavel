@@ -27,20 +27,21 @@ type ActionHandlerWithoutPayload<State> = (state: State) => State
 
 type ActionHandlers<State> = {
   [actionType: RecordKey]:
-    | ActionHandlerWithPayload<State, unknown>
+    | ActionHandlerWithPayload<State, any>
     | ActionHandlerWithoutPayload<State>
 }
 
 export function createSlice<
-  State,
+  State = any,
   Handlers extends ActionHandlers<State> = ActionHandlers<State>,
+  Name extends string = string,
 >({
   initialState,
   name,
   handlers = {} as Handlers,
 }: {
   initialState: State
-  name: string
+  name: Name
   handlers?: Handlers
 }) {
   function reducer(state = initialState, action: AnyAction) {
@@ -59,6 +60,8 @@ export function createSlice<
   }
 }
 
+// "without payload" case should be before "with payload"
+// for correct inference
 type ActionCreatorForHandler<
   ActionType extends RecordKey,
   Handler,
@@ -68,32 +71,33 @@ type ActionCreatorForHandler<
   ? ActionCreatorWithPayload<ActionType, Payload>
   : never
 
-type ActionsCreatorsForHandlers<Handlers extends ActionHandlers<any>> = {
-  [ActionType in keyof Handlers]: Handlers[ActionType] extends ActionHandlerWithPayload<
-    any,
-    any
+type ActionCreatorsForHandlers<Handlers extends ActionHandlers<any>> = {
+  [ActionType in keyof Handlers]: ActionCreatorForHandler<
+    ActionType,
+    Handlers[ActionType]
   >
-    ? ActionCreatorForHandler<ActionType, Handlers[ActionType]>
-    : never
 }
 
 function extractActions<Handlers extends ActionHandlers<any>>(
   sliceName: string,
   handlers: Handlers,
-): ActionsCreatorsForHandlers<Handlers> {
-  const actionCreators = {} as ActionsCreatorsForHandlers<Handlers>
+): ActionCreatorsForHandlers<Handlers> {
+  const actionCreators = {} as ActionCreatorsForHandlers<Handlers>
 
   for (const actionType in handlers) {
-    // eslint-disable-next-line no-inner-declarations
-    function actionCreator(payload: any) {
+    const actionCreator = ((payload: any) => {
       return {
         type: actionType,
         payload,
       }
-    }
+    }) as ActionCreatorForHandler<
+      typeof actionType,
+      typeof handlers[typeof actionType]
+    >
 
     actionCreator.toString = () => `${sliceName}/${actionType}`
-    ;(actionCreators as any)[actionType as keyof Handlers] = actionCreator
+
+    actionCreators[actionType] = actionCreator
   }
 
   return actionCreators
@@ -117,3 +121,8 @@ function extractActions<Handlers extends ActionHandlers<any>>(
 
 // increment()
 // incrementBy(3)
+
+// const testHandlers = {
+//   increment: (state) => ({ count: state.count + 1 }),
+//   incrementBy: (state, change: number) => ({ count: state.count + change }),
+// }
