@@ -3,8 +3,8 @@ import { insertAt, remove } from '@pavel/utils'
 import {
   buildFeature,
   Comparison,
-  buildOption,
   Feature,
+  createOption,
 } from '@pavel/comparator-shared'
 import { ComparisonsState } from './types'
 import { addOption } from '../options'
@@ -160,9 +160,9 @@ export const {
 } = comparisonsByIdSlice.actions
 
 export function addOptionToCurrentComparison(index: number) {
-  return function (dispatch, getState) {
+  return async function (dispatch, getState) {
     const currentComparisonId = selectCurrentComparisonId(getState())
-    const option = buildOption()
+    const option = await createOption()
 
     dispatch([
       addOption(option),
