@@ -47,14 +47,14 @@ export function mapDataToCoords(
 }
 
 // Gets x by fractional index
-function getX(domain: number[], index: number): number {
+function getX(xs: number[], index: number): number {
   if (Number.isInteger(index)) {
-    return domain[index]
+    return xs[index]
   }
 
   return (
-    (domain[ceil(index)] - domain[Math.floor(index)]) * (index % 1) +
-    domain[Math.floor(index)]
+    (xs[ceil(index)] - xs[Math.floor(index)]) * (index % 1) +
+    xs[Math.floor(index)]
   )
 }
 
