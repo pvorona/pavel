@@ -11,12 +11,16 @@ export function mapDataToCoords(
   { startIndex, endIndex }: { startIndex: number; endIndex: number },
   lineWidth: number,
 ): Point[] {
-  const height = availableHeight - lineWidth * 2
+  // half of the line width is deducted from both sides
+  // to prevent line trimming on the edges
+  const lineWidthBuffer = lineWidth / 2
+  const minY = lineWidthBuffer
+  const maxY = availableHeight - lineWidthBuffer
   const coords: Point[] = []
 
   if (!Number.isInteger(startIndex)) {
     const x = 0
-    const y = toScreenY(data, min, max, height, startIndex)
+    const y = toScreenY(data, min, max, minY, maxY, startIndex)
 
     coords.push({ x, y })
   }
@@ -27,14 +31,14 @@ export function mapDataToCoords(
     currentIndex++
   ) {
     const x = toScreenX(domain, width, startIndex, endIndex, currentIndex)
-    const y = toScreenY(data, min, max, height, currentIndex)
+    const y = toScreenY(data, min, max, minY, maxY, currentIndex)
 
     coords.push({ x, y })
   }
 
   if (!Number.isInteger(endIndex)) {
     const x = width
-    const y = toScreenY(data, min, max, height, endIndex)
+    const y = toScreenY(data, min, max, minY, maxY, endIndex)
 
     coords.push({ x, y })
   }
@@ -74,8 +78,9 @@ export function toScreenY(
   ys: number[],
   min: number,
   max: number,
-  height: number,
+  minY: number,
+  maxY: number,
   currentIndex: number,
 ) {
-  return interpolate(max, min, 0, height, interpolatePoint(currentIndex, ys))
+  return interpolate(max, min, minY, maxY, interpolatePoint(currentIndex, ys))
 }
