@@ -1,15 +1,22 @@
 import { firestore } from '../firebase'
-import { doc, setDoc } from 'firebase/firestore'
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
 import { useEffect, Fragment } from 'react'
 import { useSelector } from 'react-redux'
 import { selectOptionById } from './options.selectors'
+import { buildOption } from './options.factories'
+
+const OPTIONS_PATH = 'Options'
 
 export function getOptionPath(id: string) {
-  return `Options/${id}`
+  return `${OPTIONS_PATH}/${id}`
 }
 
 export function getOptionRef(id: string) {
   return doc(firestore, getOptionPath(id))
+}
+
+export function getOptionsCollectionRef() {
+  return collection(firestore, OPTIONS_PATH)
 }
 
 // Race conditions
@@ -51,4 +58,8 @@ export function OptionsObserver({ optionIds }: { optionIds: string[] }) {
       ))}
     </>
   )
+}
+
+export function createOption() {
+  return addDoc(getOptionsCollectionRef(), buildOption())
 }

@@ -2,9 +2,6 @@ import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Provider } from 'react-redux'
 import { store } from '../store'
-import { app, firestore } from '../modules/firebase'
-
-// import { PersistGate } from 'redux-persist/integration/react'
 
 import './styles.css'
 
@@ -14,10 +11,8 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Comparator</title>
       </Head>
-      <main className="app h-screen">
-        {/* <PersistGate loading={null} persistor={persistor}> */}
+      <main className="app h-screen  dark:bg-[#202124] dark:text-[#e7eaed] selection:bg-black selection:text-white dark:selection:bg-gray-3">
         <Component {...pageProps} />
-        {/* </PersistGate> */}
       </main>
     </Provider>
   )

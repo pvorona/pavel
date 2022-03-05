@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Header } from './Header'
 import { ComparisonTable } from './ComparisonTable'
-import { getDoc } from 'firebase/firestore'
+import { DocumentData, getDoc, QueryDocumentSnapshot } from 'firebase/firestore'
 import {
   addComparison,
   Comparison as ComparisonModel,
@@ -20,8 +20,15 @@ import {
 } from '../../modules/options'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { RecordKey } from '@pavel/types'
 
 type LoadingState = 'idle' | 'loading' | 'completed' | 'failed'
+
+function fromSnapshot<T extends Record<RecordKey, unknown>>(
+  snapshot: QueryDocumentSnapshot<DocumentData>,
+): T {
+  return Object.assign(snapshot.data(), { id: snapshot.id }) as unknown as T
+}
 
 export default function ComparisonPageWrapper() {
   const router = useRouter()
@@ -49,18 +56,24 @@ export default function ComparisonPageWrapper() {
 
         setComparisonExists(true)
 
-        const comparison = comparisonSnapshot.data() as ComparisonModel
+        const comparison = fromSnapshot<ComparisonModel>(comparisonSnapshot)
         const optionsSnapshots = await Promise.all(
           comparison.optionIds.map(optionId => getDoc(getOptionRef(optionId))),
         )
         // Handle option doesn't exist or empty
         const options = optionsSnapshots.map(optionsSnapshot =>
-          optionsSnapshot.data(),
-        ) as Option[]
+          fromSnapshot<Option>(optionsSnapshot),
+        )
+
+        console.log({
+          options,
+          comparison,
+        })
 
         options.forEach(option => {
           dispatch(addOption(option))
         })
+
         dispatch(addComparison(comparison))
         dispatch(setCurrentComparisonId(comparison.id))
         setLoadingState('completed')
@@ -92,7 +105,7 @@ export function Comparison() {
     <>
       <OptionsObserver optionIds={optionIds} />
       <ComparisonObserver comparisonId={currentComparisonId} />
-      <div className="h-full overflow-auto flex flex-col dark:bg-[#202124] dark:text-[#e7eaed] selection:bg-black selection:text-white dark:selection:bg-gray-3">
+      <div className="flex flex-col">
         <Header />
         <ComparisonTable />
       </div>

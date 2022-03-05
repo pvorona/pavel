@@ -30,9 +30,7 @@ export function ComparisonName() {
   return (
     <div className="overflow-x-auto flex items-center">
       {/* <Button type="link" className="mx-3"> */}
-      <PageTitleView className="font-extralight dark:font-thin text-2xl">
-        {currentComparisonName}
-      </PageTitleView>
+      <PageTitleView>{currentComparisonName}</PageTitleView>
       {/* </Button> */}
     </div>
   )
@@ -75,5 +73,5 @@ export function HeaderView(props) {
 }
 
 export function PageTitleView(props) {
-  return <div className="font-extralight dark:font-thin text-xl" {...props} />
+  return <div className="font-extralight dark:font-thin text-2xl" {...props} />
 }

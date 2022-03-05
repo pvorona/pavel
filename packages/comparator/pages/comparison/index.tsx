@@ -1,8 +1,13 @@
 import classNames from 'classnames'
 import { getDocs } from 'firebase/firestore'
 import Link from 'next/link'
-import { ReactNode, useEffect, useState } from 'react'
-import { Comparison, getComparisonsPath } from '../../modules/comparisons'
+import { useRouter } from 'next/router'
+import { ReactNode, useEffect, useState, forwardRef } from 'react'
+import {
+  Comparison,
+  createComparison,
+  getComparisonsCollectionRef,
+} from '../../modules/comparisons'
 import { HeaderView, PageTitleView } from './Header'
 
 export default function ComparisonListPageWrapper() {
@@ -10,7 +15,7 @@ export default function ComparisonListPageWrapper() {
 
   useEffect(() => {
     const loadData = async () => {
-      const docsSnapshots = await getDocs(getComparisonsPath())
+      const docsSnapshots = await getDocs(getComparisonsCollectionRef())
       setDocsState(docsSnapshots.docs.map(doc => doc.data() as Comparison))
     }
 
@@ -25,7 +30,11 @@ export default function ComparisonListPageWrapper() {
 
       <ComparisonList>
         {docsState.map(d => (
-          <Link key={d.id} href={`comparison/${encodeURIComponent(d.id)}`}>
+          <Link
+            key={d.id}
+            passHref
+            href={`comparison/${encodeURIComponent(d.id)}`}
+          >
             <ComparisonItem>{d.name}</ComparisonItem>
           </Link>
         ))}
@@ -43,29 +52,50 @@ export function ComparisonList({ children }: { children: ReactNode }) {
   )
 }
 
-export function ComparisonItem(props) {
-  return <Card {...props} />
-}
+export const ComparisonItem = forwardRef<HTMLAnchorElement, CardProps>(
+  function ComparisonItem(props, ref) {
+    return <Card {...props} ref={ref} />
+  },
+)
 
 export function AddComparisonCard() {
+  const router = useRouter()
+
+  async function onClick() {
+    const { id } = await createComparison()
+
+    router.push(`comparison/${id}`)
+  }
+
   return (
-    <Card className="bg-gray-4 text-white flex items-center justify-center text-4xl">
+    <Card
+      onClick={onClick}
+      className="bg-gray-4 text-white flex items-center justify-center text-4xl"
+    >
       +
     </Card>
   )
 }
 
-export function Card({
-  className,
-  ...props
-}: {
+type CardProps = {
   className?: string
   children: ReactNode
-}) {
+  onClick?: () => void
+}
+
+export const Card = forwardRef<HTMLAnchorElement, CardProps>(function Card(
+  { className, onClick, ...props }: CardProps,
+  ref,
+) {
   return (
-    <div
-      className={classNames('shadow-2xl w-48 h-48 ml-3 rounded-sm', className)}
+    <a
+      ref={ref}
+      onClick={onClick}
+      className={classNames(
+        'block shadow-2xl w-48 h-48 ml-3 rounded-sm',
+        className,
+      )}
       {...props}
     />
   )
-}
+})

@@ -10,6 +10,7 @@ import {
   circleColor,
   textColor,
 } from './constants'
+import { ensureInBounds } from '@pavel/utils'
 
 export const AddOptionLine = memo(function AddOptionLine({
   attachment,
@@ -28,11 +29,16 @@ export const AddOptionLine = memo(function AddOptionLine({
       return
     }
 
-    return pointerPosition.observe(({ y }) => {
+    return effect([pointerPosition], ({ y }) => {
       const { top } = svg.getBoundingClientRect()
+      const translateY = ensureInBounds(
+        y - top,
+        hoverTrapSizeFromOneSide,
+        Infinity,
+      )
 
-      button.style.transform = `translateY(${y - top}px)`
-      circle.style.transform = `translateY(${y - top}px)`
+      button.style.transform = `translateY(${translateY}px)`
+      circle.style.transform = `translateY(${translateY}px)`
     })
   }, [button, circle, svg])
 
@@ -63,12 +69,11 @@ export const AddOptionLine = memo(function AddOptionLine({
         top: 0,
         margin: `0 -${hoverTrapSizeFromOneSide}px`,
         ...(attachment === 'left' ? { left: 0 } : { right: 0 }),
-        // transform: 'translateX(-50%)',
       }}
     >
       <line
         x1={hoverTrapSizeFromOneSide}
-        y1="0"
+        y1={hoverTrapSizeFromOneSide}
         x2={hoverTrapSizeFromOneSide}
         y2="100%"
         stroke={lineColor}

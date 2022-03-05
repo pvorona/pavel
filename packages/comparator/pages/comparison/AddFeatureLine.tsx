@@ -1,4 +1,4 @@
-import { pointerPosition } from '@pavel/observable'
+import { effect, pointerPosition } from '@pavel/observable'
 import { addFeatureToCurrentComparison } from '../../modules/comparisons'
 import { memo, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -27,7 +27,7 @@ export const AddFeatureLine = memo(function AddFeatureLine({
       return
     }
 
-    return pointerPosition.observe(({ x }) => {
+    return effect([pointerPosition], ({ x }) => {
       const { left } = svg.getBoundingClientRect()
 
       button.style.transform = `translateX(${x - left}px)`

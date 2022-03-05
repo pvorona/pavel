@@ -1,10 +1,10 @@
 import { createSlice } from '@pavel/redux-slice'
 import { insertAt, remove, removeAt } from '@pavel/utils'
-import { createFeature } from './factories'
+import { buildFeature } from './comparisons.factories'
 import { Comparison, ComparisonsState, Feature } from './types'
 import { addOption } from '../options'
 import { selectCurrentComparisonId } from './comparisons.selectors'
-import { createComparison, createOption } from './factories'
+import { buildComparison, createOption } from './comparisons.factories'
 import { setCurrentComparisonId } from './currentComparisonId.slice'
 
 export const comparisonsByIdSlice = createSlice({
@@ -19,7 +19,7 @@ export const comparisonsByIdSlice = createSlice({
       state,
       { id, index }: { id: string; index: number },
     ) => {
-      const newFeature = createFeature()
+      const newFeature = buildFeature()
       const comparison = state[id]
       const features = [...comparison.features]
 
@@ -273,9 +273,9 @@ export function initNewComparison() {
     const option1 = createOption({ name: 'Option A' })
     const option2 = createOption({ name: 'Option B' })
     const comparison: Comparison = {
-      ...createComparison({ isNew: true }),
+      ...buildComparison({ isNew: true }),
       optionIds: [option1.id, option2.id],
-      features: [createFeature()],
+      features: [buildFeature()],
     }
 
     dispatch([

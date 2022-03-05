@@ -1,9 +1,8 @@
 import { uuid } from '@pavel/utils'
 import { Feature } from './types'
-import { Option } from '../options'
 import { Comparison } from '.'
 
-export function createFeature(): Feature {
+export function buildFeature(): Feature {
   return {
     id: uuid(),
     name: '',
@@ -18,23 +17,23 @@ export function createFeature(): Feature {
   }
 }
 
-export function createOption(values?: Partial<Option>): Option {
-  return {
-    id: uuid(),
-    name: 'Option',
-    features: {},
-    ...values,
-  }
+function formatDate(timestamp: number) {
+  const date = new Date(timestamp)
+
+  return `${String(date.getDate()).padStart(2)}.${String(
+    date.getMonth() + 1,
+  ).padStart(2)}.${date.getFullYear()}`
 }
 
-export function createComparison(values?: Partial<Comparison>): Comparison {
+export function buildComparison(
+  values?: Partial<Comparison>,
+): Partial<Comparison> {
   return {
-    id: uuid(),
-    name: '',
+    // id: uuid(),
+    name: `Comparison created at ${formatDate(Date.now())}`,
     features: [],
     optionIds: [],
     isLocked: false,
-    isNew: false,
     ...values,
   }
 }
