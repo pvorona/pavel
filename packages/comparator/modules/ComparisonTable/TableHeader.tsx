@@ -9,9 +9,7 @@ export const TableHeader = memo(function TableHeader() {
   return (
     <>
       {optionIds.map(optionId => (
-        <th key={optionId} className="relative">
-          <OptionHeader optionId={optionId} />
-        </th>
+        <OptionHeader key={optionId} optionId={optionId} />
       ))}
     </>
   )

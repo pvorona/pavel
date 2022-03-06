@@ -1,11 +1,17 @@
-import { selectCurrentComparisonFeatureIds } from '../../modules/comparisons'
+import {
+  selectCurrentComparisonFeatureIds,
+  selectCurrentComparisonOptionIds,
+} from '../../modules/comparisons'
 import { memo } from 'react'
 import { useSelector } from 'react-redux'
 import { FeatureRow } from './FeatureRow'
 import { Button } from '@pavel/components'
+import { OptionRemovingRectangle } from './OptionRemovingRectangle'
 
 export const TableBody = memo(function FeatureRows() {
   const featureIds = useSelector(selectCurrentComparisonFeatureIds)
+
+  const optionIds = useSelector(selectCurrentComparisonOptionIds)
 
   if (featureIds.length === 0) {
     return (
@@ -22,6 +28,13 @@ export const TableBody = memo(function FeatureRows() {
 
   return (
     <>
+      <tr>
+        {optionIds.map(optionId => (
+          <td key={optionId}>
+            <OptionRemovingRectangle optionId={optionId} />
+          </td>
+        ))}
+      </tr>
       {featureIds.map(featureId => (
         <FeatureRow featureId={featureId} key={featureId} />
       ))}

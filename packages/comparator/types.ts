@@ -1,7 +1,7 @@
-import { ComparisonsState } from './modules/comparisons'
-import { OptionsState } from './modules/options'
+import { OptionsState, ComparisonsState, ComparisonTableState } from './modules'
 
 export type RootState = {
   options: OptionsState
   comparisons: ComparisonsState
+  comparisonTable: ComparisonTableState
 }
