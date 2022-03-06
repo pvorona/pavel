@@ -1,17 +1,25 @@
-import { selectCurrentComparisonName } from '../comparisons'
-import { useSelector } from 'react-redux'
-import { Button } from '@pavel/components'
+import {
+  selectCurrentComparisonName,
+  setCurrentComparisonProperty,
+} from '../comparisons'
+import { useDispatch, useSelector } from 'react-redux'
+import { Button, TextField } from '@pavel/components'
 import { Avatars } from '../Avatars'
 
 export function ComparisonName() {
+  const dispatch = useDispatch()
   const currentComparisonName = useSelector(selectCurrentComparisonName)
 
+  const onComparisonNameChange = (value: string) => {
+    dispatch(setCurrentComparisonProperty({ name: value }))
+  }
+
   return (
-    <div className="overflow-x-auto flex items-center">
-      {/* <Button type="link" className="mx-3"> */}
-      <PageTitleView>{currentComparisonName}</PageTitleView>
-      {/* </Button> */}
-    </div>
+    <PageTitleView>
+      <TextField onInput={onComparisonNameChange}>
+        {currentComparisonName}
+      </TextField>
+    </PageTitleView>
   )
 }
 
@@ -34,7 +42,7 @@ export function ShareButton() {
 
 export function Header() {
   return (
-    <header className="flex justify-between mt-2 mx-3">
+    <HeaderView>
       <div className="whitespace-nowrap overflow-hidden flex">
         <ComparisonName />
         {/* <AddComparisonButton /> */}
@@ -43,12 +51,17 @@ export function Header() {
         <Avatars />
         <ShareButton />
       </div>
-    </header>
+    </HeaderView>
   )
 }
 
 export function HeaderView(props) {
-  return <header className="flex justify-between mt-2 mx-3" {...props} />
+  return (
+    <header
+      className="flex justify-between items-center mt-2 mx-3"
+      {...props}
+    />
+  )
 }
 
 export function PageTitleView(props) {

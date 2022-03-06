@@ -145,6 +145,19 @@ export const comparisonsByIdSlice = createSlice({
         },
       }
     },
+    setComparisonProperty: (
+      state,
+      {
+        comparisonId,
+        payload,
+      }: { comparisonId: string; payload: Partial<Comparison> },
+    ) => ({
+      ...state,
+      [comparisonId]: {
+        ...state[comparisonId],
+        ...payload,
+      },
+    }),
   },
 })
 
@@ -157,6 +170,7 @@ export const {
   toggleDescriptionExpandedInComparison,
   removeOptionIdFromComparison,
   setFeaturePropertyInComparison,
+  setComparisonProperty,
 } = comparisonsByIdSlice.actions
 
 export function addOptionToCurrentComparison(index: number) {
@@ -272,6 +286,19 @@ export function toggleDescriptionExpandedInCurrentComparison(
       toggleDescriptionExpandedInComparison({
         id: currentComparisonId,
         featureId,
+      }),
+    )
+  }
+}
+
+export function setCurrentComparisonProperty(payload: Partial<Comparison>) {
+  return function (dispatch, getState) {
+    const currentComparisonId = selectCurrentComparisonId(getState())
+
+    dispatch(
+      setComparisonProperty({
+        comparisonId: currentComparisonId,
+        payload,
       }),
     )
   }
