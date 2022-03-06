@@ -25,7 +25,7 @@ export function ComparisonName() {
 
 export function AddComparisonButton() {
   return (
-    <Button className="mx-3" type="link">
+    <Button className="mx-3" variant="link">
       + <span className="hidden md:inline">Add new comparison</span>
     </Button>
   )

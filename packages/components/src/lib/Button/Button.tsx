@@ -4,12 +4,18 @@ import React from 'react'
 export type ButtonProps = {
   children: React.ReactNode
   className?: string
-  type?: 'button' | 'link'
+  variant?: 'button' | 'link'
   size?: 'md'
+  type?: 'button' | 'submit'
   onClick?: (event: React.MouseEvent) => void
 }
 
-export function Button({ className, type = 'button', ...props }: ButtonProps) {
+export function Button({
+  className,
+  variant = 'button',
+  type = 'button',
+  ...props
+}: ButtonProps) {
   const defaultButtonClassName =
     'text-lg bg-gray-4 text-white bg-gray-4 dark:hover:border-[#5f6368] border border-gray-4 rounded transition-colors'
   const defaultLinkClassName =
@@ -21,12 +27,11 @@ export function Button({ className, type = 'button', ...props }: ButtonProps) {
       className={classnames(
         mdSizeClassName,
         {
-          [defaultButtonClassName]: type === 'button',
-          [defaultLinkClassName]: type === 'link',
+          [defaultButtonClassName]: variant === 'button',
+          [defaultLinkClassName]: variant === 'link',
         },
         className,
       )}
-      type="button"
       {...props}
     />
   )
