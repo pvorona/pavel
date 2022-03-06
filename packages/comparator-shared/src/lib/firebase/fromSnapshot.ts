@@ -1,8 +1,8 @@
-import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import { RecordKey } from '@pavel/types'
+import { DocumentSnapshot } from 'firebase/firestore'
+import { AnyRecord } from '@pavel/types'
 
-export function fromSnapshot<T extends Record<RecordKey, unknown>>(
-  snapshot: QueryDocumentSnapshot<DocumentData>,
+export function fromSnapshot<T extends AnyRecord>(
+  snapshot: DocumentSnapshot,
 ): T {
   return Object.assign(snapshot.data(), { id: snapshot.id }) as unknown as T
 }
