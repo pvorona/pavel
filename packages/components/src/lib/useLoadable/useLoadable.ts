@@ -13,6 +13,7 @@ type Loadable<T, E = unknown> =
 const IDLE = { status: 'idle' } as const
 const LOADING = { status: 'loading' } as const
 
+// Cancel on unmount
 export function useLoadable<T>(load: false | (() => Promise<T>)): Loadable<T> {
   const [state, setState] = useState<Loadable<T>>(IDLE)
 
