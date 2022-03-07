@@ -1,10 +1,21 @@
 import { auth } from '@pavel/comparator-shared'
-import { Button } from '@pavel/components'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { useState } from 'react'
 import { EmailPasswordForm, SignInLayout } from '../modules'
+import {
+  withAuthUser,
+  withAuthUserTokenSSR,
+  AuthAction,
+} from 'next-firebase-auth'
 
-export default function SignUpPage() {
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+})()
+
+export default withAuthUser({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+})(SignUpPage)
+
+function SignUpPage() {
   return (
     <SignInLayout>
       <SignUpForm />
@@ -14,16 +25,9 @@ export default function SignUpPage() {
 
 function SignUpForm() {
   function onSubmit({ email, password }: { email: string; password: string }) {
-    console.log('sign up', { email, password })
-
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        const user = userCredential.user
-        console.log({ userCredential, user })
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    createUserWithEmailAndPassword(auth, email, password).catch(error => {
+      console.log(error)
+    })
   }
 
   return <EmailPasswordForm onSubmit={onSubmit} label="Sign up" />

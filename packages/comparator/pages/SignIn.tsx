@@ -1,9 +1,21 @@
 import { auth } from '@pavel/comparator-shared'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { useRouter } from 'next/router'
 import { EmailPasswordForm, SignInLayout } from '../modules'
+import {
+  withAuthUser,
+  withAuthUserTokenSSR,
+  AuthAction,
+} from 'next-firebase-auth'
 
-export default function SignInPage() {
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+})()
+
+export default withAuthUser({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+})(SignInPage)
+
+function SignInPage() {
   return (
     <SignInLayout>
       <SignInForm />
@@ -12,20 +24,10 @@ export default function SignInPage() {
 }
 
 function SignInForm() {
-  const router = useRouter()
-
   function onSubmit({ email, password }: { email: string; password: string }) {
-    console.log('sign in', { email, password })
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        const user = userCredential.user
-        console.log({ userCredential, user })
-        router.replace('/comparison')
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    signInWithEmailAndPassword(auth, email, password).catch(error => {
+      console.log(error)
+    })
   }
 
   return <EmailPasswordForm onSubmit={onSubmit} label="Sign in" />

@@ -4,13 +4,28 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode, useEffect, useState, forwardRef } from 'react'
 import {
+  COMPARISON,
   Comparison,
   createComparison,
   getComparisonsCollectionRef,
 } from '@pavel/comparator-shared'
 import { HeaderView, PageTitleView } from '../../modules'
+import {
+  withAuthUser,
+  withAuthUserTokenSSR,
+  useAuthUser,
+  AuthAction,
+} from 'next-firebase-auth'
 
-export default function ComparisonListPageWrapper() {
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})()
+
+export default withAuthUser({
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+})(ComparisonListPageWrapper)
+
+function ComparisonListPageWrapper() {
   const [docsState, setDocsState] = useState<Comparison[]>([])
 
   useEffect(() => {
@@ -30,11 +45,7 @@ export default function ComparisonListPageWrapper() {
 
       <ComparisonList>
         {docsState.map(d => (
-          <Link
-            key={d.id}
-            passHref
-            href={`comparison/${encodeURIComponent(d.id)}`}
-          >
+          <Link key={d.id} passHref href={COMPARISON(d.id)}>
             <ComparisonItem>{d.name}</ComparisonItem>
           </Link>
         ))}
@@ -64,7 +75,7 @@ export function AddComparisonCard() {
   async function onClick() {
     const { id } = await createComparison()
 
-    router.push(`comparison/${id}`)
+    router.push(COMPARISON(id))
   }
 
   return (

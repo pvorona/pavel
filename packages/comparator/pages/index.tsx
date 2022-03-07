@@ -1,59 +1,19 @@
-import Link from 'next/link'
-import { signInAnonymously } from 'firebase/auth'
-import { auth } from '@pavel/comparator-shared'
-import { Button } from '@pavel/components'
-import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
-import { selectAuthState, useAuth } from '../modules'
-import { signOut } from '../modules/auth/auth.firebase'
+import {
+  withAuthUser,
+  withAuthUserTokenSSR,
+  AuthAction,
+} from 'next-firebase-auth'
 
-export default function Index() {
-  useAuth()
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})()
 
-  const router = useRouter()
-  const user = useSelector(selectAuthState)
+export default withAuthUser({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+})(Index)
 
-  async function tryAnonymously() {
-    try {
-      await signInAnonymously(auth)
-      router.push('/comparison')
-    } catch (error) {
-      console.error('Failed to sign in anonymously', error)
-    }
-  }
-
-  async function onSignOut() {
-    try {
-      await signOut()
-    } catch (error) {
-      console.error('Failed to sign out', error)
-    }
-  }
-
-  console.log({ user })
-
-  const userString = user.isAnonymous ? 'Anonymously' : user.email
-
-  if (user) {
-    return (
-      <>
-        Authenticated {userString}
-        <Button onClick={onSignOut}>Sign out</Button>
-      </>
-    )
-  }
-
-  return (
-    <>
-      <div>
-        <Link href="/signup">Sign up</Link>
-      </div>
-      <div>
-        <Link href="/signin">Sign in</Link>
-      </div>
-      <div>
-        <Button onClick={tryAnonymously}>Try without signing in</Button>
-      </div>
-    </>
-  )
+function Index() {
+  return null
 }

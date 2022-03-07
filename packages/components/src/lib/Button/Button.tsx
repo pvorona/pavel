@@ -6,14 +6,14 @@ export type ButtonProps = {
   className?: string
   variant?: 'button' | 'link'
   size?: 'md'
-  type?: 'button' | 'submit'
+  buttonType?: 'button' | 'submit'
   onClick?: (event: React.MouseEvent) => void
 }
 
 export function Button({
   className,
   variant = 'button',
-  type = 'button',
+  buttonType = 'button',
   ...props
 }: ButtonProps) {
   const defaultButtonClassName =

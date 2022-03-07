@@ -10,5 +10,5 @@ export function useAuth() {
     return auth.onAuthStateChanged(user => {
       dispatch(setUser(user))
     })
-  }, [])
+  }, [dispatch])
 }
