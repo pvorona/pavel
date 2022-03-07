@@ -9,7 +9,7 @@ const handler = async (req, res) => {
   } catch (e) {
     return res.status(500).json({ message: 'Unexpected sign out error.', e })
   }
-  return res.status(200)
+  return res.sendStatus(200)
 }
 
 export default handler

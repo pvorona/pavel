@@ -1,5 +1,8 @@
+import { ensureString } from '@pavel/assert'
 import { init } from 'next-firebase-auth'
 import { API_SIGN_IN, API_SIGN_OUT, COMPARISON_LIST, SIGN_IN } from '../routes'
+
+const EXPIRATION_TIME = 14 * 60 * 60 * 24 * 1000
 
 export const initAuth = () => {
   init({
@@ -13,43 +16,44 @@ export const initAuth = () => {
     onLogoutRequestError: err => {
       console.error(err)
     },
-    // firebaseAuthEmulatorHost: 'localhost:9099',
     firebaseAdminInitConfig: {
       credential: {
-        projectId: 'comparator-342612',
-        clientEmail:
-          'firebase-adminsdk-8x8g3@comparator-342612.iam.gserviceaccount.com',
-        // The private key must not be accessible on the client side.
+        projectId: ensureString(process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID),
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL
+          ? ensureString(process.env.FIREBASE_CLIENT_EMAIL)
+          : undefined,
+        // The private key must not be accessible on the client
         privateKey: process.env.FIREBASE_PRIVATE_KEY
           ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
           : undefined,
       },
-      // databaseURL: 'https://my-example-app.firebaseio.com',
     },
     // Use application default credentials (takes precedence over fireaseAdminInitConfig if set)
     // useFirebaseAdminDefaultCredential: true,
     firebaseClientInitConfig: {
-      apiKey: 'AIzaSyAcCrEUxCJ2z9o9LH4WpgQVtpZz18L99_E',
-      authDomain: 'comparator-342612.firebaseapp.com',
-      projectId: 'comparator-342612',
-      storageBucket: 'comparator-342612.appspot.com',
-      messagingSenderId: '89512111902',
-      appId: '1:89512111902:web:57bac28d6f19b5fd05a30f',
+      apiKey: ensureString(process.env.NEXT_PUBLIC_FIREBASE_API_KEY),
+      authDomain: ensureString(process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN),
+      projectId: ensureString(process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID),
+      storageBucket: ensureString(
+        process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+      ),
+      messagingSenderId: ensureString(
+        process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+      ),
+      appId: ensureString(process.env.NEXT_PUBLIC_FIREBASE_APP_ID),
     },
     cookies: {
-      name: 'Comparator', // required
-      // Keys are required unless you set `signed` to `false`.
-      // The keys cannot be accessible on the client side.
+      name: 'Comparator',
       keys: [
         process.env.COOKIE_SECRET_CURRENT,
         process.env.COOKIE_SECRET_PREVIOUS,
       ],
       httpOnly: true,
-      maxAge: 14 * 60 * 60 * 24 * 1000, // 30 days
+      maxAge: EXPIRATION_TIME,
       overwrite: true,
       path: '/',
       sameSite: 'strict',
-      secure: false, // set this to false in local (non-HTTPS) development
+      secure: false,
       signed: false,
     },
     onVerifyTokenError: err => {
