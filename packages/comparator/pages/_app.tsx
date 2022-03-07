@@ -1,9 +1,12 @@
+import { initAuth } from '@pavel/comparator-shared'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Provider } from 'react-redux'
 import { store } from '../store'
 
 import './styles.css'
+
+initAuth()
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (

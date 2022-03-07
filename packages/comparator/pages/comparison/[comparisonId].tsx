@@ -20,10 +20,13 @@ import {
   getOptionPath,
 } from '@pavel/comparator-shared'
 import { useLoadable, isSettled, isFailed } from '@pavel/components'
+import {
+  withAuthUser,
+  withAuthUserTokenSSR,
+  AuthAction,
+} from 'next-firebase-auth'
 
 async function loadComparisonAndRelatedData(comparisonId: string) {
-  console.log({ comparisonId })
-
   const comparison = await fetchDoc<ComparisonModel>(
     getComparisonPath(comparisonId),
   )
@@ -33,18 +36,21 @@ async function loadComparisonAndRelatedData(comparisonId: string) {
     ),
   )
 
-  console.log({
-    options,
-    comparison,
-  })
-
   return {
     options,
     comparison,
   }
 }
 
-export default function ComparisonPageDataLoader() {
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})()
+
+export default withAuthUser({
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+})(ComparisonPageDataLoader)
+
+function ComparisonPageDataLoader() {
   const router = useRouter()
   const dispatch = useDispatch()
   const { comparisonId } = router.query
@@ -67,11 +73,11 @@ export default function ComparisonPageDataLoader() {
   const loadable = useLoadable(loadData)
 
   if (isFailed(loadable)) {
-    return String(loadable.error)
+    return <pre>{String(loadable.error)}</pre>
   }
 
   if (!isSettled(loadable)) {
-    return 'Loading page data...'
+    return <span>Loading page data...</span>
   }
 
   return <Comparison />
