@@ -4,6 +4,7 @@ export type Comparison = {
   features: Feature[]
   optionIds: string[]
   isLocked: boolean
+  ownerId: string
 }
 
 export type Feature = {
