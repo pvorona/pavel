@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { getDocs } from 'firebase/firestore'
+import { getDocs, query, where } from 'firebase/firestore'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode, useEffect, useState, forwardRef } from 'react'
@@ -27,15 +27,18 @@ export default withAuthUser({
 
 function ComparisonListPageWrapper() {
   const [docsState, setDocsState] = useState<Comparison[]>([])
+  const user = useAuthUser()
 
   useEffect(() => {
     const loadData = async () => {
-      const docsSnapshots = await getDocs(getComparisonsCollectionRef())
+      const docsSnapshots = await getDocs(
+        query(getComparisonsCollectionRef(), where('ownerId', '==', user.id)),
+      )
       setDocsState(docsSnapshots.docs.map(doc => doc.data() as Comparison))
     }
 
     loadData()
-  }, [])
+  }, [user.id])
 
   return (
     <>
@@ -71,9 +74,13 @@ export const ComparisonItem = forwardRef<HTMLAnchorElement, CardProps>(
 
 export function AddComparisonCard() {
   const router = useRouter()
+  const user = useAuthUser()
 
   async function onClick() {
-    const { id } = await createComparison()
+    const { id } = await createComparison(user.id)
+
+    // TODO:
+    // Push response to store to avoid refetching
 
     router.push(COMPARISON(id))
   }

@@ -1,8 +1,9 @@
 export type Option = {
   id: string
+  ownerId: string
   name: string
   // Compare apples to apples
-  type: string
+  // type: string
   features: Record<string, OptionFeature>
 }
 

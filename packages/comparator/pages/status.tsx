@@ -33,7 +33,8 @@ function Status() {
 
     return (
       <>
-        Authenticated as {userString}
+        <div>Authenticated as {userString}</div>
+        <div>ID: {user.id}</div>
         <Button onClick={onSignOut}>Sign out</Button>
       </>
     )

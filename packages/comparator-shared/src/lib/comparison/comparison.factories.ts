@@ -1,5 +1,5 @@
 import { uuid } from '@pavel/utils'
-import { Comparison, Feature } from './types'
+import { Comparison, Feature } from './comparison.types'
 
 export function buildFeature(): Feature {
   return {
@@ -25,10 +25,9 @@ function formatDate(timestamp: number) {
 }
 
 export function buildComparison(
-  values?: Partial<Comparison>,
+  values?: Partial<Comparison> & { ownerId: string },
 ): Partial<Comparison> {
   return {
-    // id: uuid(),
     name: `Comparison created at ${formatDate(Date.now())}`,
     features: [],
     optionIds: [],

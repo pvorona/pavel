@@ -1,7 +1,7 @@
 import { firestore } from '../firebase'
 import { addDoc, collection, doc } from 'firebase/firestore'
-import { buildOption } from './options.factories'
-import { Option } from './types'
+import { buildOption } from './option.factories'
+import { Option } from './option.types'
 
 const OPTIONS_PATH = 'Options'
 
@@ -17,8 +17,9 @@ export function getOptionsCollectionRef() {
   return collection(firestore, OPTIONS_PATH)
 }
 
-export async function createOption(data = buildOption()): Promise<Option> {
-  const { id } = await addDoc(getOptionsCollectionRef(), data)
+export async function createOption(ownerId: string): Promise<Option> {
+  const option = buildOption({ ownerId })
+  const { id } = await addDoc(getOptionsCollectionRef(), option)
 
-  return { ...data, id }
+  return { ...option, id }
 }
