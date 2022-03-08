@@ -1,7 +1,7 @@
-import { pointerPosition, effect, windowHeight } from '@pavel/observable'
+import { pointerPosition, effect } from '@pavel/observable'
 import { addOptionToCurrentComparison } from '../../modules/comparisons'
 import { memo, useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   lineThickness,
   hoverTrapSizeFromOneSide,
@@ -12,6 +12,7 @@ import {
 } from './constants'
 import { ensureInBounds } from '@pavel/utils'
 import { useAuthUser } from 'next-firebase-auth'
+import { selectTableSize } from './comparisonTable.selectors'
 
 export const AddOptionLine = memo(function AddOptionLine({
   attachment,
@@ -23,6 +24,7 @@ export const AddOptionLine = memo(function AddOptionLine({
   const [svg, setSvg] = useState<SVGSVGElement>()
   const [button, setButton] = useState<SVGTextElement>()
   const [circle, setCircle] = useState<SVGCircleElement>()
+  const { height } = useSelector(selectTableSize)
   const dispatch = useDispatch()
   const user = useAuthUser()
 
@@ -44,16 +46,6 @@ export const AddOptionLine = memo(function AddOptionLine({
     })
   }, [button, circle, svg])
 
-  useEffect(() => {
-    if (!svg) {
-      return
-    }
-
-    return effect([windowHeight], height => {
-      svg.setAttribute('height', `${height}`)
-    })
-  }, [svg])
-
   function onClick() {
     dispatch(addOptionToCurrentComparison({ ownerId: user.id, index }))
   }
@@ -62,8 +54,7 @@ export const AddOptionLine = memo(function AddOptionLine({
     <svg
       onClick={onClick}
       ref={setSvg}
-      // Init with 0 to match the hydrated server state
-      height={0}
+      height={height}
       width={`${lineThickness + 2 * hoverTrapSizeFromOneSide}px`}
       className="opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
       style={{
