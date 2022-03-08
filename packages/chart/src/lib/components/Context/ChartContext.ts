@@ -102,7 +102,11 @@ export const ChartContext = (options: ChartOptions) => {
     easing: special,
   })(visibleMin)
 
-  const { max: globalMax, min: globalMin } = createMinMaxView(
+  const {
+    max: globalMax,
+    min: globalMin,
+    minMaxByGraphName: globalMinMaxByGraphName,
+  } = createMinMaxView(
     globalStartIndex,
     globalEndIndex,
     enabledGraphNames,
@@ -219,7 +223,6 @@ export const ChartContext = (options: ChartOptions) => {
     enabledGraphNames,
     isAnyGraphEnabled,
     mainGraphPoints,
-    visibleMinMaxByGraphName,
     startIndex,
     endIndex,
     inertStartIndex,
@@ -235,6 +238,8 @@ export const ChartContext = (options: ChartOptions) => {
     globalMin,
     inertGlobalMax,
     inertGlobalMin,
+    globalMinMaxByGraphName,
+    visibleMinMaxByGraphName,
     globalStartIndex,
     globalEndIndex,
     inertVisibleMax,

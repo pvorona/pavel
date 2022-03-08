@@ -84,3 +84,13 @@ export function toScreenY(
 ) {
   return interpolate(max, min, minY, maxY, interpolatePoint(currentIndex, ys))
 }
+
+export function toScreenYNew(
+  minValue: number,
+  maxValue: number,
+  minY: number,
+  maxY: number,
+  value: number,
+) {
+  return interpolate(maxValue, minValue, minY, maxY, value)
+}

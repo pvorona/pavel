@@ -27,6 +27,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
     inertGlobalMax,
     inertGlobalMin,
     inertOpacityStateByGraphName,
+    globalMinMaxByGraphName,
   } = context
 
   const canvasHeight =
@@ -81,7 +82,13 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
   const graphs = createDOM()
 
   scheduleTask(() => {
-    renderPoints(overviewGraphPoints.value, inertOpacityStateByGraphName.value)
+    renderPoints(
+      overviewGraphPoints.value,
+      inertOpacityStateByGraphName.value,
+      inertGlobalMin.value,
+      inertGlobalMax.value,
+      globalMinMaxByGraphName.value,
+    )
   })
 
   effect(
@@ -95,20 +102,42 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       renderPoints(
         overviewGraphPoints.value,
         inertOpacityStateByGraphName.value,
+        inertGlobalMin.value,
+        inertGlobalMax.value,
+        globalMinMaxByGraphName.value,
       )
     },
     { fireImmediately: false },
   )
 
   effect(
-    [overviewGraphPoints, inertOpacityStateByGraphName],
-    (overviewGraphPoints, inertOpacityStateByGraphName) => {
+    [
+      overviewGraphPoints,
+      inertOpacityStateByGraphName,
+      inertGlobalMin,
+      inertGlobalMax,
+      globalMinMaxByGraphName,
+    ],
+    (
+      overviewGraphPoints,
+      inertOpacityStateByGraphName,
+      inertGlobalMin,
+      inertGlobalMax,
+      // Should be inert
+      globalMinMaxByGraphName,
+    ) => {
       clearRect(
         graphs.context,
         toBitMapSize(width.value),
         toBitMapSize(canvasHeight),
       )
-      renderPoints(overviewGraphPoints, inertOpacityStateByGraphName)
+      renderPoints(
+        overviewGraphPoints,
+        inertOpacityStateByGraphName,
+        inertGlobalMin,
+        inertGlobalMax,
+        globalMinMaxByGraphName,
+      )
     },
     { fireImmediately: false },
   )
@@ -116,6 +145,9 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
   function renderPoints(
     overviewGraphPoints: { [key: string]: Point[] },
     inertOpacityStateByGraphName: { [key: string]: number },
+    min: number,
+    max: number,
+    minMaxByGraphName: Record<string, { min: number; max: number }>,
   ) {
     renderLineSeriesWithAreaGradient({
       opacityState: inertOpacityStateByGraphName,
@@ -126,9 +158,11 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       strokeStyles: options.colors,
       height: canvasHeight,
       width: width.value,
-      // Use `miter` line join in overview?
       lineJoinByName: options.lineJoin,
       lineCapByName: options.lineCap,
+      min,
+      max,
+      minMaxByGraphName,
     })
   }
 
