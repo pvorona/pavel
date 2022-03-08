@@ -65,13 +65,15 @@ export function toScreenX(
   endIndex: number,
   currentIndex: number,
 ) {
-  return interpolate(
+  const result = interpolate(
     getX(xs, startIndex),
     getX(xs, endIndex),
     0,
     width,
     getX(xs, currentIndex),
   )
+
+  return result
 }
 
 export function toScreenY(

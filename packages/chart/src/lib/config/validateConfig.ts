@@ -1,6 +1,9 @@
 import {
   ChartOptions,
+  ChartOptionsUnvalidated,
   ColorsOptions,
+  DomainOptions,
+  DomainOptionsUnvalidated,
   OverviewOptions,
   TooltipOptions,
   ViewBoxOptions,
@@ -10,8 +13,12 @@ import {
 import { assertColor } from './assertColor'
 import { assertNonNegativeNumber } from './assertNonNegativeNumber'
 import { assertNonNegativeInt } from './assertNonNegativeInt'
+import { compute, observable } from '@pavel/observable'
+import { DataByGraphName, DataByGraphNameUnvalidated } from '..'
 
-export function validateConfig(options: ChartOptions): ChartOptions {
+export function validateConfig(options: ChartOptionsUnvalidated): ChartOptions {
+  const domain = validateDomainOptions(options.domain)
+
   return {
     x: validateXOptions(options.x),
     y: validateYOptions(options.y),
@@ -19,17 +26,35 @@ export function validateConfig(options: ChartOptions): ChartOptions {
     tooltip: validateTooltipOptions(options.tooltip),
     viewBox: validateViewBoxOptions(options.viewBox),
     visibility: options.visibility,
-    total: assertNonNegativeInt(options.total),
-    width: assertNonNegativeNumber(options.width),
-    height: assertNonNegativeNumber(options.height),
     lineWidth: assertNonNegativeInt(options.lineWidth),
     colors: validateColorsOptions(options.colors),
-    data: options.data,
+    data: validateDataOptions(options.data),
+    domain,
     lineJoin: options.lineJoin,
     lineCap: options.lineCap,
-    domain: options.domain,
     graphNames: options.graphNames,
+    total: compute([domain], domain => domain.length),
+    width: options.width,
+    height: options.height,
   }
+}
+
+export function validateDataOptions(
+  options: DataByGraphNameUnvalidated,
+): DataByGraphName {
+  const result: Record<string, number[]> = {}
+
+  for (const [key, value] of Object.entries(options)) {
+    result[key] = value
+  }
+
+  return observable(result)
+}
+
+export function validateDomainOptions(
+  options: DomainOptionsUnvalidated,
+): DomainOptions {
+  return observable(options)
 }
 
 export function validateXOptions(options: XOptions): XOptions {

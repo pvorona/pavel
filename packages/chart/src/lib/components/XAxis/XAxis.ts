@@ -107,14 +107,14 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
     ) {
       const screenX = toBitMapSize(
         toScreenX(
-          options.domain,
+          options.domain.value,
           width.value,
           inertStartIndex,
           inertEndIndex,
           i,
         ),
       )
-      const label = labels.get(options.domain[i])
+      const label = labels.get(options.domain.value[i])
       const { width: labelWidth } = context.measureText(label)
 
       if (screenX < labelWidth / 2) continue

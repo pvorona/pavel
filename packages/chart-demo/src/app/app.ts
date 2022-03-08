@@ -1,39 +1,65 @@
-import { Chart, ChartOptions } from '@pavel/chart'
+import {
+  Chart,
+  ChartOptionsUnvalidated,
+  TimeSeriesDataPoint,
+} from '@pavel/chart'
 import { theme } from './theme'
 import './app.scss'
 
-type DataEntry = { timestamp: number; value: number }
-
 document.body.style.background = theme.body || theme.background
 
+const TIME_STEP = 1_000
+const MAX_VALUE = 10_000
+const startTime = 0
+const NEW_ITEMS = 50
+
+let currentIteration = 0
+
+function generateData(items: number): TimeSeriesDataPoint[] {
+  const result = []
+
+  for (let i = 0; i < items; i++) {
+    result.push({
+      timestamp: startTime + i * TIME_STEP + currentIteration * TIME_STEP,
+      value: Math.random() * MAX_VALUE,
+    })
+  }
+
+  currentIteration += items
+
+  return result
+}
+
 async function startApp() {
-  const series1 = fetch(
-    './assets/data/dj/1593495762538-1593515829173.json',
-  ).then(r => r.json())
-  const series2 = fetch(
-    './assets/data/dj/1593520483683-1593533756968.json',
-  ).then(r => r.json())
+  // const series1 = fetch(
+  //   './assets/data/dj/1593495762538-1593515829173.json',
+  // ).then(r => r.json())
+  // const series2 = fetch(
+  //   './assets/data/dj/1593520483683-1593533756968.json',
+  // ).then(r => r.json())
 
   document.addEventListener('DOMContentLoaded', async () => {
-    const fraction = 0.6
+    // const fraction = 0.6
 
     try {
-      const [data1O, data2O] = await Promise.all([series1, series2])
-      const data1: DataEntry[] = data1O.slice(
-        0,
-        Math.floor(data1O.length * fraction),
-      )
-      const data2: DataEntry[] = data2O.slice(
-        0,
-        Math.floor(data1O.length * fraction),
-      )
+      // const [data1O, data2O] = await Promise.all([series1, series2])
+      // const data1: DataEntry[] = data1O.slice(
+      //   0,
+      //   Math.floor(data1O.length * fraction),
+      // )
+      // const data2: DataEntry[] = data2O.slice(
+      //   0,
+      //   Math.floor(data1O.length * fraction),
+      // )
       const chartContainer = document.getElementById('chart')
 
       if (!chartContainer) {
         throw new Error('Cannot find #chart container')
       }
 
-      const options: ChartOptions = {
+      const data = generateData(10)
+
+      const options: ChartOptionsUnvalidated = {
         x: {
           color: theme.x,
           marginBottom: 7,
@@ -69,14 +95,14 @@ async function startApp() {
           edgeColor: theme.overviewEdge,
         },
         viewBox: {
-          startIndex: (data1.length - 1) * 0.75,
-          endIndex: data1.length - 1,
+          startIndex: 0,
+          endIndex: data.length - 1,
         },
-        graphNames: ['A', 'B'],
-        domain: data1.map(d => d.timestamp),
+        // graphNames: ['A', 'B'],
+        graphNames: ['A'],
+        domain: data.map(d => d.timestamp),
         data: {
-          A: data1.map(d => d.value),
-          B: data2.map(d => d.value),
+          A: data.map(d => d.value),
         },
         lineJoin: {
           A: 'bevel',
@@ -86,8 +112,8 @@ async function startApp() {
           A: 'butt',
           B: 'butt',
         },
+        // Allow to specify array of colors to cycle through
         colors: { A: theme.series[0], B: theme.series[1] },
-        total: data1.length,
         visibility: {
           A: true,
           B: true,
@@ -99,7 +125,13 @@ async function startApp() {
         },
       }
 
-      Chart(chartContainer, options)
+      const chart = Chart(chartContainer, options)
+
+      setInterval(() => {
+        const newData = generateData(NEW_ITEMS)
+
+        chart.append('A', newData)
+      }, TIME_STEP)
     } catch (error) {
       console.error(error)
     }
