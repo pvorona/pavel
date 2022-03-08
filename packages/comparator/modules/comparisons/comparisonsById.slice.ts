@@ -173,10 +173,16 @@ export const {
   setComparisonProperty,
 } = comparisonsByIdSlice.actions
 
-export function addOptionToCurrentComparison(index: number) {
+export function addOptionToCurrentComparison({
+  ownerId,
+  index,
+}: {
+  ownerId: string
+  index: number
+}) {
   return async function (dispatch, getState) {
     const currentComparisonId = selectCurrentComparisonId(getState())
-    const option = await createOption()
+    const option = await createOption(ownerId)
 
     dispatch([
       addOption(option),

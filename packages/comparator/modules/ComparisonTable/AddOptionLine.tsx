@@ -11,6 +11,7 @@ import {
   textColor,
 } from './constants'
 import { ensureInBounds } from '@pavel/utils'
+import { useAuthUser } from 'next-firebase-auth'
 
 export const AddOptionLine = memo(function AddOptionLine({
   attachment,
@@ -23,6 +24,7 @@ export const AddOptionLine = memo(function AddOptionLine({
   const [button, setButton] = useState<SVGTextElement>()
   const [circle, setCircle] = useState<SVGCircleElement>()
   const dispatch = useDispatch()
+  const user = useAuthUser()
 
   useEffect(() => {
     if (!button || !circle || !svg) {
@@ -53,7 +55,7 @@ export const AddOptionLine = memo(function AddOptionLine({
   }, [svg])
 
   function onClick() {
-    dispatch(addOptionToCurrentComparison(index))
+    dispatch(addOptionToCurrentComparison({ ownerId: user.id, index }))
   }
 
   return (
