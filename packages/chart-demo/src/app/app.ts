@@ -15,18 +15,12 @@ async function startApp() {
   ).then(r => r.json())
 
   document.addEventListener('DOMContentLoaded', async () => {
-    const fraction = 0.6
+    const itemsToShow = 13_908
 
     try {
       const [data1O, data2O] = await Promise.all([series1, series2])
-      const data1: DataEntry[] = data1O.slice(
-        0,
-        Math.floor(data1O.length * fraction),
-      )
-      const data2: DataEntry[] = data2O.slice(
-        0,
-        Math.floor(data1O.length * fraction),
-      )
+      const data1: DataEntry[] = data1O.slice(0, itemsToShow)
+      const data2: DataEntry[] = data2O.slice(0, itemsToShow)
       const chartContainer = document.getElementById('chart')
 
       if (!chartContainer) {
