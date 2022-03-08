@@ -3,7 +3,7 @@ import { observe } from '../observe'
 import { AnimatableSubject, InertOptions, InertSubject } from './types'
 import { constructTransition } from './constructTransition'
 import { createName, wrapName } from '../createName'
-import { PRIORITY, throttleWithFrame } from '@pavel/scheduling'
+import { PRIORITY, throttleTask } from '@pavel/scheduling'
 import { TransitionTimingOptions } from '../transition'
 import { createObservers } from '@pavel/utils'
 
@@ -19,7 +19,7 @@ export const inert =
 
     // TODO: don't emit values when there are no observers.
     // Ensure emitting renews if new observers join while transition is in progress
-    const throttledNotifyBeforeNextRender = throttleWithFrame(
+    const throttledNotifyBeforeNextRender = throttleTask(
       observers.notify,
       PRIORITY.BEFORE_RENDER,
     )

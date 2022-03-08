@@ -6,7 +6,7 @@ import { YAxis } from '../YAxis'
 import { Tooltip } from '../Tooltip'
 import { Series } from '../Series'
 import { ChartContext } from '../Context'
-import { throttleWithFrame, PRIORITY } from '@pavel/scheduling'
+import { throttleTask, PRIORITY } from '@pavel/scheduling'
 import { validateConfig } from '../../config'
 
 export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
@@ -17,7 +17,7 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
 
   parent.appendChild(element)
 
-  const resizeListener = throttleWithFrame(function measureContainerSize() {
+  const resizeListener = throttleTask(function measureContainerSize() {
     width.value = parent.offsetWidth
     height.value = parent.offsetHeight
   }, PRIORITY.READ)

@@ -1,9 +1,9 @@
-import { throttleWithFrame } from './throttleWithFrame'
+import { throttleTask } from './throttleTask'
 import { PRIORITY } from '../constants'
 
 const FRAME_INTERVAL = 100
 
-describe('throttleWithFrame', () => {
+describe('throttleTask', () => {
   let frameIndex = 0
 
   beforeAll(() => {
@@ -19,9 +19,9 @@ describe('throttleWithFrame', () => {
   it('schedules tasks and executes them in specified order', () => {
     const mock = jest.fn()
 
-    const write = throttleWithFrame(() => mock('write'), PRIORITY.WRITE)
-    const compute = throttleWithFrame(() => mock('compute'), PRIORITY.COMPUTE)
-    const read = throttleWithFrame(() => mock('read'), PRIORITY.READ)
+    const write = throttleTask(() => mock('write'), PRIORITY.WRITE)
+    const compute = throttleTask(() => mock('compute'), PRIORITY.COMPUTE)
+    const read = throttleTask(() => mock('read'), PRIORITY.READ)
 
     write()
     compute()

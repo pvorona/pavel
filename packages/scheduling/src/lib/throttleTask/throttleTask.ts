@@ -2,13 +2,10 @@ import { Lambda } from '@pavel/types'
 import { scheduleTask } from '../taskQueue'
 import { PRIORITY } from '../constants'
 
-export function throttleWithFrame(
-  fn: Lambda,
-  priority = PRIORITY.WRITE,
-): Lambda {
+export function throttleTask(fn: Lambda, priority = PRIORITY.WRITE): Lambda {
   let scheduled = false
 
-  return function wrappedOncePerFrame() {
+  return function scheduleThrottledTask() {
     if (scheduled) {
       return
     }
