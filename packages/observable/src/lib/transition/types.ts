@@ -1,15 +1,29 @@
 import { Easing } from '@pavel/easing'
 
+export type Interpolate<T> = (startValue: T, endValue: T, progress: number) => T
+
 export type TransitionTimingOptionsObject = {
   duration: number
   easing?: Easing
 }
+
+export type TransitionOptionsObject<T> = TransitionTimingOptionsObject & {
+  computeIntermediateValue: Interpolate<T>
+}
+
+// type ComputeOptionsObject<T> = T extends number
+//   ? { computeIntermediateValue?: ComputeIntermediateValue<T> }
+//   : { computeIntermediateValue: ComputeIntermediateValue<T> }
 
 export type TransitionTimingOptions = TransitionTimingOptionsObject | number
 
 export type TransitionTiming = {
   duration: number
   easing: Easing
+}
+
+export type TransitionOptions<T> = TransitionOptionsObject<T> & {
+  initialValue: T
 }
 
 export type Transition<T> = {
@@ -19,11 +33,18 @@ export type Transition<T> = {
   setInstant: (target: T) => { hasCompleted: boolean }
 }
 
+// Todo
 export type TimelessTransition<T> = {
-  getValue: (timestamp: number) => { value: T; hasCompleted: boolean }
-  setTargetValue: (timestamp: number, target: T) => { hasCompleted: boolean }
+  getValue: (timestamp: DOMHighResTimeStamp) => {
+    value: T
+    hasCompleted: boolean
+  }
+  setTargetValue: (
+    timestamp: DOMHighResTimeStamp,
+    target: T,
+  ) => { hasCompleted: boolean }
   setOptions: (
-    timestamp: number,
+    timestamp: DOMHighResTimeStamp,
     options: TransitionTimingOptions,
   ) => { hasCompleted: boolean }
 }

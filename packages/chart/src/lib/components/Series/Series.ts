@@ -34,7 +34,7 @@ export const Series: Component<ChartOptions, ChartContext> = (
     canvasHeight,
     inertVisibleMin,
     inertVisibleMax,
-    visibleMinMaxByGraphName,
+    inertVisibleMinMaxByGraphName,
   },
 ) => {
   const { element, canvas, context } = createDOM()
@@ -45,7 +45,7 @@ export const Series: Component<ChartOptions, ChartContext> = (
       inertOpacityStateByGraphName.value,
       inertVisibleMin.value,
       inertVisibleMax.value,
-      visibleMinMaxByGraphName.value,
+      inertVisibleMinMaxByGraphName.value,
     )
   })
 
@@ -58,7 +58,7 @@ export const Series: Component<ChartOptions, ChartContext> = (
         inertOpacityStateByGraphName.value,
         inertVisibleMin.value,
         inertVisibleMax.value,
-        visibleMinMaxByGraphName.value,
+        inertVisibleMinMaxByGraphName.value,
       )
     },
     { fireImmediately: false },
@@ -70,15 +70,14 @@ export const Series: Component<ChartOptions, ChartContext> = (
       inertOpacityStateByGraphName,
       inertVisibleMin,
       inertVisibleMax,
-      // should be inert
-      visibleMinMaxByGraphName,
+      inertVisibleMinMaxByGraphName,
     ],
     (
       mainGraphPoints,
       inertOpacityStateByGraphName,
       inertVisibleMin,
       inertVisibleMax,
-      visibleMinMaxByGraphName,
+      inertVisibleMinMaxByGraphName,
     ) => {
       clearRect(
         context,
@@ -90,7 +89,7 @@ export const Series: Component<ChartOptions, ChartContext> = (
         inertOpacityStateByGraphName,
         inertVisibleMin,
         inertVisibleMax,
-        visibleMinMaxByGraphName,
+        inertVisibleMinMaxByGraphName,
       )
     },
     { fireImmediately: false },

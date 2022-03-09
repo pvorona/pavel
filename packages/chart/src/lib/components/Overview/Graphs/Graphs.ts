@@ -7,7 +7,7 @@ import {
 import { ChartContext, ChartOptions } from '../../../types'
 import { special } from '@pavel/easing'
 import { mapDataToCoords, toBitMapSize } from '../../../util'
-import { Transition } from '../../constants'
+import { TRANSITION } from '../../constants'
 import { Point, Component } from '../../types'
 import { createGraphs } from '../../Graphs/createGraphs'
 import { scheduleTask } from '@pavel/scheduling'
@@ -27,7 +27,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
     inertGlobalMax,
     inertGlobalMin,
     inertOpacityStateByGraphName,
-    globalMinMaxByGraphName,
+    inertGlobalMinMaxByGraphName,
   } = context
 
   const canvasHeight =
@@ -65,15 +65,15 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
 
   observe([isDragging, isWheeling], (isDragging, isWheeling) => {
     if (isDragging || isWheeling) {
-      inertGlobalMax.setTransition(Transition.Medium)
-      inertGlobalMin.setTransition(Transition.Medium)
+      inertGlobalMax.setTransition(TRANSITION.MEDIUM)
+      inertGlobalMin.setTransition(TRANSITION.MEDIUM)
     } else {
       inertGlobalMax.setTransition({
-        duration: Transition.Slow,
+        duration: TRANSITION.SLOW,
         easing: special,
       })
       inertGlobalMin.setTransition({
-        duration: Transition.Slow,
+        duration: TRANSITION.SLOW,
         easing: special,
       })
     }
@@ -87,7 +87,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       inertOpacityStateByGraphName.value,
       inertGlobalMin.value,
       inertGlobalMax.value,
-      globalMinMaxByGraphName.value,
+      inertGlobalMinMaxByGraphName.value,
     )
   })
 
@@ -104,7 +104,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
         inertOpacityStateByGraphName.value,
         inertGlobalMin.value,
         inertGlobalMax.value,
-        globalMinMaxByGraphName.value,
+        inertGlobalMinMaxByGraphName.value,
       )
     },
     { fireImmediately: false },
@@ -116,15 +116,14 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       inertOpacityStateByGraphName,
       inertGlobalMin,
       inertGlobalMax,
-      globalMinMaxByGraphName,
+      inertGlobalMinMaxByGraphName,
     ],
     (
       overviewGraphPoints,
       inertOpacityStateByGraphName,
       inertGlobalMin,
       inertGlobalMax,
-      // Should be inert
-      globalMinMaxByGraphName,
+      inertGlobalMinMaxByGraphName,
     ) => {
       clearRect(
         graphs.context,
@@ -136,7 +135,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
         inertOpacityStateByGraphName,
         inertGlobalMin,
         inertGlobalMax,
-        globalMinMaxByGraphName,
+        inertGlobalMinMaxByGraphName,
       )
     },
     { fireImmediately: false },

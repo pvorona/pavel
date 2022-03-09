@@ -6,11 +6,13 @@ import {
   resetWhenInactive,
   inert,
   compute,
+  interpolateMap,
+  interpolateMinMax,
 } from '@pavel/observable'
 import { ChartOptions } from '../../types'
 import {
   cursor,
-  Transition,
+  TRANSITION,
   MIN_HEIGHT,
   WHEEL_CLEAR_TIMEOUT,
 } from '../constants'
@@ -82,9 +84,9 @@ export const ChartContext = (options: ChartOptions) => {
     },
   )
 
-  const inertStartIndex = inert(Transition.Fast)(startIndex)
+  const inertStartIndex = inert(TRANSITION.FAST)(startIndex)
 
-  const inertEndIndex = inert(Transition.Fast)(endIndex)
+  const inertEndIndex = inert(TRANSITION.FAST)(endIndex)
 
   const {
     minMaxByGraphName: visibleMinMaxByGraphName,
@@ -93,14 +95,22 @@ export const ChartContext = (options: ChartOptions) => {
   } = createMinMaxView(startIndex, endIndex, enabledGraphNames, options.data)
 
   const inertVisibleMax = inert({
-    duration: Transition.Slow,
+    duration: TRANSITION.SLOW,
     easing: special,
   })(visibleMax)
 
   const inertVisibleMin = inert({
-    duration: Transition.Slow,
+    duration: TRANSITION.SLOW,
     easing: special,
   })(visibleMin)
+
+  const inertVisibleMinMaxByGraphName = inert({
+    duration: TRANSITION.SLOW,
+    easing: special,
+  })({
+    target: visibleMinMaxByGraphName,
+    interpolate: interpolateMinMax,
+  })
 
   const {
     max: globalMax,
@@ -114,14 +124,22 @@ export const ChartContext = (options: ChartOptions) => {
   )
 
   const inertGlobalMax = inert({
-    duration: Transition.Slow,
+    duration: TRANSITION.SLOW,
     easing: special,
   })(globalMax)
 
   const inertGlobalMin = inert({
-    duration: Transition.Slow,
+    duration: TRANSITION.SLOW,
     easing: special,
   })(globalMin)
+
+  const inertGlobalMinMaxByGraphName = inert({
+    duration: TRANSITION.SLOW,
+    easing: special,
+  })({
+    target: globalMinMaxByGraphName,
+    interpolate: interpolateMinMax,
+  })
 
   // why lazy
   const opacityStateByGraphName = computeLazy(
@@ -138,9 +156,12 @@ export const ChartContext = (options: ChartOptions) => {
   )
 
   const inertOpacityStateByGraphName = inert({
-    duration: Transition.Slow,
+    duration: TRANSITION.SLOW,
     easing: special,
-  })(opacityStateByGraphName)
+  })({
+    target: opacityStateByGraphName,
+    interpolate: interpolateMap,
+  })
 
   const mainGraphPoints = computeLazy(
     [
@@ -184,15 +205,21 @@ export const ChartContext = (options: ChartOptions) => {
     [isDragging, isWheeling, isGrabbingGraphs],
     (isDragging, isWheeling, isGrabbingGraphs) => {
       if (isDragging || isWheeling || isGrabbingGraphs) {
-        inertVisibleMax.setTransition(Transition.Medium)
-        inertVisibleMin.setTransition(Transition.Medium)
+        // Linear easing when moving
+        inertVisibleMax.setTransition(TRANSITION.MEDIUM)
+        inertVisibleMin.setTransition(TRANSITION.MEDIUM)
+        inertVisibleMinMaxByGraphName.setTransition(TRANSITION.MEDIUM)
       } else {
         inertVisibleMax.setTransition({
-          duration: Transition.Slow,
+          duration: TRANSITION.SLOW,
           easing: special,
         })
         inertVisibleMin.setTransition({
-          duration: Transition.Slow,
+          duration: TRANSITION.SLOW,
+          easing: special,
+        })
+        inertVisibleMinMaxByGraphName.setTransition({
+          duration: TRANSITION.SLOW,
           easing: special,
         })
       }
@@ -240,6 +267,8 @@ export const ChartContext = (options: ChartOptions) => {
     inertGlobalMin,
     globalMinMaxByGraphName,
     visibleMinMaxByGraphName,
+    inertVisibleMinMaxByGraphName,
+    inertGlobalMinMaxByGraphName,
     globalStartIndex,
     globalEndIndex,
     inertVisibleMax,

@@ -1,7 +1,7 @@
 export const FRAME = 1000 / 60
 
-export const Transition = {
-  Fast: FRAME * 2,
-  Medium: FRAME * 8,
-  Slow: FRAME * 26,
+export const TRANSITION = {
+  FAST: FRAME * 2,
+  MEDIUM: FRAME * 8,
+  SLOW: FRAME * 26,
 } as const
