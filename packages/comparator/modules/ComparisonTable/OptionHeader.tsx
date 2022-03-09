@@ -9,6 +9,7 @@ import { OptionTitle } from './OptionTitle'
 import { AddOptionLine } from './AddOptionLine'
 import useResizeObserver from 'use-resize-observer'
 import { setOptionSize } from './comparisonTable.slice'
+import { linear } from '@pavel/easing'
 
 export const OptionHeader = memo(function OptionHeader({
   optionId,
@@ -16,7 +17,10 @@ export const OptionHeader = memo(function OptionHeader({
   optionId: string
 }) {
   const dispatch = useDispatch()
-  const { ref, width, height } = useResizeObserver<HTMLTableCellElement>()
+  const { ref, width, height } = useResizeObserver<HTMLTableCellElement>({
+    box: 'border-box',
+    round: linear,
+  })
   const isLastOption = useSelector(
     selectIsLastOptionInCurrentComparisonById(optionId),
   )
@@ -29,7 +33,7 @@ export const OptionHeader = memo(function OptionHeader({
   }, [width, height, dispatch, optionId])
 
   return (
-    <th ref={ref} className="relative">
+    <th ref={ref} className="relative z-10">
       <AddOptionLine attachment="left" index={optionIndex} />
       <div className="group relative">
         <OptionTitle optionId={optionId} />

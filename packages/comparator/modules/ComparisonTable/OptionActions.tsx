@@ -26,17 +26,12 @@ export const OptionActions = memo(function OptionActions({
   }
 
   return (
-    <div className="absolute top-1/2 -translate-y-1/2 mr-2 right-0 opacity-0 scale-0 transition-all group-hover:opacity-100 group-focus-within:opacity-100 group-hover:scale-100 group-focus-within:scale-100">
-      <div className="flex flex-col p-2">
-        <IconButton
-          className="mt-2"
-          color="red"
-          onMouseEnter={onRemoveOptionMouseEnter}
-          onMouseLeave={onRemoveOptionMouseLeave}
-          onClick={onRemoveOptionClick}
-        />
-        {/* <IconButton className='mt-2' color="yellow" onClick={onRemoveOptionClick} /> */}
-      </div>
-    </div>
+    <IconButton
+      className="absolute top-1/2 -translate-y-1/2 mr-4 mt-1 right-0 opacity-0 scale-0 transition-all group-hover:opacity-100 group-focus-within:opacity-100 group-hover:scale-100 group-focus-within:scale-100"
+      color="red"
+      onMouseEnter={onRemoveOptionMouseEnter}
+      onMouseLeave={onRemoveOptionMouseLeave}
+      onClick={onRemoveOptionClick}
+    />
   )
 })

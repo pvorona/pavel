@@ -10,7 +10,6 @@ import { OptionRemovingRectangle } from './OptionRemovingRectangle'
 
 export const TableBody = memo(function FeatureRows() {
   const featureIds = useSelector(selectCurrentComparisonFeatureIds)
-
   const optionIds = useSelector(selectCurrentComparisonOptionIds)
 
   if (featureIds.length === 0) {
