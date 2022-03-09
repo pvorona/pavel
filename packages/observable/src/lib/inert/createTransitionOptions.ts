@@ -1,9 +1,18 @@
-import { TransitionOptions, createTransitionTimingOptions } from '../transition'
-import { InertOptions } from './types'
+import {
+  TransitionOptions,
+  createTransitionTimingOptions,
+  Interpolate,
+} from '../transition'
+import { AnyAnimatableValue, InertOptions } from './types'
 
-export function createTransitionOptions(
+export function createTransitionOptions<T extends AnyAnimatableValue>(
   optionsOrDuration: InertOptions,
-  initialValue: number,
-): TransitionOptions {
-  return { ...createTransitionTimingOptions(optionsOrDuration), initialValue }
+  initialValue: T,
+  interpolate: Interpolate<T>,
+): TransitionOptions<T> {
+  return {
+    ...createTransitionTimingOptions(optionsOrDuration),
+    initialValue,
+    interpolate,
+  }
 }

@@ -2,15 +2,11 @@ import { assert, isPositive } from '@pavel/assert'
 import { hasOvershoot } from '@pavel/easing'
 import { shallowEqual } from '@pavel/utils'
 import {
-  TransitionTimingOptionsObject,
+  TransitionOptions,
   TransitionTimingOptions,
   Transition,
 } from '../types'
 import { createTransitionTimingOptions } from './createTransitionTimingOptions'
-
-export type TransitionOptions = TransitionTimingOptionsObject & {
-  initialValue: number
-}
 
 // TODO:
 // - [ ] Use class to avoid creating new functions for every transition
@@ -20,9 +16,9 @@ export type TransitionOptions = TransitionTimingOptionsObject & {
 // - [ ] Stateless transition
 
 // I don't like it at all
-export const createTransition = (
-  options: TransitionOptions,
-): Transition<number> => {
+export const createTransition = <T>(
+  options: TransitionOptions<T>,
+): Transition<T> => {
   let timingOptions = createTransitionTimingOptions(options)
 
   let startTime = 0.0
@@ -71,11 +67,12 @@ export const createTransition = (
 
   function computeCurrentValue() {
     const progress = getProgress(startTime, duration, performance.now())
+    const easedProgress = easing(progress)
 
-    return startValue + (targetValue - startValue) * easing(progress)
+    return options.interpolate(startValue, targetValue, easedProgress)
   }
 
-  const setTargetValue = (newTargetValue: number) => {
+  const setTargetValue = (newTargetValue: T) => {
     if (newTargetValue === targetValue) {
       return { hasCompleted }
     }
@@ -106,9 +103,10 @@ export const createTransition = (
     return { hasCompleted }
   }
 
-  function setInstant(newValue: number) {
+  function setInstant(newValue: T) {
     startValue = newValue
     targetValue = newValue
+    // Should use better equality check here?
     hasCompleted = newValue === lastObservedValue
 
     return { hasCompleted }

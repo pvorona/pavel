@@ -1,7 +1,7 @@
-export const FRAME = 1000 / 60
+export const TIME_UNIT = 1000 / 60
 
-export const Transition = {
-  Fast: FRAME * 2,
-  Medium: FRAME * 8,
-  Slow: FRAME * 26,
+export const TRANSITION = {
+  FAST: TIME_UNIT * 2,
+  MEDIUM: TIME_UNIT * 8,
+  SLOW: TIME_UNIT * 26,
 } as const

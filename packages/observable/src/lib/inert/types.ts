@@ -1,5 +1,6 @@
 import { Lambda } from '@pavel/types'
 import {
+  Interpolate,
   TransitionTimingOptions,
   TransitionTimingOptionsObject,
 } from '../transition'
@@ -8,6 +9,7 @@ import {
   ReadonlyLazySubject,
   Named,
   LazySubject,
+  ObservedTypeOf,
 } from '../types'
 
 export type InertOptions =
@@ -16,15 +18,21 @@ export type InertOptions =
 
 export type AnimatableValue = number
 
-type Collection<T> = Record<string, T>
+export type AnyAnimatableValue = AnimatableValue | any
 
-export type AnimatableCollection = Collection<AnimatableValue>
+export type AnimatableSubject<T> =
+  | ReadonlyEagerSubject<T>
+  | ReadonlyLazySubject<T>
 
-export type AnimatableSubject =
-  | ReadonlyEagerSubject<AnimatableValue>
-  | ReadonlyEagerSubject<AnimatableCollection>
-  | ReadonlyLazySubject<AnimatableValue>
-  | ReadonlyLazySubject<AnimatableCollection>
+export type AnyAnimatableSubject = AnimatableSubject<AnyAnimatableValue>
+
+export type TargetDescriptor<T extends AnyAnimatableSubject> = {
+  target: T
+  interpolate: Interpolate<ObservedTypeOf<T>>
+}
+
+export type TargetOrTargetDescriptor<T extends AnyAnimatableSubject> =
+  T extends AnimatableSubject<AnimatableValue> ? T : TargetDescriptor<T>
 
 export type InertSubject<T> = LazySubject<T> & {
   setTransition: (options: TransitionTimingOptions) => void
