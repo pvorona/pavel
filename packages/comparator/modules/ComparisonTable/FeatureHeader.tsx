@@ -39,7 +39,6 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
   }
 
   return (
-    // <div className="inline-block sticky left-0 px-3 bg-white dark:bg-[#202124]">
     <div className="inline-block sticky left-0">
       <div
         className="flex flex-row items-center group"
