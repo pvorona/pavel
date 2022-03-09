@@ -3,10 +3,13 @@ import { observable } from '../observable'
 
 export const windowHeight = observable(isBrowser ? window.innerHeight : 0)
 
+export const windowWidth = observable(isBrowser ? window.innerWidth : 0)
+
 if (isBrowser) {
   windowHeight.value = window.innerHeight
 
-  window.addEventListener('resize', () => [
-    (windowHeight.value = window.innerHeight),
-  ])
+  window.addEventListener('resize', () => {
+    windowHeight.value = window.innerHeight
+    windowWidth.value = window.innerWidth
+  })
 }
