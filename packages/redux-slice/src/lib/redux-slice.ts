@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RecordKey } from '@pavel/types'
 import { AnyAction } from 'redux'
+import { Draft, produce } from 'immer'
 
 type ActionWithPayload<Type extends RecordKey, Payload> = {
   type: Type
@@ -19,11 +20,11 @@ type ActionCreatorWithoutPayload<Type extends RecordKey> =
   () => ActionWithoutPayload<Type>
 
 type ActionHandlerWithPayload<State, Payload> = (
-  state: State,
+  state: Draft<State>,
   payload: Payload,
-) => State
+) => void
 
-type ActionHandlerWithoutPayload<State> = (state: State) => State
+type ActionHandlerWithoutPayload<State> = (state: Draft<State>) => void
 
 type ActionHandlers<State> = {
   [actionType: RecordKey]:
@@ -48,7 +49,7 @@ export function createSlice<
     const handler = handlers[action.type]
 
     return typeof handler === 'function'
-      ? handler(state, action.payload)
+      ? produce(state, draft => handler(draft, action.payload))
       : state
   }
 

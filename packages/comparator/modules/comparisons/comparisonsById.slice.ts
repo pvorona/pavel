@@ -1,5 +1,5 @@
 import { createSlice } from '@pavel/redux-slice'
-import { insertAt, remove } from '@pavel/utils'
+import { insertAt, removeAt } from '@pavel/utils'
 import {
   buildFeature,
   Comparison,
@@ -14,115 +14,54 @@ export const comparisonsByIdSlice = createSlice({
   name: 'comparisons.byId',
   initialState: {} as ComparisonsState['byId'],
   handlers: {
-    addComparison: (state, comparison: Comparison) => ({
-      ...state,
-      [comparison.id]: comparison,
-    }),
+    addComparison: (state, comparison: Comparison) => {
+      state[comparison.id] = comparison
+    },
     addFeatureToComparison: (
       state,
       { id, index }: { id: string; index: number },
     ) => {
-      const newFeature = buildFeature()
-      const comparison = state[id]
-      const features = [...comparison.features]
-
-      return {
-        ...state,
-        [id]: {
-          ...comparison,
-          features: insertAt(features, index, newFeature),
-        },
-      }
-      // TODO
-      // setShouldScrollToBottom(true)
+      insertAt(state[id].features, index, buildFeature())
     },
     addOptionIdToComparison: (
       state,
       { id, optionId, index }: { id: string; optionId: string; index: number },
     ) => {
-      const comparison = state[id]
-      const optionIds = [...comparison.optionIds]
-
-      return {
-        ...state,
-        [comparison.id]: {
-          ...comparison,
-          optionIds: insertAt(optionIds, index, optionId),
-        },
-      }
+      insertAt(state[id].optionIds, index, optionId)
     },
     removeFeatureFromComparison: (
       state,
       { id, featureId }: { id: string; featureId: string },
     ) => {
-      const comparison = state[id]
-      const features = comparison.features.filter(
-        feature => feature.id !== featureId,
+      const index = state[id].features.findIndex(
+        feature => feature.id === featureId,
       )
-
-      return {
-        ...state,
-        [comparison.id]: {
-          ...comparison,
-          features,
-        },
-      }
+      removeAt(state[id].features, index)
     },
     toggleFeatureExpandedInComparison: (
       state,
       { id, featureId }: { id: string; featureId: string },
     ) => {
-      const comparison = state[id]
-      const features = comparison.features.map(feature =>
-        feature.id === featureId
-          ? { ...feature, isExpanded: !feature.isExpanded }
-          : feature,
+      const feature = state[id].features.find(
+        feature => feature.id === featureId,
       )
-
-      return {
-        ...state,
-        [comparison.id]: {
-          ...comparison,
-          features,
-        },
-      }
+      feature.isExpanded = !feature.isExpanded
     },
-    toggleDescriptionExpandedInComparison: (
+    toggleFeatureDescriptionExpandedInComparison: (
       state,
       { id, featureId }: { id: string; featureId: string },
     ) => {
-      const comparison = state[id]
-      const features = comparison.features.map(feature =>
-        feature.id === featureId
-          ? {
-              ...feature,
-              isDescriptionExpanded: !feature.isDescriptionExpanded,
-            }
-          : feature,
+      const feature = state[id].features.find(
+        feature => feature.id === featureId,
       )
-
-      return {
-        ...state,
-        [comparison.id]: {
-          ...comparison,
-          features,
-        },
-      }
+      feature.isDescriptionExpanded = !feature.isDescriptionExpanded
     },
     removeOptionIdFromComparison: (
       state,
       { id, optionId }: { id: string; optionId: string },
     ) => {
-      const comparison = state[id]
-      const optionIds = [...comparison.optionIds]
-
-      return {
-        ...state,
-        [comparison.id]: {
-          ...comparison,
-          optionIds: remove(optionIds, optionId),
-        },
-      }
+      const index = state[id].optionIds.findIndex(option => option === optionId)
+      removeAt(state[id].optionIds, index)
     },
     setFeaturePropertyInComparison: (
       state,
@@ -132,18 +71,10 @@ export const comparisonsByIdSlice = createSlice({
         ...change
       }: Partial<Feature> & { featureId: string; id: string },
     ) => {
-      const comparison = state[id]
-      const features = comparison.features.map(feature =>
-        feature.id === featureId ? { ...feature, ...change } : feature,
+      const feature = state[id].features.find(
+        feature => feature.id === featureId,
       )
-
-      return {
-        ...state,
-        [comparison.id]: {
-          ...comparison,
-          features,
-        },
-      }
+      Object.assign(feature, change)
     },
     setComparisonProperty: (
       state,
@@ -151,13 +82,9 @@ export const comparisonsByIdSlice = createSlice({
         comparisonId,
         payload,
       }: { comparisonId: string; payload: Partial<Comparison> },
-    ) => ({
-      ...state,
-      [comparisonId]: {
-        ...state[comparisonId],
-        ...payload,
-      },
-    }),
+    ) => {
+      Object.assign(state[comparisonId], payload)
+    },
   },
 })
 
@@ -167,7 +94,7 @@ export const {
   addOptionIdToComparison,
   removeFeatureFromComparison,
   toggleFeatureExpandedInComparison,
-  toggleDescriptionExpandedInComparison,
+  toggleFeatureDescriptionExpandedInComparison,
   removeOptionIdFromComparison,
   setFeaturePropertyInComparison,
   setComparisonProperty,
@@ -289,7 +216,7 @@ export function toggleDescriptionExpandedInCurrentComparison(
     const currentComparisonId = selectCurrentComparisonId(getState())
 
     dispatch(
-      toggleDescriptionExpandedInComparison({
+      toggleFeatureDescriptionExpandedInComparison({
         id: currentComparisonId,
         featureId,
       }),

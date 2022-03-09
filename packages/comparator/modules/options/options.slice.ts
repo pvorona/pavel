@@ -6,10 +6,9 @@ export const optionsByIdSlice = createSlice({
   name: 'options.byId',
   initialState: {} as OptionsState['byId'],
   handlers: {
-    addOption: (state, option: Option) => ({
-      ...state,
-      [option.id]: option,
-    }),
+    addOption: (state, option: Option) => {
+      state[option.id] = option
+    },
 
     setOptionFeatureValue: (
       state,
@@ -19,31 +18,15 @@ export const optionsByIdSlice = createSlice({
         value,
       }: { optionId: string; featureId: string; value: string },
     ) => {
-      const option = state[optionId]
-      const features = {
-        ...option.features,
-        [featureId]: value,
-      }
-
-      return {
-        ...state,
-        [optionId]: {
-          ...option,
-          features,
-        },
-      }
+      state[optionId].features[featureId] = value
     },
 
     setOptionProperty: (
       state,
       { id, ...change }: Partial<Option> & { id: string },
-    ) => ({
-      ...state,
-      [id]: {
-        ...state[id],
-        ...change,
-      },
-    }),
+    ) => {
+      Object.assign(state[id], change)
+    },
   },
 })
 
