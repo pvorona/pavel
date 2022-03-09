@@ -1,4 +1,4 @@
-import { hexToRGB, toBitMapSize, toScreenYNew } from '../../util'
+import { hexToRGB, toBitMapSize, toScreenY } from '../../util'
 import { Point } from '../types'
 import { lineTo } from './lineTo'
 
@@ -60,7 +60,7 @@ export function renderLineSeriesWithAreaGradient({
       lineTo(context, toBitMapSize(x), toBitMapSize(y))
 
       if (j === points[graphName].length - 1) {
-        const yStart = toScreenYNew(
+        const yStart = toScreenY(
           min,
           max,
           0,

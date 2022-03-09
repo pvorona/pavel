@@ -92,7 +92,13 @@ export const ChartContext = (options: ChartOptions) => {
     minMaxByGraphName: visibleMinMaxByGraphName,
     min: visibleMin,
     max: visibleMax,
-  } = createMinMaxView(startIndex, endIndex, enabledGraphNames, options.data)
+  } = createMinMaxView(
+    startIndex,
+    endIndex,
+    enabledGraphNames,
+    options.graphNames,
+    options.data,
+  )
 
   const inertVisibleMax = inert({
     duration: TRANSITION.SLOW,
@@ -120,6 +126,7 @@ export const ChartContext = (options: ChartOptions) => {
     globalStartIndex,
     globalEndIndex,
     enabledGraphNames,
+    options.graphNames,
     options.data,
   )
 

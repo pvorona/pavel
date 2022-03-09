@@ -67,12 +67,17 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
     if (isDragging || isWheeling) {
       inertGlobalMax.setTransition(TRANSITION.MEDIUM)
       inertGlobalMin.setTransition(TRANSITION.MEDIUM)
+      inertGlobalMinMaxByGraphName.setTransition(TRANSITION.MEDIUM)
     } else {
       inertGlobalMax.setTransition({
         duration: TRANSITION.SLOW,
         easing: special,
       })
       inertGlobalMin.setTransition({
+        duration: TRANSITION.SLOW,
+        easing: special,
+      })
+      inertGlobalMinMaxByGraphName.setTransition({
         duration: TRANSITION.SLOW,
         easing: special,
       })

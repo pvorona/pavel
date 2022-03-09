@@ -20,7 +20,13 @@ export function mapDataToCoords(
 
   if (!Number.isInteger(startIndex)) {
     const x = 0
-    const y = toScreenYNew(min, max, minY, maxY, data[startIndex])
+    const y = toScreenY(
+      min,
+      max,
+      minY,
+      maxY,
+      interpolatePoint(startIndex, data),
+    )
 
     coords.push({ x, y })
   }
@@ -31,7 +37,7 @@ export function mapDataToCoords(
     currentIndex++
   ) {
     const x = toScreenX(domain, width, startIndex, endIndex, currentIndex)
-    const y = toScreenYNew(
+    const y = toScreenY(
       min,
       max,
       minY,
@@ -44,7 +50,7 @@ export function mapDataToCoords(
 
   if (!Number.isInteger(endIndex)) {
     const x = width
-    const y = toScreenYNew(min, max, minY, maxY, data[endIndex])
+    const y = toScreenY(min, max, minY, maxY, interpolatePoint(endIndex, data))
 
     coords.push({ x, y })
   }
@@ -81,17 +87,6 @@ export function toScreenX(
 }
 
 export function toScreenY(
-  ys: number[],
-  min: number,
-  max: number,
-  minY: number,
-  maxY: number,
-  currentIndex: number,
-) {
-  return interpolate(max, min, minY, maxY, interpolatePoint(currentIndex, ys))
-}
-
-export function toScreenYNew(
   minValue: number,
   maxValue: number,
   minY: number,
