@@ -1,4 +1,4 @@
-import { hexToRGB, toBitMapSize, toScreenY } from '../../util'
+import { hexToRGB, toBitMapSize } from '../../util'
 import { Point } from '../types'
 import { lineTo } from './lineTo'
 
@@ -16,9 +16,6 @@ export function renderLineSeriesWithAreaGradient({
   lineCapByName,
   width,
   height,
-  minMaxByGraphName,
-  min,
-  max,
 }: {
   context: CanvasRenderingContext2D
   points: { [key: string]: Point[] }
@@ -30,9 +27,6 @@ export function renderLineSeriesWithAreaGradient({
   lineCapByName: { [series: string]: CanvasLineCap }
   width: number
   height: number
-  minMaxByGraphName: Record<string, { min: number; max: number }>
-  min: number
-  max: number
 }) {
   for (let i = 0; i < graphNames.length; i++) {
     const graphName = graphNames[i]
@@ -60,18 +54,9 @@ export function renderLineSeriesWithAreaGradient({
       lineTo(context, toBitMapSize(x), toBitMapSize(y))
 
       if (j === points[graphName].length - 1) {
-        const yStart = toScreenY(
-          min,
-          max,
-          0,
-          height,
-          minMaxByGraphName[graphName].max,
-        )
-
         const gradient = context.createLinearGradient(
           0,
-          // Ignore line width for now
-          toBitMapSize(yStart),
+          0,
           0,
           toBitMapSize(height),
         )

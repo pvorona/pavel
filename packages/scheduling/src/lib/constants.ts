@@ -1,9 +1,9 @@
-// TODO: first class tasks that depend on other tasks
+// TODO: tasks that depend on other tasks
 export enum PRIORITY {
-  BEFORE_RENDER = 'BEFORE_RENDER',
-  READ = 'READ',
-  COMPUTE = 'COMPUTE',
-  WRITE = 'WRITE',
+  BEFORE_RENDER,
+  READ,
+  COMPUTE,
+  WRITE,
 }
 
 export const BEFORE_RENDER_PRIORITIES_IN_ORDER = [PRIORITY.BEFORE_RENDER]

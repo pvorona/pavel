@@ -7,7 +7,7 @@ import {
 import { ChartContext, ChartOptions } from '../../../types'
 import { special } from '@pavel/easing'
 import { mapDataToCoords, toBitMapSize } from '../../../util'
-import { TRANSITION } from '../../constants'
+import { Transition } from '../../constants'
 import { Point, Component } from '../../types'
 import { createGraphs } from '../../Graphs/createGraphs'
 import { scheduleTask } from '@pavel/scheduling'
@@ -27,7 +27,6 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
     inertGlobalMax,
     inertGlobalMin,
     inertOpacityStateByGraphName,
-    inertGlobalMinMaxByGraphName,
   } = context
 
   const canvasHeight =
@@ -65,20 +64,15 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
 
   observe([isDragging, isWheeling], (isDragging, isWheeling) => {
     if (isDragging || isWheeling) {
-      inertGlobalMax.setTransition(TRANSITION.MEDIUM)
-      inertGlobalMin.setTransition(TRANSITION.MEDIUM)
-      inertGlobalMinMaxByGraphName.setTransition(TRANSITION.MEDIUM)
+      inertGlobalMax.setTransition(Transition.Medium)
+      inertGlobalMin.setTransition(Transition.Medium)
     } else {
       inertGlobalMax.setTransition({
-        duration: TRANSITION.SLOW,
+        duration: Transition.Slow,
         easing: special,
       })
       inertGlobalMin.setTransition({
-        duration: TRANSITION.SLOW,
-        easing: special,
-      })
-      inertGlobalMinMaxByGraphName.setTransition({
-        duration: TRANSITION.SLOW,
+        duration: Transition.Slow,
         easing: special,
       })
     }
@@ -87,13 +81,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
   const graphs = createDOM()
 
   scheduleTask(() => {
-    renderPoints(
-      overviewGraphPoints.value,
-      inertOpacityStateByGraphName.value,
-      inertGlobalMin.value,
-      inertGlobalMax.value,
-      inertGlobalMinMaxByGraphName.value,
-    )
+    renderPoints(overviewGraphPoints.value, inertOpacityStateByGraphName.value)
   })
 
   effect(
@@ -107,41 +95,20 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       renderPoints(
         overviewGraphPoints.value,
         inertOpacityStateByGraphName.value,
-        inertGlobalMin.value,
-        inertGlobalMax.value,
-        inertGlobalMinMaxByGraphName.value,
       )
     },
     { fireImmediately: false },
   )
 
   effect(
-    [
-      overviewGraphPoints,
-      inertOpacityStateByGraphName,
-      inertGlobalMin,
-      inertGlobalMax,
-      inertGlobalMinMaxByGraphName,
-    ],
-    (
-      overviewGraphPoints,
-      inertOpacityStateByGraphName,
-      inertGlobalMin,
-      inertGlobalMax,
-      inertGlobalMinMaxByGraphName,
-    ) => {
+    [overviewGraphPoints, inertOpacityStateByGraphName],
+    (overviewGraphPoints, inertOpacityStateByGraphName) => {
       clearRect(
         graphs.context,
         toBitMapSize(width.value),
         toBitMapSize(canvasHeight),
       )
-      renderPoints(
-        overviewGraphPoints,
-        inertOpacityStateByGraphName,
-        inertGlobalMin,
-        inertGlobalMax,
-        inertGlobalMinMaxByGraphName,
-      )
+      renderPoints(overviewGraphPoints, inertOpacityStateByGraphName)
     },
     { fireImmediately: false },
   )
@@ -149,9 +116,6 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
   function renderPoints(
     overviewGraphPoints: { [key: string]: Point[] },
     inertOpacityStateByGraphName: { [key: string]: number },
-    min: number,
-    max: number,
-    minMaxByGraphName: Record<string, { min: number; max: number }>,
   ) {
     renderLineSeriesWithAreaGradient({
       opacityState: inertOpacityStateByGraphName,
@@ -162,11 +126,9 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       strokeStyles: options.colors,
       height: canvasHeight,
       width: width.value,
+      // Use `miter` line join in overview?
       lineJoinByName: options.lineJoin,
       lineCapByName: options.lineCap,
-      min,
-      max,
-      minMaxByGraphName,
     })
   }
 

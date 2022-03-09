@@ -1,17 +1,19 @@
-import { Interpolate, createTransition, Transition } from '../transition'
+import { createGroupTransition, createTransition } from '../transition'
 import { createTransitionOptions } from './createTransitionOptions'
-import { AnyAnimatableValue, InertOptions } from './types'
+import { createTransitions } from './createTransitions'
+import { AnimatableCollection, AnimatableValue, InertOptions } from './types'
 
-export const constructTransition = <T extends AnyAnimatableValue>(
-  value: T,
+export const constructTransition = (
+  value: AnimatableValue | AnimatableCollection,
   options: InertOptions,
-  computeIntermediateValue: Interpolate<T>,
-): Transition<T> => {
-  const transitionOptions = createTransitionOptions(
-    options,
-    value,
-    computeIntermediateValue,
-  )
+) => {
+  if (typeof value === 'object') {
+    const transitions = createTransitions(value, options)
+
+    return createGroupTransition(transitions)
+  }
+
+  const transitionOptions = createTransitionOptions(options, value)
 
   return createTransition(transitionOptions)
 }

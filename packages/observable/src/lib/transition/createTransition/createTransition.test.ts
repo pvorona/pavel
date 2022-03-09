@@ -1,4 +1,3 @@
-import { interpolateNumber } from '../../inert'
 import { Transition } from '../types'
 import { createTransition } from './createTransition'
 import { createTimeUtils } from './__test__/createTimeUtils'
@@ -17,7 +16,6 @@ describe('createTransition', () => {
         createTransition({
           initialValue,
           duration,
-          interpolate: interpolateNumber,
         }),
       ).toThrowError(`Expected positive duration. Received ${duration}`)
     })
@@ -35,7 +33,6 @@ describe('createTransition', () => {
       transition = createTransition({
         initialValue,
         duration,
-        interpolate: interpolateNumber,
       })
     })
 
@@ -54,7 +51,6 @@ describe('createTransition', () => {
           transition = createTransition({
             initialValue,
             duration,
-            interpolate: interpolateNumber,
           })
           transition.setTargetValue(initialValue)
         })
@@ -76,7 +72,6 @@ describe('createTransition', () => {
           transition = createTransition({
             initialValue,
             duration,
-            interpolate: interpolateNumber,
           })
           transition.setTargetValue(10)
 
@@ -123,7 +118,6 @@ describe('createTransition', () => {
           transition = createTransition({
             initialValue,
             duration,
-            interpolate: interpolateNumber,
           })
         })
 

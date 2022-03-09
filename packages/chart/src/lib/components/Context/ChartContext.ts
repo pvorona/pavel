@@ -6,13 +6,11 @@ import {
   resetWhenInactive,
   inert,
   compute,
-  interpolateMap,
-  interpolateMinMax,
 } from '@pavel/observable'
 import { ChartOptions } from '../../types'
 import {
   cursor,
-  TRANSITION,
+  Transition,
   MIN_HEIGHT,
   WHEEL_CLEAR_TIMEOUT,
 } from '../constants'
@@ -84,69 +82,42 @@ export const ChartContext = (options: ChartOptions) => {
     },
   )
 
-  const inertStartIndex = inert(TRANSITION.FAST)(startIndex)
+  const inertStartIndex = inert(Transition.Fast)(startIndex)
 
-  const inertEndIndex = inert(TRANSITION.FAST)(endIndex)
+  const inertEndIndex = inert(Transition.Fast)(endIndex)
 
   const {
     minMaxByGraphName: visibleMinMaxByGraphName,
     min: visibleMin,
     max: visibleMax,
-  } = createMinMaxView(
-    startIndex,
-    endIndex,
-    enabledGraphNames,
-    options.graphNames,
-    options.data,
-  )
+  } = createMinMaxView(startIndex, endIndex, enabledGraphNames, options.data)
 
   const inertVisibleMax = inert({
-    duration: TRANSITION.SLOW,
+    duration: Transition.Slow,
     easing: special,
   })(visibleMax)
 
   const inertVisibleMin = inert({
-    duration: TRANSITION.SLOW,
+    duration: Transition.Slow,
     easing: special,
   })(visibleMin)
 
-  const inertVisibleMinMaxByGraphName = inert({
-    duration: TRANSITION.SLOW,
-    easing: special,
-  })({
-    target: visibleMinMaxByGraphName,
-    interpolate: interpolateMinMax,
-  })
-
-  const {
-    max: globalMax,
-    min: globalMin,
-    minMaxByGraphName: globalMinMaxByGraphName,
-  } = createMinMaxView(
+  const { max: globalMax, min: globalMin } = createMinMaxView(
     globalStartIndex,
     globalEndIndex,
     enabledGraphNames,
-    options.graphNames,
     options.data,
   )
 
   const inertGlobalMax = inert({
-    duration: TRANSITION.SLOW,
+    duration: Transition.Slow,
     easing: special,
   })(globalMax)
 
   const inertGlobalMin = inert({
-    duration: TRANSITION.SLOW,
+    duration: Transition.Slow,
     easing: special,
   })(globalMin)
-
-  const inertGlobalMinMaxByGraphName = inert({
-    duration: TRANSITION.SLOW,
-    easing: special,
-  })({
-    target: globalMinMaxByGraphName,
-    interpolate: interpolateMinMax,
-  })
 
   // why lazy
   const opacityStateByGraphName = computeLazy(
@@ -163,12 +134,9 @@ export const ChartContext = (options: ChartOptions) => {
   )
 
   const inertOpacityStateByGraphName = inert({
-    duration: TRANSITION.SLOW,
+    duration: Transition.Slow,
     easing: special,
-  })({
-    target: opacityStateByGraphName,
-    interpolate: interpolateMap,
-  })
+  })(opacityStateByGraphName)
 
   const mainGraphPoints = computeLazy(
     [
@@ -212,21 +180,15 @@ export const ChartContext = (options: ChartOptions) => {
     [isDragging, isWheeling, isGrabbingGraphs],
     (isDragging, isWheeling, isGrabbingGraphs) => {
       if (isDragging || isWheeling || isGrabbingGraphs) {
-        // Linear easing when moving
-        inertVisibleMax.setTransition(TRANSITION.MEDIUM)
-        inertVisibleMin.setTransition(TRANSITION.MEDIUM)
-        inertVisibleMinMaxByGraphName.setTransition(TRANSITION.MEDIUM)
+        inertVisibleMax.setTransition(Transition.Medium)
+        inertVisibleMin.setTransition(Transition.Medium)
       } else {
         inertVisibleMax.setTransition({
-          duration: TRANSITION.SLOW,
+          duration: Transition.Slow,
           easing: special,
         })
         inertVisibleMin.setTransition({
-          duration: TRANSITION.SLOW,
-          easing: special,
-        })
-        inertVisibleMinMaxByGraphName.setTransition({
-          duration: TRANSITION.SLOW,
+          duration: Transition.Slow,
           easing: special,
         })
       }
@@ -257,6 +219,7 @@ export const ChartContext = (options: ChartOptions) => {
     enabledGraphNames,
     isAnyGraphEnabled,
     mainGraphPoints,
+    visibleMinMaxByGraphName,
     startIndex,
     endIndex,
     inertStartIndex,
@@ -272,10 +235,6 @@ export const ChartContext = (options: ChartOptions) => {
     globalMin,
     inertGlobalMax,
     inertGlobalMin,
-    globalMinMaxByGraphName,
-    visibleMinMaxByGraphName,
-    inertVisibleMinMaxByGraphName,
-    inertGlobalMinMaxByGraphName,
     globalStartIndex,
     globalEndIndex,
     inertVisibleMax,

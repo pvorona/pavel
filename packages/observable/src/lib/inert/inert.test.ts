@@ -1,5 +1,5 @@
 import { observable } from '../observable'
-import { inert, interpolateMap } from './inert'
+import { inert } from './inert'
 
 const DURATION = 100
 
@@ -143,10 +143,7 @@ describe('with objects', () => {
       c: 0,
       d: 0,
     })
-    const animation = inert(DURATION)({
-      target: o,
-      interpolate: interpolateMap,
-    })
+    const animation = inert(DURATION)(o)
 
     expect(animation.value).toStrictEqual({
       a: 0,
@@ -163,10 +160,7 @@ describe('with objects', () => {
       c: 0,
       d: 0,
     })
-    const animation = inert(DURATION)({
-      target: o,
-      interpolate: interpolateMap,
-    })
+    const animation = inert(DURATION)(o)
 
     o.value = {
       a: 10,
@@ -251,10 +245,7 @@ describe('with objects', () => {
       c: 0,
       d: 0,
     })
-    const animation = inert(DURATION)({
-      target: o,
-      interpolate: interpolateMap,
-    })
+    const animation = inert(DURATION)(o)
 
     o.value = {
       a: 10,

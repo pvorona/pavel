@@ -30,8 +30,6 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     inertEndIndex,
     inertVisibleMax,
     inertVisibleMin,
-    inertGlobalMinMaxByGraphName,
-    inertVisibleMinMaxByGraphName,
   } = context
 
   const {
@@ -120,8 +118,6 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     inertEndIndex.complete()
     inertVisibleMax.complete()
     inertVisibleMin.complete()
-    inertGlobalMinMaxByGraphName.complete()
-    inertVisibleMinMaxByGraphName.complete()
   }
 
   function onRightSideClick(event: MouseEvent) {
@@ -139,8 +135,6 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     inertEndIndex.complete()
     inertVisibleMax.complete()
     inertVisibleMin.complete()
-    inertGlobalMinMaxByGraphName.complete()
-    inertVisibleMinMaxByGraphName.complete()
   }
 
   handleDrag(leftResizeHandler, {

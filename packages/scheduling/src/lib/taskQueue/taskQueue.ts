@@ -56,17 +56,17 @@ function createTaskQueue() {
 
   // function performScheduledTasks(timestamp: number) {
   function performFrameTasks() {
-    // We were not able to run idle tasks before the next frame
-    // Let's run them now before frame tasks
+    // We were not able to run idle tasks before next frame
+    // Run them now before frame tasks
     if (idleCallbackId !== undefined) {
       cancelIdleCallback(idleCallbackId)
 
       idleCallbackId = undefined
+    }
 
-      for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
-        for (const task of currentFrameQueueByPriority[priority]) {
-          task()
-        }
+    for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
+      for (const task of currentFrameQueueByPriority[priority]) {
+        task()
       }
     }
 
