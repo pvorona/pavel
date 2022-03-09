@@ -11,15 +11,16 @@ export function createMinMaxView(
   startIndex: EagerSubject<number>,
   endIndex: EagerSubject<number>,
   enabledGraphNames: ReadonlySubject<string[]>,
+  graphNames: string[],
   dataByGraphName: { [graphName: string]: number[] },
 ) {
   const minMaxByGraphName = computeLazy(
-    [startIndex, endIndex, enabledGraphNames],
-    (startIndex, endIndex, enabledGraphNames) => {
+    [startIndex, endIndex],
+    (startIndex, endIndex) => {
       const result: { [graphName: string]: { min: number; max: number } } = {}
 
-      for (let i = 0; i < enabledGraphNames.length; i++) {
-        const graphName = enabledGraphNames[i]
+      for (let i = 0; i < graphNames.length; i++) {
+        const graphName = graphNames[i]
 
         result[graphName] = getMinMax(
           startIndex,
