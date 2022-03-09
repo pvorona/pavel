@@ -12,7 +12,6 @@ import { createName, wrapName } from '../createName'
 import { PRIORITY, throttleTask } from '@pavel/scheduling'
 import { TransitionTimingOptions } from '../transition'
 import { createObservers } from '@pavel/utils'
-import { RecordKey } from '@pavel/types'
 
 const INERT_GROUP = 'Inert'
 
@@ -136,10 +135,10 @@ export const inert =
       get value() {
         return get() as never
       },
+      // Remove setter and use complete?
       set value(newValue) {
         set(newValue)
       },
-      // Remove this and use inert.value = newValue
       complete,
       observe: observers.register,
     }

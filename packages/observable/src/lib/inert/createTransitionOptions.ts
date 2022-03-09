@@ -8,11 +8,11 @@ import { AnyAnimatableValue, InertOptions } from './types'
 export function createTransitionOptions<T extends AnyAnimatableValue>(
   optionsOrDuration: InertOptions,
   initialValue: T,
-  computeIntermediateValue: Interpolate<T>,
+  interpolate: Interpolate<T>,
 ): TransitionOptions<T> {
   return {
     ...createTransitionTimingOptions(optionsOrDuration),
     initialValue,
-    computeIntermediateValue,
+    interpolate,
   }
 }

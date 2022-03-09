@@ -10,7 +10,6 @@ import {
   Named,
   LazySubject,
   ObservedTypeOf,
-  EagerSubject,
 } from '../types'
 
 export type InertOptions =
@@ -18,8 +17,6 @@ export type InertOptions =
   | number
 
 export type AnimatableValue = number
-
-// export type AnimatableCollection = Record<RecordKey, AnimatableValue>
 
 export type AnyAnimatableValue = AnimatableValue | any
 

@@ -69,11 +69,7 @@ export const createTransition = <T>(
     const progress = getProgress(startTime, duration, performance.now())
     const easedProgress = easing(progress)
 
-    return options.computeIntermediateValue(
-      startValue,
-      targetValue,
-      easedProgress,
-    )
+    return options.interpolate(startValue, targetValue, easedProgress)
   }
 
   const setTargetValue = (newTargetValue: T) => {

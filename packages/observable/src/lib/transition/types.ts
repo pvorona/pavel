@@ -8,12 +8,8 @@ export type TransitionTimingOptionsObject = {
 }
 
 export type TransitionOptionsObject<T> = TransitionTimingOptionsObject & {
-  computeIntermediateValue: Interpolate<T>
+  interpolate: Interpolate<T>
 }
-
-// type ComputeOptionsObject<T> = T extends number
-//   ? { computeIntermediateValue?: ComputeIntermediateValue<T> }
-//   : { computeIntermediateValue: ComputeIntermediateValue<T> }
 
 export type TransitionTimingOptions = TransitionTimingOptionsObject | number
 

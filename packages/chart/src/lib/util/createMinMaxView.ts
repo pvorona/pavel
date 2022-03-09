@@ -15,7 +15,6 @@ export function createMinMaxView(
   dataByGraphName: { [graphName: string]: number[] },
 ) {
   const minMaxByGraphName = computeLazy(
-    // should be all graph names, not only enabled
     [startIndex, endIndex],
     (startIndex, endIndex) => {
       const result: { [graphName: string]: { min: number; max: number } } = {}
