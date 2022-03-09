@@ -62,11 +62,13 @@ function createTaskQueue() {
       cancelIdleCallback(idleCallbackId)
 
       idleCallbackId = undefined
+    }
 
-      for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
-        for (const task of currentFrameQueueByPriority[priority]) {
-          task()
-        }
+    // Idle tasks can be in the queue event if idleCallbackId is undefined
+    // If they didn't have enough time to run during idle time
+    for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
+      for (const task of currentFrameQueueByPriority[priority]) {
+        task()
       }
     }
 
