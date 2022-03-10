@@ -35,7 +35,7 @@ export const FeatureRow = memo(function FeatureRow({
         <td
           className={classNames({
             'pt-10': index !== 0,
-            'pt-5': index === 0,
+            'pt-8': index === 0,
           })}
           colSpan={optionIds.length}
         >
