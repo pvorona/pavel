@@ -25,10 +25,15 @@ function SignInPage() {
 
 function SignInForm() {
   function onSubmit({ email, password }: { email: string; password: string }) {
-    signInWithEmailAndPassword(auth, email, password).catch(error => {
-      console.log(error)
-    })
+    return signInWithEmailAndPassword(auth, email, password)
   }
 
-  return <EmailPasswordForm onSubmit={onSubmit} label="Sign in" />
+  return (
+    <EmailPasswordForm
+      onSubmit={onSubmit}
+      hint="Please confirm your email and password"
+      title="Sign in"
+      buttonLabel="Sign in"
+    />
+  )
 }

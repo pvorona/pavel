@@ -5,6 +5,9 @@ export function SignInLayout(
   >,
 ) {
   return (
-    <div className="flex items-center justify-center h-screen" {...props} />
+    <div
+      className="flex flex-col items-center justify-center h-screen"
+      {...props}
+    />
   )
 }

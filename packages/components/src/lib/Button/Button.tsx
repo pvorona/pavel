@@ -8,7 +8,10 @@ export type ButtonProps = {
   size?: 'md'
   buttonType?: 'button' | 'submit'
   onClick?: (event: React.MouseEvent) => void
-}
+} & React.DetailedHTMLProps<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+>
 
 export function Button({
   className,
@@ -17,7 +20,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const defaultButtonClassName =
-    'text-lg bg-gray-4 text-white bg-gray-4 dark:hover:border-[#5f6368] border border-gray-4 rounded transition-colors'
+    'text-lg bg-gray-4 text-white bg-gray-4 dark:hover:border-[#5f6368] border border-gray-4 rounded transition-colors outline-none hover:bg-gray-6 focus:bg-gray-6'
   const defaultLinkClassName =
     'dark:hover:text-white hover:underline underline-offset-4 transition-colors'
   const mdSizeClassName = 'py-3 px-8'

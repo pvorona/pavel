@@ -25,10 +25,15 @@ function SignUpPage() {
 
 function SignUpForm() {
   function onSubmit({ email, password }: { email: string; password: string }) {
-    createUserWithEmailAndPassword(auth, email, password).catch(error => {
-      console.log(error)
-    })
+    return createUserWithEmailAndPassword(auth, email, password)
   }
 
-  return <EmailPasswordForm onSubmit={onSubmit} label="Sign up" />
+  return (
+    <EmailPasswordForm
+      onSubmit={onSubmit}
+      title="Sign up"
+      hint="Please enter your email and password"
+      buttonLabel="Sign up"
+    />
+  )
 }
