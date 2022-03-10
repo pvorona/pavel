@@ -30,7 +30,7 @@ export function EmailPasswordForm({
         value={password}
         onChange={e => setPassword(e.target.value)}
       />
-      <Button type="submit">{label}</Button>
+      <Button buttonType="submit">{label}</Button>
     </form>
   )
 }
