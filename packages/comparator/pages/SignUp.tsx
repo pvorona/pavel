@@ -34,6 +34,7 @@ function SignUpForm() {
       title="Sign up"
       hint="Please enter your email and password"
       buttonLabel="Sign up"
+      buttonLoadingLabel="Loading..."
     />
   )
 }

@@ -34,6 +34,7 @@ function SignInForm() {
       hint="Please confirm your email and password"
       title="Sign in"
       buttonLabel="Sign in"
+      buttonLoadingLabel="Loading..."
     />
   )
 }

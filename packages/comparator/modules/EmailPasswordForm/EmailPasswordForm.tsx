@@ -38,10 +38,12 @@ export function EmailPasswordForm({
   title,
   hint,
   buttonLabel,
+  buttonLoadingLabel,
 }: {
   title: string
   hint: string
   buttonLabel: string
+  buttonLoadingLabel: string
   onSubmit: (formValue: { email: string; password: string }) => Promise<unknown>
 }) {
   const [email, setEmail] = useState('')
@@ -63,6 +65,8 @@ export function EmailPasswordForm({
 
     try {
       await onSubmit({ email, password })
+    } catch (e) {
+      console.error(e)
     } finally {
       setIsLoading(false)
     }
@@ -99,14 +103,14 @@ export function EmailPasswordForm({
           }
         />
         <Button
-          className={classNames(
-            'mt-8 w-full opacity-0 transition-opacity duration-200',
-            isButtonVisible && 'opacity-100',
-          )}
+          className={classNames('mt-8 w-full shadow-md opacity-0', {
+            'opacity-100': isButtonVisible,
+            'pointer-events-none': !isButtonVisible,
+          })}
           buttonType="submit"
           disabled={isLoading || !isButtonVisible}
         >
-          {buttonLabel}
+          {isLoading ? buttonLoadingLabel : buttonLabel}
         </Button>
       </form>
     </>
