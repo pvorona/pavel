@@ -1,6 +1,6 @@
 import { Button, Input } from '@pavel/components'
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function EmailPasswordForm({
   onSubmit,
@@ -16,6 +16,13 @@ export function EmailPasswordForm({
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [emailElement, setEmailElement] = useState<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (emailElement) {
+      emailElement.focus()
+    }
+  }, [emailElement])
 
   async function ownOnSubmit(event: React.FormEvent) {
     event.preventDefault()
@@ -39,12 +46,14 @@ export function EmailPasswordForm({
         <Input
           className="block"
           placeholder="Email"
+          ref={setEmailElement}
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
         <Input
           className="block mt-4"
           placeholder="Password"
+          type="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
         />

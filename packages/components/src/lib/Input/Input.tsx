@@ -1,18 +1,20 @@
 import classNames from 'classnames'
-import { InputHTMLAttributes } from 'react'
+import { forwardRef, InputHTMLAttributes } from 'react'
 import styles from './Input.module.css'
 
-export function Input({
-  className,
-  placeholder,
-  ...props
-}: React.DetailedHTMLProps<
+type InputProps = React.DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
->) {
+>
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { className, placeholder, ...props }: InputProps,
+  ref,
+) {
   return (
     <div className={classNames('relative', styles['container'])}>
       <input
+        ref={ref}
         className={classNames(
           'outline-none rounded border-none ',
           className,
@@ -25,4 +27,4 @@ export function Input({
       <div className={styles['placeholder']}>{placeholder}</div>
     </div>
   )
-}
+})
