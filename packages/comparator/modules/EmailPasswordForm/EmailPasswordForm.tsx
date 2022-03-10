@@ -1,4 +1,4 @@
-import { Button } from '@pavel/components'
+import { Button, Input } from '@pavel/components'
 import { useState } from 'react'
 
 export function EmailPasswordForm({
@@ -18,19 +18,21 @@ export function EmailPasswordForm({
 
   return (
     <form onSubmit={ownOnSubmit}>
-      <input
+      <Input
         className="block"
-        placeholder="email"
+        placeholder="Email"
         value={email}
         onChange={e => setEmail(e.target.value)}
       />
-      <input
-        className="block"
-        placeholder="password"
+      <Input
+        className="block mt-4"
+        placeholder="Password"
         value={password}
         onChange={e => setPassword(e.target.value)}
       />
-      <Button buttonType="submit">{label}</Button>
+      <Button className="mt-8 w-full" buttonType="submit">
+        {label}
+      </Button>
     </form>
   )
 }

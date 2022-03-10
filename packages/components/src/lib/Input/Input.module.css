@@ -1,0 +1,101 @@
+.container {
+  --color-green-1: #4dcd5e;
+  --color-red-1: #e53935;
+  --time-transition-duration: 0.2s;
+
+  --space-15: 15px;
+  --space-16: 16px;
+  --space-18: 18px;
+
+  --placeholder-lifted-scale: 0.8;
+  --placeholder-lifted-horizontal-space: 5px;
+
+  --placeholder-horizontal-space: calc(
+    var(--placeholder-lifted-horizontal-space) / var(--placeholder-lifted-scale)
+  );
+  --placeholder-active-y: -10px;
+
+  --color-background: white;
+  --color-caret: black;
+
+  --color-box-shadow: hsla(225, 4%, 25%, 0.2);
+  --color-box-shadow-hover: hsla(225, 4%, 25%, 0.5);
+  --color-box-shadow-focus: hsla(225, 4%, 25%, 0.85);
+
+  --color-placeholder: hsla(0, 0%, 0%, 0.45);
+  --color-placeholder-lifted-hover: hsla(0, 0%, 0%, 0.8);
+  --color-placeholder-lifted-focused: hsla(0, 0%, 0%, 1);
+
+  --border-width: 1px;
+  --border-width-hover: 2px;
+  --border-width-active: 2px;
+}
+
+.input {
+  padding: var(--space-18) var(--space-15) var(--space-16);
+  box-shadow: 0 0 0 var(--border-width) var(--color-box-shadow) inset;
+  width: 360px;
+  caret-color: var(--color-caret);
+  transition: box-shadow var(--time-transition-duration);
+}
+
+.input:hover {
+  box-shadow: 0 0 0 var(--border-width-hover) var(--color-box-shadow-hover)
+    inset;
+}
+
+.input:focus {
+  box-shadow: 0 0 0 var(--border-width-active) var(--color-box-shadow-focus)
+    inset;
+}
+
+.placeholder {
+  user-select: none;
+  color: var(--color-placeholder);
+  transition: transform var(--time-transition-duration),
+    color var(--time-transition-duration),
+    background var(--time-transition-duration);
+  padding: 0 var(--placeholder-horizontal-space);
+  transform-origin: left top;
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.input:hover:not(:placeholder-shown) ~ .placeholder {
+  color: var(--color-placeholder-lifted-hover);
+}
+
+.input:focus:not(:placeholder-shown) ~ .placeholder {
+  color: var(--color-placeholder-lifted-focused);
+}
+
+.input:placeholder-shown ~ .placeholder {
+  transform: translate(
+    calc(var(--space-15) - var(--placeholder-horizontal-space)),
+    var(--space-18)
+  );
+}
+
+.input:not(:placeholder-shown) ~ .placeholder {
+  color: var(--color-placeholder);
+  background-color: var(--color-background);
+  transform: translate(
+      calc(var(--space-15) - var(--placeholder-horizontal-space)),
+      var(--placeholder-active-y)
+    )
+    scale(var(--placeholder-lifted-scale));
+}
+
+/* .input--invalid {
+  box-shadow: 0 0 0 var(--border-width) var(--color-red-1) inset !important;
+}
+
+.input--invalid ~ .placeholder {
+  color: var(--color-red-1) !important;
+}
+
+.input--with-icon {
+  padding-right: 45px;
+} */
