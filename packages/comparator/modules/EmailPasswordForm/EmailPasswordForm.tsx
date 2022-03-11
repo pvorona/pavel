@@ -1,6 +1,9 @@
-import { Button, Input } from '@pavel/components'
+import { Button, Input, VALIDITY } from '@pavel/components'
 import classNames from 'classnames'
 import React, { SVGProps, useEffect, useState } from 'react'
+import { FormikHelpers, useFormik } from 'formik'
+import { useStorage } from '@pavel/comparator-shared'
+import { isBrowser } from '@pavel/utils'
 
 const IconContainer = ({
   onClick,
@@ -33,6 +36,8 @@ const IconEyeClosed = () => (
   />
 )
 
+type FormValues = { email: string; password: string }
+
 export function EmailPasswordForm({
   onSubmit,
   title,
@@ -46,11 +51,61 @@ export function EmailPasswordForm({
   buttonLoadingLabel: string
   onSubmit: (formValue: { email: string; password: string }) => Promise<unknown>
 }) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
   const [emailElement, setEmailElement] = useState<HTMLInputElement>(null)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [storedEmail, setStoredEmail] = useStorage({
+    key: 'email',
+    initialValue: '',
+    storage: isBrowser && sessionStorage,
+  })
+  const {
+    values,
+    errors,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    touched,
+    isSubmitting,
+    isValid,
+  } = useFormik({
+    initialValues: { email: storedEmail, password: '' },
+    validate: values => {
+      const errors = {} as FormValues
+      if (!values.email) {
+        errors.email = 'Please enter email address'
+      } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+      ) {
+        errors.email = 'Please enter real email address'
+      }
+
+      if (!values.password) {
+        errors.password = 'Please enter password'
+      } else if (values.password.length < 6) {
+        errors.password = 'Password should be at least 6 characters long'
+      }
+      return errors
+    },
+    onSubmit: async (
+      values: FormValues,
+      { setSubmitting, setFieldError }: FormikHelpers<FormValues>,
+    ) => {
+      try {
+        setStoredEmail(null)
+        await onSubmit(values)
+      } catch (e) {
+        setFieldError('email', 'Invalid credentials')
+        setFieldError('password', 'Invalid credentials')
+        console.error(e)
+      } finally {
+        setSubmitting(false)
+      }
+    },
+  })
+
+  useEffect(() => {
+    setStoredEmail(values.email)
+  }, [values.email, setStoredEmail])
 
   useEffect(() => {
     if (emailElement) {
@@ -58,60 +113,70 @@ export function EmailPasswordForm({
     }
   }, [emailElement])
 
-  async function ownOnSubmit(event: React.FormEvent) {
-    event.preventDefault()
-
-    setIsLoading(true)
-
-    try {
-      await onSubmit({ email, password })
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   function togglePasswordVisible() {
     setIsPasswordVisible(!isPasswordVisible)
   }
 
-  const isButtonVisible = email && password
+  const isButtonVisible = values.email && values.password
+  // const isButtonVisible = true
+  const isButtonDisabled = Boolean(!isValid || !isButtonVisible)
 
   return (
     <>
       <div className="text-3xl font-bold mt-12">{title}</div>
-      <div className="text-sm mt-6 text-gray-1">{hint}</div>
-      <form onSubmit={ownOnSubmit} className="mt-9">
+      <div className="text-sm mt-6 tracking-wide text-gray-1">{hint}</div>
+      <form onSubmit={handleSubmit} className="mt-6">
         <Input
+          name="email"
           className="block"
           placeholder="Email"
+          autoCapitalize="false"
+          autoComplete="off"
+          autoCorrect="false"
           ref={setEmailElement}
-          value={email}
-          onChange={e => setEmail(e.target.value)}
+          onBlur={handleBlur}
+          value={values.email}
+          onChange={handleChange}
+          validity={
+            errors.email && touched.email ? VALIDITY.INVALID : VALIDITY.DEFAULT
+          }
         />
         <Input
           className="block mt-4"
           placeholder="Password"
           type={isPasswordVisible ? 'text' : 'password'}
-          value={password}
-          onChange={e => setPassword(e.target.value)}
+          name="password"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          value={values.password}
           icon={
             <IconContainer onClick={togglePasswordVisible}>
               {isPasswordVisible ? <IconEyeClosed /> : <IconEyeOpen />}
             </IconContainer>
           }
+          validity={
+            errors.password && touched.password
+              ? VALIDITY.INVALID
+              : VALIDITY.DEFAULT
+          }
         />
-        <Button
-          className={classNames('mt-8 w-full shadow-md opacity-0', {
-            'opacity-100': isButtonVisible,
-            'pointer-events-none': !isButtonVisible,
-          })}
-          buttonType="submit"
-          disabled={isLoading || !isButtonVisible}
+        <div
+          className={classNames(
+            'mt-8 w-full opacity-0 transition-opacity duration-200',
+            {
+              'opacity-100': isButtonVisible,
+              'pointer-events-none': !isButtonVisible,
+            },
+          )}
         >
-          {isLoading ? buttonLoadingLabel : buttonLabel}
-        </Button>
+          <Button
+            className={'shadow-md w-full'}
+            type="submit"
+            disabled={isSubmitting || isButtonDisabled}
+          >
+            {isSubmitting ? buttonLoadingLabel : buttonLabel}
+          </Button>
+        </div>
       </form>
     </>
   )

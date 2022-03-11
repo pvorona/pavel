@@ -1,9 +1,15 @@
+/* 
+todo:
+- Red border when invalid
+- Green border when valid
+
+*/
 .container {
   --color-green-1: #4dcd5e;
   --color-red-1: #e53935;
   --time-transition-duration: 0.2s;
 
-  --space-15: 15px;
+  --input-padding-horizontal: 15px;
   --space-16: 16px;
   --space-18: 18px;
 
@@ -15,16 +21,24 @@
   );
   --placeholder-active-y: -10px;
 
-  --color-background: white;
-  --color-caret: black;
+  /* --color-background: white; */
+  --color-background: #1f2023;
+  /* --color-caret: black; */
+  --color-caret: white;
 
-  --color-box-shadow: hsla(225, 4%, 25%, 0.2);
-  --color-box-shadow-hover: hsla(225, 4%, 25%, 0.5);
-  --color-box-shadow-focus: hsla(225, 4%, 25%, 0.85);
+  /* --color-box-shadow: hsla(225, 4%, 25%, 0.2); */
+  --color-box-shadow: hsla(225, 4%, 75%, 0.2);
+  /* --color-box-shadow-hover: hsla(225, 4%, 25%, 0.5); */
+  --color-box-shadow-hover: hsla(225, 4%, 75%, 0.5);
+  /* --color-box-shadow-focus: hsla(225, 4%, 25%, 0.85); */
+  --color-box-shadow-focus: hsla(225, 4%, 75%, 0.85);
 
-  --color-placeholder: hsla(0, 0%, 0%, 0.45);
-  --color-placeholder-lifted-hover: hsla(0, 0%, 0%, 0.8);
-  --color-placeholder-lifted-focused: hsla(0, 0%, 0%, 1);
+  /* --color-placeholder: hsla(0, 0%, 0%, 0.45); */
+  --color-placeholder: hsla(0, 0%, 100%, 0.45);
+  /* --color-placeholder-lifted-hover: hsla(0, 0%, 0%, 0.8); */
+  --color-placeholder-lifted-hover: hsla(0, 0%, 100%, 0.8);
+  /* --color-placeholder-lifted-focused: hsla(0, 0%, 0%, 1); */
+  --color-placeholder-lifted-focused: hsla(0, 0%, 100%, 1);
 
   --border-width: 1px;
   --border-width-hover: 2px;
@@ -32,7 +46,7 @@
 }
 
 .input {
-  padding: var(--space-18) var(--space-15) var(--space-16);
+  padding: var(--space-18) var(--input-padding-horizontal) var(--space-16);
   box-shadow: 0 0 0 var(--border-width) var(--color-box-shadow) inset;
   width: 360px;
   caret-color: var(--color-caret);
@@ -73,7 +87,7 @@
 
 .input:placeholder-shown ~ .placeholder {
   transform: translate(
-    calc(var(--space-15) - var(--placeholder-horizontal-space)),
+    calc(var(--input-padding-horizontal) - var(--placeholder-horizontal-space)),
     var(--space-18)
   );
 }
@@ -82,7 +96,9 @@
   color: var(--color-placeholder);
   background-color: var(--color-background);
   transform: translate(
-      calc(var(--space-15) - var(--placeholder-horizontal-space)),
+      calc(
+        var(--input-padding-horizontal) - var(--placeholder-horizontal-space)
+      ),
       var(--placeholder-active-y)
     )
     scale(var(--placeholder-lifted-scale));
@@ -99,3 +115,15 @@
 .input--with-icon {
   padding-right: 45px;
 } */
+
+.hint {
+  position: absolute;
+  font-size: 13px;
+  left: var(--input-padding-horizontal);
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 0.35s;
+  will-change: opacity, transform;
+  pointer-events: none;
+  opacity: 1;
+}

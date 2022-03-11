@@ -15,11 +15,13 @@ module.exports = {
           7: 'hsla(270, 0%, 35%, 0.2)',
           8: 'hsl(210, 1%, 70%)',
           9: 'hsl(225, 6%, 17%)',
+          10: 'hsl(225, 6%, 90%)',
         },
       },
       boxShadow: {
         1: '0 0 0 1px hsl(0, 0%, 50%)',
         2: '0 0 0 1px hsl(0, 0%, 80%)',
+        3: '0 0 0 1px var(--tw-shadow-color) inset;',
       },
       animation: {
         success: 'success .45s',

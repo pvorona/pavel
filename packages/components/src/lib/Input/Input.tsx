@@ -7,10 +7,18 @@ type InputProps = React.DetailedHTMLProps<
   HTMLInputElement
 > & {
   icon?: JSX.Element
+  hint?: string
+  validity?: VALIDITY
+}
+
+export enum VALIDITY {
+  DEFAULT,
+  VALID,
+  INVALID,
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, placeholder, icon, ...props },
+  { className, placeholder, icon, hint, validity = VALIDITY.DEFAULT, ...props },
   ref,
 ) {
   return (
@@ -18,16 +26,28 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <input
         ref={ref}
         className={classNames(
-          'outline-none rounded border-none overflow-ellipsis',
+          'outline-none rounded border-none overflow-ellipsis bg-transparent peer',
           className,
           styles['input'],
-          icon && 'pr-10',
+          {
+            'shadow-red-500 shadow-3': validity === VALIDITY.INVALID, // handle hover focus as well
+            'pr-10': icon,
+          },
         )}
         placeholder=" "
         type="text"
+        spellCheck="false"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
         {...props}
       />
-      <div className={styles['placeholder']}>{placeholder}</div>
+      <div
+        className={classNames(styles['hint'], 'tracking-wider text-red-400')}
+      >
+        {hint}
+      </div>
+      <div className={classNames(styles['placeholder'], '')}>{placeholder}</div>
       {icon && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex">
           {icon}

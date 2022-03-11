@@ -1,8 +1,6 @@
 import Link from 'next/link'
-import { signInAnonymously } from 'firebase/auth'
-import { auth } from '@pavel/comparator-shared'
+import { signOut, signInAnonymously } from '@pavel/comparator-shared'
 import { Button } from '@pavel/components'
-import { signOut } from '../modules/auth/auth.firebase'
 import { withAuthUser, useAuthUser } from 'next-firebase-auth'
 
 export default withAuthUser()(Status)
@@ -12,7 +10,7 @@ function Status() {
 
   async function tryAnonymously() {
     try {
-      await signInAnonymously(auth)
+      await signInAnonymously()
     } catch (error) {
       console.error('Failed to sign in anonymously', error)
     }
