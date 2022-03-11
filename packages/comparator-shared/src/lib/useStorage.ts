@@ -35,14 +35,11 @@ export function useStorage<T>({
       try {
         // Allow value to be a function so we have same API as useState
         // Save state
+        // TODO:
+        // - fix rerenders
         setStoredValue(value)
-        // Save to local storage
         if (isBrowser) {
-          if (value === null) {
-            storage.removeItem(key)
-          } else {
-            storage.setItem(key, JSON.stringify(value))
-          }
+          storage.setItem(key, JSON.stringify(value))
         }
       } catch (error) {
         // A more advanced implementation would handle the error case
@@ -52,5 +49,15 @@ export function useStorage<T>({
     [key, storage],
   )
 
-  return [storedValue, setValue]
+  const removeItem = useCallback(() => {
+    if (isBrowser) {
+      try {
+        storage.removeItem(key)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }, [key, storage])
+
+  return [storedValue, setValue, removeItem]
 }

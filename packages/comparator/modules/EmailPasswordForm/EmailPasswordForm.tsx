@@ -1,9 +1,9 @@
 import { Button, Input, VALIDITY } from '@pavel/components'
-import classNames from 'classnames'
-import React, { SVGProps, useEffect, useState } from 'react'
+import React, { SVGProps, useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
 import { useStorage } from '@pavel/comparator-shared'
-import { isBrowser } from '@pavel/utils'
+import { getDistanceBetweenPointAndRectangle, isBrowser } from '@pavel/utils'
+import { observe, pointerPosition } from '@pavel/observable'
 
 const IconContainer = ({
   onClick,
@@ -38,6 +38,22 @@ const IconEyeClosed = () => (
 
 type FormValues = { email: string; password: string }
 
+function validate(values: FormValues) {
+  const errors = {} as FormValues
+  if (!values.email) {
+    errors.email = 'Please enter email address'
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    errors.email = 'Please enter real email address'
+  }
+
+  if (!values.password) {
+    errors.password = 'Please enter password'
+  } else if (values.password.length < 6) {
+    errors.password = 'Password should be at least 6 characters long'
+  }
+  return errors
+}
+
 export function EmailPasswordForm({
   onSubmit,
   title,
@@ -53,11 +69,32 @@ export function EmailPasswordForm({
 }) {
   const [emailElement, setEmailElement] = useState<HTMLInputElement>(null)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [storedEmail, setStoredEmail] = useStorage({
+  const [storedEmail, setStoredEmail, removeStoredEmail] = useStorage({
     key: 'email',
     initialValue: '',
     storage: isBrowser && sessionStorage,
   })
+  const [isCloseToButton, setIsCloseToButton] = useState(false)
+  const ownOnSubmit = useCallback(
+    async (
+      values: FormValues,
+      { setSubmitting, setFieldError }: FormikHelpers<FormValues>,
+    ) => {
+      try {
+        await onSubmit(values)
+        removeStoredEmail()
+      } catch (e) {
+        // Hack
+        setFieldError('email', 'Email')
+        setFieldError('password', 'Password')
+        console.error(e)
+      } finally {
+        setSubmitting(false)
+      }
+    },
+    [onSubmit, removeStoredEmail],
+  )
+  const initialValues = { email: storedEmail, password: '' }
   const {
     values,
     errors,
@@ -69,45 +106,36 @@ export function EmailPasswordForm({
     isValid,
     dirty,
   } = useFormik({
-    initialValues: { email: storedEmail, password: '' },
-    validate: values => {
-      const errors = {} as FormValues
-      if (!values.email) {
-        errors.email = 'Please enter email address'
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-      ) {
-        errors.email = 'Please enter real email address'
-      }
-
-      if (!values.password) {
-        errors.password = 'Please enter password'
-      } else if (values.password.length < 6) {
-        errors.password = 'Password should be at least 6 characters long'
-      }
-      return errors
-    },
-    onSubmit: async (
-      values: FormValues,
-      { setSubmitting, setFieldError }: FormikHelpers<FormValues>,
-    ) => {
-      try {
-        setStoredEmail(null)
-        await onSubmit(values)
-      } catch (e) {
-        // Hack
-        setFieldError('email', 'Email')
-        setFieldError('password', 'Password')
-        console.error(e)
-      } finally {
-        setSubmitting(false)
-      }
-    },
+    initialValues,
+    initialErrors: validate(initialValues),
+    validate,
+    onSubmit: ownOnSubmit,
   })
 
   useEffect(() => {
     setStoredEmail(values.email)
-  }, [values.email, setStoredEmail])
+  }, [values, setStoredEmail])
+
+  useEffect(() => {
+    const THRESHOLD = 20
+
+    return observe(
+      [pointerPosition],
+      ({ x, y }) => {
+        const button = document.getElementById('kek')
+        const { left, top, right, bottom } = button.getBoundingClientRect()
+
+        const distance = getDistanceBetweenPointAndRectangle([x, y], {
+          left,
+          top,
+          right,
+          bottom,
+        })
+        setIsCloseToButton(distance < THRESHOLD)
+      },
+      { fireImmediately: false },
+    )
+  }, [])
 
   useEffect(() => {
     if (emailElement) {
@@ -119,8 +147,14 @@ export function EmailPasswordForm({
     setIsPasswordVisible(!isPasswordVisible)
   }
 
-  const isButtonVisible = values.email && values.password
-  const isButtonDisabled = Boolean(!isValid || !isButtonVisible)
+  const emailValidity =
+    errors.email && ((touched.email && dirty) || isCloseToButton)
+      ? VALIDITY.INVALID
+      : VALIDITY.DEFAULT
+  const passwordValidity =
+    errors.password && ((touched.password && dirty) || isCloseToButton)
+      ? VALIDITY.INVALID
+      : VALIDITY.DEFAULT
 
   return (
     <>
@@ -141,12 +175,8 @@ export function EmailPasswordForm({
           ref={setEmailElement}
           onBlur={handleBlur}
           value={values.email}
-          onChange={handleChange}
-          validity={
-            errors.email && touched.email && dirty
-              ? VALIDITY.INVALID
-              : VALIDITY.DEFAULT
-          }
+          onInput={handleChange}
+          validity={emailValidity}
         />
         <Input
           className="block mt-4"
@@ -157,7 +187,7 @@ export function EmailPasswordForm({
           }
           type={isPasswordVisible ? 'text' : 'password'}
           name="password"
-          onChange={handleChange}
+          onInput={handleChange}
           onBlur={handleBlur}
           value={values.password}
           icon={
@@ -165,16 +195,13 @@ export function EmailPasswordForm({
               {isPasswordVisible ? <IconEyeClosed /> : <IconEyeOpen />}
             </IconContainer>
           }
-          validity={
-            errors.password && touched.password && dirty
-              ? VALIDITY.INVALID
-              : VALIDITY.DEFAULT
-          }
+          validity={passwordValidity}
         />
         <Button
+          id="kek"
           className="w-full mt-8"
           type="submit"
-          disabled={isSubmitting || isButtonDisabled}
+          disabled={isSubmitting || !isValid}
         >
           {isSubmitting ? buttonLoadingLabel : buttonLabel}
         </Button>

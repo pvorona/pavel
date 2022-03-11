@@ -48,7 +48,7 @@ function SignInForm() {
         buttonLoadingLabel="Loading..."
       />
       <div className="text-center mt-12 text-gray-1">
-        {"Don't have an account yet?"}
+        {"Don't have an account?"}
       </div>
       <div className="text-center mt-1 text-gray-1">
         <Link href={SIGN_UP} passHref>
