@@ -67,6 +67,7 @@ export function EmailPasswordForm({
     touched,
     isSubmitting,
     isValid,
+    dirty,
   } = useFormik({
     initialValues: { email: storedEmail, password: '' },
     validate: values => {
@@ -94,8 +95,9 @@ export function EmailPasswordForm({
         setStoredEmail(null)
         await onSubmit(values)
       } catch (e) {
-        setFieldError('email', 'Invalid credentials')
-        setFieldError('password', 'Invalid credentials')
+        // Hack
+        setFieldError('email', 'Email')
+        setFieldError('password', 'Password')
         console.error(e)
       } finally {
         setSubmitting(false)
@@ -118,18 +120,21 @@ export function EmailPasswordForm({
   }
 
   const isButtonVisible = values.email && values.password
-  // const isButtonVisible = true
   const isButtonDisabled = Boolean(!isValid || !isButtonVisible)
 
   return (
     <>
-      <div className="text-3xl font-bold mt-12">{title}</div>
+      <div className="text-3xl font-bold mt-28">{title}</div>
       <div className="text-sm mt-6 tracking-wide text-gray-1">{hint}</div>
       <form onSubmit={handleSubmit} className="mt-6">
         <Input
           name="email"
           className="block"
-          placeholder="Email"
+          placeholder={
+            errors.email && touched.email && dirty
+              ? String(errors.email)
+              : 'Email'
+          }
           autoCapitalize="false"
           autoComplete="off"
           autoCorrect="false"
@@ -138,12 +143,18 @@ export function EmailPasswordForm({
           value={values.email}
           onChange={handleChange}
           validity={
-            errors.email && touched.email ? VALIDITY.INVALID : VALIDITY.DEFAULT
+            errors.email && touched.email && dirty
+              ? VALIDITY.INVALID
+              : VALIDITY.DEFAULT
           }
         />
         <Input
           className="block mt-4"
-          placeholder="Password"
+          placeholder={
+            errors.password && touched.password && dirty
+              ? errors.password
+              : 'Password'
+          }
           type={isPasswordVisible ? 'text' : 'password'}
           name="password"
           onChange={handleChange}
@@ -155,28 +166,18 @@ export function EmailPasswordForm({
             </IconContainer>
           }
           validity={
-            errors.password && touched.password
+            errors.password && touched.password && dirty
               ? VALIDITY.INVALID
               : VALIDITY.DEFAULT
           }
         />
-        <div
-          className={classNames(
-            'mt-8 w-full opacity-0 transition-opacity duration-200',
-            {
-              'opacity-100': isButtonVisible,
-              'pointer-events-none': !isButtonVisible,
-            },
-          )}
+        <Button
+          className="w-full mt-8"
+          type="submit"
+          disabled={isSubmitting || isButtonDisabled}
         >
-          <Button
-            className={'shadow-md w-full'}
-            type="submit"
-            disabled={isSubmitting || isButtonDisabled}
-          >
-            {isSubmitting ? buttonLoadingLabel : buttonLabel}
-          </Button>
-        </div>
+          {isSubmitting ? buttonLoadingLabel : buttonLabel}
+        </Button>
       </form>
     </>
   )

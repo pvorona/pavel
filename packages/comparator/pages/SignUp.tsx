@@ -47,10 +47,10 @@ function SignUpForm() {
         buttonLabel="Sign up"
         buttonLoadingLabel="Loading..."
       />
-      <div className="text-center mt-9 text-gray-1">
+      <div className="text-center mt-12 text-gray-1">
         Already have an account?
       </div>
-      <div className="text-center mt-1 text-gray-1">
+      <div className="text-center mt-1 text-gray-1 tracking-wide">
         <Link href={SIGN_IN} passHref>
           <Button component="a" variant="link">
             Sign in
@@ -58,7 +58,7 @@ function SignUpForm() {
         </Link>{' '}
         or{' '}
         <Button variant="link" onClick={tryAnonymously}>
-          try without signing in
+          try anonymously
         </Button>
       </div>
     </>

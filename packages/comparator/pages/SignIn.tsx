@@ -47,7 +47,7 @@ function SignInForm() {
         buttonLabel="Sign in"
         buttonLoadingLabel="Loading..."
       />
-      <div className="text-center mt-9 text-gray-1">
+      <div className="text-center mt-12 text-gray-1">
         {"Don't have an account yet?"}
       </div>
       <div className="text-center mt-1 text-gray-1">
@@ -58,7 +58,7 @@ function SignInForm() {
         </Link>{' '}
         or{' '}
         <Button variant="link" onClick={tryAnonymously}>
-          try without signing up
+          try anonymously
         </Button>
       </div>
     </>

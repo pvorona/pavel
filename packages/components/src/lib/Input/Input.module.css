@@ -5,8 +5,8 @@ todo:
 
 */
 .container {
-  --color-green-1: #4dcd5e;
-  --color-red-1: #e53935;
+  /* --color-green-1: #4dcd5e;
+  --color-red-1: #e53935; */
   --time-transition-duration: 0.2s;
 
   --input-padding-horizontal: 15px;
@@ -21,51 +21,66 @@ todo:
   );
   --placeholder-active-y: -10px;
 
-  /* --color-background: white; */
-  --color-background: #1f2023;
-  /* --color-caret: black; */
-  --color-caret: white;
+  --color-background: white;
+  /* --color-background: #1f2023; */
+  --color-caret: black;
+  /* --color-caret: white; */
 
-  /* --color-box-shadow: hsla(225, 4%, 25%, 0.2); */
-  --color-box-shadow: hsla(225, 4%, 75%, 0.2);
-  /* --color-box-shadow-hover: hsla(225, 4%, 25%, 0.5); */
-  --color-box-shadow-hover: hsla(225, 4%, 75%, 0.5);
-  /* --color-box-shadow-focus: hsla(225, 4%, 25%, 0.85); */
-  --color-box-shadow-focus: hsla(225, 4%, 75%, 0.85);
+  --color-box-shadow: hsla(225, 4%, 25%, 0.2);
+  /* --color-box-shadow: hsla(225, 4%, 75%, 0.2); */
+  --color-box-shadow-hover: hsla(225, 4%, 25%, 0.5);
+  /* --color-box-shadow-hover: hsla(225, 4%, 75%, 0.5); */
+  --color-box-shadow-focus: hsla(225, 4%, 25%, 0.85);
+  /* --color-box-shadow-focus: hsla(225, 4%, 75%, 0.85); */
+  --color-box-shadow-invalid: theme('colors.red.500');
 
-  /* --color-placeholder: hsla(0, 0%, 0%, 0.45); */
-  --color-placeholder: hsla(0, 0%, 100%, 0.45);
-  /* --color-placeholder-lifted-hover: hsla(0, 0%, 0%, 0.8); */
-  --color-placeholder-lifted-hover: hsla(0, 0%, 100%, 0.8);
-  /* --color-placeholder-lifted-focused: hsla(0, 0%, 0%, 1); */
-  --color-placeholder-lifted-focused: hsla(0, 0%, 100%, 1);
+  --color-placeholder-default: hsla(0, 0%, 0%, 0.45);
+  /* --color-placeholder: hsla(0, 0%, 100%, 0.45); */
+  --color-placeholder-lifted-hover: hsla(0, 0%, 0%, 0.8);
+  /* --color-placeholder-lifted-hover: hsla(0, 0%, 100%, 0.8); */
+  --color-placeholder-lifted-focused: hsla(0, 0%, 0%, 1);
+  /* --color-placeholder-lifted-focused: hsla(0, 0%, 100%, 1); */
+  --color-placeholder-invalid-default: theme('colors.red.500');
+  --color-placeholder-invalid-lifted: theme('colors.red.500');
+  --color-placeholder-invalid-lifted-hover: theme('colors.red.500');
+  --color-placeholder-invalid-lifted-focus: theme('colors.red.500');
 
-  --border-width: 1px;
+  --border-width-default: 1px;
   --border-width-hover: 2px;
   --border-width-active: 2px;
+  --border-width-invalid: 2px;
 }
 
 .input {
   padding: var(--space-18) var(--input-padding-horizontal) var(--space-16);
-  box-shadow: 0 0 0 var(--border-width) var(--color-box-shadow) inset;
   width: 360px;
   caret-color: var(--color-caret);
   transition: box-shadow var(--time-transition-duration);
+
+  /* Border / box-shadow */
+  --border-width: var(--border-width-default);
+  --border-color: var(--color-box-shadow);
+
+  box-shadow: 0 0 0 var(--border-width) var(--border-color) inset;
 }
 
 .input:hover {
-  box-shadow: 0 0 0 var(--border-width-hover) var(--color-box-shadow-hover)
-    inset;
+  --border-width: var(--border-width-hover);
+  --border-color: var(--color-box-shadow-hover);
 }
 
 .input:focus {
-  box-shadow: 0 0 0 var(--border-width-active) var(--color-box-shadow-focus)
-    inset;
+  --border-width: var(--border-width-active);
+  --border-color: var(--color-box-shadow-focus);
+}
+
+.input.invalid {
+  --border-width: var(--border-width-invalid);
+  --border-color: var(--color-box-shadow-invalid);
 }
 
 .placeholder {
   user-select: none;
-  color: var(--color-placeholder);
   transition: transform var(--time-transition-duration),
     color var(--time-transition-duration),
     background var(--time-transition-duration);
@@ -75,16 +90,13 @@ todo:
   left: 0;
   top: 0;
   pointer-events: none;
+
+  --placeholder-color: var(--color-placeholder-default);
+
+  color: var(--placeholder-color);
 }
 
-.input:hover:not(:placeholder-shown) ~ .placeholder {
-  color: var(--color-placeholder-lifted-hover);
-}
-
-.input:focus:not(:placeholder-shown) ~ .placeholder {
-  color: var(--color-placeholder-lifted-focused);
-}
-
+/* Default */
 .input:placeholder-shown ~ .placeholder {
   transform: translate(
     calc(var(--input-padding-horizontal) - var(--placeholder-horizontal-space)),
@@ -92,8 +104,8 @@ todo:
   );
 }
 
+/* Lifted */
 .input:not(:placeholder-shown) ~ .placeholder {
-  color: var(--color-placeholder);
   background-color: var(--color-background);
   transform: translate(
       calc(
@@ -104,17 +116,35 @@ todo:
     scale(var(--placeholder-lifted-scale));
 }
 
-/* .input--invalid {
-  box-shadow: 0 0 0 var(--border-width) var(--color-red-1) inset !important;
+/* Lifted hover */
+.input:hover:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-lifted-hover);
 }
 
-.input--invalid ~ .placeholder {
-  color: var(--color-red-1) !important;
+/* Lifted focus */
+.input:focus:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-lifted-focused);
 }
 
-.input--with-icon {
-  padding-right: 45px;
-} */
+/* Invalid default */
+.input.invalid ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-invalid-default);
+}
+
+/* Invalid lifted */
+.input.invalid:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-invalid-lifted);
+}
+
+/* Invalid lifted hover */
+.input.invalid:hover:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-invalid-lifted-hover);
+}
+
+/* Invalid lifted focus */
+.input.invalid:focus:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-invalid-lifted-focus);
+}
 
 .hint {
   position: absolute;

@@ -6,6 +6,7 @@ export function createObservers<
   T extends unknown[] = never[],
   F extends (...args: T) => void = (...args: T) => void,
 >() {
+  // LinkedList works better here
   const observers: F[] = []
 
   function addObserver(observer: F): Lambda {

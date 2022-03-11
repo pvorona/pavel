@@ -30,8 +30,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           className,
           styles['input'],
           {
-            'shadow-red-500 shadow-3': validity === VALIDITY.INVALID, // handle hover focus as well
+            // 'shadow-red-500 shadow-3': validity === VALIDITY.INVALID, // handle hover focus as well
             'pr-10': icon,
+            [styles['invalid']]: validity === VALIDITY.INVALID,
           },
         )}
         placeholder=" "
@@ -42,12 +43,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         autoCapitalize="off"
         {...props}
       />
-      <div
-        className={classNames(styles['hint'], 'tracking-wider text-red-400')}
-      >
-        {hint}
-      </div>
-      <div className={classNames(styles['placeholder'], '')}>{placeholder}</div>
+      {hint && (
+        <div
+          className={classNames(styles['hint'], 'tracking-wider text-red-400')}
+        >
+          {hint}
+        </div>
+      )}
+      {placeholder && (
+        <div className={classNames(styles['placeholder'], '')}>
+          {placeholder}
+        </div>
+      )}
       {icon && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex">
           {icon}
