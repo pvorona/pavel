@@ -1,6 +1,7 @@
 import { isBrowser } from '@pavel/utils'
 import { useCallback, useState } from 'react'
 
+// Extract to react-specific package
 export function useStorage<T>({
   key,
   initialValue,

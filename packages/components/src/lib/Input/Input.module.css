@@ -5,8 +5,6 @@ todo:
 
 */
 .container {
-  /* --color-green-1: #4dcd5e;
-  --color-red-1: #e53935; */
   --time-transition-duration: 0.2s;
 
   --input-padding-horizontal: 15px;
@@ -22,24 +20,17 @@ todo:
   --placeholder-active-y: -10px;
 
   --color-background: white;
-  /* --color-background: #1f2023; */
   --color-caret: black;
-  /* --color-caret: white; */
 
   --color-box-shadow: hsla(225, 4%, 25%, 0.2);
-  /* --color-box-shadow: hsla(225, 4%, 75%, 0.2); */
   --color-box-shadow-hover: hsla(225, 4%, 25%, 0.5);
-  /* --color-box-shadow-hover: hsla(225, 4%, 75%, 0.5); */
   --color-box-shadow-focus: hsla(225, 4%, 25%, 0.85);
-  /* --color-box-shadow-focus: hsla(225, 4%, 75%, 0.85); */
   --color-box-shadow-invalid: theme('colors.red.500');
 
   --color-placeholder-default: hsla(0, 0%, 0%, 0.45);
-  /* --color-placeholder: hsla(0, 0%, 100%, 0.45); */
   --color-placeholder-lifted-hover: hsla(0, 0%, 0%, 0.8);
-  /* --color-placeholder-lifted-hover: hsla(0, 0%, 100%, 0.8); */
   --color-placeholder-lifted-focused: hsla(0, 0%, 0%, 1);
-  /* --color-placeholder-lifted-focused: hsla(0, 0%, 100%, 1); */
+
   --color-placeholder-invalid-default: theme('colors.red.500');
   --color-placeholder-invalid-lifted: theme('colors.red.500');
   --color-placeholder-invalid-lifted-hover: theme('colors.red.500');
@@ -49,6 +40,22 @@ todo:
   --border-width-hover: 2px;
   --border-width-active: 2px;
   --border-width-invalid: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    --color-background: #1f2023;
+    --color-caret: white;
+
+    --color-box-shadow: hsla(225, 4%, 75%, 0.2);
+    --color-box-shadow-hover: hsla(225, 4%, 75%, 0.5);
+    --color-box-shadow-focus: hsla(225, 4%, 75%, 0.85);
+    --color-box-shadow-invalid: theme('colors.red.500');
+
+    --color-placeholder-default: hsla(0, 0%, 100%, 0.45);
+    --color-placeholder-lifted-hover: hsla(0, 0%, 100%, 0.8);
+    --color-placeholder-lifted-focused: hsla(0, 0%, 100%, 1);
+  }
 }
 
 .input {

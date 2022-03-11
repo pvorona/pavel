@@ -5,6 +5,7 @@ import { useStorage } from '@pavel/comparator-shared'
 import { getDistanceBetweenPointAndRectangle, isBrowser } from '@pavel/utils'
 import { observe, pointerPosition } from '@pavel/observable'
 
+// dark colors
 const IconContainer = ({
   onClick,
   ...props
@@ -116,6 +117,7 @@ export function EmailPasswordForm({
     setStoredEmail(values.email)
   }, [values, setStoredEmail])
 
+  // Extract hook useProximity
   useEffect(() => {
     const THRESHOLD = 20
 

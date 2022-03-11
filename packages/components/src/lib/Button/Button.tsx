@@ -27,8 +27,9 @@ type AnchorElementProps = {
 const baseClassName = 'outline-none transition-all'
 const defaultButtonClassName =
   'text-lg bg-gray-4 text-white bg-gray-4 border border-gray-4 rounded'
+// Find better dark:interaction colors
 const defaultButtonInteractionsClassName =
-  'dark:hover:border-[#5f6368] hover:bg-gray-9 focus:bg-gray-9 duration-200 shadow-md'
+  'hover:bg-gray-9 focus:bg-gray-9 dark:hover:bg-gray-4 dark:focus:bg-gray-4 dark:hover:border-[#5f6368] duration-200 shadow-md'
 const defaultLinkClassName = 'dark:text-gray-10'
 const defaultLinkInteractionsClassName =
   'text-gray-6 hover:text-gray-9 dark:hover:text-white dark:focus:text-white hover:underline focus:underline underline-offset-4 '
