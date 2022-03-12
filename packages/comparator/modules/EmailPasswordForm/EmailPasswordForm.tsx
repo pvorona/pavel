@@ -13,12 +13,7 @@ import {
   usePointerProximity,
   useDefaultFromStorage,
 } from '@pavel/react-utils'
-import {
-  isBrowser,
-  moveCursorToEnd,
-  removeFromStorage,
-  saveToStorage,
-} from '@pavel/utils'
+import { bindStorage, isBrowser, moveCursorToEnd } from '@pavel/utils'
 import { LoadingStatus } from '@pavel/types'
 
 type FormValues = { email: string; password: string }
@@ -41,6 +36,13 @@ function validate(values: FormValues) {
 
 const storageKey = 'email'
 const storage = isBrowser && sessionStorage
+
+const { remove: removeEmailFromStorage, set: saveEmailToStorage } = bindStorage(
+  {
+    storage,
+    key: storageKey,
+  },
+)
 
 export function EmailPasswordForm({
   onSubmit,
@@ -70,7 +72,7 @@ export function EmailPasswordForm({
     ) => {
       try {
         await onSubmit(values)
-        removeFromStorage(storageKey, storage)
+        removeEmailFromStorage()
       } catch (e) {
         // Hack
         setFieldError('email', 'Email')
@@ -103,7 +105,7 @@ export function EmailPasswordForm({
   useAutoFocus(emailInput)
 
   useEffect(() => {
-    saveToStorage(storageKey, values.email, storage)
+    saveEmailToStorage(values.email)
   }, [values])
 
   useEffect(() => {

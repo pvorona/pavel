@@ -49,3 +49,17 @@ export const removeFromStorageBrowser = (
 }
 
 export const removeFromStorage = isBrowser ? removeFromStorageBrowser : noop
+
+export function bindStorage<T = string>({
+  storage,
+  key,
+}: {
+  storage: Storage
+  key: string
+}) {
+  return {
+    get: () => getFromStorage(key, storage),
+    set: (value: T) => saveToStorage(key, value, storage),
+    remove: () => removeFromStorage(key, storage),
+  }
+}
