@@ -4,7 +4,7 @@ import {
 } from '../../modules'
 import { memo } from 'react'
 import { useDispatch } from 'react-redux'
-import { IconButton } from '@pavel/components'
+import { DotButton } from '@pavel/components'
 
 export const OptionActions = memo(function OptionActions({
   optionId,
@@ -26,7 +26,7 @@ export const OptionActions = memo(function OptionActions({
   }
 
   return (
-    <IconButton
+    <DotButton
       className="absolute top-1/2 -translate-y-1/2 mr-4 mt-1 right-0 opacity-0 scale-0 transition-all group-hover:opacity-100 group-focus-within:opacity-100 group-hover:scale-100 group-focus-within:scale-100"
       color="red"
       onMouseEnter={onRemoveOptionMouseEnter}

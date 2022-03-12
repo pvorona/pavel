@@ -8,7 +8,7 @@ export enum Direction {
   Inverse = 1,
 }
 
-export function IconGroup({
+export function IconTransitionGroup({
   children,
   direction = Direction.Straight,
   isOpen,
