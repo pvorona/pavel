@@ -1,4 +1,7 @@
-export const getFromStorage = <T>(
+import { isBrowser } from '../isBrowser'
+import { noop } from '../noop'
+
+export const getFromStorageBrowser = <T>(
   key: string,
   defaultValue: T,
   storage = localStorage,
@@ -16,7 +19,9 @@ export const getFromStorage = <T>(
   }
 }
 
-export const saveToStorage = <T>(
+export const getFromStorage = isBrowser ? getFromStorageBrowser : noop
+
+export const saveToStorageBrowser = <T>(
   key: string,
   value: T,
   storage = localStorage,
@@ -28,7 +33,12 @@ export const saveToStorage = <T>(
   }
 }
 
-export const removeFromStorage = (key: string, storage = localStorage) => {
+export const saveToStorage = isBrowser ? saveToStorageBrowser : noop
+
+export const removeFromStorageBrowser = (
+  key: string,
+  storage = localStorage,
+) => {
   try {
     storage.removeItem(key)
   } catch (error) {
@@ -37,3 +47,5 @@ export const removeFromStorage = (key: string, storage = localStorage) => {
     )
   }
 }
+
+export const removeFromStorage = isBrowser ? removeFromStorageBrowser : noop

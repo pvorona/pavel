@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
 
-export function useAutoFocus() {
-  const [element, setElement] = useState<HTMLElement | undefined>()
+export function useAutoFocus(maybeElement?: HTMLElement) {
+  const [element, setElement] = useState<HTMLElement | undefined>(maybeElement)
+
+  useEffect(() => {
+    setElement(maybeElement)
+  }, [maybeElement])
 
   useEffect(() => {
     if (element) {

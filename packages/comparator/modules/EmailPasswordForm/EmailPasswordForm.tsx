@@ -13,7 +13,12 @@ import {
   usePointerProximity,
   useDefaultFromStorage,
 } from '@pavel/react-utils'
-import { isBrowser, removeFromStorage, saveToStorage } from '@pavel/utils'
+import {
+  isBrowser,
+  moveCursorToEnd,
+  removeFromStorage,
+  saveToStorage,
+} from '@pavel/utils'
 import { LoadingStatus } from '@pavel/types'
 
 type FormValues = { email: string; password: string }
@@ -50,7 +55,7 @@ export function EmailPasswordForm({
   buttonLoadingLabel: string
   onSubmit: (formValue: { email: string; password: string }) => Promise<unknown>
 }) {
-  const emailInputRef = useAutoFocus()
+  const [emailInput, setEmailInput] = useState<HTMLInputElement | undefined>()
   const [isCloseToButton, buttonRef] = usePointerProximity()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const storedEmail = useDefaultFromStorage({
@@ -95,9 +100,17 @@ export function EmailPasswordForm({
     onSubmit: ownOnSubmit,
   })
 
+  useAutoFocus(emailInput)
+
   useEffect(() => {
     saveToStorage(storageKey, values.email, storage)
   }, [values])
+
+  useEffect(() => {
+    if (emailInput) {
+      moveCursorToEnd(emailInput)
+    }
+  }, [emailInput])
 
   function togglePasswordVisible() {
     setIsPasswordVisible(!isPasswordVisible)
@@ -128,7 +141,7 @@ export function EmailPasswordForm({
           autoCapitalize="off"
           autoComplete="off"
           spellCheck="false"
-          ref={emailInputRef}
+          ref={setEmailInput}
           onBlur={handleBlur}
           value={values.email}
           onInput={handleChange}
