@@ -11,7 +11,7 @@ import { FormikHelpers, useFormik } from 'formik'
 import {
   useAutoFocus,
   usePointerProximity,
-  useStorage,
+  useDefaultFromStorage,
 } from '@pavel/react-utils'
 import { isBrowser } from '@pavel/utils'
 import { LoadingStatus } from '@pavel/types'
@@ -50,12 +50,12 @@ export function EmailPasswordForm({
   const emailInputRef = useAutoFocus()
   const [isCloseToButton, buttonRef] = usePointerProximity()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [storedEmail, setStoredEmail, removeStoredEmail] = useStorage({
-    key: 'email',
-    initialValue: '',
-    storage: isBrowser && sessionStorage,
-  })
-  const [isLoaded, setLoaded] = useState(false)
+  const [storedEmail, setStoredEmail, removeStoredEmail] =
+    useDefaultFromStorage({
+      key: 'email',
+      initialValue: '',
+      storage: isBrowser && sessionStorage,
+    })
   const ownOnSubmit = useCallback(
     async (
       values: FormValues,
@@ -64,7 +64,6 @@ export function EmailPasswordForm({
       try {
         await onSubmit(values)
         removeStoredEmail()
-        setLoaded(true)
       } catch (e) {
         // Hack
         setFieldError('email', 'Email')
