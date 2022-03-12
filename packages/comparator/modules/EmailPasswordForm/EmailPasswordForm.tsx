@@ -8,7 +8,7 @@ import {
 } from '@pavel/components'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
-import { useStorage } from '@pavel/react-utils'
+import { useAutoFocus, useStorage } from '@pavel/react-utils'
 import { getDistance2DBetweenPointAndRectangle, isBrowser } from '@pavel/utils'
 import { observe, pointerPosition } from '@pavel/observable'
 
@@ -43,7 +43,7 @@ export function EmailPasswordForm({
   buttonLoadingLabel: string
   onSubmit: (formValue: { email: string; password: string }) => Promise<unknown>
 }) {
-  const [emailElement, setEmailElement] = useState<HTMLInputElement>(null)
+  const ref = useAutoFocus()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [storedEmail, setStoredEmail, removeStoredEmail] = useStorage({
     key: 'email',
@@ -114,12 +114,6 @@ export function EmailPasswordForm({
     )
   }, [])
 
-  useEffect(() => {
-    if (emailElement) {
-      emailElement.focus()
-    }
-  }, [emailElement])
-
   function togglePasswordVisible() {
     setIsPasswordVisible(!isPasswordVisible)
   }
@@ -149,7 +143,7 @@ export function EmailPasswordForm({
           autoCapitalize="false"
           autoComplete="off"
           autoCorrect="false"
-          ref={setEmailElement}
+          ref={ref}
           onBlur={handleBlur}
           value={values.email}
           onInput={handleChange}
