@@ -1,0 +1,43 @@
+.base {
+  transition-duration: 0.2s;
+}
+
+.link {
+}
+
+.button {
+  &:not(:disabled) {
+    box-shadow: theme('boxShadow.md');
+  }
+
+  &:hover:not(:disabled) {
+    background-color: theme('backgroundColor.gray.9');
+
+    @media (prefers-color-scheme: dark) {
+      & {
+        background-color: theme('backgroundColor.gray.4');
+      }
+    }
+  }
+
+  &:focus:not(:disabled) {
+    background-color: theme('backgroundColor.gray.9');
+
+    @media (prefers-color-scheme: dark) {
+      & {
+        background-color: theme('backgroundColor.gray.4');
+      }
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    &:hover:not(:disabled) {
+      border-color: #5f6368;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
