@@ -121,9 +121,9 @@ export function EmailPasswordForm({
               ? String(errors.email)
               : 'Email'
           }
-          autoCapitalize="false"
+          autoCapitalize="off"
           autoComplete="off"
-          autoCorrect="false"
+          spellCheck="false"
           ref={emailInputRef}
           onBlur={handleBlur}
           value={values.email}
@@ -137,6 +137,9 @@ export function EmailPasswordForm({
               ? errors.password
               : 'Password'
           }
+          autoCapitalize="off"
+          autoComplete="off"
+          spellCheck="false"
           type={isPasswordVisible ? 'text' : 'password'}
           name="password"
           onInput={handleChange}
