@@ -1,7 +1,7 @@
 import { ensureInBounds } from './ensureInBounds'
-import { getDistance } from './getDistance'
+import { getDistance2D } from './getDistance2D'
 
-export function getDistanceBetweenPointAndRectangle(
+export function getDistance2DBetweenPointAndRectangle(
   [x, y]: [number, number],
   {
     left,
@@ -13,5 +13,5 @@ export function getDistanceBetweenPointAndRectangle(
   const closestX = ensureInBounds(x, left, right)
   const closestY = ensureInBounds(y, top, bottom)
 
-  return getDistance([x, y], [closestX, closestY])
+  return getDistance2D([x, y], [closestX, closestY])
 }

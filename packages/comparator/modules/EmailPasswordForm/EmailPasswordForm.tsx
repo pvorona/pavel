@@ -2,7 +2,7 @@ import { Button, Input, VALIDITY } from '@pavel/components'
 import React, { SVGProps, useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
 import { useStorage } from '@pavel/comparator-shared'
-import { getDistanceBetweenPointAndRectangle, isBrowser } from '@pavel/utils'
+import { getDistance2DBetweenPointAndRectangle, isBrowser } from '@pavel/utils'
 import { observe, pointerPosition } from '@pavel/observable'
 
 // dark colors
@@ -127,7 +127,7 @@ export function EmailPasswordForm({
         const button = document.getElementById('kek')
         const { left, top, right, bottom } = button.getBoundingClientRect()
 
-        const distance = getDistanceBetweenPointAndRectangle([x, y], {
+        const distance = getDistance2DBetweenPointAndRectangle([x, y], {
           left,
           top,
           right,
@@ -199,6 +199,7 @@ export function EmailPasswordForm({
           }
           validity={passwordValidity}
         />
+        {/* loading cursor wait */}
         <Button
           id="kek"
           className="w-full mt-8"

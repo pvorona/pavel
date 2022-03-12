@@ -1,9 +1,3 @@
-/* 
-todo:
-- Red border when invalid
-- Green border when valid
-
-*/
 .container {
   --time-transition-duration: 0.2s;
 

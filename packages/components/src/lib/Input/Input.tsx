@@ -30,7 +30,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           className,
           styles['input'],
           {
-            // 'shadow-red-500 shadow-3': validity === VALIDITY.INVALID, // handle hover focus as well
             'pr-10': icon,
             [styles['invalid']]: validity === VALIDITY.INVALID,
           },
