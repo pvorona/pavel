@@ -7,3 +7,9 @@ export type Nominal<Source, Type extends string> = Source & {
 }
 
 export type AnyRecord = Record<RecordKey, unknown>
+
+export enum LoadingStatus {
+  IDLE,
+  IN_PROGRESS,
+  COMPLETED,
+}

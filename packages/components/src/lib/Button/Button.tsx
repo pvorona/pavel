@@ -1,3 +1,4 @@
+import { LoadingStatus } from '@pavel/types'
 import classnames from 'classnames'
 import React, { forwardRef } from 'react'
 import styles from './Button.module.scss'
@@ -7,7 +8,7 @@ export type ButtonProps = {
   className?: string
   variant?: 'button' | 'link'
   size?: 'md'
-  isLoading?: boolean
+  loadingStatus?: LoadingStatus
   onClick?: (event: React.MouseEvent) => void
 } & (ButtonElementProps | AnchorElementProps)
 
@@ -44,7 +45,7 @@ export const Button = forwardRef<
     size = 'md',
     variant = 'button',
     component: Component = 'button',
-    isLoading = false,
+    loadingStatus = LoadingStatus.IDLE,
     children,
     ...props
   },
@@ -63,7 +64,6 @@ export const Button = forwardRef<
           [defaultButtonClassName]: variant === 'button',
           [defaultLinkClassName]: variant === 'link',
           [defaultLinkInteractionsClassName]: variant === 'link',
-          [styles['loading']]: isLoading,
         },
         className,
       )}
@@ -71,7 +71,8 @@ export const Button = forwardRef<
     >
       <div
         className={classnames(styles['progress'], {
-          [styles['loading']]: isLoading,
+          [styles['loading']]: loadingStatus === LoadingStatus.IN_PROGRESS,
+          [styles['loaded']]: loadingStatus === LoadingStatus.COMPLETED,
         })}
       />
       <div className="relative">{children}</div>

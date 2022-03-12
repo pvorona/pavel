@@ -8,6 +8,8 @@ import {
 } from 'next-firebase-auth'
 import { Button } from '@pavel/components'
 import Link from 'next/link'
+import { useState } from 'react'
+import { LoadingStatus } from '@pavel/types'
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
@@ -26,15 +28,20 @@ function SignInPage() {
 }
 
 function SignInForm() {
+  const [isLoading, setIsLoading] = useState(false)
+
   function onSubmit({ email, password }: { email: string; password: string }) {
     return signInWithEmailAndPassword(auth, email, password)
   }
 
   async function tryAnonymously() {
+    setIsLoading(true)
     try {
       await signInAnonymously()
     } catch (error) {
       console.error('Failed to sign in anonymously', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -57,7 +64,14 @@ function SignInForm() {
           </Button>
         </Link>{' '}
         or{' '}
-        <Button variant="link" onClick={tryAnonymously}>
+        <Button
+          variant="link"
+          onClick={tryAnonymously}
+          loadingStatus={
+            isLoading ? LoadingStatus.IN_PROGRESS : LoadingStatus.IDLE
+          }
+          disabled={isLoading}
+        >
           try anonymously
         </Button>
       </div>

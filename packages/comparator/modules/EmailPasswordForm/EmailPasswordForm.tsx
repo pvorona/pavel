@@ -14,6 +14,7 @@ import {
   useStorage,
 } from '@pavel/react-utils'
 import { isBrowser } from '@pavel/utils'
+import { LoadingStatus } from '@pavel/types'
 
 type FormValues = { email: string; password: string }
 
@@ -54,6 +55,7 @@ export function EmailPasswordForm({
     initialValue: '',
     storage: isBrowser && sessionStorage,
   })
+  const [isLoaded, setLoaded] = useState(false)
   const ownOnSubmit = useCallback(
     async (
       values: FormValues,
@@ -62,6 +64,7 @@ export function EmailPasswordForm({
       try {
         await onSubmit(values)
         removeStoredEmail()
+        setLoaded(true)
       } catch (e) {
         // Hack
         setFieldError('email', 'Email')
@@ -158,7 +161,9 @@ export function EmailPasswordForm({
           className="w-full mt-8"
           type="submit"
           disabled={isSubmitting || !isValid}
-          isLoading={isSubmitting}
+          loadingStatus={
+            isSubmitting ? LoadingStatus.IN_PROGRESS : LoadingStatus.IDLE
+          }
         >
           {isSubmitting ? buttonLoadingLabel : buttonLabel}
         </Button>
