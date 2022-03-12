@@ -8,9 +8,12 @@ import {
 } from '@pavel/components'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
-import { useAutoFocus, useStorage } from '@pavel/react-utils'
-import { getDistance2DBetweenPointAndRectangle, isBrowser } from '@pavel/utils'
-import { observe, pointerPosition } from '@pavel/observable'
+import {
+  useAutoFocus,
+  usePointerProximity,
+  useStorage,
+} from '@pavel/react-utils'
+import { isBrowser } from '@pavel/utils'
 
 type FormValues = { email: string; password: string }
 
@@ -43,14 +46,14 @@ export function EmailPasswordForm({
   buttonLoadingLabel: string
   onSubmit: (formValue: { email: string; password: string }) => Promise<unknown>
 }) {
-  const ref = useAutoFocus()
+  const emailInputRef = useAutoFocus()
+  const [isCloseToButton, buttonRef] = usePointerProximity()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [storedEmail, setStoredEmail, removeStoredEmail] = useStorage({
     key: 'email',
     initialValue: '',
     storage: isBrowser && sessionStorage,
   })
-  const [isCloseToButton, setIsCloseToButton] = useState(false)
   const ownOnSubmit = useCallback(
     async (
       values: FormValues,
@@ -92,28 +95,6 @@ export function EmailPasswordForm({
     setStoredEmail(values.email)
   }, [values, setStoredEmail])
 
-  // Extract hook useProximity
-  useEffect(() => {
-    const THRESHOLD = 20
-
-    return observe(
-      [pointerPosition],
-      ({ x, y }) => {
-        const button = document.getElementById('kek')
-        const { left, top, right, bottom } = button.getBoundingClientRect()
-
-        const distance = getDistance2DBetweenPointAndRectangle([x, y], {
-          left,
-          top,
-          right,
-          bottom,
-        })
-        setIsCloseToButton(distance < THRESHOLD)
-      },
-      { fireImmediately: false },
-    )
-  }, [])
-
   function togglePasswordVisible() {
     setIsPasswordVisible(!isPasswordVisible)
   }
@@ -143,7 +124,7 @@ export function EmailPasswordForm({
           autoCapitalize="false"
           autoComplete="off"
           autoCorrect="false"
-          ref={ref}
+          ref={emailInputRef}
           onBlur={handleBlur}
           value={values.email}
           onInput={handleChange}
@@ -170,7 +151,7 @@ export function EmailPasswordForm({
         />
         {/* loading cursor wait */}
         <Button
-          id="kek"
+          ref={buttonRef}
           className="w-full mt-8"
           type="submit"
           disabled={isSubmitting || !isValid}
