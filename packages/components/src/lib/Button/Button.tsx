@@ -7,6 +7,7 @@ export type ButtonProps = {
   className?: string
   variant?: 'button' | 'link'
   size?: 'md'
+  isLoading?: boolean
   onClick?: (event: React.MouseEvent) => void
 } & (ButtonElementProps | AnchorElementProps)
 
@@ -43,6 +44,8 @@ export const Button = forwardRef<
     size = 'md',
     variant = 'button',
     component: Component = 'button',
+    isLoading = false,
+    children,
     ...props
   },
   ref,
@@ -60,10 +63,18 @@ export const Button = forwardRef<
           [defaultButtonClassName]: variant === 'button',
           [defaultLinkClassName]: variant === 'link',
           [defaultLinkInteractionsClassName]: variant === 'link',
+          [styles['loading']]: isLoading,
         },
         className,
       )}
       {...props}
-    />
+    >
+      <div
+        className={classnames(styles['progress'], {
+          [styles['loading']]: isLoading,
+        })}
+      />
+      <div className="relative">{children}</div>
+    </Component>
   )
 })

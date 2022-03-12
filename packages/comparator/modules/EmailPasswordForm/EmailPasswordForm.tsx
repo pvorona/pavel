@@ -158,6 +158,7 @@ export function EmailPasswordForm({
           className="w-full mt-8"
           type="submit"
           disabled={isSubmitting || !isValid}
+          isLoading={isSubmitting}
         >
           {isSubmitting ? buttonLoadingLabel : buttonLabel}
         </Button>
