@@ -1,0 +1,33 @@
+{
+  "root": "packages/react-utils",
+  "sourceRoot": "packages/react-utils/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/react-utils",
+        "main": "packages/react-utils/src/index.ts",
+        "tsConfig": "packages/react-utils/tsconfig.lib.json",
+        "assets": ["packages/react-utils/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/react-utils/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/react-utils"],
+      "options": {
+        "jestConfig": "packages/react-utils/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

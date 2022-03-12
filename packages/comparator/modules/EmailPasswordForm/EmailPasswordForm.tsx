@@ -1,7 +1,7 @@
 import { Button, Input, VALIDITY } from '@pavel/components'
 import React, { SVGProps, useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
-import { useStorage } from '@pavel/comparator-shared'
+import { useStorage } from '@pavel/react-utils'
 import { getDistance2DBetweenPointAndRectangle, isBrowser } from '@pavel/utils'
 import { observe, pointerPosition } from '@pavel/observable'
 
