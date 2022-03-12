@@ -1,51 +1,17 @@
-import { isBrowser, noop } from '@pavel/utils'
-import { useCallback, useState } from 'react'
+import { getFromStorage, isServer } from '@pavel/utils'
 
-// TODO:
-// - simplify this hook and extract storage operations
 export function useDefaultFromStorage<T>({
   key,
-  initialValue,
+  defaultValue: initialValue,
   storage,
 }: {
   key: string
-  initialValue: T
+  defaultValue: T
   storage: Storage
 }) {
-  if (isBrowser) {
-    return [initialValue, noop, noop]
+  if (isServer) {
+    return initialValue
   }
 
-  const [storedOrInitialValue] = useState(() => {
-    try {
-      const item = storage.getItem(key)
-
-      return item ? JSON.parse(item) : initialValue
-    } catch (error) {
-      console.log(error)
-
-      return initialValue
-    }
-  })
-
-  const store = useCallback(
-    (value: T) => {
-      try {
-        storage.setItem(key, JSON.stringify(value))
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    [key, storage],
-  )
-
-  const remove = useCallback(() => {
-    try {
-      storage.removeItem(key)
-    } catch (error) {
-      console.error(error)
-    }
-  }, [key, storage])
-
-  return [storedOrInitialValue, store, remove]
+  return getFromStorage(key, initialValue, storage)
 }
