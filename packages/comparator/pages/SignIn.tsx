@@ -38,6 +38,7 @@ function SignInForm() {
     setIsLoading(true)
     try {
       await signInAnonymously()
+      // Clear stored email
     } catch (error) {
       console.error('Failed to sign in anonymously', error)
     } finally {

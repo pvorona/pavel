@@ -33,6 +33,7 @@ function SignUpForm() {
   async function tryAnonymously() {
     try {
       await signInAnonymously()
+      // Clear stored email
     } catch (error) {
       console.error('Failed to sign in anonymously', error)
     }
