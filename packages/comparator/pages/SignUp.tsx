@@ -6,8 +6,8 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
-import { Button } from '@pavel/components'
-import Link from 'next/link'
+import { Button, Link } from '@pavel/components'
+import NextLink from 'next/link'
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
@@ -51,11 +51,9 @@ function SignUpForm() {
         Already have an account?
       </div>
       <div className="text-center mt-1 text-gray-1 tracking-wide">
-        <Link href={SIGN_IN} passHref>
-          <Button component="a" variant="link">
-            Sign in
-          </Button>
-        </Link>{' '}
+        <NextLink href={SIGN_IN} passHref>
+          <Link>Sign in</Link>
+        </NextLink>{' '}
         or{' '}
         <Button variant="link" onClick={tryAnonymously}>
           try anonymously

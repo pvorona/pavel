@@ -6,8 +6,8 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
-import { Button } from '@pavel/components'
-import Link from 'next/link'
+import { Button, Link } from '@pavel/components'
+import NextLink from 'next/link'
 import { useState } from 'react'
 import { LoadingStatus } from '@pavel/types'
 
@@ -58,11 +58,9 @@ function SignInForm() {
         {"Don't have an account?"}
       </div>
       <div className="text-center mt-1 text-gray-1">
-        <Link href={SIGN_UP} passHref>
-          <Button component="a" variant="link">
-            Sign up
-          </Button>
-        </Link>{' '}
+        <NextLink href={SIGN_UP} passHref>
+          <Link>Sign up</Link>
+        </NextLink>{' '}
         or{' '}
         <Button
           variant="link"
