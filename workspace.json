@@ -9,7 +9,6 @@
     "comparator-e2e": "packages/comparator-e2e",
     "comparator-shared": "packages/comparator-shared",
     "components": "packages/components",
-    "data-structures": "packages/data-structures",
     "easing": "packages/easing",
     "observable": "packages/observable",
     "react-utils": "packages/react-utils",

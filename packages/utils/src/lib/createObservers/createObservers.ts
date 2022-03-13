@@ -1,25 +1,25 @@
+import { createLinkedList } from '../LinkedList'
 import { Lambda } from '@pavel/types'
-import { invokeAll } from '../invokeAll'
-import { removeFirstElementOccurrence } from '../removeFirstElementOccurrence'
 
 export function createObservers<
   T extends unknown[] = never[],
   F extends (...args: T) => void = (...args: T) => void,
 >() {
-  // LinkedList works better here
-  const observers: F[] = []
+  const observers = createLinkedList<F>()
 
-  function addObserver(observer: F): Lambda {
-    observers.push(observer)
+  function register(observer: F): Lambda {
+    const node = observers.append(observer)
 
     return () => {
-      removeFirstElementOccurrence(observers, observer)
+      observers.removeNode(node)
     }
   }
 
   function notify(...args: Parameters<F>) {
-    invokeAll(observers, ...args)
+    for (const observer of observers) {
+      observer(...args)
+    }
   }
 
-  return { register: addObserver, notify }
+  return { register, notify }
 }

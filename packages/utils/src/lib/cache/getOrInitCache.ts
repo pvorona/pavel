@@ -1,5 +1,5 @@
 import { RecordKey } from '@pavel/types'
-import { createValue } from '@pavel/utils'
+import { createValue } from '../createValue'
 import { Cache } from './types'
 
 export function getOrInitCache<Key extends RecordKey, Value>(

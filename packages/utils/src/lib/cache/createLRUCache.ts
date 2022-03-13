@@ -1,5 +1,9 @@
 import { assert, isInteger, isPositive } from '@pavel/assert'
-import { createDoublyLinkedList, ListNode, moveToEnd } from '../list'
+import {
+  createDoublyLinkedList,
+  ListNode,
+  moveToEnd,
+} from '../DoublyLinkedList'
 import { RecordKey } from '@pavel/types'
 import { CacheOptions, Cache } from './types'
 

@@ -1,4 +1,4 @@
-import { ListNode } from '../list'
+import { ListNode } from '../DoublyLinkedList'
 
 export type Queue<T> = Iterable<T> & {
   enqueue: (value: T) => ListNode<T>

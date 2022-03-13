@@ -1,4 +1,4 @@
-import { makeCached } from '@pavel/data-structures'
+import { makeCached } from '@pavel/utils'
 import { computeLazy, effect } from '@pavel/observable'
 import { scheduleTask } from '@pavel/scheduling'
 import { ChartContext, ChartOptions } from '../../types'

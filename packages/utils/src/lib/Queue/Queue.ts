@@ -1,4 +1,4 @@
-import { createDoublyLinkedList, ListNode } from '../list'
+import { createDoublyLinkedList, ListNode } from '../DoublyLinkedList'
 import { Queue } from './types'
 
 export function createQueue<T>(): Queue<T> {
