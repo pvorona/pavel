@@ -153,8 +153,8 @@ export const ChartContext = (options: ChartOptions) => {
       options.data,
     ],
     function computeVisibleSeriesPoints(
-      startIndex,
-      endIndex,
+      inertStartIndex,
+      inertEndIndex,
       max,
       min,
       width,
@@ -162,6 +162,8 @@ export const ChartContext = (options: ChartOptions) => {
       domain,
       dataByGraphName,
     ) {
+      console.log({ inertEndIndex })
+
       return options.graphNames.reduce(
         (points, graphName) => ({
           ...points,
@@ -174,7 +176,7 @@ export const ChartContext = (options: ChartOptions) => {
               width: width,
               height: canvasHeight,
             },
-            { startIndex, endIndex },
+            { startIndex: inertStartIndex, endIndex: inertEndIndex },
             options.lineWidth,
           ),
         }),

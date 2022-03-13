@@ -40,7 +40,7 @@ export const Chart = (
     element.style.flexDirection = 'column'
 
     const series = Series(options, context)
-    const overview = Overview(options, context)
+    // const overview = Overview(options, context)
     const controls = Controls(options, context)
     const tooltip = Tooltip(options, context)
     const xAxis = XAxis(options, context)
@@ -50,7 +50,7 @@ export const Chart = (
     element.appendChild(series.element)
     element.appendChild(xAxis.element)
     element.appendChild(yAxis.element)
-    element.appendChild(overview.element)
+    // element.appendChild(overview.element)
     element.appendChild(controls.element)
 
     return {

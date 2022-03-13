@@ -8,10 +8,10 @@ import './app.scss'
 
 document.body.style.background = theme.body || theme.background
 
-const TIME_STEP = 1_000
+const TIME_STEP = 1_000 / 100
 const MAX_VALUE = 10_000
 const startTime = 0
-const NEW_ITEMS = 50
+const NEW_ITEMS = 1
 
 let currentIteration = 0
 
