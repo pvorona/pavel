@@ -1,5 +1,6 @@
 import { createLinkedList } from '../LinkedList'
 import { Lambda } from '@pavel/types'
+import { invokeAll } from '../invokeAll'
 
 export function createObservers<
   T extends unknown[] = never[],
@@ -16,9 +17,7 @@ export function createObservers<
   }
 
   function notify(...args: Parameters<F>) {
-    for (const observer of observers) {
-      observer(...args)
-    }
+    invokeAll(observers, ...args)
   }
 
   return { register, notify }
