@@ -1,6 +1,6 @@
 import { QueueByPriority } from '../../types'
 import { PRIORITIES_IN_ORDER } from '../../constants'
-import { createQueue } from '@pavel/data-structures'
+import { createQueue } from '@pavel/utils'
 
 export function initQueue() {
   return PRIORITIES_IN_ORDER.reduce(

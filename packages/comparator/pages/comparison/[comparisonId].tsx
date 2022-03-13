@@ -19,7 +19,7 @@ import {
   getComparisonPath,
   getOptionPath,
 } from '@pavel/comparator-shared'
-import { useLoadable, isSettled, isFailed } from '@pavel/components'
+import { useLoadable, isSettled, isFailed } from '@pavel/react-utils'
 import {
   withAuthUser,
   withAuthUserTokenSSR,

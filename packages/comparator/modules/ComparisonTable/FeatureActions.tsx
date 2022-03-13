@@ -5,7 +5,7 @@ import {
   removeFeatureFromCurrentComparison,
   toggleDescriptionExpandedInCurrentComparison,
 } from '../../modules/comparisons'
-import { IconButton, IconGroup, Direction } from '@pavel/components'
+import { DotButton, IconTransitionGroup, Direction } from '@pavel/components'
 import { useDispatch } from 'react-redux'
 import React from 'react'
 
@@ -33,25 +33,25 @@ export function FeatureActions({
   const iconClassName = 'ml-2'
 
   return (
-    <IconGroup
+    <IconTransitionGroup
       direction={isOpen ? Direction.Straight : Direction.Inverse}
       isOpen={isOpen}
     >
-      <IconButton
+      <DotButton
         color="green"
         className={iconClassName}
         onClick={onDescriptionExpandedClick}
       />
-      <IconButton
+      <DotButton
         color="yellow"
         className={iconClassName}
         onClick={onToggleExpandedClick}
       />
-      <IconButton
+      <DotButton
         color="red"
         className={iconClassName}
         onClick={onRemoveFeatureClick}
       />
-    </IconGroup>
+    </IconTransitionGroup>
   )
 }

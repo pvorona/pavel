@@ -1,0 +1,160 @@
+.container {
+  --time-transition-duration: 0.2s;
+
+  --input-padding-horizontal: 15px;
+  --space-16: 16px;
+  --space-18: 18px;
+
+  --placeholder-lifted-scale: 0.8;
+  --placeholder-lifted-horizontal-space: 5px;
+
+  --placeholder-horizontal-space: calc(
+    var(--placeholder-lifted-horizontal-space) / var(--placeholder-lifted-scale)
+  );
+  --placeholder-active-y: -10px;
+
+  --color-background: white;
+  --color-caret: black;
+
+  --color-box-shadow: hsla(225, 4%, 25%, 0.2);
+  --color-box-shadow-hover: hsla(225, 4%, 25%, 0.5);
+  --color-box-shadow-focus: hsla(225, 4%, 25%, 0.85);
+  --color-box-shadow-invalid: theme('colors.red.500');
+
+  --color-placeholder-default: hsla(0, 0%, 0%, 0.45);
+  --color-placeholder-lifted-hover: hsla(0, 0%, 0%, 0.8);
+  --color-placeholder-lifted-focused: hsla(0, 0%, 0%, 1);
+
+  --color-placeholder-invalid-default: theme('colors.red.500');
+  --color-placeholder-invalid-lifted: theme('colors.red.500');
+  --color-placeholder-invalid-lifted-hover: theme('colors.red.500');
+  --color-placeholder-invalid-lifted-focus: theme('colors.red.500');
+
+  --border-width-default: 1px;
+  --border-width-hover: 2px;
+  --border-width-active: 2px;
+  --border-width-invalid: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    --color-background: #1f2023;
+    --color-caret: white;
+
+    --color-box-shadow: hsla(225, 4%, 75%, 0.2);
+    --color-box-shadow-hover: hsla(225, 4%, 75%, 0.5);
+    --color-box-shadow-focus: hsla(225, 4%, 75%, 0.85);
+    --color-box-shadow-invalid: theme('colors.red.500');
+
+    --color-placeholder-default: hsla(0, 0%, 100%, 0.45);
+    --color-placeholder-lifted-hover: hsla(0, 0%, 100%, 0.8);
+    --color-placeholder-lifted-focused: hsla(0, 0%, 100%, 1);
+  }
+}
+
+.input {
+  padding: var(--space-18) var(--input-padding-horizontal) var(--space-16);
+  width: 360px;
+  caret-color: var(--color-caret);
+  transition: box-shadow var(--time-transition-duration);
+
+  /* Border / box-shadow */
+  --border-width: var(--border-width-default);
+  --border-color: var(--color-box-shadow);
+
+  box-shadow: 0 0 0 var(--border-width) var(--border-color) inset;
+}
+
+.input:hover {
+  --border-width: var(--border-width-hover);
+  --border-color: var(--color-box-shadow-hover);
+}
+
+.input:focus {
+  --border-width: var(--border-width-active);
+  --border-color: var(--color-box-shadow-focus);
+}
+
+.input.invalid {
+  --border-width: var(--border-width-invalid);
+  --border-color: var(--color-box-shadow-invalid);
+}
+
+.placeholder {
+  user-select: none;
+  transition: transform var(--time-transition-duration),
+    color var(--time-transition-duration),
+    background var(--time-transition-duration);
+  padding: 0 var(--placeholder-horizontal-space);
+  transform-origin: left top;
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+
+  --placeholder-color: var(--color-placeholder-default);
+
+  color: var(--placeholder-color);
+}
+
+/* Default */
+.input:placeholder-shown ~ .placeholder {
+  transform: translate(
+    calc(var(--input-padding-horizontal) - var(--placeholder-horizontal-space)),
+    var(--space-18)
+  );
+}
+
+/* Lifted */
+.input:not(:placeholder-shown) ~ .placeholder {
+  background-color: var(--color-background);
+  transform: translate(
+      calc(
+        var(--input-padding-horizontal) - var(--placeholder-horizontal-space)
+      ),
+      var(--placeholder-active-y)
+    )
+    scale(var(--placeholder-lifted-scale));
+}
+
+/* Lifted hover */
+.input:hover:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-lifted-hover);
+}
+
+/* Lifted focus */
+.input:focus:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-lifted-focused);
+}
+
+/* Invalid default */
+.input.invalid ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-invalid-default);
+}
+
+/* Invalid lifted */
+.input.invalid:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-invalid-lifted);
+}
+
+/* Invalid lifted hover */
+.input.invalid:hover:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-invalid-lifted-hover);
+}
+
+/* Invalid lifted focus */
+.input.invalid:focus:not(:placeholder-shown) ~ .placeholder {
+  --placeholder-color: var(--color-placeholder-invalid-lifted-focus);
+}
+
+.hint {
+  position: absolute;
+  font-size: 13px;
+  left: var(--input-padding-horizontal);
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 0.35s;
+  will-change: opacity, transform;
+  pointer-events: none;
+  opacity: 1;
+}
