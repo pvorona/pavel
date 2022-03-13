@@ -1,6 +1,7 @@
+import classNames from 'classnames'
 import { SVGProps } from 'react'
+import styles from './IconButton.module.scss'
 
-// dark colors
 export const IconButton = ({
   onClick,
   ...props
@@ -10,7 +11,10 @@ export const IconButton = ({
   <button
     onClick={onClick}
     type="button"
-    className="text-gray-1 hover:text-gray-6 focus:text-gray-6 transition-colors cursor-pointer outline-none"
+    className={classNames(
+      styles['icon'],
+      'transition-colors cursor-pointer outline-none',
+    )}
   >
     <svg width={24} height={24} {...props} />
   </button>

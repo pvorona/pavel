@@ -19,7 +19,9 @@ export const getFromStorageBrowser = <T>(
   }
 }
 
-export const getFromStorage = isBrowser ? getFromStorageBrowser : noop
+export const getFromStorage = isBrowser
+  ? getFromStorageBrowser
+  : <T>(_: string, defaultValue: T) => defaultValue
 
 export const saveToStorageBrowser = <T>(
   key: string,

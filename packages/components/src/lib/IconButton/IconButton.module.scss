@@ -1,0 +1,25 @@
+.icon {
+  --color-default: theme('colors.gray.1');
+  --color-hover: theme('colors.gray.6');
+  --color-focus: theme('colors.gray.6');
+
+  --icon-color: var(--color-default);
+
+  color: var(--icon-color);
+
+  &:hover {
+    --icon-color: var(--color-hover);
+  }
+
+  &:focus {
+    --icon-color: var(--color-focus);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    & {
+      --color-default: hsla(0, 0%, 100%, 0.45);
+      --color-hover: hsla(0, 0%, 100%, 0.8);
+      --color-focus: hsla(0, 0%, 100%, 1);
+    }
+  }
+}

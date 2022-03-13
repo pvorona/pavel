@@ -8,12 +8,13 @@ import {
 } from '@pavel/components'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
+import { useAutoFocus, usePointerProximity } from '@pavel/react-utils'
 import {
-  useAutoFocus,
-  usePointerProximity,
-  useDefaultFromStorage,
-} from '@pavel/react-utils'
-import { bindStorage, isBrowser, moveCursorToEnd } from '@pavel/utils'
+  bindStorage,
+  getFromStorage,
+  isBrowser,
+  moveCursorToEnd,
+} from '@pavel/utils'
 import { LoadingStatus } from '@pavel/types'
 
 type FormValues = { email: string; password: string }
@@ -36,6 +37,8 @@ function validate(values: FormValues) {
 
 const storageKey = 'email'
 const storage = isBrowser && sessionStorage
+
+const storedEmail = getFromStorage(storageKey, '', storage)
 
 const { remove: removeEmailFromStorage, set: saveEmailToStorage } = bindStorage(
   {
@@ -60,11 +63,6 @@ export function EmailPasswordForm({
   const [emailInput, setEmailInput] = useState<HTMLInputElement | undefined>()
   const [isCloseToButton, buttonRef] = usePointerProximity()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const storedEmail = useDefaultFromStorage({
-    key: storageKey,
-    defaultValue: '',
-    storage,
-  })
   const ownOnSubmit = useCallback(
     async (
       values: FormValues,
