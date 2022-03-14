@@ -6,8 +6,8 @@ import styles from './Button.module.scss'
 export type BaseButtonProps = {
   children: React.ReactNode
   className?: string
-  variant?: 'button' | 'link'
-  size?: 'md'
+  variant?: 'button' | 'link' | 'outlined'
+  size?: 'sm' | 'md'
   loadingStatus?: LoadingStatus
   onClick?: (event: React.MouseEvent) => void
 }
@@ -21,12 +21,14 @@ type ButtonElementProps = React.DetailedHTMLProps<
 
 const baseClassName = 'outline-none transition-all'
 const defaultButtonClassName =
-  'text-lg bg-gray-4 text-white bg-gray-4 border border-gray-4 rounded'
+  'bg-gray-4 text-white bg-gray-4 border border-gray-4 rounded'
+const defaultOutlinedClassName = 'rounded'
 // Find better dark:interaction colors
 const defaultLinkClassName = 'dark:text-gray-10'
 const defaultLinkInteractionsClassName =
   'text-gray-6 hover:text-gray-9 dark:hover:text-white dark:focus:text-white hover:underline focus:underline underline-offset-4 '
-const mdButtonClassName = 'py-3 px-8'
+const smButtonClassName = 'py-2 px-6 text-sm'
+const mdButtonClassName = 'py-3 px-8 text-lg'
 
 export type LinkProps = BaseButtonProps & AnchorElementProps
 
@@ -96,7 +98,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           {
             [styles['button']]: variant === 'button',
             [styles['link']]: variant === 'link',
-            [mdButtonClassName]: variant === 'button' && size === 'md',
+            [styles['outlined']]: variant === 'outlined',
+            [defaultOutlinedClassName]: variant === 'outlined',
+            [smButtonClassName]:
+              (variant === 'button' || variant === 'outlined') && size === 'sm',
+            [mdButtonClassName]:
+              (variant === 'button' || variant === 'outlined') && size === 'md',
             [defaultButtonClassName]: variant === 'button',
             [defaultLinkClassName]: variant === 'link',
             [defaultLinkInteractionsClassName]: variant === 'link',
@@ -111,6 +118,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             [styles['loaded']]: loadingStatus === LoadingStatus.COMPLETED,
           })}
         />
+        {/* relative is required to create stacking context above progress indication */}
         <div className="relative">{children}</div>
       </button>
     )

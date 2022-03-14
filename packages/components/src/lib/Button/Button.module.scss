@@ -55,6 +55,22 @@
   }
 }
 
+.outlined {
+  backdrop-filter: blur(12px);
+  background: rgb(255 255 255 / 20%);
+  border: 1px solid hsl(0deg, 0%, 35%);
+  color: hsl(0deg, 0%, 10%);
+
+  &:not(:disabled) {
+    box-shadow: theme('boxShadow.md');
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
 .button {
   &:not(:disabled) {
     box-shadow: theme('boxShadow.md');
