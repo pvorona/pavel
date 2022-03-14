@@ -1,24 +1,95 @@
-import { Button } from '@pavel/components'
-import {
-  withAuthUser,
-  withAuthUserTokenSSR,
-  AuthAction,
-} from 'next-firebase-auth'
+import { Link } from '@pavel/components'
+import NextLink from 'next/link'
+import { withAuthUser, AuthAction, useAuthUser } from 'next-firebase-auth'
 import styles from './index.module.scss'
-
-// export const getServerSideProps = withAuthUserTokenSSR({
-//   whenAuthed: AuthAction.REDIRECT_TO_APP,
-//   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-// })()
-
-// export default withAuthUser({
-//   whenAuthed: AuthAction.REDIRECT_TO_APP,
-//   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-// })(Index)
+import { COMPARISON_LIST, SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
 
 const CTAStyles = {
   borderRadius: 30,
 }
+
+const AuthSection = withAuthUser({})(function AuthSection() {
+  const user = useAuthUser()
+
+  if (user.firebaseUser) {
+    return (
+      <NextLink href={COMPARISON_LIST} passHref>
+        <Link
+          variant="button"
+          className="ml-4"
+          size="sm"
+          style={{
+            ...CTAStyles,
+          }}
+        >
+          Go to app
+        </Link>
+      </NextLink>
+    )
+  }
+
+  return (
+    <>
+      <NextLink href={SIGN_IN} passHref>
+        <Link
+          style={{
+            ...CTAStyles,
+          }}
+          size="sm"
+          variant="outlined"
+        >
+          Sign in
+        </Link>
+      </NextLink>
+      <NextLink href={SIGN_UP} passHref>
+        <Link
+          variant="button"
+          className="ml-4"
+          size="sm"
+          style={{
+            ...CTAStyles,
+          }}
+        >
+          Sign up
+        </Link>
+      </NextLink>
+    </>
+  )
+})
+
+const MainCTA = withAuthUser({})(function MainCTA() {
+  const user = useAuthUser()
+
+  if (user.firebaseUser) {
+    return (
+      <NextLink href={COMPARISON_LIST} passHref>
+        <Link
+          variant="button"
+          style={{
+            ...CTAStyles,
+            width: 235,
+          }}
+        >
+          Go to app
+        </Link>
+      </NextLink>
+    )
+  }
+
+  return (
+    <NextLink href={SIGN_UP} passHref>
+      <Link
+        variant="button"
+        style={{
+          ...CTAStyles,
+          width: 235,
+        }}
+      >
+        Try for free
+      </Link>
+    </NextLink>
+  )
+})
 
 export default function Index() {
   return (
@@ -33,24 +104,7 @@ export default function Index() {
             <div className="mx-4 font-semibold">Demo</div>
           </div>
           <div>
-            <Button
-              style={{
-                ...CTAStyles,
-              }}
-              size="sm"
-              variant="outlined"
-            >
-              Sign in
-            </Button>
-            <Button
-              className="ml-4"
-              size="sm"
-              style={{
-                ...CTAStyles,
-              }}
-            >
-              Sign up
-            </Button>
+            <AuthSection />
           </div>
         </div>
         <div className="flex flex-col items-center justify-center h-full">
@@ -62,14 +116,7 @@ export default function Index() {
               {`The best in class tools that help you focus on what's important`}
             </div>
             <div className="mt-8">
-              <Button
-                style={{
-                  ...CTAStyles,
-                  width: 235,
-                }}
-              >
-                Now
-              </Button>
+              <MainCTA />
             </div>
           </div>
         </div>
@@ -117,7 +164,7 @@ function Background() {
       <circle
         cx="95%"
         cy="95%"
-        r="500"
+        r="40%"
         fill="url(#logo-gradient)"
         className={circleClass}
       ></circle>
@@ -131,21 +178,21 @@ function Background() {
       <circle
         cx="81%"
         cy="0"
-        r="75"
+        r="5%"
         fill="url(#logo-gradient)"
         className={circleClass}
       ></circle>
       <circle
         cx="105%"
         cy="5%"
-        r="275"
+        r="20%"
         fill="url(#logo-gradient)"
         className={circleClass}
       ></circle>
       <circle
         cx="81%"
         cy="26%"
-        r="125"
+        r="10%"
         fill="url(#logo-gradient)"
         className={circleClass}
       ></circle>

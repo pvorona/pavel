@@ -56,13 +56,21 @@
 }
 
 .outlined {
+  --color: hsl(0deg, 0%, 10%);
+
   backdrop-filter: blur(12px);
   background: rgb(255 255 255 / 20%);
   border: 1px solid hsl(0deg, 0%, 35%);
-  color: hsl(0deg, 0%, 10%);
+  color: var(--color);
 
   &:not(:disabled) {
     box-shadow: theme('boxShadow.md');
+  }
+
+  @media (prefers-color-scheme: dark) {
+    & {
+      --color: hsl(0deg, 0%, 90%);
+    }
   }
 
   &:disabled {

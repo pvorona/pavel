@@ -57,7 +57,12 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
         {
           [styles['button']]: variant === 'button',
           [styles['link']]: variant === 'link',
-          [mdButtonClassName]: variant === 'button' && size === 'md',
+          [styles['outlined']]: variant === 'outlined',
+          [defaultOutlinedClassName]: variant === 'outlined',
+          [smButtonClassName]:
+            (variant === 'outlined' || variant === 'button') && size === 'sm',
+          [mdButtonClassName]:
+            (variant === 'outlined' || variant === 'button') && size === 'md',
           [defaultButtonClassName]: variant === 'button',
           [defaultLinkClassName]: variant === 'link',
           [defaultLinkInteractionsClassName]: variant === 'link',
@@ -101,9 +106,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             [styles['outlined']]: variant === 'outlined',
             [defaultOutlinedClassName]: variant === 'outlined',
             [smButtonClassName]:
-              (variant === 'button' || variant === 'outlined') && size === 'sm',
+              (variant === 'outlined' || variant === 'button') && size === 'sm',
             [mdButtonClassName]:
-              (variant === 'button' || variant === 'outlined') && size === 'md',
+              (variant === 'outlined' || variant === 'button') && size === 'md',
             [defaultButtonClassName]: variant === 'button',
             [defaultLinkClassName]: variant === 'link',
             [defaultLinkInteractionsClassName]: variant === 'link',
