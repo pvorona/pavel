@@ -14,9 +14,7 @@ export type BaseButtonProps = {
 
 export type ButtonProps = BaseButtonProps & ButtonElementProps
 
-type ButtonElementProps = {
-  type?: 'button' | 'submit'
-} & React.DetailedHTMLProps<
+type ButtonElementProps = React.DetailedHTMLProps<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 >

@@ -63,6 +63,16 @@ export function createDoublyLinkedList<T>(): List<T> {
     return (node as ListNode<T>).value
   }
 
+  function pop() {
+    assert(tail !== null, 'Cannot pop empty list')
+
+    const node = tail
+
+    removeNode(node as ListNode<T>)
+
+    return (node as ListNode<T>).value
+  }
+
   function removeNode(node: ListNode<T>) {
     const { next, prev } = node
 
@@ -112,6 +122,7 @@ export function createDoublyLinkedList<T>(): List<T> {
     prependNode,
     appendNode,
     shift,
+    pop,
     get head() {
       return head
     },

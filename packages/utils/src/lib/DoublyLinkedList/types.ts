@@ -1,3 +1,9 @@
+export type LinkedListNode<T> = {
+  next: LinkedListNode<T> | null
+  value: T
+}
+
+// export type DoublyLinkedListNode<T> = {
 export type ListNode<T> = {
   prev: ListNode<T> | null
   next: ListNode<T> | null
@@ -16,5 +22,6 @@ export type List<T> = Iterable<T> &
     prepend: (value: T) => ListNode<T>
     removeNode: (node: ListNode<T>) => void
     shift: () => T
+    pop: () => T
     toArray: () => T[]
   }>
