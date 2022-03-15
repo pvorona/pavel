@@ -3,7 +3,7 @@ import {
   setCurrentComparisonProperty,
 } from '../comparisons'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, TextField } from '@pavel/components'
+import { Button, TextField, Variant } from '@pavel/components'
 import { Avatars } from '../Avatars'
 
 export function ComparisonName() {
@@ -25,7 +25,7 @@ export function ComparisonName() {
 
 export function AddComparisonButton() {
   return (
-    <Button className="mx-3" variant="link">
+    <Button className="mx-3" variant={Variant.Link}>
       + <span className="hidden md:inline">Add new comparison</span>
     </Button>
   )

@@ -6,6 +6,7 @@ import {
 } from '../DoublyLinkedList'
 import { RecordKey } from '@pavel/types'
 import { CacheOptions, Cache } from './types'
+import { createLinkedList } from '../LinkedList'
 
 type CacheNode<Key, Value> = {
   key: Key
@@ -22,8 +23,7 @@ export function createLRUCache<Key extends RecordKey, Value>(
     `Expected positive integer, received: ${max}`,
   )
 
-  // Can use single linked list instead
-  const nodes = createDoublyLinkedList<CacheNode<Key, Value>>()
+  const nodes = createLinkedList<CacheNode<Key, Value>>()
   const nodeByKey = new Map<Key, ListNode<CacheNode<Key, Value>>>()
 
   function get(key: Key) {

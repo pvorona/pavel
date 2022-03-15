@@ -6,7 +6,7 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
-import { Button, Link } from '@pavel/components'
+import { Button, Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
 
 export const getServerSideProps = withAuthUserTokenSSR({
@@ -56,7 +56,7 @@ function SignUpForm() {
           <Link>Sign in</Link>
         </NextLink>{' '}
         or{' '}
-        <Button variant="link" onClick={tryAnonymously}>
+        <Button variant={Variant.Link} onClick={tryAnonymously}>
           try anonymously
         </Button>
       </div>

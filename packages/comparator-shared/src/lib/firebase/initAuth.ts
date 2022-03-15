@@ -30,7 +30,7 @@ export const initAuth = () => {
           : undefined,
         // The private key must not be accessible on the client
         privateKey: process.env.FIREBASE_PRIVATE_KEY
-          ? process.env.FIREBASE_PRIVATE_KEY
+          ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
           : undefined,
       },
     },
