@@ -1,7 +1,6 @@
 import { Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
-import { withAuthUser, AuthAction, useAuthUser } from 'next-firebase-auth'
-import styles from './index.module.scss'
+import { withAuthUser, useAuthUser } from 'next-firebase-auth'
 import { COMPARISON_LIST, SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
 
 const CTAStyles = {
@@ -133,7 +132,6 @@ function Background() {
     <svg
       width="100%"
       height="100%"
-      // className="fixed top-0 right-0 bottom-0 left-0 -z-10 blur-md"
       className="fixed top-0 right-0 bottom-0 left-0"
     >
       <defs>
@@ -157,10 +155,6 @@ function Background() {
           </stop>
         </linearGradient>
       </defs>
-
-      {/* <circle cx="20%" cy="50%" r="250" fill="#FAFAFA"></circle> */}
-      {/* <circle cx="20%" cy="50%" r="250" fill="url(#logo-gradient)" className="opacity-20" ></circle> */}
-      {/* <circle cx="95%" cy="95%" r="500" fill="#FAFAFA"></circle> */}
       <circle
         cx="95%"
         cy="95%"
@@ -168,13 +162,6 @@ function Background() {
         fill="url(#logo-gradient)"
         className={circleClass}
       ></circle>
-      {/* <circle
-        // className={styles['circle3']}
-        cx="65%"
-        cy="35%"
-        r="75"
-        fill="#FAFAFA"
-      ></circle> */}
       <circle
         cx="81%"
         cy="0"
