@@ -98,44 +98,36 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
   {
     className,
     size = 'md',
-    variant = 'link',
+    variant = Variant.Link,
     loadingStatus = LoadingStatus.IDLE,
     children,
     ...props
-  },
+  }: LinkProps,
   ref,
 ) {
+  const isButtonLike =
+    variant === Variant.Filled || variant === Variant.Outlined
+  const allClassNames = classnames(
+    styles['base'],
+    baseClassName,
+    {
+      [styles['button']]: variant === Variant.Filled,
+      [styles['link']]: variant === Variant.Link,
+      [styles['outlined']]: variant === Variant.Outlined,
+      [defaultOutlinedClassName]: variant === Variant.Outlined,
+      [smButtonClassName]: isButtonLike && size === 'sm',
+      [mdButtonClassName]: isButtonLike && size === 'md',
+      [defaultButtonClassName]: variant === Variant.Filled,
+      [defaultLinkClassName]: variant === Variant.Link,
+      [defaultLinkInteractionsClassName]: variant === Variant.Link,
+    },
+    className,
+  )
+
   return (
-    <a
-      ref={ref}
-      className={classnames(
-        styles['base'],
-        baseClassName,
-        {
-          [styles['button']]: variant === Variant.Filled,
-          [styles['link']]: variant === Variant.Link,
-          [styles['outlined']]: variant === Variant.Outlined,
-          [defaultOutlinedClassName]: variant === Variant.Outlined,
-          [smButtonClassName]:
-            (variant === Variant.Outlined || variant === Variant.Filled) &&
-            size === 'sm',
-          [mdButtonClassName]:
-            (variant === Variant.Outlined || variant === Variant.Filled) &&
-            size === 'md',
-          [defaultButtonClassName]: variant === Variant.Filled,
-          [defaultLinkClassName]: variant === Variant.Link,
-          [defaultLinkInteractionsClassName]: variant === Variant.Link,
-        },
-        className,
-      )}
-      {...props}
-    >
-      <div
-        className={classnames(styles['progress'], {
-          [styles['loading']]: loadingStatus === LoadingStatus.IN_PROGRESS,
-          [styles['loaded']]: loadingStatus === LoadingStatus.COMPLETED,
-        })}
-      />
+    <a ref={ref} className={allClassNames} {...props}>
+      <LoadingProgress color={Color.Light} status={loadingStatus} />
+      {/* relative is required to create stacking context above progress indication */}
       <div className="relative">{children}</div>
     </a>
   )
