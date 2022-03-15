@@ -6,7 +6,7 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
-import { Button, Link } from '@pavel/components'
+import { Button, Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
 import { useState } from 'react'
 import { LoadingStatus } from '@pavel/types'
@@ -64,7 +64,7 @@ function SignInForm() {
         </NextLink>{' '}
         or{' '}
         <Button
-          variant="link"
+          variant={Variant.Link}
           onClick={tryAnonymously}
           loadingStatus={
             isLoading ? LoadingStatus.IN_PROGRESS : LoadingStatus.IDLE

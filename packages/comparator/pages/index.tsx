@@ -1,4 +1,4 @@
-import { Link } from '@pavel/components'
+import { Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
 import { withAuthUser, AuthAction, useAuthUser } from 'next-firebase-auth'
 import styles from './index.module.scss'
@@ -15,7 +15,7 @@ const AuthSection = withAuthUser({})(function AuthSection() {
     return (
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
-          variant="button"
+          variant={Variant.Filled}
           className="ml-4"
           size="sm"
           style={{
@@ -36,14 +36,14 @@ const AuthSection = withAuthUser({})(function AuthSection() {
             ...CTAStyles,
           }}
           size="sm"
-          variant="outlined"
+          variant={Variant.Outlined}
         >
           Sign in
         </Link>
       </NextLink>
       <NextLink href={SIGN_UP} passHref>
         <Link
-          variant="button"
+          variant={Variant.Filled}
           className="ml-4"
           size="sm"
           style={{
@@ -64,7 +64,7 @@ const MainCTA = withAuthUser({})(function MainCTA() {
     return (
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
-          variant="button"
+          variant={Variant.Filled}
           style={{
             ...CTAStyles,
             width: 235,
@@ -79,7 +79,7 @@ const MainCTA = withAuthUser({})(function MainCTA() {
   return (
     <NextLink href={SIGN_UP} passHref>
       <Link
-        variant="button"
+        variant={Variant.Filled}
         style={{
           ...CTAStyles,
           width: 235,

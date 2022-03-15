@@ -12,49 +12,6 @@
 .link {
 }
 
-.progress {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  transform-origin: left;
-  opacity: 0;
-
-  .button & {
-    background-color: hsla(0, 0%, 0%, 0.6);
-  }
-
-  .link & {
-    background-color: hsla(0, 0%, 0%, 0.1);
-  }
-
-  &.loading {
-    animation: loading 5s 0.5s ease forwards;
-  }
-
-  &.loaded {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
-@keyframes loading {
-  0% {
-    transform: scaleX(0);
-    opacity: 1;
-  }
-
-  80% {
-    transform: scaleX(0.9);
-  }
-
-  100% {
-    transform: scaleX(0.985);
-    opacity: 1;
-  }
-}
-
 .outlined {
   --color: hsl(0deg, 0%, 10%);
 
