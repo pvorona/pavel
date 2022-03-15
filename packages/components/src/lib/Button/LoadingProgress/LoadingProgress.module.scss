@@ -1,0 +1,49 @@
+$animation-duration: 5s;
+$animation-delay: 0.5s;
+
+$color-dark: hsla(0, 0%, 0%, 0.6);
+$color-light: hsla(0, 0%, 0%, 0.1);
+
+.light {
+  --color-background: #{$color-light};
+}
+
+.dark {
+  --color-background: #{$color-dark};
+}
+
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  transform-origin: left;
+  opacity: 0;
+
+  background-color: var(--color-background);
+
+  &.loading {
+    opacity: 1;
+    animation: loading $animation-duration $animation-delay ease forwards;
+  }
+
+  &.loaded {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes loading {
+  0% {
+    transform: scaleX(0);
+  }
+
+  80% {
+    transform: scaleX(0.9);
+  }
+
+  100% {
+    transform: scaleX(0.985);
+  }
+}

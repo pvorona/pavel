@@ -12,46 +12,27 @@
 .link {
 }
 
-.progress {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  transform-origin: left;
-  opacity: 0;
+.outlined {
+  --color: hsl(0deg, 0%, 10%);
 
-  .button & {
-    background-color: hsla(0, 0%, 0%, 0.6);
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid hsl(0deg, 0%, 35%);
+  color: var(--color);
+
+  &:not(:disabled) {
+    box-shadow: theme('boxShadow.md');
   }
 
-  .link & {
-    background-color: hsla(0, 0%, 0%, 0.1);
+  @media (prefers-color-scheme: dark) {
+    & {
+      --color: hsl(0deg, 0%, 90%);
+    }
   }
 
-  &.loading {
-    animation: loading 5s 0.5s ease forwards;
-  }
-
-  &.loaded {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
-@keyframes loading {
-  0% {
-    transform: scaleX(0);
-    opacity: 1;
-  }
-
-  80% {
-    transform: scaleX(0.9);
-  }
-
-  100% {
-    transform: scaleX(0.985);
-    opacity: 1;
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 }
 
