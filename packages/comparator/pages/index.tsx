@@ -1,20 +1,24 @@
 import { Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
-import { withAuthUser, useAuthUser } from 'next-firebase-auth'
+import { withAuthUser, useAuthUser, withAuthUserSSR } from 'next-firebase-auth'
 import { COMPARISON_LIST, SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
+import styles from './index.module.scss'
+import classNames from 'classnames'
 
 const CTAStyles = {
   borderRadius: 30,
 }
 
-const AuthSection = withAuthUser({})(function AuthSection() {
-  const user = useAuthUser()
+export const getServerSideProps = withAuthUserSSR()()
 
-  if (user.firebaseUser) {
+const AuthSection = withAuthUser<{ userId: string }>()(function AuthSection({
+  userId,
+}) {
+  if (userId) {
     return (
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
-          variant={Variant.Filled}
+          variant={Variant.Outlined}
           className="ml-4"
           size="sm"
           style={{
@@ -56,10 +60,10 @@ const AuthSection = withAuthUser({})(function AuthSection() {
   )
 })
 
-const MainCTA = withAuthUser({})(function MainCTA() {
-  const user = useAuthUser()
-
-  if (user.firebaseUser) {
+const MainCTA = withAuthUser<{
+  userId: string
+}>({})(function MainCTA({ userId }) {
+  if (userId) {
     return (
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
@@ -90,7 +94,9 @@ const MainCTA = withAuthUser({})(function MainCTA() {
   )
 })
 
-export default function Index() {
+export default withAuthUser()(function Index() {
+  const user = useAuthUser()
+
   return (
     <>
       <Background />
@@ -98,31 +104,47 @@ export default function Index() {
         <div className="flex justify-between py-6 px-14 items-baseline">
           <div className="text-4xl font-medium">Socrates</div>
           <div className="flex">
-            <div className="mx-4 font-semibold">Product</div>
-            <div className="mx-4 font-semibold">Pricing</div>
-            <div className="mx-4 font-semibold">Demo</div>
+            <Link href="/" className="mx-4 font-semibold">
+              Product
+            </Link>
+            <Link href="/" className="mx-4 font-semibold">
+              Pricing
+            </Link>
+            <Link href="/" className="mx-4 font-semibold">
+              Demo
+            </Link>
           </div>
           <div>
-            <AuthSection />
+            <AuthSection userId={user.id} />
           </div>
         </div>
         <div className="flex flex-col items-center justify-center h-full">
           <div className="max-w-5xl">
-            <div className="text-8xl font-semibold">
+            <div
+              className={classNames(
+                styles.Line,
+                'text-8xl font-semibold animate-bounce',
+              )}
+            >
               Empower your decisions with AI
             </div>
-            <div className="text-xl font-medium text-[#425466] mt-8">
+            <div
+              className={classNames(
+                styles.SubLine,
+                'text-xl font-medium text-[#425466] mt-8',
+              )}
+            >
               {`The best in class tools that help you focus on what's important`}
             </div>
-            <div className="mt-8">
-              <MainCTA />
+            <div className={classNames(styles.SubLine, 'mt-8')}>
+              <MainCTA userId={user.id} />
             </div>
           </div>
         </div>
       </div>
     </>
   )
-}
+})
 
 const circleClass =
   'opacity-40 blur-md hover:opacity-40 hover:scale-2 transition-all duration-400'

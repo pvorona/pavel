@@ -43,7 +43,7 @@ function ComparisonListPageWrapper() {
   return (
     <>
       <HeaderView>
-        <PageTitleView>Comparisons</PageTitleView>
+        <PageTitleView>My Comparisons</PageTitleView>
       </HeaderView>
 
       <ComparisonList>

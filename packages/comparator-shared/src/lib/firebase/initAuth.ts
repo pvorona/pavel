@@ -74,7 +74,7 @@ export const initAuth = () => {
       path: '/',
       sameSite: 'strict',
       secure: false,
-      signed: false,
+      signed: true,
     },
     onVerifyTokenError: err => {
       console.error(err)
