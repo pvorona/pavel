@@ -1,4 +1,3 @@
-import { selectElementContent } from '@pavel/utils'
 import classNames from 'classnames'
 import React, { FormEvent, useEffect, useState } from 'react'
 import styles from './TextField.module.css'
@@ -8,7 +7,7 @@ const ESCAPE = 'Escape'
 
 export function TextField({
   className,
-  onInput,
+  onInput: onInputProp,
   children,
   ...props
 }: {
@@ -20,22 +19,22 @@ export function TextField({
   const [element, setElement] = useState<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (!element) {
-      return
+    if (element) {
+      element.innerText = children
     }
-
-    element.textContent = children
-  }, [element, children])
+    // children are not included by intent -- we need to run this only for initial children
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [element])
 
   function onKeyDown(e: React.KeyboardEvent) {
     if (!element) {
       return
     }
 
-    if (e.code === ENTER) {
-      element.blur()
-      // animateOnce(element, 'animate-success')
-    }
+    // if (e.code === ENTER) {
+    // element.blur()
+    // animateOnce(element, 'animate-success')
+    // }
 
     if (e.code === ESCAPE) {
       element.blur()
@@ -43,12 +42,12 @@ export function TextField({
     }
   }
 
-  function ownOnInput(e: FormEvent<HTMLDivElement>) {
-    onInput(e.currentTarget.innerText)
+  function onInput(e: FormEvent<HTMLDivElement>) {
+    onInputProp(e.currentTarget.innerText)
   }
 
   function onFocus(e: React.FocusEvent<HTMLSpanElement>) {
-    selectElementContent(e.target)
+    // selectElementContent(e.target)
   }
 
   // function onBlur(e: React.FocusEvent<HTMLDivElement>) {
@@ -58,7 +57,7 @@ export function TextField({
   return (
     <div
       {...props}
-      onInput={ownOnInput}
+      onInput={onInput}
       ref={setElement}
       className={classNames(
         className,

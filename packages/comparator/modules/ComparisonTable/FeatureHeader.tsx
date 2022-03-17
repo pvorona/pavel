@@ -48,7 +48,7 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
         <TextField
           onInput={onFeatureNameChange}
           placeholder="Feature name"
-          className="px-3 py-1 font-extralight text-sm tracking-widest transition-colors text-gray-2 dark:text-gray-1"
+          className="px-3 py-1 text-sm transition-colors text-gray-2 dark:text-gray-1 font-semibold opacity-50 tracking-[0.15em]"
         >
           {feature.name}
         </TextField>

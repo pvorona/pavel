@@ -35,16 +35,17 @@ export const AddOptionLine = memo(function AddOptionLine({
 
     return effect([pointerPosition], ({ y }) => {
       const { top } = svg.getBoundingClientRect()
+
       const translateY = ensureInBounds(
         y - top,
         hoverTrapSizeFromOneSide,
-        Infinity,
+        height - hoverTrapSizeFromOneSide,
       )
 
       button.style.transform = `translateY(${translateY}px)`
       circle.style.transform = `translateY(${translateY}px)`
     })
-  }, [button, circle, svg])
+  }, [button, circle, svg, height])
 
   function onClick() {
     dispatch(addOptionToCurrentComparison({ ownerId: user.id, index }))
