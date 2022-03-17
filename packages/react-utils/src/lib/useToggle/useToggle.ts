@@ -11,5 +11,6 @@ export default function useToggle(initialState = false) {
       setState(maybeValue)
     }
   }, [])
+
   return [state, toggle]
 }

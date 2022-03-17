@@ -67,7 +67,7 @@ const MainCTA = withAuthUser<{
     return (
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
-          variant={Variant.Filled}
+          variant={Variant.Outlined}
           style={{
             ...CTAStyles,
             width: 235,
@@ -128,16 +128,17 @@ export default withAuthUser()(function Index() {
             >
               Empower your decisions with AI
             </div>
-            <div
-              className={classNames(
-                styles.SubLine,
-                'text-xl font-medium text-[#425466] mt-8',
-              )}
-            >
-              {`The best in class tools that help you focus on what's important`}
-            </div>
-            <div className={classNames(styles.SubLine, 'mt-8')}>
-              <MainCTA userId={user.id} />
+            <div className={styles.SubLine}>
+              <div
+                className={classNames(
+                  'text-xl font-medium text-[#425466] mt-8',
+                )}
+              >
+                {`The best in class tools that help you focus on what's important`}
+              </div>
+              <div className={classNames('mt-8')}>
+                <MainCTA userId={user.id} />
+              </div>
             </div>
           </div>
         </div>
