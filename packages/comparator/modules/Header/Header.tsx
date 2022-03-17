@@ -3,8 +3,10 @@ import {
   setCurrentComparisonProperty,
 } from '../comparisons'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, TextField, Variant } from '@pavel/components'
+import { Button, IconButton, TextField, Variant } from '@pavel/components'
 import { Avatars } from '../Avatars'
+import { useRouter } from 'next/router'
+import { COMPARISON_LIST } from '@pavel/comparator-shared'
 
 export function ComparisonName() {
   const dispatch = useDispatch()
@@ -40,10 +42,32 @@ export function ShareButton() {
   )
 }
 
+export function BackIcon() {
+  const router = useRouter()
+
+  function goBack() {
+    router.push(COMPARISON_LIST)
+  }
+
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 10 10"
+      className="text-white rotate-180 mr-3"
+      stroke="currentColor"
+      onClick={goBack}
+    >
+      <path d="M1 1l4 4-4 4"></path>
+    </svg>
+  )
+}
+
 export function Header() {
   return (
     <HeaderView>
-      <div className="whitespace-nowrap overflow-hidden flex">
+      <div className="whitespace-nowrap overflow-hidden flex items-center">
+        <BackIcon />
         <ComparisonName />
         {/* <AddComparisonButton /> */}
       </div>

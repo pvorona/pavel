@@ -6,7 +6,7 @@ export const IconButton = ({
   onClick,
   ...props
 }: SVGProps<SVGSVGElement> & {
-  onClick: React.MouseEventHandler<HTMLButtonElement>
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
 }) => (
   <button
     onClick={onClick}
