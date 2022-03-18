@@ -2,9 +2,18 @@ import React, { memo, useEffect, useRef } from 'react'
 import { TableBody } from './TableBody'
 import { TableHeader } from './TableHeader'
 import useResizeObserver from 'use-resize-observer'
-import { useDispatch } from 'react-redux'
-import { setTableSize } from './comparisonTable.slice'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  setLeftBlockHovered,
+  setRightBlockHovered,
+  setTableSize,
+} from './comparisonTable.slice'
 import { effect, windowWidth } from '@pavel/observable'
+import {
+  addOptionToCurrentComparison,
+  selectCurrentComparisonOptionIds,
+} from '../comparisons'
+import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 
 export const ComparisonTable = memo(function ComparisonTable() {
   const dispatch = useDispatch()
@@ -34,8 +43,9 @@ export const ComparisonTable = memo(function ComparisonTable() {
   }, [width])
 
   return (
-    <div className="w-full mt-2">
-      <table ref={ref} className="min-w-[640px] mb-16 mx-auto relative">
+    <div className="w-full mt-2 flex">
+      <LeftHoverBlock />
+      <table ref={ref} className="min-w-[640px] mx-auto relative">
         <thead>
           <tr className="sticky top-0 z-20 bg-white dark:bg-gray-6">
             <TableHeader />
@@ -49,6 +59,67 @@ export const ComparisonTable = memo(function ComparisonTable() {
           <TableBody />
         </tbody>
       </table>
+      <RightHoverBlock />
     </div>
   )
 })
+
+const LeftHoverBlock = withAuthUser()(function LeftHoverBlock() {
+  const user = useAuthUser()
+  const dispatch = useDispatch()
+
+  function onClick() {
+    dispatch(addOptionToCurrentComparison({ ownerId: user.id, index: 0 }))
+  }
+
+  function onMouseEnter() {
+    dispatch(setLeftBlockHovered(true))
+  }
+
+  function onMouseLeave() {
+    dispatch(setLeftBlockHovered(false))
+  }
+
+  return (
+    <HoverBlock
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    />
+  )
+})
+
+const RightHoverBlock = withAuthUser()(function RightHoverBlock() {
+  const user = useAuthUser()
+  const dispatch = useDispatch()
+  const optionIds = useSelector(selectCurrentComparisonOptionIds)
+
+  function onClick() {
+    dispatch(
+      addOptionToCurrentComparison({
+        ownerId: user.id,
+        index: optionIds.length,
+      }),
+    )
+  }
+
+  function onMouseEnter() {
+    dispatch(setRightBlockHovered(true))
+  }
+
+  function onMouseLeave() {
+    dispatch(setRightBlockHovered(false))
+  }
+
+  return (
+    <HoverBlock
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    />
+  )
+})
+
+function HoverBlock(props) {
+  return <div className="flex-grow cursor-pointer" {...props} />
+}

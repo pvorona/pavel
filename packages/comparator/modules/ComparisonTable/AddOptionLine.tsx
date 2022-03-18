@@ -1,5 +1,8 @@
 import { pointerPosition, effect } from '@pavel/observable'
-import { addOptionToCurrentComparison } from '../../modules/comparisons'
+import {
+  addOptionToCurrentComparison,
+  selectCurrentComparisonOptionIds,
+} from '../../modules/comparisons'
 import { memo, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -12,7 +15,11 @@ import {
 } from './constants'
 import { ensureInBounds } from '@pavel/utils'
 import { useAuthUser } from 'next-firebase-auth'
-import { selectTableSize } from './comparisonTable.selectors'
+import {
+  selectIsLeftBlockHovered,
+  selectIsRightBlockHovered,
+  selectTableSize,
+} from './comparisonTable.selectors'
 
 export const AddOptionLine = memo(function AddOptionLine({
   attachment,
@@ -27,6 +34,14 @@ export const AddOptionLine = memo(function AddOptionLine({
   const { height } = useSelector(selectTableSize)
   const dispatch = useDispatch()
   const user = useAuthUser()
+  const isFirst = index === 0
+  const optionIds = useSelector(selectCurrentComparisonOptionIds)
+  // Last line index is last option index + 1
+  const isLast = index === optionIds.length && attachment === 'right'
+  const isLeftBlockHovered = useSelector(selectIsLeftBlockHovered)
+  const isRightBlockHovered = useSelector(selectIsRightBlockHovered)
+  const isVisible =
+    (isFirst && isLeftBlockHovered) || (isLast && isRightBlockHovered)
 
   useEffect(() => {
     if (!button || !circle || !svg) {
@@ -63,6 +78,7 @@ export const AddOptionLine = memo(function AddOptionLine({
         top: 0,
         margin: `0 -${hoverTrapSizeFromOneSide}px`,
         ...(attachment === 'left' ? { left: 0 } : { right: 0 }),
+        opacity: isVisible ? '1' : undefined,
       }}
     >
       <line

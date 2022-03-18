@@ -9,6 +9,10 @@ export type ComparisonTableState = {
   optionIdToRemove: null | string
   optionSizeMap: Record<string, Size>
   tableSize: Size
+  hover: {
+    leftBlock: boolean
+    rightBlock: boolean
+  }
 }
 
 const comparisonTableSlice = createSlice({
@@ -17,6 +21,10 @@ const comparisonTableSlice = createSlice({
     optionIdToRemove: null,
     optionSizeMap: {},
     tableSize: { width: 0, height: 0 },
+    hover: {
+      leftBlock: false,
+      rightBlock: false,
+    },
   } as ComparisonTableState,
   handlers: {
     setOptionIdToRemove: (state, optionId: string) => {
@@ -31,9 +39,20 @@ const comparisonTableSlice = createSlice({
     setTableSize: (state, size: Size) => {
       state.tableSize = size
     },
+    setLeftBlockHovered: (state, hover: boolean) => {
+      state.hover.leftBlock = hover
+    },
+    setRightBlockHovered: (state, hover: boolean) => {
+      state.hover.rightBlock = hover
+    },
   },
 })
 
-export const { setOptionIdToRemove, setOptionSize, setTableSize } =
-  comparisonTableSlice.actions
+export const {
+  setOptionIdToRemove,
+  setOptionSize,
+  setTableSize,
+  setLeftBlockHovered,
+  setRightBlockHovered,
+} = comparisonTableSlice.actions
 export const comparisonTableReducer = comparisonTableSlice.reducer

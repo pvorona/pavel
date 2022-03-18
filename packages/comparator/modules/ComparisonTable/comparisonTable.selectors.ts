@@ -31,3 +31,18 @@ export const selectTableSize = createSelector(
   selectComparisonTableState,
   comparisonTableState => comparisonTableState.tableSize,
 )
+
+export const selectHoverState = createSelector(
+  selectComparisonTableState,
+  comparisonTableState => comparisonTableState.hover,
+)
+
+export const selectIsLeftBlockHovered = createSelector(
+  selectHoverState,
+  hoverState => hoverState.leftBlock,
+)
+
+export const selectIsRightBlockHovered = createSelector(
+  selectHoverState,
+  hoverState => hoverState.rightBlock,
+)
