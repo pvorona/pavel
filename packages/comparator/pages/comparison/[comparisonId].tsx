@@ -25,6 +25,7 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
+import { GooeyLoader } from '@pavel/components'
 
 async function loadComparisonAndRelatedData(comparisonId: string) {
   const comparison = await fetchDoc<ComparisonModel>(
@@ -77,7 +78,7 @@ function ComparisonPageDataLoader() {
   }
 
   if (!isSettled(loadable)) {
-    return <span>Loading page data...</span>
+    return <GooeyLoader />
   }
 
   return <Comparison />

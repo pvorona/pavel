@@ -22,7 +22,7 @@ export const OptionTitle = memo(function OptionTitle({
 
   return (
     <TextField
-      className="px-12 py-4 w-full inline-block font-extralight text-4xl text-left"
+      className="px-12 py-4 w-full inline-block font-light text-4xl text-left"
       onInput={onOptionNameChanged}
     >
       {optionName}

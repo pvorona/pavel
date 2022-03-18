@@ -1,0 +1,75 @@
+.gooey {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 142px;
+  height: 40px;
+  margin: -20px 0 0 -71px;
+  filter: contrast(20);
+  .dot {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 12px;
+    left: 15px;
+    filter: blur(4px);
+    background: currentColor;
+    border-radius: 50%;
+    transform: translateX(0);
+    animation: dot 2.8s infinite;
+  }
+  .dots {
+    transform: translateX(0);
+    margin-top: 12px;
+    margin-left: 31px;
+    animation: dots 2.8s infinite;
+    span {
+      display: block;
+      float: left;
+      width: 16px;
+      height: 16px;
+      margin-left: 16px;
+      filter: blur(4px);
+      background: currentColor;
+      border-radius: 50%;
+    }
+  }
+}
+
+.Main {
+  animation: dot 2.8s infinite;
+}
+
+.Small {
+  animation: dots 2.8s infinite;
+}
+
+$size: 32px;
+$space: 16px;
+$items: 4;
+$color: #88e6ce;
+
+.Circle {
+  --color: #{$color};
+
+  display: inline-block;
+  border-radius: 50%;
+  background-color: var(--color);
+  width: $size;
+  height: $size;
+  margin: $space/2;
+  box-shadow: -20px 17px 0px 0px var(--color);
+}
+
+@keyframes dot {
+  50% {
+    box-shadow: 20px 17px 0px 0px var(--color);
+    transform: translateX(($items - 1) * ($space + $size));
+  }
+}
+@keyframes dots {
+  50% {
+    box-shadow: 20px 17px 0px 0px var(--color);
+    transform: translateX(-($size + $space));
+  }
+}

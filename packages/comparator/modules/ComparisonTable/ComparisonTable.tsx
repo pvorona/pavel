@@ -34,14 +34,14 @@ export const ComparisonTable = memo(function ComparisonTable() {
   }, [width])
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-2">
       <table ref={ref} className="min-w-[640px] mb-16 mx-auto relative">
         <thead>
           <tr className="sticky top-0 z-20 bg-white dark:bg-gray-6">
             <TableHeader />
             <th
               ref={separatorRef}
-              className="h-[1px] absolute bottom-0 bg-gray-5 dark:bg-gray-7"
+              className="h-[1px] absolute bottom-0 bg-gray-5 dark:bg-gray-7 p-0"
             />
           </tr>
         </thead>

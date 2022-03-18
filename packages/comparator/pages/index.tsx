@@ -70,7 +70,7 @@ const MainCTA = withAuthUser<{
           variant={Variant.Filled}
           style={{
             ...CTAStyles,
-            width: 235,
+            width: 200,
           }}
         >
           Go to app
