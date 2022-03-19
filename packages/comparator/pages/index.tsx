@@ -4,6 +4,7 @@ import { withAuthUser, useAuthUser, withAuthUserSSR } from 'next-firebase-auth'
 import { COMPARISON_LIST, SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
 import styles from './index.module.scss'
 import classNames from 'classnames'
+import img from './Group.svg'
 
 const CTAStyles = {
   borderRadius: 30,
@@ -101,44 +102,40 @@ export default withAuthUser()(function Index() {
     <>
       <Background />
       <div className="flex flex-col h-full">
-        <div className="flex justify-between py-6 px-14 items-baseline">
+        <div className="flex justify-between my-2 mx-4 md:my-4 md:mx-8 lg:my-6 lg:mx-14 items-center relative whitespace-nowrap">
           <div className="text-4xl font-medium">Socrates</div>
-          <div className="flex">
+          <div className="flex absolute left-1/2 -translate-x-1/2 bottom-2 invisible md:visible">
             <Link href="/" className="mx-4 font-semibold">
-              Product
+              How it works
             </Link>
             <Link href="/" className="mx-4 font-semibold">
               Pricing
             </Link>
-            <Link href="/" className="mx-4 font-semibold">
-              Demo
-            </Link>
           </div>
-          <div>
+          <div className="invisible xs:visible">
             <AuthSection userId={user.id} />
           </div>
         </div>
         <div className="flex flex-col items-center justify-center h-full">
-          <div className="max-w-5xl">
-            <div
-              className={classNames(
-                styles.Line,
-                'text-8xl font-semibold animate-bounce',
-              )}
-            >
-              Empower your decisions with AI
-            </div>
-            <div
-              className={classNames(
-                styles.SubLine,
-                'text-xl font-medium text-[#425466] mt-8',
-              )}
-            >
-              {`The best in class tools that help you focus on what's important`}
-            </div>
-            <div className={classNames(styles.SubLine, 'mt-8')}>
-              <MainCTA userId={user.id} />
-            </div>
+          <div
+            className={classNames(
+              styles.Line,
+              'text-8xl font-semibold animate-bounce',
+            )}
+          >
+            Empower your decisions
+          </div>
+          <div
+            className={classNames(
+              styles.SubLine,
+              'text-xl font-medium text-gray-main-45 invisible xs:visible',
+            )}
+          >
+            {`The best in class tools that help you focus on what's important`}
+            {/* {`Tools and models that help you see the important`} */}
+          </div>
+          <div className={classNames(styles.SubLine)}>
+            <MainCTA userId={user.id} />
           </div>
         </div>
       </div>
@@ -146,65 +143,14 @@ export default withAuthUser()(function Index() {
   )
 })
 
-const circleClass =
-  'opacity-40 blur-md hover:opacity-40 hover:scale-2 transition-all duration-400'
-
 function Background() {
   return (
-    <svg
-      width="100%"
-      height="100%"
-      className="fixed top-0 right-0 bottom-0 left-0"
-    >
-      <defs>
-        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="hsl(270, 81%, 65%)">
-            <animate
-              attributeName="stop-color"
-              values="hsl(270, 81%, 65%); hsl(357, 81%, 65%); hsl(270, 81%, 65%)"
-              dur="4s"
-              repeatCount="indefinite"
-            ></animate>
-          </stop>
-
-          <stop offset="100%" stopColor="hsl(357, 81%, 65%)">
-            <animate
-              attributeName="stop-color"
-              values="hsl(357, 81%, 65%); hsl(270, 81%, 65%); hsl(357, 81%, 65%)"
-              dur="4s"
-              repeatCount="indefinite"
-            ></animate>
-          </stop>
-        </linearGradient>
-      </defs>
-      <circle
-        cx="95%"
-        cy="95%"
-        r="40%"
-        fill="url(#logo-gradient)"
-        className={circleClass}
-      ></circle>
-      <circle
-        cx="81%"
-        cy="0"
-        r="5%"
-        fill="url(#logo-gradient)"
-        className={circleClass}
-      ></circle>
-      <circle
-        cx="105%"
-        cy="5%"
-        r="20%"
-        fill="url(#logo-gradient)"
-        className={circleClass}
-      ></circle>
-      <circle
-        cx="81%"
-        cy="26%"
-        r="10%"
-        fill="url(#logo-gradient)"
-        className={circleClass}
-      ></circle>
-    </svg>
+    <div
+      className="fixed top-0 bottom-0 right-0 left-0 -z-10"
+      style={{
+        backgroundSize: '100vw 175vh',
+        backgroundImage: `url(${img.src})`,
+      }}
+    />
   )
 }

@@ -4,8 +4,16 @@ const { join } = require('path')
 module.exports = {
   theme: {
     extend: {
+      screens: {
+        xs: '420px',
+      },
       colors: {
         gray: {
+          main: {
+            25: 'hsl(110, 5%, 25%)',
+            45: 'hsl(110, 5%, 45%)',
+          },
+
           1: 'hsl(210, 2%, 55%)',
           2: 'hsl(220, 9%, 48%)',
           3: 'hsla(270, 0%, 35%, 0.6)',
