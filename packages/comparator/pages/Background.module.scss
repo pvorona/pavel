@@ -1,0 +1,22 @@
+//       className="fixed top-0 bottom-0 right-0 left-0 -z-10"
+//       style={{
+//         backgroundSize: '100vw 175vh',
+//         backgroundImage: `url(${img.src})`,
+//       }}
+
+.Background {
+  --background-color: hsl(120, 4%, 10%);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 175vh;
+  // bottom: 0;
+  // right: 0;
+  z-index: -1;
+}
+
+.Circle {
+  fill: var(--background-color);
+}

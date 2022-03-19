@@ -4,7 +4,7 @@ import { withAuthUser, useAuthUser, withAuthUserSSR } from 'next-firebase-auth'
 import { COMPARISON_LIST, SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
 import styles from './index.module.scss'
 import classNames from 'classnames'
-import img from './Group.svg'
+import { Background } from './Background'
 
 const CTAStyles = {
   borderRadius: 30,
@@ -69,6 +69,7 @@ const MainCTA = withAuthUser<{
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
           variant={Variant.Filled}
+          className={styles['Neon']}
           style={{
             ...CTAStyles,
             width: 200,
@@ -84,6 +85,8 @@ const MainCTA = withAuthUser<{
     <NextLink href={SIGN_UP} passHref>
       <Link
         variant={Variant.Filled}
+        className={styles['Neon']}
+        labelClassName={styles['NeonLabel']}
         style={{
           ...CTAStyles,
           width: 235,
@@ -133,6 +136,7 @@ export default withAuthUser()(function Index() {
           >
             {`The best in class tools that help you focus on what's important`}
             {/* {`Tools and models that help you see the important`} */}
+            {/* Eliminate the bias. Focus on important outcomes. */}
           </div>
           <div className={classNames(styles.SubLine)}>
             <MainCTA userId={user.id} />
@@ -143,14 +147,14 @@ export default withAuthUser()(function Index() {
   )
 })
 
-function Background() {
-  return (
-    <div
-      className="fixed top-0 bottom-0 right-0 left-0 -z-10"
-      style={{
-        backgroundSize: '100vw 175vh',
-        backgroundImage: `url(${img.src})`,
-      }}
-    />
-  )
-}
+// function Background() {
+//   return (
+//     <div
+//       className="fixed top-0 bottom-0 right-0 left-0 -z-10"
+//       style={{
+//         backgroundSize: '100vw 175vh',
+//         backgroundImage: `url(${img.src})`,
+//       }}
+//     />
+//   )
+// }

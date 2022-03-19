@@ -22,3 +22,83 @@
     opacity: 1;
   }
 }
+
+@property --rotate {
+  syntax: '<angle>';
+  initial-value: 132deg;
+  inherits: false;
+}
+
+.Neon {
+  --border-radius: 99999px;
+  --card-height: 65vh;
+  --card-width: calc(var(--card-height) / 1.5);
+  --animation-duration: 2.5s;
+  --border-size: 2px;
+
+  background-color: #1f2023;
+}
+
+.Neon::before {
+  content: '';
+  width: calc(100% + var(--border-size) * 2);
+  height: calc(100% + var(--border-size) * 2);
+  border-radius: var(--border-radius);
+  background-image: linear-gradient(
+    var(--rotate),
+    #5ddcff,
+    #3c67e3 43%,
+    #4e00c2
+  );
+  position: absolute;
+  z-index: -1;
+  top: calc(-1 * var(--border-size));
+  left: calc(-1 * var(--border-size));
+  animation: spin var(--animation-duration) linear infinite;
+}
+
+.Neon::after {
+  position: absolute;
+  content: '';
+  top: 30%;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0.8) scaleY(0.5);
+  filter: blur(30px);
+  background-image: linear-gradient(
+    var(--rotate),
+    #5ddcff,
+    #3c67e3 43%,
+    #4e00c2
+  );
+  animation: spin var(--animation-duration) var(--animation-duration) linear
+    infinite;
+}
+
+.NeonLabel {
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-image: linear-gradient(
+    var(--rotate),
+    #5ddcff,
+    #3c67e3 43%,
+    #4e00c2
+  );
+  animation: spin var(--animation-duration) var(--animation-duration) linear
+    infinite;
+}
+
+@keyframes spin {
+  0% {
+    --rotate: 0deg;
+  }
+  100% {
+    --rotate: 360deg;
+  }
+}
