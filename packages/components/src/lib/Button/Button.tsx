@@ -1,5 +1,5 @@
 import { LoadingStatus } from '@pavel/types'
-import classnames from 'classnames'
+import classNames from 'classnames'
 import React, {
   ReactNode,
   forwardRef,
@@ -23,6 +23,7 @@ export type BaseButtonProps = {
   size?: 'sm' | 'md'
   loadingStatus?: LoadingStatus
   onClick?: (event: MouseEvent) => void
+  labelClassName?: string
 }
 
 export type ButtonProps = BaseButtonProps & ButtonElementProps
@@ -55,7 +56,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) {
     const isButtonLike =
       variant === Variant.Filled || variant === Variant.Outlined
-    const allClassNames = classnames(
+    const allClassNames = classNames(
       styles['ButtonBase'],
       {
         [styles['ButtonLike']]: isButtonLike,
@@ -98,13 +99,14 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
     variant = Variant.Link,
     loadingStatus = LoadingStatus.IDLE,
     children,
+    labelClassName,
     ...props
   }: LinkProps,
   ref,
 ) {
   const isButtonLike =
     variant === Variant.Filled || variant === Variant.Outlined
-  const allClassNames = classnames(
+  const allClassNames = classNames(
     styles['ButtonBase'],
     {
       [styles['ButtonLike']]: isButtonLike,
@@ -124,7 +126,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
     <a ref={ref} className={allClassNames} {...props}>
       <LoadingProgress color={Color.Light} status={loadingStatus} />
       {/* relative is required to create stacking context above progress indication */}
-      <div className="relative">{children}</div>
+      <div className={classNames(labelClassName, 'relative')}>{children}</div>
     </a>
   )
 })

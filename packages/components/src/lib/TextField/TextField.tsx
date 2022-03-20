@@ -31,10 +31,10 @@ export function TextField({
       return
     }
 
-    // if (e.code === ENTER) {
-    // element.blur()
-    // animateOnce(element, 'animate-success')
-    // }
+    if (e.code === ENTER && !e.shiftKey) {
+      element.blur()
+      // animateOnce(element, 'animate-success')
+    }
 
     if (e.code === ESCAPE) {
       element.blur()

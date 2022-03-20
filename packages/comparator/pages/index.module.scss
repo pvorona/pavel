@@ -1,24 +1,128 @@
 .Line {
-  animation: drop 2s;
+  animation: drop var(--hero-title-animation-duration);
   font-size: var(--space-7);
 }
 
 .SubLine {
   opacity: 0;
-  animation: appear 2s 1s forwards;
+  animation: appear var(--hero-subtitle-animation-duration)
+    var(--hero-subtitle-animation-delay) forwards;
   font-size: var(--space-2);
   margin-top: var(--space-3);
+}
+
+.Cta {
+  opacity: 0;
+  animation: appear var(--hero-subtitle-animation-duration)
+    calc(var(--hero-subtitle-animation-delay) + 1s) forwards;
+  margin-top: var(--space-3);
+}
+
+.Header {
+  opacity: 0;
+  animation: appear 2s calc(var(--hero-subtitle-animation-delay) + 2s) forwards;
 }
 
 @keyframes drop {
   from {
     opacity: 0;
-    transform: translateY(-25%);
   }
 }
 
 @keyframes appear {
   to {
     opacity: 1;
+  }
+}
+
+@property --rotate {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+// TODO
+// - on hover wider blur shadow and more transparent background
+.Neon {
+  --border-radius: 99999px;
+  --border-size: 2px;
+
+  --animation-duration: 2.5s;
+  --animation-delay: 2s;
+
+  // --neon-color-1: #5ddcff;
+  // --neon-color-2: #3c67e3;
+  // --neon-color-3: #4e00c2;
+
+  --neon-color-1: hsl(193deg 100% 50%);
+  --neon-color-2: hsl(225deg 75% 70%);
+  --neon-color-3: hsl(264deg 100% 80%);
+
+  // background-color: #1f2023;
+  // background-color: hsl(225deg 6% 13% / 98%);
+}
+
+.Neon::before {
+  content: '';
+  width: calc(100% + var(--border-size) * 2);
+  height: calc(100% + var(--border-size) * 2);
+  border-radius: var(--border-radius);
+  background-image: linear-gradient(
+    var(--rotate),
+    var(--neon-color-1),
+    var(--neon-color-2) 43%,
+    var(--neon-color-3)
+  );
+  position: absolute;
+  z-index: -1;
+  top: calc(-1 * var(--border-size));
+  left: calc(-1 * var(--border-size));
+  animation: spin var(--animation-duration) var(--animation-delay) linear
+    infinite;
+}
+
+.Neon::after {
+  position: absolute;
+  content: '';
+  top: 30%;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0.8) scaleY(0.5);
+  filter: blur(30px);
+  background-image: linear-gradient(
+    var(--rotate),
+    var(--neon-color-1),
+    var(--neon-color-2) 43%,
+    var(--neon-color-3)
+  );
+  animation: spin var(--animation-duration)
+    calc(var(--animation-duration) + var(--animation-delay)) linear infinite;
+}
+
+.NeonLabel {
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-image: linear-gradient(
+    var(--rotate),
+    var(--neon-color-1),
+    var(--neon-color-2) 43%,
+    var(--neon-color-3)
+  );
+  animation: spin var(--animation-duration)
+    calc(var(--animation-duration) + var(--animation-delay)) linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    --rotate: 0deg;
+  }
+  100% {
+    --rotate: 360deg;
   }
 }
