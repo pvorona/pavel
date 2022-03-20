@@ -5,6 +5,7 @@ import {
 import { memo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { DotIcon, HoldConfirmationButton } from '@pavel/components'
+import classNames from 'classnames'
 
 export const OptionActions = memo(function OptionActions({
   optionId,
@@ -13,7 +14,7 @@ export const OptionActions = memo(function OptionActions({
 }) {
   const dispatch = useDispatch()
 
-  const [confirming, setConfirming] = useState(false)
+  const [isConfirmingDeletion, setIsConfirmingDeletion] = useState(false)
 
   function onRemoveOptionMouseEnter() {
     dispatch(setOptionIdToRemove(optionId))
@@ -35,10 +36,16 @@ export const OptionActions = memo(function OptionActions({
       onFocus={onRemoveOptionMouseEnter}
       onBlur={onRemoveOptionMouseLeave}
       onConfirmationCompleted={onRemoveOptionClick}
-      onConfirmationStart={() => setConfirming(true)}
-      onConfirmationCancel={() => setConfirming(false)}
+      onConfirmationStart={() => setIsConfirmingDeletion(true)}
+      onConfirmationCancel={() => setIsConfirmingDeletion(false)}
     >
-      <DotIcon color="red" loading={confirming} />
+      <DotIcon
+        color="red"
+        loading={isConfirmingDeletion}
+        className={classNames({
+          'cursor-none': isConfirmingDeletion,
+        })}
+      />
     </HoldConfirmationButton>
   )
 })
