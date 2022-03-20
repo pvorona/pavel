@@ -151,20 +151,9 @@ export default withAuthUser()(function Index() {
           <div className={classNames(styles.Cta)}>
             <MainCTA />
           </div>
+          <HoldConfirmationButton />
         </div>
       </div>
     </>
   )
 })
-
-// function Background() {
-//   return (
-//     <div
-//       className="fixed top-0 bottom-0 right-0 left-0 -z-10"
-//       style={{
-//         backgroundSize: '100vw 175vh',
-//         backgroundImage: `url(${img.src})`,
-//       }}
-//     />
-//   )
-// }

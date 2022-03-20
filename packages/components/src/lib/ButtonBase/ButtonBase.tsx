@@ -15,10 +15,10 @@ type ButtonElementProps = DetailedHTMLProps<
 export type ButtonBaseProps = PropsWithChildren<ButtonElementProps>
 
 export const ButtonBase = forwardRef<HTMLButtonElement, ButtonBaseProps>(
-  function ButtonBase(props: ButtonBaseProps, ref) {
+  function ButtonBase({ className, ...props }: ButtonBaseProps, ref) {
     return (
       <button
-        className={classNames(styles['ButtonBase'], props.className)}
+        className={classNames(styles['ButtonBase'], className)}
         {...props}
         ref={ref}
       />

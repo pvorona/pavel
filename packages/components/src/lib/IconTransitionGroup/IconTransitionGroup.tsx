@@ -31,6 +31,7 @@ export function IconTransitionGroup({
         return React.cloneElement(
           child,
           {
+            ...child.props,
             className: classNames(child.props.className, {
               'opacity-0 scale-0': !isOpen,
               'opacity-100 scale-100': isOpen,
@@ -46,7 +47,7 @@ export function IconTransitionGroup({
               ),
             },
           },
-          null,
+          child.props.children,
         )
       })}
     </div>

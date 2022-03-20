@@ -5,9 +5,17 @@ import {
   removeFeatureFromCurrentComparison,
   toggleDescriptionExpandedInCurrentComparison,
 } from '../../modules/comparisons'
-import { DotButton, IconTransitionGroup, Direction } from '@pavel/components'
+import {
+  DotIcon,
+  IconTransitionGroup,
+  Direction,
+  HoldConfirmationButton,
+  ButtonBase,
+} from '@pavel/components'
 import { useDispatch } from 'react-redux'
-import React from 'react'
+import React, { useState } from 'react'
+
+const iconClassName = 'ml-2'
 
 export function FeatureActions({
   featureId,
@@ -17,6 +25,7 @@ export function FeatureActions({
   isOpen: boolean
 }) {
   const dispatch = useDispatch()
+  const [isConfirmingDeletion, setIsConfirmingDeletion] = useState(false)
 
   function onToggleExpandedClick() {
     dispatch(toggleFeatureExpandedInCurrentComparison(featureId))
@@ -30,28 +39,34 @@ export function FeatureActions({
     dispatch(toggleDescriptionExpandedInCurrentComparison(featureId))
   }
 
-  const iconClassName = 'ml-2'
-
   return (
     <IconTransitionGroup
       direction={isOpen ? Direction.Straight : Direction.Inverse}
       isOpen={isOpen}
     >
-      <DotButton
-        color="green"
+      <ButtonBase
         className={iconClassName}
         onClick={onDescriptionExpandedClick}
-      />
-      <DotButton
-        color="yellow"
+      >
+        <DotIcon color="green" />
+      </ButtonBase>
+      <ButtonBase className={iconClassName} onClick={onToggleExpandedClick}>
+        <DotIcon color="yellow" />
+      </ButtonBase>
+      <HoldConfirmationButton
+        onConfirmationCompleted={onRemoveFeatureClick}
+        onConfirmationStart={() => setIsConfirmingDeletion(true)}
+        onConfirmationCancel={() => setIsConfirmingDeletion(false)}
         className={iconClassName}
-        onClick={onToggleExpandedClick}
-      />
-      <DotButton
-        color="red"
-        className={iconClassName}
-        onClick={onRemoveFeatureClick}
-      />
+      >
+        <DotIcon
+          color="red"
+          loading={isConfirmingDeletion}
+          className={classNames({
+            'cursor-none': isConfirmingDeletion,
+          })}
+        />
+      </HoldConfirmationButton>
     </IconTransitionGroup>
   )
 }

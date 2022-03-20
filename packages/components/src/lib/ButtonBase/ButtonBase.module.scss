@@ -2,4 +2,7 @@
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
+  outline: none;
+  // I don't know why chrome treats empty string child as a whitespace
+  font-size: 0;
 }

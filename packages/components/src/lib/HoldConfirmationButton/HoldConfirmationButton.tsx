@@ -1,6 +1,15 @@
-import { PropsWithChildren, useEffect } from 'react'
+import { Lambda } from '@pavel/types'
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useRef,
+  MouseEvent,
+} from 'react'
 import { useState, KeyboardEvent } from 'react'
 import { ButtonBase, ButtonBaseProps } from '../ButtonBase'
+
+export const DEFAULT_DELAY = 2_000
 
 export enum HoldState {
   DEFAULT = 'DEFAULT',
@@ -10,13 +19,13 @@ export enum HoldState {
 export type HoldConfirmationButtonProps = PropsWithChildren<
   Omit<
     ButtonBaseProps,
-    | 'ref'
-    | 'onMouseDown'
-    | 'onMouseUp'
-    | 'onKeyDown'
-    | 'onKeyUp'
-    | 'onMouseLeave'
-  >
+    'ref' | 'onMouseDown' | 'onMouseUp' | 'onKeyDown' | 'onKeyUp'
+  > & {
+    onConfirmationCompleted?: Lambda
+    onConfirmationStart?: Lambda
+    onConfirmationCancel?: Lambda
+    delay?: number
+  }
 >
 
 const START_KEYS = ['Enter', ' ', 'Delete', 'Backspace', 'Clear']
@@ -24,9 +33,48 @@ const STOP_KEYS = [...START_KEYS, 'Escape']
 
 // Todo
 // - Handle touch leave
-export function HoldConfirmationButton(props: HoldConfirmationButtonProps) {
+export function HoldConfirmationButton({
+  onMouseLeave: onMouseLeaveProp,
+  onConfirmationStart,
+  onConfirmationCancel,
+  onConfirmationCompleted,
+  delay = DEFAULT_DELAY,
+  ...props
+}: HoldConfirmationButtonProps) {
   const [element, setElement] = useState<HTMLButtonElement | null>(null)
   const [pressedState, setPressedState] = useState(HoldState.DEFAULT)
+  const [isCompleted, setIsCompleted] = useState(false)
+  const timeoutRef = useRef<number | undefined>()
+
+  const onComplete = useCallback(() => {
+    setIsCompleted(true)
+    onConfirmationCompleted?.()
+  }, [onConfirmationCompleted])
+
+  const startHold = useCallback(() => {
+    if (pressedState === HoldState.PRESSED) {
+      return
+    }
+
+    setPressedState(HoldState.PRESSED)
+
+    if (isCompleted) {
+      return
+    }
+
+    onConfirmationStart?.()
+    timeoutRef.current = window.setTimeout(onComplete, delay)
+    // Invalid handle if delay value changes during the confirmation
+  }, [pressedState, onComplete, isCompleted, delay, onConfirmationStart])
+
+  const stopHold = useCallback(() => {
+    setPressedState(HoldState.DEFAULT)
+
+    if (!isCompleted) {
+      window.clearTimeout(timeoutRef.current)
+      onConfirmationCancel?.()
+    }
+  }, [isCompleted, onConfirmationCancel])
 
   useEffect(() => {
     if (!element) {
@@ -53,7 +101,7 @@ export function HoldConfirmationButton(props: HoldConfirmationButtonProps) {
       element.removeEventListener('touchend', onTouchEnd)
       element.removeEventListener('touchcancel', onTouchEnd)
     }
-  }, [element])
+  }, [element, startHold, stopHold])
 
   function onMouseDown() {
     startHold()
@@ -75,8 +123,11 @@ export function HoldConfirmationButton(props: HoldConfirmationButtonProps) {
     }
   }
 
-  const startHold = () => setPressedState(HoldState.PRESSED)
-  const stopHold = () => setPressedState(HoldState.DEFAULT)
+  function onMouseLeave(event: MouseEvent<HTMLButtonElement>) {
+    stopHold()
+
+    onMouseLeaveProp?.(event)
+  }
 
   return (
     <ButtonBase
@@ -86,9 +137,7 @@ export function HoldConfirmationButton(props: HoldConfirmationButtonProps) {
       onMouseUp={onMouseUp}
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
-      onMouseLeave={stopHold}
-    >
-      {pressedState}
-    </ButtonBase>
+      onMouseLeave={onMouseLeave}
+    />
   )
 }
