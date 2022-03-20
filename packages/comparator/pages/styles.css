@@ -10,4 +10,8 @@ html {
   --space-7: clamp(0.75rem, 7vw, 6rem);
   --space-2: clamp(0.75rem, 2vw, 1.25rem);
   --space-3: clamp(0.5rem, 2.8vw, 2rem);
+
+  --hero-title-animation-duration: 3s;
+  --hero-subtitle-animation-duration: 2s;
+  --hero-subtitle-animation-delay: 1s;
 }

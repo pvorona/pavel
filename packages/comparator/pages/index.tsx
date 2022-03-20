@@ -1,4 +1,4 @@
-import { Link, Variant } from '@pavel/components'
+import { Link, Variant, HoldConfirmationButton } from '@pavel/components'
 import NextLink from 'next/link'
 import { withAuthUser, useAuthUser, withAuthUserSSR } from 'next-firebase-auth'
 import { COMPARISON_LIST, SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
@@ -12,10 +12,10 @@ const CTAStyles = {
 
 export const getServerSideProps = withAuthUserSSR()()
 
-const AuthSection = withAuthUser<{ userId: string }>()(function AuthSection({
-  userId,
-}) {
-  if (userId) {
+function AuthSection() {
+  const { id } = useAuthUser()
+
+  if (id) {
     return (
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
@@ -59,17 +59,18 @@ const AuthSection = withAuthUser<{ userId: string }>()(function AuthSection({
       </NextLink>
     </>
   )
-})
+}
 
-const MainCTA = withAuthUser<{
-  userId: string
-}>({})(function MainCTA({ userId }) {
-  if (userId) {
+function MainCTA() {
+  const { id } = useAuthUser()
+
+  if (id) {
     return (
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
           variant={Variant.Filled}
           className={styles['Neon']}
+          labelClassName={styles['NeonLabel']}
           style={{
             ...CTAStyles,
             width: 200,
@@ -96,29 +97,38 @@ const MainCTA = withAuthUser<{
       </Link>
     </NextLink>
   )
-})
+}
+
+function Header() {
+  return (
+    <div
+      className={classNames(
+        'flex justify-between my-2 mx-4 md:my-4 md:mx-8 lg:my-6 lg:mx-14 items-center relative whitespace-nowrap',
+        styles['Header'],
+      )}
+    >
+      <div className="text-4xl font-medium">Socrates</div>
+      <div className="flex absolute left-1/2 -translate-x-1/2 bottom-2 invisible md:visible">
+        <Link href="/" className="mx-4 font-semibold">
+          How it works
+        </Link>
+        <Link href="/" className="mx-4 font-semibold">
+          Pricing
+        </Link>
+      </div>
+      <div className="invisible xs:visible">
+        <AuthSection />
+      </div>
+    </div>
+  )
+}
 
 export default withAuthUser()(function Index() {
-  const user = useAuthUser()
-
   return (
     <>
       <Background />
       <div className="flex flex-col h-full">
-        <div className="flex justify-between my-2 mx-4 md:my-4 md:mx-8 lg:my-6 lg:mx-14 items-center relative whitespace-nowrap">
-          <div className="text-4xl font-medium">Socrates</div>
-          <div className="flex absolute left-1/2 -translate-x-1/2 bottom-2 invisible md:visible">
-            <Link href="/" className="mx-4 font-semibold">
-              How it works
-            </Link>
-            <Link href="/" className="mx-4 font-semibold">
-              Pricing
-            </Link>
-          </div>
-          <div className="invisible xs:visible">
-            <AuthSection userId={user.id} />
-          </div>
-        </div>
+        <Header />
         <div className="flex flex-col items-center justify-center h-full">
           <div
             className={classNames(
@@ -138,8 +148,8 @@ export default withAuthUser()(function Index() {
             {/* {`Tools and models that help you see the important`} */}
             {/* Eliminate the bias. Focus on important outcomes. */}
           </div>
-          <div className={classNames(styles.SubLine)}>
-            <MainCTA userId={user.id} />
+          <div className={classNames(styles.Cta)}>
+            <MainCTA />
           </div>
         </div>
       </div>
