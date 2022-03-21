@@ -1,6 +1,6 @@
 .Line {
   animation: drop var(--hero-title-animation-duration);
-  font-size: var(--space-7);
+  font-size: var(--space-6);
 }
 
 .SubLine {
@@ -8,7 +8,7 @@
   animation: appear var(--hero-subtitle-animation-duration)
     var(--hero-subtitle-animation-delay) forwards;
   font-size: var(--space-2);
-  margin-top: var(--space-3);
+  margin-top: var(--space-2);
 }
 
 .Cta {
@@ -41,8 +41,6 @@
   inherits: false;
 }
 
-// TODO
-// - on hover wider blur shadow and more transparent background
 .Neon {
   --border-radius: 99999px;
   --border-size: 2px;
@@ -50,16 +48,59 @@
   --animation-duration: 2.5s;
   --animation-delay: 2s;
 
-  // --neon-color-1: #5ddcff;
-  // --neon-color-2: #3c67e3;
-  // --neon-color-3: #4e00c2;
+  --neon-color-1: hsl(193, 100%, 50%);
+  --neon-color-2: hsl(225, 75%, 70%);
+  --neon-color-3: hsl(264, 100%, 80%);
 
-  --neon-color-1: hsl(193deg 100% 50%);
-  --neon-color-2: hsl(225deg 75% 70%);
-  --neon-color-3: hsl(264deg 100% 80%);
+  // --background-color-default: hsla(225, 6%, 30%, 0.98);
+  // --background-color-hover: hsla(225, 6%, 30%, 0.92);
+  --background-color-default: hsla(225, 6%, 100%, 1);
+  --background-color-hover: hsla(225, 6%, 100%, 1);
 
-  // background-color: #1f2023;
-  // background-color: hsl(225deg 6% 13% / 98%);
+  --scale-x-default: 0.8;
+  --scale-y-default: 0.5;
+
+  --scale-x-hover: 0.85;
+  --scale-y-hover: 0.55;
+
+  --blur-default: 30px;
+  --blur-hover: 35px;
+
+  // Weaving
+  --scale-x: var(--scale-x-default);
+  --scale-y: var(--scale-y-default);
+
+  --background-color: var(--background-color-default);
+
+  --blur: var(--blur-default);
+
+  background-color: var(--background-color);
+
+  transition: background-color 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    --background-color: var(--background-color-hover) !important;
+    --blur: var(--blur-hover);
+
+    --scale-x: var(--scale-x-hover);
+    --scale-y: var(--scale-y-hover);
+    --border-size: 3px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    & {
+      --neon-color-1: hsl(193, 100%, 68%);
+      --neon-color-2: hsl(225, 75%, 56%);
+      --neon-color-3: hsl(264, 100%, 38%);
+
+      --background-color-default: hsla(225, 6%, 13%, 0.98);
+      --background-color-hover: hsla(225, 6%, 13%, 0.8);
+
+      --scale-x-hover: var(--scale-x-default);
+      --scale-y-hover: var(--scale-y-default);
+    }
+  }
 }
 
 .Neon::before {
@@ -77,6 +118,7 @@
   z-index: -1;
   top: calc(-1 * var(--border-size));
   left: calc(-1 * var(--border-size));
+  transition: all 0.2s;
   animation: spin var(--animation-duration) var(--animation-delay) linear
     infinite;
 }
@@ -90,8 +132,9 @@
   z-index: -1;
   height: 100%;
   width: 100%;
-  transform: scaleX(0.8) scaleY(0.5);
-  filter: blur(30px);
+  transition: transform 0.2s, filter 0.2s;
+  transform: scaleX(var(--scale-x)) scaleY(var(--scale-y));
+  filter: blur(var(--blur));
   background-image: linear-gradient(
     var(--rotate),
     var(--neon-color-1),

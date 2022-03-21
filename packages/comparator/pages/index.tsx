@@ -68,8 +68,8 @@ function MainCTA() {
     return (
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
-          variant={Variant.Filled}
-          className={styles['Neon']}
+          variant={Variant.Unstyled}
+          className={classNames(styles['Neon'], 'shadow')}
           labelClassName={styles['NeonLabel']}
           style={{
             ...CTAStyles,
@@ -85,8 +85,8 @@ function MainCTA() {
   return (
     <NextLink href={SIGN_UP} passHref>
       <Link
-        variant={Variant.Filled}
-        className={styles['Neon']}
+        variant={Variant.Unstyled}
+        className={classNames(styles['Neon'], 'shadow')}
         labelClassName={styles['NeonLabel']}
         style={{
           ...CTAStyles,

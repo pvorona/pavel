@@ -1,5 +1,4 @@
 .Background {
-  // --background-color: hsl(120, 4%, 10%);
   --background-color: hsl(120, 4%, 95%);
 
   position: fixed;
@@ -12,6 +11,12 @@
   transform: scale(2) translateY(10%);
 
   animation: a1 2s 2s forwards;
+
+  @media (prefers-color-scheme: dark) {
+    & {
+      --background-color: hsl(120, 4%, 10%);
+    }
+  }
 }
 
 @keyframes a1 {

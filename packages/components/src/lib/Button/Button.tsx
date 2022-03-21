@@ -14,6 +14,7 @@ export enum Variant {
   Filled,
   Outlined,
   Link,
+  Unstyled,
 }
 
 export type BaseButtonProps = {
@@ -42,6 +43,8 @@ const defaultLinkInteractionsClassName =
 const smButtonClassName = 'py-2 px-6 text-sm'
 const mdButtonClassName = 'py-3 px-8 text-lg'
 
+const ButtonLikeVariants = [Variant.Filled, Variant.Outlined, Variant.Unstyled]
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     {
@@ -54,8 +57,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }: ButtonProps,
     ref,
   ) {
-    const isButtonLike =
-      variant === Variant.Filled || variant === Variant.Outlined
+    const isButtonLike = ButtonLikeVariants.includes(variant)
     const allClassNames = classNames(
       styles['ButtonBase'],
       {
@@ -104,8 +106,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
   }: LinkProps,
   ref,
 ) {
-  const isButtonLike =
-    variant === Variant.Filled || variant === Variant.Outlined
+  const isButtonLike = ButtonLikeVariants.includes(variant)
   const allClassNames = classNames(
     styles['ButtonBase'],
     {
