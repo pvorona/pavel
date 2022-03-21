@@ -56,7 +56,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) {
     const isButtonLike = ButtonLikeVariants.includes(variant)
     const allClassNames = classNames(
-      styles['ButtonBase'],
+      // styles['ButtonBase'],
       {
         [styles['ButtonLike']]: isButtonLike,
         [styles['Filled']]: variant === Variant.Filled,
@@ -64,7 +64,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         [styles['outlined']]: variant === Variant.Outlined,
         [smButtonClassName]: isButtonLike && size === 'sm',
         [mdButtonClassName]: isButtonLike && size === 'md',
-        // [filledButtonClassName]: variant === Variant.Filled,
         [defaultLinkClassName]: variant === Variant.Link,
         [defaultLinkInteractionsClassName]: variant === Variant.Link,
       },
@@ -113,7 +112,6 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
       [styles['outlined']]: variant === Variant.Outlined,
       [smButtonClassName]: isButtonLike && size === 'sm',
       [mdButtonClassName]: isButtonLike && size === 'md',
-      // [filledButtonClassName]: variant === Variant.Filled,
       [defaultLinkClassName]: variant === Variant.Link,
       [defaultLinkInteractionsClassName]: variant === Variant.Link,
     },

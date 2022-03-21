@@ -45,7 +45,7 @@
   --border-radius: 99999px;
   --border-size: 2px;
 
-  --animation-duration: 2.5s;
+  --animation-duration: 3s;
   --animation-delay: 2s;
 
   --neon-color-1: hsl(193, 100%, 50%);
@@ -102,7 +102,7 @@
         var(--c-1-hue),
         var(--c-1-sat),
         var(--c-1-lit-1),
-        0.8
+        0.9
       );
 
       --scale-x-hover: var(--scale-x-default);
@@ -149,8 +149,8 @@
     var(--neon-color-2) 43%,
     var(--neon-color-3)
   );
-  animation: spin var(--animation-duration)
-    calc(var(--animation-duration) + var(--animation-delay)) linear infinite;
+  animation: spin var(--animation-duration) calc(var(--animation-delay)) linear
+    infinite;
 }
 
 .NeonLabel {
