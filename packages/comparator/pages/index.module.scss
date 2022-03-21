@@ -64,7 +64,7 @@
   --scale-y-hover: 0.55;
 
   --blur-default: 30px;
-  --blur-hover: 35px;
+  --blur-hover: 17px;
 
   // Weaving
   --scale-x: var(--scale-x-default);
@@ -149,6 +149,7 @@
   background-size: 100%;
   background-repeat: repeat;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 
   background-image: linear-gradient(

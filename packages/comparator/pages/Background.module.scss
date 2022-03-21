@@ -1,5 +1,8 @@
 .Background {
-  --background-color: hsl(120, 4%, 95%);
+  // --background-color: hsl(120, 4%, 80%);
+  --background-color: hsla(120, 4%, 25%, 0.25);
+  --fill: hsla(120, 4%, 80%, 0.35);
+  --scale: 2;
 
   position: fixed;
   top: 0;
@@ -8,13 +11,14 @@
   height: 175vh;
   z-index: -1;
   opacity: 0;
-  transform: scale(2) translateY(10%);
+  transform: scale(var(--scale)) translateY(10%);
 
   animation: a1 2s 2s forwards;
 
   @media (prefers-color-scheme: dark) {
     & {
-      --background-color: hsl(120, 4%, 10%);
+      --background-color: hsl(120, 4%, 20%);
+      --fill: hsl(120, 4%, 25%);
     }
   }
 }
@@ -24,8 +28,4 @@
     opacity: 1;
     transform: scale(1) translateY(0);
   }
-}
-
-.Circle {
-  fill: var(--background-color);
 }
