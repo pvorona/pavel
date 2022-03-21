@@ -34,9 +34,6 @@ type ButtonElementProps = DetailedHTMLProps<
   HTMLButtonElement
 >
 
-const defaultButtonClassName =
-  'bg-gray-4 text-white bg-gray-4 border border-gray-4'
-// Find better dark:interaction colors
 const defaultLinkClassName = 'dark:text-gray-10'
 const defaultLinkInteractionsClassName =
   'text-gray-6 hover:text-gray-9 dark:hover:text-white dark:focus:text-white hover:underline focus:underline underline-offset-4 '
@@ -62,12 +59,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       styles['ButtonBase'],
       {
         [styles['ButtonLike']]: isButtonLike,
-        [styles['button']]: variant === Variant.Filled,
+        [styles['Filled']]: variant === Variant.Filled,
         [styles['link']]: variant === Variant.Link,
         [styles['outlined']]: variant === Variant.Outlined,
         [smButtonClassName]: isButtonLike && size === 'sm',
         [mdButtonClassName]: isButtonLike && size === 'md',
-        [defaultButtonClassName]: variant === Variant.Filled,
+        // [filledButtonClassName]: variant === Variant.Filled,
         [defaultLinkClassName]: variant === Variant.Link,
         [defaultLinkInteractionsClassName]: variant === Variant.Link,
       },
@@ -111,12 +108,12 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
     styles['ButtonBase'],
     {
       [styles['ButtonLike']]: isButtonLike,
-      [styles['button']]: variant === Variant.Filled,
+      [styles['Filled']]: variant === Variant.Filled,
       [styles['link']]: variant === Variant.Link,
       [styles['outlined']]: variant === Variant.Outlined,
       [smButtonClassName]: isButtonLike && size === 'sm',
       [mdButtonClassName]: isButtonLike && size === 'md',
-      [defaultButtonClassName]: variant === Variant.Filled,
+      // [filledButtonClassName]: variant === Variant.Filled,
       [defaultLinkClassName]: variant === Variant.Link,
       [defaultLinkInteractionsClassName]: variant === Variant.Link,
     },

@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { Provider } from 'react-redux'
 import { store } from '../store'
 
-import './styles.css'
+import './styles.scss'
 
 initAuth()
 

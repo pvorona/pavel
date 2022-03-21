@@ -52,10 +52,8 @@
   --neon-color-2: hsl(225, 75%, 70%);
   --neon-color-3: hsl(264, 100%, 80%);
 
-  // --background-color-default: hsla(225, 6%, 30%, 0.98);
-  // --background-color-hover: hsla(225, 6%, 30%, 0.92);
-  --background-color-default: hsla(225, 6%, 100%, 1);
-  --background-color-hover: hsla(225, 6%, 100%, 1);
+  --background-color-default: hsl(var(--hue-2), var(--sat-2), var(--lit-2));
+  --background-color-hover: hsla(var(--hue-2), var(--sat-2), var(--lit-2));
 
   --scale-x-default: 0.8;
   --scale-y-default: 0.5;
@@ -78,9 +76,9 @@
 
   transition: background-color 0.2s;
 
-  &:hover,
-  &:focus-visible {
-    --background-color: var(--background-color-hover) !important;
+  &:not(:disabled):hover,
+  &:not(:disabled):focus-visible {
+    --background-color: var(--background-color-hover);
     --blur: var(--blur-hover);
 
     --scale-x: var(--scale-x-hover);
@@ -94,8 +92,18 @@
       --neon-color-2: hsl(225, 75%, 56%);
       --neon-color-3: hsl(264, 100%, 38%);
 
-      --background-color-default: hsla(225, 6%, 13%, 0.98);
-      --background-color-hover: hsla(225, 6%, 13%, 0.8);
+      --background-color-default: hsla(
+        var(--c-1-hue),
+        var(--c-1-sat),
+        var(--c-1-lit-1),
+        0.98
+      );
+      --background-color-hover: hsla(
+        var(--c-1-hue),
+        var(--c-1-sat),
+        var(--c-1-lit-1),
+        0.8
+      );
 
       --scale-x-hover: var(--scale-x-default);
       --scale-y-hover: var(--scale-y-default);

@@ -16,9 +16,9 @@
   --color-background: white;
   --color-caret: black;
 
-  --color-box-shadow: hsla(225, 4%, 25%, 0.2);
-  --color-box-shadow-hover: hsla(225, 4%, 25%, 0.5);
-  --color-box-shadow-focus: hsla(225, 4%, 25%, 0.85);
+  --color-box-shadow: hsla(var(--c-1-hue), var(--c-1-sat), 25%, 0.2);
+  --color-box-shadow-hover: hsla(var(--c-1-hue), var(--c-1-sat), 25%, 0.5);
+  --color-box-shadow-focus: hsla(var(--c-1-hue), var(--c-1-sat), 25%, 0.85);
   --color-box-shadow-invalid: theme('colors.red.500');
 
   --color-placeholder-default: hsla(0, 0%, 0%, 0.45);
@@ -41,9 +41,9 @@
     --color-background: #1f2023;
     --color-caret: white;
 
-    --color-box-shadow: hsla(225, 4%, 75%, 0.2);
-    --color-box-shadow-hover: hsla(225, 4%, 75%, 0.5);
-    --color-box-shadow-focus: hsla(225, 4%, 75%, 0.85);
+    --color-box-shadow: hsla(var(--c-1-hue), var(--c-1-sat), 75%, 0.2);
+    --color-box-shadow-hover: hsla(var(--c-1-hue), var(--c-1-sat), 75%, 0.5);
+    --color-box-shadow-focus: hsla(var(--c-1-hue), var(--c-1-sat), 75%, 0.85);
     --color-box-shadow-invalid: theme('colors.red.500');
 
     --color-placeholder-default: hsla(0, 0%, 100%, 0.45);

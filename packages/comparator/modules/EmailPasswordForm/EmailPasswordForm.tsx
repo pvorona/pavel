@@ -169,11 +169,10 @@ export function EmailPasswordForm({
           }
           validity={passwordValidity}
         />
-        {/* loading cursor wait */}
+        {/* TODO: loading cursor wait */}
         <Button
           ref={buttonRef}
           className="w-full mt-8"
-          type="submit"
           disabled={isSubmitting || !isValid}
           loadingStatus={
             isSubmitting ? LoadingStatus.IN_PROGRESS : LoadingStatus.IDLE
