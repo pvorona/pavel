@@ -63,14 +63,14 @@
   --neon-color-3: hsl(264, 100%, 80%);
 
   --background-color-default: hsl(
-    var(--c-white-hue),
-    var(--c-white-sat),
-    var(--c-white-lit-10)
+    var(--c-gray-hue),
+    var(--c-gray-sat),
+    var(--c-gray-lit-100)
   );
   --background-color-hover: hsla(
-    var(--c-white-hue),
-    var(--c-white-sat),
-    var(--c-white-lit-10)
+    var(--c-gray-hue),
+    var(--c-gray-sat),
+    var(--c-gray-lit-100)
   );
 
   --scale-x-default: 0.8;

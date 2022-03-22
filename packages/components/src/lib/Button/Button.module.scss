@@ -1,7 +1,4 @@
 .ButtonBase {
-  // transition-duration: 0.2s;
-  // transition-property: color, box-shadow, background-color, opacity,
-  //   border-color;
   position: relative;
   display: inline-flex;
   justify-content: center;
@@ -21,20 +18,11 @@
   border-radius: var(--border-radius);
 }
 
-// const defaultLinkClassName = 'dark:text-gray-10'
-// const defaultLinkInteractionsClassName =
-//   'hover:underline focus:underline underline-offset-4 '
-// 9: 'hsl(225, 6%, 17%)',
-// 6: 'hsl(225, 6%, 13%)',
-// 10: 'hsl(225, 6%, 90%)',
-
 .Link {
-  --c-1-lit-9: 35%;
-
-  --color-light-default: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-9));
+  --color-light-default: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-5));
   --color-light-hover: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-1));
   --color-dark-default: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-7));
-  --color-dark-hover: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-9));
+  --color-dark-hover: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-5));
   --color: var(--color-light-default);
 
   color: var(--color);
@@ -110,29 +98,29 @@
 // - FIX DARK DISABLED
 .Filled {
   --color-light-default: hsl(
-    var(--c-white-hue),
-    var(--c-white-sat),
-    var(--c-white-lit-9)
+    var(--c-gray-hue),
+    var(--c-gray-sat),
+    var(--c-gray-lit-95)
   );
   --color-light-hover: hsl(
-    var(--c-white-hue),
-    var(--c-white-sat),
-    var(--c-white-lit-10)
+    var(--c-gray-hue),
+    var(--c-gray-sat),
+    var(--c-gray-lit-100)
   );
   --color-light-disabled: hsl(
-    var(--c-white-hue),
-    var(--c-white-sat),
-    var(--c-white-lit-4)
+    var(--c-gray-hue),
+    var(--c-gray-sat),
+    var(--c-gray-lit-40)
   );
   --color-dark-default: hsl(
-    var(--c-white-hue),
-    var(--c-white-sat),
-    var(--c-white-lit-9)
+    var(--c-gray-hue),
+    var(--c-gray-sat),
+    var(--c-gray-lit-95)
   );
   --color-dark-hover: hsl(
-    var(--c-white-hue),
-    var(--c-white-sat),
-    var(--c-white-lit-10)
+    var(--c-gray-hue),
+    var(--c-gray-sat),
+    var(--c-gray-lit-100)
   );
   --color-dark-disabled: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-6));
 
