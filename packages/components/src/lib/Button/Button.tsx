@@ -8,7 +8,7 @@ import React, {
   ButtonHTMLAttributes,
 } from 'react'
 import styles from './Button.module.scss'
-import { Color, LoadingProgress } from './LoadingProgress'
+import { LoadingProgress } from './LoadingProgress'
 
 export enum Variant {
   Filled,
@@ -67,10 +67,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <button ref={ref} className={allClassNames} {...props}>
-        <LoadingProgress
-          color={variant === Variant.Filled ? Color.Dark : Color.Light}
-          status={loadingStatus}
-        />
+        <LoadingProgress status={loadingStatus} />
         {/* relative is required to create stacking context above progress indication */}
         <div className="relative">{children}</div>
       </button>
@@ -113,7 +110,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
 
   return (
     <a ref={ref} className={allClassNames} {...props}>
-      <LoadingProgress color={Color.Light} status={loadingStatus} />
+      <LoadingProgress status={loadingStatus} />
       {/* relative is required to create stacking context above progress indication */}
       <div className={classNames(labelClassName, 'relative')}>{children}</div>
     </a>

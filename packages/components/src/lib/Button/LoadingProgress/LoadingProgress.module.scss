@@ -1,25 +1,15 @@
 $animation-duration: 5s;
 $animation-delay: 0.5s;
 
-.light {
+.progress {
   --color-background: hsla(
     var(--c-black-hue),
     var(--c-black-sat),
     var(--c-black-lit),
     var(--c-black-alpha-1)
   );
-}
 
-.dark {
-  --color-background: hsla(
-    var(--c-black-hue),
-    var(--c-black-sat),
-    var(--c-black-lit),
-    var(--c-black-alpha-3)
-  );
-}
-
-.progress {
+  background-color: var(--color-background);
   position: absolute;
   left: 0;
   right: 0;
@@ -27,12 +17,11 @@ $animation-delay: 0.5s;
   bottom: 0;
   transform-origin: left;
   opacity: 0;
-
-  background-color: var(--color-background);
+  transform: scaleX(0);
 
   &.loading {
     opacity: 1;
-    animation: loading $animation-duration $animation-delay ease forwards;
+    animation: loading $animation-duration $animation-delay ease;
   }
 
   &.loaded {
@@ -42,10 +31,6 @@ $animation-delay: 0.5s;
 }
 
 @keyframes loading {
-  0% {
-    transform: scaleX(0);
-  }
-
   80% {
     transform: scaleX(0.9);
   }
