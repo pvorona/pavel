@@ -193,13 +193,13 @@
   0% {
     --rotate: 0deg;
   }
-  45% {
+  40% {
     --neon-color-1: initial;
   }
   55% {
     --neon-color-1: var(--neon-color-1-alternate);
   }
-  70% {
+  85% {
     --neon-color-1: initial;
   }
   100% {
