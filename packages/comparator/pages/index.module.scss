@@ -9,6 +9,11 @@
     var(--hero-subtitle-animation-delay) forwards;
   font-size: var(--space-2);
   margin-top: var(--space-2);
+
+  // --color-light: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-5));
+  --color-dark: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-60));
+
+  color: var(--color-dark);
 }
 
 .Cta {
@@ -45,7 +50,25 @@
   syntax: '<color>';
   // initial-value: hsl(193, 100%, 68%);
   initial-value: hsl(193, 100%, 50%);
-  inherits: false;
+  inherits: true;
+}
+
+@property --neon-color-1-alternate {
+  syntax: '<color>';
+  initial-value: hsl(193, 100%, 50%);
+  inherits: true;
+}
+
+@property --neon-color-2 {
+  syntax: '<color>';
+  initial-value: hsl(225, 75%, 70%);
+  inherits: true;
+}
+
+@property --neon-color-3 {
+  syntax: '<color>';
+  initial-value: hsl(264, 100%, 80%);
+  inherits: true;
 }
 
 .Neon {
@@ -73,8 +96,10 @@
     var(--c-gray-lit-100)
   );
 
+  // --scale-x-default: 0.8;
+  // --scale-y-default: 0.5;
   --scale-x-default: 0.8;
-  --scale-y-default: 0.5;
+  --scale-y-default: 0.4;
 
   --scale-x-hover: 0.85;
   --scale-y-hover: 0.55;
@@ -101,6 +126,16 @@
     --scale-x: var(--scale-x-hover);
     --scale-y: var(--scale-y-hover);
     --border-size: 3px;
+
+    // --neon-color-1: hsl(317deg 100% 50%);
+    // --neon-color-1-alternate: hsl(184deg 100% 50%);
+    // --neon-color-2: hsl(225, 75%, 70%);
+    // --neon-color-3: hsl(264, 100%, 80%);
+
+    --neon-color-1: hsl(317, 100%, 50%);
+    --neon-color-1-alternate: hsl(184, 100%, 50%);
+    --neon-color-2: hsl(298, 75%, 70%);
+    --neon-color-3: hsl(6, 100%, 80%);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -152,6 +187,7 @@
 .Neon::after {
   position: absolute;
   content: '';
+  border-radius: 99999px;
   top: 30%;
   left: 0;
   right: 0;
@@ -169,6 +205,20 @@
   );
   animation: spin var(--animation-duration) calc(var(--animation-delay))
     var(--animation-timing-function) infinite;
+}
+
+.Neon:hover::after {
+  top: 0;
+  animation: spin var(--animation-duration) calc(var(--animation-delay))
+      var(--animation-timing-function) infinite,
+    glow calc(var(--animation-duration)) calc(var(--animation-delay)) infinite;
+}
+
+@keyframes glow {
+  25% {
+    // transform: scaleX(0.8) scaleY(0.6);
+    transform: scale(0.8);
+  }
 }
 
 .NeonLabel {

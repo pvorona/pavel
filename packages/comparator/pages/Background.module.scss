@@ -1,7 +1,6 @@
 .Background {
-  // --background-color: hsl(120, 4%, 80%);
-  --background-color: hsla(120, 4%, 25%, 0.25);
-  --fill: hsla(120, 4%, 80%, 0.35);
+  --background-color: hsla(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-90));
+  --fill: hsla(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-95));
   --scale: 2;
 
   position: fixed;
@@ -17,9 +16,27 @@
 
   @media (prefers-color-scheme: dark) {
     & {
-      --background-color: hsl(120, 4%, 20%);
-      --fill: hsl(120, 4%, 25%);
+      --background-color: hsla(
+        var(--c-1-hue),
+        var(--c-1-sat),
+        var(--c-1-lit-3)
+      );
+      --fill: hsla(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-2));
     }
+  }
+}
+
+.Planets1 {
+  animation: rotate-1 12s infinite linear;
+}
+
+.Planets2 {
+  animation: rotate-1 120s infinite linear reverse;
+}
+
+@keyframes rotate-1 {
+  to {
+    transform: rotate(1turn);
   }
 }
 

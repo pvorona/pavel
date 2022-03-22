@@ -1,10 +1,24 @@
-import { Link, Variant, HoldConfirmationButton } from '@pavel/components'
+import {
+  Link,
+  Variant,
+  HoldConfirmationButton,
+  Button,
+  ParallaxContainer,
+  ParallaxLayer,
+  ParallaxPage,
+} from '@pavel/components'
 import NextLink from 'next/link'
 import { withAuthUser, useAuthUser, withAuthUserSSR } from 'next-firebase-auth'
-import { COMPARISON_LIST, SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
+import {
+  COMPARISON_LIST,
+  signOut,
+  SIGN_IN,
+  SIGN_UP,
+} from '@pavel/comparator-shared'
 import styles from './index.module.scss'
 import classNames from 'classnames'
 import { Background } from './Background'
+import { PropsWithChildren } from 'react'
 
 const CTAStyles = {
   borderRadius: 30,
@@ -17,18 +31,17 @@ function AuthSection() {
 
   if (id) {
     return (
-      <NextLink href={COMPARISON_LIST} passHref>
-        <Link
-          variant={Variant.Outlined}
-          className="ml-4"
-          size="sm"
-          style={{
-            ...CTAStyles,
-          }}
-        >
-          Go to app
-        </Link>
-      </NextLink>
+      <Button
+        onClick={signOut}
+        variant={Variant.Filled}
+        className="ml-4"
+        size="sm"
+        style={{
+          ...CTAStyles,
+        }}
+      >
+        Sign out
+      </Button>
     )
   }
 
@@ -125,35 +138,42 @@ function Header() {
 
 export default withAuthUser()(function Index() {
   return (
-    <>
-      <Background />
-      <div className="flex flex-col h-full">
-        <Header />
-        <div className="flex flex-col items-center justify-center h-full">
-          <div
-            className={classNames(
-              styles.Line,
-              'text-8xl font-semibold animate-bounce',
-            )}
-          >
-            Empower your decisions
+    <ParallaxContainer>
+      <ParallaxLayer depth={1}>
+        <Background />
+      </ParallaxLayer>
+      <ParallaxLayer depth={0}>
+        <ParallaxPage className="flex flex-col">
+          <Header />
+          <div className="flex flex-col items-center justify-center h-full">
+            <div
+              className={classNames(
+                styles.Line,
+                'text-8xl font-semibold animate-bounce',
+              )}
+            >
+              Empower your decisions
+            </div>
+            <div
+              className={classNames(
+                styles.SubLine,
+                'text-xl font-medium invisible xs:visible',
+              )}
+            >
+              {`The best in class tools that help you focus on what's important`}
+              {/* {`Tools and models that help you see the important`} */}
+              {/* Eliminate the bias. Focus on important outcomes. */}
+            </div>
+            <div className={classNames(styles.Cta)}>
+              <MainCTA />
+            </div>
+            <HoldConfirmationButton />
           </div>
-          <div
-            className={classNames(
-              styles.SubLine,
-              'text-xl font-medium text-gray-main-45 invisible xs:visible',
-            )}
-          >
-            {`The best in class tools that help you focus on what's important`}
-            {/* {`Tools and models that help you see the important`} */}
-            {/* Eliminate the bias. Focus on important outcomes. */}
-          </div>
-          <div className={classNames(styles.Cta)}>
-            <MainCTA />
-          </div>
-          <HoldConfirmationButton />
-        </div>
-      </div>
-    </>
+        </ParallaxPage>
+        <ParallaxPage className="flex justify-center items-center">
+          How it works
+        </ParallaxPage>
+      </ParallaxLayer>
+    </ParallaxContainer>
   )
 })
