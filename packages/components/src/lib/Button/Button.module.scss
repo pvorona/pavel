@@ -1,7 +1,7 @@
 .ButtonBase {
-  transition-duration: 0.2s;
-  transition-property: color, box-shadow, background-color, opacity,
-    border-color;
+  // transition-duration: 0.2s;
+  // transition-property: color, box-shadow, background-color, opacity,
+  //   border-color;
   position: relative;
   display: inline-flex;
   justify-content: center;
@@ -21,13 +21,44 @@
   border-radius: var(--border-radius);
 }
 
-.link {
-  @extend .ButtonBase;
+// const defaultLinkClassName = 'dark:text-gray-10'
+// const defaultLinkInteractionsClassName =
+//   'hover:underline focus:underline underline-offset-4 '
+// 9: 'hsl(225, 6%, 17%)',
+// 6: 'hsl(225, 6%, 13%)',
+// 10: 'hsl(225, 6%, 90%)',
+
+.Link {
+  --c-1-lit-9: 35%;
+
+  --color-light-default: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-9));
+  --color-light-hover: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-1));
+  --color-dark-default: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-7));
+  --color-dark-hover: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-9));
+  --color: var(--color-light-default);
+
+  color: var(--color);
+  transition-property: color;
+  transition-duration: var(--duration-1);
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus-visible {
+    --color: var(--color-light-hover);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    & {
+      --color: var(--color-dark-default);
+
+      &:not(:disabled):hover,
+      &:not(:disabled):focus-visible {
+        --color: var(--color-dark-hover);
+      }
+    }
+  }
 }
 
 .outlined {
-  @extend .ButtonBase;
-
   --color: hsl(0deg, 0%, 10%);
   --color-light-hover: hsl(0deg, 0%, 5%);
 
@@ -75,19 +106,36 @@
 }
 
 // TODO:
-// - Check disabled color contrast a11y
-// - CHECK LIGHT BACKGROUND DURING THE DAY
 // - Add focus ring
-// - Shadow
+// - Loader color
+// - FIX DARK DISABLED
 .Filled {
-  @extend .ButtonBase;
-
-  --color-light-default: hsl(0, 0%, 95%);
-  --color-light-hover: hsl(0, 0%, 100%);
-  --color-light-disabled: hsl(0, 0%, 70%);
-  --color-dark-default: hsl(0, 0%, 95%);
-  --color-dark-hover: hsl(0, 0%, 100%);
-  --color-dark-disabled: hsl(0, 0%, 70%);
+  --color-light-default: hsl(
+    var(--c-white-hue),
+    var(--c-white-sat),
+    var(--c-white-lit-9)
+  );
+  --color-light-hover: hsl(
+    var(--c-white-hue),
+    var(--c-white-sat),
+    var(--c-white-lit-10)
+  );
+  --color-light-disabled: hsl(
+    var(--c-white-hue),
+    var(--c-white-sat),
+    var(--c-white-lit-4)
+  );
+  --color-dark-default: hsl(
+    var(--c-white-hue),
+    var(--c-white-sat),
+    var(--c-white-lit-9)
+  );
+  --color-dark-hover: hsl(
+    var(--c-white-hue),
+    var(--c-white-sat),
+    var(--c-white-lit-10)
+  );
+  --color-dark-disabled: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-6));
 
   --shadow-default: 0 2px 5px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1);
   --shadow-hover: 0 2px 3px rgba(0, 0, 0, 0.1),
@@ -96,12 +144,17 @@
   --background-light-default: hsl(
     var(--c-1-hue),
     var(--c-1-sat),
-    var(--c-1-lit-1)
+    var(--c-1-lit-5)
   );
   --background-light-hover: hsl(
     var(--c-1-hue),
     var(--c-1-sat),
-    var(--c-1-lit-3)
+    var(--c-1-lit-4)
+  );
+  --background-light-disabled: hsl(
+    var(--c-1-hue),
+    var(--c-1-sat),
+    var(--c-1-lit-8)
   );
   --background-dark-default: hsl(
     var(--c-1-hue),
@@ -112,6 +165,11 @@
     var(--c-1-hue),
     var(--c-1-sat),
     var(--c-1-lit-3)
+  );
+  --background-dark-disabled: hsl(
+    var(--c-1-hue),
+    var(--c-1-sat),
+    var(--c-1-lit-4)
   );
 
   --color: var(--color-light-default);
@@ -125,6 +183,7 @@
 
   &:disabled {
     --color: var(--color-light-disabled);
+    --background-color: var(--background-light-disabled);
     cursor: not-allowed;
   }
 
@@ -146,6 +205,7 @@
 
       &:disabled {
         --color: var(--color-dark-disabled);
+        --background-color: var(--background-dark-disabled);
       }
 
       &:not(:disabled):hover,

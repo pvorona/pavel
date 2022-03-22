@@ -1,15 +1,22 @@
 $animation-duration: 5s;
 $animation-delay: 0.5s;
 
-$color-dark: hsla(0, 0%, 0%, 0.6);
-$color-light: hsla(0, 0%, 0%, 0.1);
-
 .light {
-  --color-background: #{$color-light};
+  --color-background: hsla(
+    var(--c-black-hue),
+    var(--c-black-sat),
+    var(--c-black-lit),
+    var(--c-black-alpha-1)
+  );
 }
 
 .dark {
-  --color-background: #{$color-dark};
+  --color-background: hsla(
+    var(--c-black-hue),
+    var(--c-black-sat),
+    var(--c-black-lit),
+    var(--c-black-alpha-3)
+  );
 }
 
 .progress {

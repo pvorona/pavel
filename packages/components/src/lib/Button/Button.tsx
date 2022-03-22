@@ -34,9 +34,6 @@ type ButtonElementProps = DetailedHTMLProps<
   HTMLButtonElement
 >
 
-const defaultLinkClassName = 'dark:text-gray-10'
-const defaultLinkInteractionsClassName =
-  'text-gray-6 hover:text-gray-9 dark:hover:text-white dark:focus:text-white hover:underline focus:underline underline-offset-4 '
 const smButtonClassName = 'py-2 px-6 text-sm'
 const mdButtonClassName = 'py-3 px-8 text-lg'
 
@@ -56,16 +53,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) {
     const isButtonLike = ButtonLikeVariants.includes(variant)
     const allClassNames = classNames(
-      // styles['ButtonBase'],
+      styles['ButtonBase'],
       {
         [styles['ButtonLike']]: isButtonLike,
         [styles['Filled']]: variant === Variant.Filled,
-        [styles['link']]: variant === Variant.Link,
+        [styles['Link']]: variant === Variant.Link,
         [styles['outlined']]: variant === Variant.Outlined,
         [smButtonClassName]: isButtonLike && size === 'sm',
         [mdButtonClassName]: isButtonLike && size === 'md',
-        [defaultLinkClassName]: variant === Variant.Link,
-        [defaultLinkInteractionsClassName]: variant === Variant.Link,
       },
       className,
     )
@@ -108,12 +103,10 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
     {
       [styles['ButtonLike']]: isButtonLike,
       [styles['Filled']]: variant === Variant.Filled,
-      [styles['link']]: variant === Variant.Link,
+      [styles['Link']]: variant === Variant.Link,
       [styles['outlined']]: variant === Variant.Outlined,
       [smButtonClassName]: isButtonLike && size === 'sm',
       [mdButtonClassName]: isButtonLike && size === 'md',
-      [defaultLinkClassName]: variant === Variant.Link,
-      [defaultLinkInteractionsClassName]: variant === Variant.Link,
     },
     className,
   )
