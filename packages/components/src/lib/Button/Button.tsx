@@ -21,6 +21,7 @@ export type BaseButtonProps = {
   children: ReactNode
   className?: string
   variant?: Variant
+  rounded?: boolean
   size?: 'sm' | 'md'
   loadingStatus?: LoadingStatus
   onClick?: (event: MouseEvent) => void
@@ -42,6 +43,7 @@ const ButtonLikeVariants = [Variant.Filled, Variant.Outlined, Variant.Unstyled]
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     {
+      rounded,
       className,
       size = 'md',
       variant = Variant.Filled,
@@ -55,6 +57,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const allClassNames = classNames(
       styles['ButtonBase'],
       {
+        'rounded-full': rounded,
         [styles['ButtonLike']]: isButtonLike,
         [styles['Filled']]: variant === Variant.Filled,
         [styles['Link']]: variant === Variant.Link,
@@ -85,6 +88,7 @@ type AnchorElementProps = React.DetailedHTMLProps<
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
   {
     className,
+    rounded,
     size = 'md',
     variant = Variant.Link,
     loadingStatus = LoadingStatus.IDLE,
@@ -98,6 +102,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
   const allClassNames = classNames(
     styles['ButtonBase'],
     {
+      'rounded-full': rounded,
       [styles['ButtonLike']]: isButtonLike,
       [styles['Filled']]: variant === Variant.Filled,
       [styles['Link']]: variant === Variant.Link,

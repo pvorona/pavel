@@ -1,0 +1,10 @@
+.Header {
+  opacity: 0;
+  animation: appear 2s calc(var(--hero-subtitle-animation-delay) + 2s) forwards;
+}
+
+@keyframes appear {
+  to {
+    opacity: 1;
+  }
+}

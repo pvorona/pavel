@@ -7,6 +7,7 @@ import { Button, IconButton, TextField, Variant } from '@pavel/components'
 import { Avatars } from '../Avatars'
 import { useRouter } from 'next/router'
 import { COMPARISON_LIST } from '@pavel/comparator-shared'
+import { HeaderAuth, HeaderTitle, LandingHeader } from '../LandingHeader'
 
 export function ComparisonName() {
   const dispatch = useDispatch()
@@ -17,11 +18,11 @@ export function ComparisonName() {
   }
 
   return (
-    <PageTitleView>
-      <TextField onInput={onComparisonNameChange}>
-        {currentComparisonName}
-      </TextField>
-    </PageTitleView>
+    // <PageTitleView>
+    <TextField onInput={onComparisonNameChange}>
+      {currentComparisonName}
+    </TextField>
+    // </PageTitleView>
   )
 }
 
@@ -65,19 +66,32 @@ export function BackIcon() {
 
 export function Header() {
   return (
-    <HeaderView>
-      <div className="whitespace-nowrap overflow-hidden flex items-center">
+    <LandingHeader>
+      <HeaderTitle className="flex items-center">
         <BackIcon />
         <ComparisonName />
         {/* <AddComparisonButton /> */}
-      </div>
-      <div className="flex items-center">
-        <Avatars />
-        <ShareButton />
-      </div>
-    </HeaderView>
+      </HeaderTitle>
+      <HeaderAuth />
+    </LandingHeader>
   )
 }
+
+// export function Header() {
+//   return (
+//     <HeaderView>
+//       <div className="whitespace-nowrap overflow-hidden flex items-center">
+//         <BackIcon />
+//         <ComparisonName />
+//         {/* <AddComparisonButton /> */}
+//       </div>
+//       <div className="flex items-center">
+//         <Avatars />
+//         <ShareButton />
+//       </div>
+//     </HeaderView>
+//   )
+// }
 
 export function HeaderView(props) {
   return (

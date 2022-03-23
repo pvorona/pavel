@@ -9,7 +9,13 @@ import {
   createComparison,
   getComparisonsCollectionRef,
 } from '@pavel/comparator-shared'
-import { HeaderView, PageTitleView } from '../../modules'
+import {
+  HeaderAuth,
+  HeaderTitle,
+  HeaderView,
+  LandingHeader,
+  PageTitleView,
+} from '../../modules'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
@@ -42,9 +48,10 @@ function ComparisonListPageWrapper() {
 
   return (
     <>
-      <HeaderView>
-        <PageTitleView>My Comparisons</PageTitleView>
-      </HeaderView>
+      <LandingHeader>
+        <HeaderTitle>Your comparisons</HeaderTitle>
+        <HeaderAuth />
+      </LandingHeader>
 
       <ComparisonList>
         {docsState.map(d => (
