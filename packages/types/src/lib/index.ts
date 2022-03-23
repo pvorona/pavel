@@ -12,4 +12,5 @@ export enum LoadingStatus {
   IDLE,
   IN_PROGRESS,
   COMPLETED,
+  FAILED,
 }

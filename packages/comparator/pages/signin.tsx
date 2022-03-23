@@ -1,10 +1,11 @@
-import { auth, signInAnonymously, SIGN_UP } from '@pavel/comparator-shared'
+import { auth, SIGN_UP } from '@pavel/comparator-shared'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import {
   EmailPasswordForm,
   SignInLayout,
   emailStorageKey,
   emailStorage,
+  useTryAnonymously,
 } from '../modules'
 import {
   withAuthUser,
@@ -13,7 +14,7 @@ import {
 } from 'next-firebase-auth'
 import { Button, Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
-import { useState } from 'react'
+import { useCallback } from 'react'
 import { LoadingStatus } from '@pavel/types'
 import { removeFromStorage } from '@pavel/utils'
 
@@ -34,22 +35,15 @@ function SignInPage() {
 }
 
 function SignInForm() {
-  const [isLoading, setIsLoading] = useState(false)
+  const removeEmailFromStorage = useCallback(() => {
+    removeFromStorage(emailStorageKey, emailStorage)
+  }, [])
+  const { tryAnonymously, status } = useTryAnonymously({
+    onSuccess: removeEmailFromStorage,
+  })
 
   function onSubmit({ email, password }: { email: string; password: string }) {
     return signInWithEmailAndPassword(auth, email, password)
-  }
-
-  async function tryAnonymously() {
-    setIsLoading(true)
-    try {
-      await signInAnonymously()
-      removeFromStorage(emailStorageKey, emailStorage)
-    } catch (error) {
-      console.error('Failed to sign in anonymously', error)
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   return (
@@ -72,10 +66,8 @@ function SignInForm() {
         <Button
           variant={Variant.Link}
           onClick={tryAnonymously}
-          loadingStatus={
-            isLoading ? LoadingStatus.IN_PROGRESS : LoadingStatus.IDLE
-          }
-          disabled={isLoading}
+          loadingStatus={status}
+          disabled={status === LoadingStatus.IN_PROGRESS}
         >
           try anonymously
         </Button>
