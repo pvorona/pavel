@@ -1,6 +1,11 @@
 import { auth, signInAnonymously, SIGN_UP } from '@pavel/comparator-shared'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { EmailPasswordForm, SignInLayout } from '../modules'
+import {
+  EmailPasswordForm,
+  SignInLayout,
+  emailStorageKey,
+  emailStorage,
+} from '../modules'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
@@ -10,6 +15,7 @@ import { Button, Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
 import { useState } from 'react'
 import { LoadingStatus } from '@pavel/types'
+import { removeFromStorage } from '@pavel/utils'
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
@@ -38,7 +44,7 @@ function SignInForm() {
     setIsLoading(true)
     try {
       await signInAnonymously()
-      // Clear stored email
+      removeFromStorage(emailStorageKey, emailStorage)
     } catch (error) {
       console.error('Failed to sign in anonymously', error)
     } finally {

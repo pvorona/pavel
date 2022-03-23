@@ -41,13 +41,13 @@ function validate(values: FormValues) {
   return errors
 }
 
-const storageKey = 'email'
-const storage = isBrowser && sessionStorage
+export const emailStorageKey = 'email'
+export const emailStorage = isBrowser && sessionStorage
 
 const { remove: removeEmailFromStorage, set: saveEmailToStorage } = bindStorage(
   {
-    storage,
-    key: storageKey,
+    storage: emailStorage,
+    key: emailStorageKey,
   },
 )
 
@@ -66,15 +66,11 @@ export function EmailPasswordForm({
 }) {
   const router = useRouter()
 
-  useOnUnload(() => {
-    console.log('removing because unload')
-    removeEmailFromStorage()
-  })
+  useOnUnload(removeEmailFromStorage)
 
   useEffect(() => {
     function clearEmailIfNeeded(path: string) {
       if (![SIGN_UP, SIGN_IN].includes(path)) {
-        console.log('removing because moved to', path)
         removeEmailFromStorage()
       }
     }
@@ -109,7 +105,7 @@ export function EmailPasswordForm({
     [onSubmit],
   )
   const initialValues = {
-    email: getFromStorage(storageKey, '', storage),
+    email: getFromStorage(emailStorageKey, '', emailStorage),
     password: '',
   }
   const {
