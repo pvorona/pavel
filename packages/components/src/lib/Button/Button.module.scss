@@ -19,10 +19,18 @@
 }
 
 .Link {
-  --color-light-default: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-5));
-  --color-light-hover: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-1));
-  --color-dark-default: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-90));
-  --color-dark-hover: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-5));
+  --color-light-default: hsl(
+    var(--c-1-hue),
+    var(--c-1-sat-1),
+    var(--c-1-lit-5)
+  );
+  --color-light-hover: hsl(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-1));
+  --color-dark-default: hsl(
+    var(--c-1-hue),
+    var(--c-1-sat-1),
+    var(--c-1-lit-90)
+  );
+  --color-dark-hover: hsl(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-5));
   --color: var(--color-light-default);
 
   color: var(--color);
@@ -122,7 +130,11 @@
     var(--c-gray-sat),
     var(--c-gray-lit-100)
   );
-  --color-dark-disabled: hsl(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-70));
+  --color-dark-disabled: hsl(
+    var(--c-1-hue),
+    var(--c-1-sat-1),
+    var(--c-1-lit-70)
+  );
 
   --shadow-default: 0 2px 5px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1);
   --shadow-hover: 0 2px 3px rgba(0, 0, 0, 0.1),
@@ -130,32 +142,32 @@
 
   --background-light-default: hsl(
     var(--c-1-hue),
-    var(--c-1-sat),
+    var(--c-1-sat-1),
     var(--c-1-lit-5)
   );
   --background-light-hover: hsl(
     var(--c-1-hue),
-    var(--c-1-sat),
+    var(--c-1-sat-1),
     var(--c-1-lit-4)
   );
   --background-light-disabled: hsl(
     var(--c-1-hue),
-    var(--c-1-sat),
+    var(--c-1-sat-1),
     var(--c-1-lit-95)
   );
   --background-dark-default: hsl(
     var(--c-1-hue),
-    var(--c-1-sat),
+    var(--c-1-sat-1),
     var(--c-1-lit-2)
   );
   --background-dark-hover: hsl(
     var(--c-1-hue),
-    var(--c-1-sat),
+    var(--c-1-sat-1),
     var(--c-1-lit-3)
   );
   --background-dark-disabled: hsl(
     var(--c-1-hue),
-    var(--c-1-sat),
+    var(--c-1-sat-1),
     var(--c-1-lit-4)
   );
 

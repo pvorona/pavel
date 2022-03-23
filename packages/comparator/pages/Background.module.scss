@@ -1,6 +1,6 @@
 .Background {
-  --background-color: hsla(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-90));
-  --fill: hsla(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-95));
+  --background-color: hsla(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-90));
+  --fill: hsla(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-95));
   --scale: 2;
 
   position: fixed;
@@ -18,10 +18,10 @@
     & {
       --background-color: hsla(
         var(--c-1-hue),
-        var(--c-1-sat),
+        var(--c-1-sat-1),
         var(--c-1-lit-3)
       );
-      --fill: hsla(var(--c-1-hue), var(--c-1-sat), var(--c-1-lit-2));
+      --fill: hsla(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-2));
     }
   }
 }

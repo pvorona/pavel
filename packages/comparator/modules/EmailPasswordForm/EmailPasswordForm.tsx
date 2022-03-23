@@ -8,7 +8,11 @@ import {
 } from '@pavel/components'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
-import { useAutoFocus, usePointerProximity } from '@pavel/react-utils'
+import {
+  useAutoFocus,
+  useOnUnload,
+  usePointerProximity,
+} from '@pavel/react-utils'
 import {
   bindStorage,
   getFromStorage,
@@ -16,6 +20,8 @@ import {
   moveCursorToEnd,
 } from '@pavel/utils'
 import { LoadingStatus } from '@pavel/types'
+import { useRouter } from 'next/router'
+import { SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
 
 type FormValues = { email: string; password: string }
 
@@ -38,8 +44,6 @@ function validate(values: FormValues) {
 const storageKey = 'email'
 const storage = isBrowser && sessionStorage
 
-const storedEmail = getFromStorage(storageKey, '', storage)
-
 const { remove: removeEmailFromStorage, set: saveEmailToStorage } = bindStorage(
   {
     storage,
@@ -60,6 +64,28 @@ export function EmailPasswordForm({
   buttonLoadingLabel: string
   onSubmit: (formValue: { email: string; password: string }) => Promise<unknown>
 }) {
+  const router = useRouter()
+
+  useOnUnload(() => {
+    console.log('removing because unload')
+    removeEmailFromStorage()
+  })
+
+  useEffect(() => {
+    function clearEmailIfNeeded(path: string) {
+      if (![SIGN_UP, SIGN_IN].includes(path)) {
+        console.log('removing because moved to', path)
+        removeEmailFromStorage()
+      }
+    }
+
+    router.events.on('routeChangeStart', clearEmailIfNeeded)
+
+    return () => {
+      router.events.off('routeChangeStart', clearEmailIfNeeded)
+    }
+  }, [router])
+
   const [emailInput, setEmailInput] = useState<HTMLInputElement | undefined>()
   const [isCloseToButton, buttonRef] = usePointerProximity()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -82,7 +108,10 @@ export function EmailPasswordForm({
     },
     [onSubmit],
   )
-  const initialValues = { email: storedEmail, password: '' }
+  const initialValues = {
+    email: getFromStorage(storageKey, '', storage),
+    password: '',
+  }
   const {
     values,
     errors,
