@@ -4,14 +4,14 @@ import classNames from 'classnames'
 import { useAuthUser } from 'next-firebase-auth'
 import NextLink from 'next/link'
 import { DetailedHTMLProps, HTMLAttributes, PropsWithChildren } from 'react'
-// import styles from './LandingHeader.module.scss'
+import styles from './LandingHeader.module.scss'
 
 function AuthSection() {
   const { id } = useAuthUser()
 
   if (id) {
     return (
-      <Button onClick={signOut} variant={Variant.Link} size="sm" rounded>
+      <Button onClick={signOut} variant={Variant.Link} size="sm">
         Sign out
       </Button>
     )
@@ -25,7 +25,7 @@ function AuthSection() {
         </Link>
       </NextLink>
       <NextLink href={SIGN_UP} passHref>
-        <Link variant={Variant.Filled} className="ml-4" size="sm" rounded>
+        <Link variant={Variant.Filled} className="ml-4" size="sm">
           Sign up
         </Link>
       </NextLink>
@@ -41,8 +41,8 @@ export function LandingHeader({ children, ...props }: LandingHeaderProps) {
   return (
     <div
       className={classNames(
-        'flex justify-between my-2 mx-4 md:my-4 md:mx-8 lg:my-6 lg:mx-14 items-center relative whitespace-nowrap',
-        // styles['Header'],
+        'flex justify-between items-baseline relative whitespace-nowrap',
+        styles['Header'],
       )}
       {...props}
     >

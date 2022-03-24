@@ -56,7 +56,7 @@ function MainCTA() {
 
 function LandingHeaderNavigation() {
   return (
-    <div className="flex absolute left-1/2 -translate-x-1/2 bottom-2 invisible md:visible">
+    <div className="flex absolute left-1/2 -translate-x-1/2 bottom-[0.8em] invisible md:visible text-base">
       <Link href="/" className="mx-4 font-semibold">
         How it works
       </Link>
@@ -80,21 +80,11 @@ export default withAuthUser()(function Index() {
             <LandingHeaderNavigation />
             <HeaderAuth />
           </LandingHeader>
-          <div className="flex flex-col items-center justify-center h-full">
-            <div
-              className={classNames(
-                styles.Line,
-                'text-8xl font-semibold animate-bounce',
-              )}
-            >
+          <div className="flex flex-col items-center justify-center h-full text-center">
+            <div className={classNames(styles.Line)}>
               Empower your decisions
             </div>
-            <div
-              className={classNames(
-                styles.SubLine,
-                'text-xl font-medium invisible xs:visible',
-              )}
-            >
+            <div className={classNames(styles.SubLine, 'hidden xs:block')}>
               {`The best in class tools that help you focus on what's important`}
               {/* {`Tools and models that help you see the important`} */}
               {/* Eliminate the bias. Focus on important outcomes. */}

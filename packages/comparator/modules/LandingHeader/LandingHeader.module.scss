@@ -1,6 +1,12 @@
 .Header {
   opacity: 0;
   animation: appear 2s calc(var(--hero-subtitle-animation-delay) + 2s) forwards;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: calc(var(--space-200-wider) * 0.5) var(--space-200-wider);
 }
 
 @keyframes appear {

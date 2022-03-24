@@ -34,10 +34,11 @@ function SignInPage() {
   )
 }
 
+const removeEmailFromStorage = () => {
+  removeFromStorage(emailStorageKey, emailStorage)
+}
+
 function SignInForm() {
-  const removeEmailFromStorage = useCallback(() => {
-    removeFromStorage(emailStorageKey, emailStorage)
-  }, [])
   const { tryAnonymously, status } = useTryAnonymously({
     onSuccess: removeEmailFromStorage,
   })
