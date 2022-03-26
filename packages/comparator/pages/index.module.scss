@@ -14,7 +14,7 @@
   padding: 0 3em;
 
   // No dark-light separation
-  --color: hsl(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-45));
+  --color: hsl(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-48));
 
   color: var(--color);
 }
@@ -100,8 +100,8 @@
   --scale-x-hover: 0.85;
   --scale-y-hover: 0.55;
 
-  --blur-default: 30px;
-  --blur-hover: 17px;
+  --blur-default: 18px;
+  --blur-hover: 18px;
 
   // Weaving
   --scale-x: var(--scale-x-default);
@@ -251,4 +251,8 @@
   100% {
     --rotate: 360deg;
   }
+}
+
+.Hero {
+  margin-top: var(--space-200);
 }

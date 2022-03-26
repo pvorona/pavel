@@ -80,7 +80,12 @@ export default withAuthUser()(function Index() {
             <LandingHeaderNavigation />
             <HeaderAuth />
           </LandingHeader>
-          <div className="flex flex-col items-center justify-center h-full text-center">
+          <div
+            className={classNames(
+              styles['Hero'],
+              'flex flex-col items-center justify-center h-full text-center',
+            )}
+          >
             <div className={classNames(styles.Line)}>
               Empower your decisions
             </div>

@@ -22,6 +22,7 @@ import {
   useAuthUser,
   AuthAction,
 } from 'next-firebase-auth'
+import styles from './Comparison.module.scss'
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
@@ -66,7 +67,7 @@ function ComparisonListPageWrapper() {
 
 export function ComparisonList({ children }: { children: ReactNode }) {
   return (
-    <div className="flex items-start h-full">
+    <div className={classNames(styles['Content'], 'flex items-start h-full')}>
       <AddComparisonCard />
       {children}
     </div>
@@ -117,7 +118,8 @@ export const Card = forwardRef<HTMLAnchorElement, CardProps>(function Card(
       ref={ref}
       onClick={onClick}
       className={classNames(
-        'block shadow-2xl w-48 h-48 ml-3 rounded-sm',
+        styles['Card'],
+        'block w-48 h-48 rounded-sm',
         className,
       )}
       {...props}

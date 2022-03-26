@@ -25,7 +25,7 @@ function AuthSection() {
         </Link>
       </NextLink>
       <NextLink href={SIGN_UP} passHref>
-        <Link variant={Variant.Filled} className="ml-4" size="sm">
+        <Link variant={Variant.Filled} className="ml-4" size="sm" rounded>
           Sign up
         </Link>
       </NextLink>
