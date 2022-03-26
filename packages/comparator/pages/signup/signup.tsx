@@ -1,12 +1,12 @@
-import { auth, SIGN_UP } from '@pavel/comparator-shared'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth, SIGN_IN } from '@pavel/comparator-shared'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import {
   EmailPasswordForm,
   SignInLayout,
   emailStorageKey,
   emailStorage,
   useTryAnonymously,
-} from '../modules'
+} from '../../modules'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
@@ -14,9 +14,9 @@ import {
 } from 'next-firebase-auth'
 import { Button, Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
+import { removeFromStorage } from '@pavel/utils'
 import { useCallback } from 'react'
 import { LoadingStatus } from '@pavel/types'
-import { removeFromStorage } from '@pavel/utils'
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
@@ -24,12 +24,12 @@ export const getServerSideProps = withAuthUserTokenSSR({
 
 export default withAuthUser({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
-})(SignInPage)
+})(SignUpPage)
 
-function SignInPage() {
+function SignUpPage() {
   return (
     <SignInLayout>
-      <SignInForm />
+      <SignUpForm />
     </SignInLayout>
   )
 }
@@ -38,30 +38,30 @@ const removeEmailFromStorage = () => {
   removeFromStorage(emailStorageKey, emailStorage)
 }
 
-function SignInForm() {
+function SignUpForm() {
   const { tryAnonymously, status } = useTryAnonymously({
     onSuccess: removeEmailFromStorage,
   })
 
   function onSubmit({ email, password }: { email: string; password: string }) {
-    return signInWithEmailAndPassword(auth, email, password)
+    return createUserWithEmailAndPassword(auth, email, password)
   }
 
   return (
     <>
       <EmailPasswordForm
         onSubmit={onSubmit}
-        hint="Please confirm your email and password"
-        title="Sign in"
-        buttonLabel="Sign in"
+        title="Sign up"
+        hint="Please enter your email and create password"
+        buttonLabel="Sign up"
         buttonLoadingLabel="Loading..."
       />
-      <div className="text-center mt-12 text-gray-1">
-        {"Don't have an account?"}
+      <div className="text-center mt-12 text-c-1-60">
+        Already have an account?
       </div>
-      <div className="text-center mt-1 text-gray-1">
-        <NextLink href={SIGN_UP} passHref>
-          <Link>Sign up</Link>
+      <div className="text-center mt-1 text-c-1-60 tracking-wide">
+        <NextLink href={SIGN_IN} passHref>
+          <Link>Sign in</Link>
         </NextLink>{' '}
         or{' '}
         <Button

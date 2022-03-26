@@ -48,7 +48,7 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
         <TextField
           onInput={onFeatureNameChange}
           placeholder="Feature name"
-          className="px-3 py-1 text-xs transition-colors text-gray-2 dark:text-gray-1 font-semibold opacity-50 tracking-[0.15em] uppercase"
+          className="px-3 py-1 text-xs transition-colors text-gray-2 dark:text-c-1-60 font-semibold opacity-50 tracking-[0.15em] uppercase"
         >
           {feature.name}
         </TextField>
@@ -58,7 +58,7 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
         <TextField
           onInput={onFeatureDescriptionChange}
           placeholder="No description"
-          className="px-3 inline-block min-w-[100px] text-xs text-gray-1 font-extralight tracking-wider"
+          className="px-3 inline-block min-w-[100px] text-xs text-c-1-60 font-extralight tracking-wider"
         >
           {feature.description}
         </TextField>

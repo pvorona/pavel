@@ -96,7 +96,10 @@ export function AddComparisonCard() {
   return (
     <Card
       onClick={onClick}
-      className="bg-gray-4 text-white flex items-center justify-center text-4xl"
+      className={classNames(
+        'text-white flex items-center justify-center text-4xl',
+        styles['CreateComparison'],
+      )}
     >
       +
     </Card>

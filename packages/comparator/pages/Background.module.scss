@@ -1,9 +1,9 @@
 .Background {
-  --background-color: hsla(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-90));
-  --fill: hsla(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-95));
+  --background-color: var(--c-1-90);
+  --fill: var(--c-1-95);
   --scale: 2;
 
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
@@ -16,12 +16,8 @@
 
   @media (prefers-color-scheme: dark) {
     & {
-      --background-color: hsla(
-        var(--c-1-hue),
-        var(--c-1-sat-1),
-        var(--c-1-lit-3)
-      );
-      --fill: hsla(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-2));
+      --background-color: var(--c-1-20);
+      --fill: var(--c-1-20);
     }
   }
 }

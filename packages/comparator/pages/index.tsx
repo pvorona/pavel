@@ -69,12 +69,10 @@ function LandingHeaderNavigation() {
 
 export default withAuthUser()(function Index() {
   return (
-    <ParallaxContainer>
-      <ParallaxLayer depth={1}>
-        <Background />
-      </ParallaxLayer>
-      <ParallaxLayer depth={0}>
-        <ParallaxPage className="flex flex-col">
+    <>
+      <Background />
+      <div>
+        <Screen className="flex flex-col">
           <LandingHeader>
             <HeaderTitle>Socrates</HeaderTitle>
             <LandingHeaderNavigation />
@@ -91,19 +89,22 @@ export default withAuthUser()(function Index() {
             </div>
             <div className={classNames(styles.SubLine, 'hidden xs:block')}>
               {`The best in class tools that help you focus on what's important`}
-              {/* {`Tools and models that help you see the important`} */}
-              {/* Eliminate the bias. Focus on important outcomes. */}
+              {/* Eliminate the bias. Focus on the important. */}
             </div>
             <div className={classNames(styles.Cta)}>
               <MainCTA />
             </div>
             <HoldConfirmationButton />
           </div>
-        </ParallaxPage>
-        <ParallaxPage className="flex justify-center items-center">
+        </Screen>
+        <Screen className="flex justify-center items-center">
           How it works
-        </ParallaxPage>
-      </ParallaxLayer>
-    </ParallaxContainer>
+        </Screen>
+      </div>
+    </>
   )
 })
+
+function Screen({ className, ...props }) {
+  return <div className={classNames(className, 'h-screen')} {...props} />
+}

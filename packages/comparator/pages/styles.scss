@@ -15,6 +15,10 @@ td {
   src: url('./font.woff2') format('woff2');
 }
 
+.text-c-1-60 {
+  color: var(--c-1-60);
+}
+
 html {
   --hero-title-animation-duration: 3s;
   --hero-subtitle-animation-duration: 2s;
@@ -24,11 +28,11 @@ html {
 
   --c-1-hue: 228;
   --c-1-sat-1: 6%;
-  --c-1-lit-1: 13%;
-  --c-1-lit-2: 15%;
-  --c-1-lit-3: 17%;
-  --c-1-lit-4: 27%;
-  --c-1-lit-5: 33%;
+  --c-1-lit-13: 13%;
+  --c-1-lit-15: 15%;
+  --c-1-lit-17: 17%;
+  --c-1-lit-27: 27%;
+  --c-1-lit-33: 33%;
   --c-1-lit-38: 38%;
   --c-1-lit-48: 48%;
   --c-1-lit-60: 60%;
@@ -62,7 +66,7 @@ body {
     var(--c-gray-sat),
     var(--c-gray-lit-100)
   );
-  --background-dark: hsl(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-1));
+  --background-dark: var(--c-1-15);
   --background: var(--background-light);
 
   --selection-background-light: hsl(
@@ -88,8 +92,8 @@ body {
   );
   --selection-color: var(--selection-color-light);
 
-  --color-light: hsl(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-38));
-  --color-dark: hsl(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-90));
+  --color-light: var(--c-1-40);
+  --color-dark: var(--c-1-90);
   --color: var(--color-light);
 
   color: var(--color);

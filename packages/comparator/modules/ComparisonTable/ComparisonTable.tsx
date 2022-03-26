@@ -14,6 +14,8 @@ import {
   selectCurrentComparisonOptionIds,
 } from '../comparisons'
 import { useAuthUser, withAuthUser } from 'next-firebase-auth'
+import classNames from 'classnames'
+import styles from './ComparisonTable.module.scss'
 
 export const ComparisonTable = memo(function ComparisonTable() {
   const dispatch = useDispatch()
@@ -47,11 +49,19 @@ export const ComparisonTable = memo(function ComparisonTable() {
       <LeftHoverBlock />
       <table ref={ref} className="min-w-[640px] mx-auto relative">
         <thead>
-          <tr className="sticky top-0 z-20 bg-white dark:bg-gray-6">
+          <tr
+            className={classNames(
+              'sticky top-0 z-20 bg-white',
+              styles['Header'],
+            )}
+          >
             <TableHeader />
             <th
               ref={separatorRef}
-              className="h-[1px] absolute bottom-0 bg-gray-5 dark:bg-gray-7 p-0"
+              className={classNames(
+                'h-[1px] absolute bottom-0 bg-gray-5 p-0',
+                styles['HeaderSeparator'],
+              )}
             />
           </tr>
         </thead>

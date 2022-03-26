@@ -1,0 +1,15 @@
+.Header {
+  @media (prefers-color-scheme: dark) {
+    & {
+      background-color: var(--c-1-15);
+    }
+  }
+}
+
+.HeaderSeparator {
+  @media (prefers-color-scheme: dark) {
+    & {
+      background-color: var(--c-1-20);
+    }
+  }
+}

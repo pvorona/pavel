@@ -1,4 +1,4 @@
-import { isServer } from '@pavel/utils'
+import { createPalette, isServer } from '@pavel/utils'
 import { Html, Head, Main, NextScript } from 'next/document'
 
 function getPxPerRem() {
@@ -23,9 +23,9 @@ function buildClamp(
   const slope = (maxFontSize - minFontSize) / (maxWidth - minWidth)
   const yAxisIntersection = -minWidth * slope + minFontSize
 
-  return `clamp( ${minFontSize}rem, ${yAxisIntersection}rem + ${
+  return `clamp(${minFontSize}rem, ${yAxisIntersection}rem + ${
     slope * 100
-  }vw, ${maxFontSize}rem )`
+  }vw, ${maxFontSize}rem)`
 }
 
 const fonts = {
@@ -65,7 +65,15 @@ function getCustomProperties() {
     result[key] = property
   }
 
-  return result
+  return {
+    ...result,
+    ...createPalette({
+      hue: 228,
+      baseSaturation: 6,
+      lightnessSteps: 21,
+      name: '--c-1',
+    }),
+  }
 }
 
 export default function Document() {

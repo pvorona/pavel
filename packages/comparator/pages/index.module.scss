@@ -14,7 +14,7 @@
   padding: 0 3em;
 
   // No dark-light separation
-  --color: hsl(var(--c-1-hue), var(--c-1-sat-1), var(--c-1-lit-48));
+  --color: var(--c-1-60);
 
   color: var(--color);
 }
@@ -144,13 +144,13 @@
       --background-color-default: hsla(
         var(--c-1-hue),
         var(--c-1-sat-1),
-        var(--c-1-lit-1),
+        var(--c-1-lit-13),
         0.98
       );
       --background-color-hover: hsla(
         var(--c-1-hue),
         var(--c-1-sat-1),
-        var(--c-1-lit-1),
+        var(--c-1-lit-13),
         0.9
       );
 

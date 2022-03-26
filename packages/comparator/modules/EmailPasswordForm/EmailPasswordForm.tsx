@@ -153,7 +153,7 @@ export function EmailPasswordForm({
   return (
     <>
       <div className="text-3xl font-bold mt-28">{title}</div>
-      <div className="text-sm mt-5 tracking-wide text-gray-1">{hint}</div>
+      <div className="text-sm mt-5 tracking-wide text-c-1-60">{hint}</div>
       <form onSubmit={handleSubmit} className="mt-6">
         <Input
           name="email"
