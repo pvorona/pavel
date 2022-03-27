@@ -8,7 +8,7 @@ import React, {
   ButtonHTMLAttributes,
 } from 'react'
 import styles from './Button.module.scss'
-import { Color, LoadingProgress } from './LoadingProgress'
+import { LoadingProgress } from './LoadingProgress'
 
 export enum Variant {
   Filled,
@@ -21,6 +21,7 @@ export type BaseButtonProps = {
   children: ReactNode
   className?: string
   variant?: Variant
+  rounded?: boolean
   size?: 'sm' | 'md'
   loadingStatus?: LoadingStatus
   onClick?: (event: MouseEvent) => void
@@ -34,12 +35,6 @@ type ButtonElementProps = DetailedHTMLProps<
   HTMLButtonElement
 >
 
-const defaultButtonClassName =
-  'bg-gray-4 text-white bg-gray-4 border border-gray-4'
-// Find better dark:interaction colors
-const defaultLinkClassName = 'dark:text-gray-10'
-const defaultLinkInteractionsClassName =
-  'text-gray-6 hover:text-gray-9 dark:hover:text-white dark:focus:text-white hover:underline focus:underline underline-offset-4 '
 const smButtonClassName = 'py-2 px-6 text-sm'
 const mdButtonClassName = 'py-3 px-8 text-lg'
 
@@ -48,11 +43,13 @@ const ButtonLikeVariants = [Variant.Filled, Variant.Outlined, Variant.Unstyled]
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     {
+      rounded,
       className,
       size = 'md',
       variant = Variant.Filled,
       loadingStatus = LoadingStatus.IDLE,
       children,
+      labelClassName,
       ...props
     }: ButtonProps,
     ref,
@@ -61,27 +58,28 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const allClassNames = classNames(
       styles['ButtonBase'],
       {
+        'rounded-full': rounded,
         [styles['ButtonLike']]: isButtonLike,
-        [styles['button']]: variant === Variant.Filled,
-        [styles['link']]: variant === Variant.Link,
+        [styles['Filled']]: variant === Variant.Filled,
+        [styles['Link']]: variant === Variant.Link,
         [styles['outlined']]: variant === Variant.Outlined,
-        [smButtonClassName]: isButtonLike && size === 'sm',
-        [mdButtonClassName]: isButtonLike && size === 'md',
-        [defaultButtonClassName]: variant === Variant.Filled,
-        [defaultLinkClassName]: variant === Variant.Link,
-        [defaultLinkInteractionsClassName]: variant === Variant.Link,
+        [styles['Loading']]: loadingStatus === LoadingStatus.IN_PROGRESS,
       },
       className,
     )
 
     return (
       <button ref={ref} className={allClassNames} {...props}>
-        <LoadingProgress
-          color={variant === Variant.Filled ? Color.Dark : Color.Light}
-          status={loadingStatus}
-        />
+        <LoadingProgress status={loadingStatus} />
         {/* relative is required to create stacking context above progress indication */}
-        <div className="relative">{children}</div>
+        <div
+          className={classNames(labelClassName, 'relative w-full', {
+            [smButtonClassName]: isButtonLike && size === 'sm',
+            [mdButtonClassName]: isButtonLike && size === 'md',
+          })}
+        >
+          {children}
+        </div>
       </button>
     )
   },
@@ -97,6 +95,7 @@ type AnchorElementProps = React.DetailedHTMLProps<
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
   {
     className,
+    rounded,
     size = 'md',
     variant = Variant.Link,
     loadingStatus = LoadingStatus.IDLE,
@@ -110,24 +109,28 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
   const allClassNames = classNames(
     styles['ButtonBase'],
     {
+      'rounded-full': rounded,
       [styles['ButtonLike']]: isButtonLike,
-      [styles['button']]: variant === Variant.Filled,
-      [styles['link']]: variant === Variant.Link,
+      [styles['Filled']]: variant === Variant.Filled,
+      [styles['Link']]: variant === Variant.Link,
       [styles['outlined']]: variant === Variant.Outlined,
-      [smButtonClassName]: isButtonLike && size === 'sm',
-      [mdButtonClassName]: isButtonLike && size === 'md',
-      [defaultButtonClassName]: variant === Variant.Filled,
-      [defaultLinkClassName]: variant === Variant.Link,
-      [defaultLinkInteractionsClassName]: variant === Variant.Link,
+      [styles['Loading']]: loadingStatus === LoadingStatus.IN_PROGRESS,
     },
     className,
   )
 
   return (
     <a ref={ref} className={allClassNames} {...props}>
-      <LoadingProgress color={Color.Light} status={loadingStatus} />
+      <LoadingProgress status={loadingStatus} />
       {/* relative is required to create stacking context above progress indication */}
-      <div className={classNames(labelClassName, 'relative')}>{children}</div>
+      <div
+        className={classNames(labelClassName, 'relative w-full', {
+          [smButtonClassName]: isButtonLike && size === 'sm',
+          [mdButtonClassName]: isButtonLike && size === 'md',
+        })}
+      >
+        {children}
+      </div>
     </a>
   )
 })

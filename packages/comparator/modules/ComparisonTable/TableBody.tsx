@@ -8,6 +8,30 @@ import { FeatureRow } from './FeatureRow'
 import { Button } from '@pavel/components'
 import { OptionRemovingRectangle } from './OptionRemovingRectangle'
 
+import {
+  selectIsLastOptionInCurrentComparisonById,
+  selectCurrentComparisonOptionIndexById,
+} from '../../modules/comparisons'
+import { AddOptionLine } from './AddOptionLine'
+
+function AddOptionLines({ optionId }: { optionId: string }) {
+  const isLastOption = useSelector(
+    selectIsLastOptionInCurrentComparisonById(optionId),
+  )
+  const optionIndex = useSelector(
+    selectCurrentComparisonOptionIndexById(optionId),
+  )
+
+  return (
+    <>
+      <AddOptionLine attachment="left" index={optionIndex} />
+      {isLastOption && (
+        <AddOptionLine attachment="right" index={optionIndex + 1} />
+      )}
+    </>
+  )
+}
+
 export const TableBody = memo(function FeatureRows() {
   const featureIds = useSelector(selectCurrentComparisonFeatureIds)
   const optionIds = useSelector(selectCurrentComparisonOptionIds)
@@ -31,6 +55,13 @@ export const TableBody = memo(function FeatureRows() {
         {optionIds.map(optionId => (
           <td key={optionId}>
             <OptionRemovingRectangle optionId={optionId} />
+          </td>
+        ))}
+      </tr>
+      <tr>
+        {optionIds.map(optionId => (
+          <td className="relative" key={optionId}>
+            <AddOptionLines optionId={optionId} />
           </td>
         ))}
       </tr>

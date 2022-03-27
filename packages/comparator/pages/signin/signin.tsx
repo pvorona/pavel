@@ -1,6 +1,12 @@
-import { auth, signInAnonymously, SIGN_UP } from '@pavel/comparator-shared'
+import { auth, SIGN_UP } from '@pavel/comparator-shared'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { EmailPasswordForm, SignInLayout } from '../modules'
+import {
+  EmailPasswordForm,
+  SignInLayout,
+  EMAIL_STORAGE_KEY,
+  EMAIL_STORAGE,
+  useTryAnonymously,
+} from '../../modules'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
@@ -8,8 +14,10 @@ import {
 } from 'next-firebase-auth'
 import { Button, Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
-import { useState } from 'react'
 import { LoadingStatus } from '@pavel/types'
+import { removeFromStorage } from '@pavel/utils'
+import classNames from 'classnames'
+import styles from './SignIn.module.scss'
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
@@ -27,23 +35,17 @@ function SignInPage() {
   )
 }
 
+const removeEmailFromStorage = () => {
+  removeFromStorage(EMAIL_STORAGE_KEY, EMAIL_STORAGE)
+}
+
 function SignInForm() {
-  const [isLoading, setIsLoading] = useState(false)
+  const { tryAnonymously, status } = useTryAnonymously({
+    onSuccess: removeEmailFromStorage,
+  })
 
   function onSubmit({ email, password }: { email: string; password: string }) {
     return signInWithEmailAndPassword(auth, email, password)
-  }
-
-  async function tryAnonymously() {
-    setIsLoading(true)
-    try {
-      await signInAnonymously()
-      // Clear stored email
-    } catch (error) {
-      console.error('Failed to sign in anonymously', error)
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   return (
@@ -55,10 +57,10 @@ function SignInForm() {
         buttonLabel="Sign in"
         buttonLoadingLabel="Loading..."
       />
-      <div className="text-center mt-12 text-gray-1">
+      <div className={classNames('text-center mt-12', styles['Text'])}>
         {"Don't have an account?"}
       </div>
-      <div className="text-center mt-1 text-gray-1">
+      <div className={classNames('text-center mt-1', styles['Text'])}>
         <NextLink href={SIGN_UP} passHref>
           <Link>Sign up</Link>
         </NextLink>{' '}
@@ -66,10 +68,8 @@ function SignInForm() {
         <Button
           variant={Variant.Link}
           onClick={tryAnonymously}
-          loadingStatus={
-            isLoading ? LoadingStatus.IN_PROGRESS : LoadingStatus.IDLE
-          }
-          disabled={isLoading}
+          loadingStatus={status}
+          disabled={status === LoadingStatus.IN_PROGRESS}
         >
           try anonymously
         </Button>

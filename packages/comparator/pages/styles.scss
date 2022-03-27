@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#__next {
+  height: 100%;
+}
+
+td {
+  padding: 0;
+}
+
+@font-face {
+  font-family: 'Google Sans';
+  src: url('./font.woff2') format('woff2');
+}
+
+.text-c-1-60 {
+  color: hsl(var(--c-1-60));
+}
+
+html {
+  --hero-title-animation-duration: 3s;
+  --hero-subtitle-animation-duration: 2s;
+  --hero-subtitle-animation-delay: 1s;
+
+  --duration-1: 0.2s;
+
+  font-family: 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+body {
+  --background-light: hsl(var(--c-0-100));
+  --background-dark: hsl(var(--c-1-15));
+  --background: var(--background-light);
+
+  --selection-background-light: hsl(var(--c-0-0));
+  --selection-background-dark: hsl(var(--c-0-95));
+  --selection-background: var(--selection-background-light);
+  --selection-color-light: hsl(var(--c-0-100));
+  --selection-color-dark: hsl(var(--c-0-20));
+  --selection-color: var(--selection-color-light);
+
+  --color-light: hsl(var(--c-1-35));
+  --color-dark: hsl(var(--c-1-90));
+  --color: var(--color-light);
+
+  color: var(--color);
+  background-color: var(--background);
+  height: 100%;
+
+  &::selection,
+  & *::selection {
+    background-color: var(--selection-background);
+    color: var(--selection-color);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    & {
+      --color: var(--color-dark);
+      --background: var(--background-dark);
+      --selection-background: var(--selection-background-dark);
+      --selection-color: var(--selection-color-dark);
+    }
+  }
+}

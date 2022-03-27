@@ -78,7 +78,7 @@ function ComparisonPageDataLoader() {
   }
 
   if (!isSettled(loadable)) {
-    return <GooeyLoader />
+    return <div>loading</div>
   }
 
   return <Comparison />

@@ -3,75 +3,50 @@ import styles from './Background.module.scss'
 export const Background = () => {
   return (
     <svg
-      // width="1728"
-      // height="1438"
-      viewBox="0 0 1628 1438"
+      width="1728"
+      height="2234"
+      viewBox="50 0 1728 2234"
       fill="none"
-      className={styles['Background']}
       xmlns="http://www.w3.org/2000/svg"
+      className={styles['Background']}
+      preserveAspectRatio="xMidYMin slice"
     >
+      <circle cx="1510" cy="358" r="290" stroke="var(--background-color)" />
+
+      <circle cx={0} cy={337} r={650} stroke="var(--background-color)" />
       <circle
-        r="162.5"
-        transform="matrix(1 0 0 -1 1059.5 908.5)"
-        className={styles['Circle']}
+        cx={200}
+        cy={337 + 650 + 50}
+        className={styles['Planets2']}
+        transform-origin="0px 337px"
+        r={30}
+        fill="var(--fill)"
       />
+
+      <circle cx="1321" cy="1349" r="628.5" stroke="var(--background-color)" />
+
+      <circle cx="1232" cy="-119" r="195.5" stroke="var(--background-color)" />
+      <circle cx="1054.5" cy="198.5" r="70" stroke="var(--background-color)" />
       <circle
-        r="162.5"
-        transform="matrix(1 0 0 -1 1404.5 735.5)"
-        className={styles['Circle']}
-      />
-      <circle
-        r="67.5"
-        transform="matrix(1 0 0 -1 1702.5 67.5)"
-        className={styles['Circle']}
-      />
-      <circle
-        r="209"
-        transform="matrix(1 0 0 -1 1614 377)"
-        className={styles['Circle']}
-      />
-      <circle
-        r="369"
-        transform="matrix(1 0 0 -1 1968 858)"
-        className={styles['Circle']}
-      />
-      <path
-        d="M568 710.5C568 822.89 476.89 914 364.5 914C252.11 914 161 822.89 161 710.5C161 598.11 252.11 507 364.5 507C476.89 507 568 598.11 568 710.5Z"
-        className={styles['Circle']}
-      />
-      <path
-        d="M648 1022C648 1084.96 596.96 1136 534 1136C471.04 1136 420 1084.96 420 1022C420 959.04 471.04 908 534 908C596.96 908 648 959.04 648 1022Z"
-        className={styles['Circle']}
-      />
-      <path
-        d="M373 1176C373 1320.7 255.699 1438 111 1438C-33.6986 1438 -151 1320.7 -151 1176C-151 1031.3 -33.6986 914 111 914C255.699 914 373 1031.3 373 1176Z"
-        className={styles['Circle']}
+        className={styles['Planets1']}
+        transform-origin="1054.5px 198.5px"
+        cx="952"
+        cy="238"
+        r="18"
+        fill="var(--fill)"
       />
       <circle
-        r="87"
-        transform="matrix(1 0 0 -1 724 833)"
-        className={styles['Circle']}
+        className={styles['Planets1']}
+        transform-origin="1054.5px 198.5px"
+        cx="1168"
+        cy="202"
+        r="18"
+        fill="var(--fill)"
       />
-      <circle
-        r="39.5"
-        transform="matrix(1 0 0 -1 734.5 989.5)"
-        className={styles['Circle']}
-      />
-      <circle
-        r="29"
-        transform="matrix(1 0 0 -1 835 943)"
-        className={styles['Circle']}
-      />
-      <circle
-        r="95"
-        transform="matrix(1 0 0 -1 -25 733)"
-        className={styles['Circle']}
-      />
-      <circle
-        r="188.5"
-        transform="matrix(1 0 0 -1 37.5 388.5)"
-        className={styles['Circle']}
-      />
+      <circle cx="522" cy="1184" r="151.5" stroke="var(--background-color)" />
+      <circle cx="-24.5" cy="1510.5" r="360" stroke="var(--background-color)" />
+      <circle cx="648.5" cy="2490.5" r="672" stroke="var(--background-color)" />
+      <circle cx="1801" cy="-152" r="252.5" stroke="var(--background-color)" />
     </svg>
   )
 }

@@ -1,65 +1,13 @@
 import { Link, Variant, HoldConfirmationButton } from '@pavel/components'
 import NextLink from 'next/link'
 import { withAuthUser, useAuthUser, withAuthUserSSR } from 'next-firebase-auth'
-import { COMPARISON_LIST, SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
+import { COMPARISON_LIST, SIGN_UP } from '@pavel/comparator-shared'
 import styles from './index.module.scss'
 import classNames from 'classnames'
 import { Background } from './Background'
-
-const CTAStyles = {
-  borderRadius: 30,
-}
+import { HeaderAuth, HeaderTitle, LandingHeader } from '../modules'
 
 export const getServerSideProps = withAuthUserSSR()()
-
-function AuthSection() {
-  const { id } = useAuthUser()
-
-  if (id) {
-    return (
-      <NextLink href={COMPARISON_LIST} passHref>
-        <Link
-          variant={Variant.Outlined}
-          className="ml-4"
-          size="sm"
-          style={{
-            ...CTAStyles,
-          }}
-        >
-          Go to app
-        </Link>
-      </NextLink>
-    )
-  }
-
-  return (
-    <>
-      <NextLink href={SIGN_IN} passHref>
-        <Link
-          style={{
-            ...CTAStyles,
-          }}
-          size="sm"
-          variant={Variant.Outlined}
-        >
-          Sign in
-        </Link>
-      </NextLink>
-      <NextLink href={SIGN_UP} passHref>
-        <Link
-          variant={Variant.Filled}
-          className="ml-4"
-          size="sm"
-          style={{
-            ...CTAStyles,
-          }}
-        >
-          Sign up
-        </Link>
-      </NextLink>
-    </>
-  )
-}
 
 function MainCTA() {
   const { id } = useAuthUser()
@@ -71,8 +19,8 @@ function MainCTA() {
           variant={Variant.Unstyled}
           className={classNames(styles['Neon'], 'shadow')}
           labelClassName={styles['NeonLabel']}
+          rounded
           style={{
-            ...CTAStyles,
             width: 200,
           }}
         >
@@ -88,8 +36,8 @@ function MainCTA() {
         variant={Variant.Unstyled}
         className={classNames(styles['Neon'], 'shadow')}
         labelClassName={styles['NeonLabel']}
+        rounded
         style={{
-          ...CTAStyles,
           width: 235,
         }}
       >
@@ -99,26 +47,15 @@ function MainCTA() {
   )
 }
 
-function Header() {
+function LandingHeaderNavigation() {
   return (
-    <div
-      className={classNames(
-        'flex justify-between my-2 mx-4 md:my-4 md:mx-8 lg:my-6 lg:mx-14 items-center relative whitespace-nowrap',
-        styles['Header'],
-      )}
-    >
-      <div className="text-4xl font-medium">Socrates</div>
-      <div className="flex absolute left-1/2 -translate-x-1/2 bottom-2 invisible md:visible">
-        <Link href="/" className="mx-4 font-semibold">
-          How it works
-        </Link>
-        <Link href="/" className="mx-4 font-semibold">
-          Pricing
-        </Link>
-      </div>
-      <div className="invisible xs:visible">
-        <AuthSection />
-      </div>
+    <div className="flex absolute left-1/2 -translate-x-1/2 bottom-[0.8em] invisible md:visible text-base">
+      <Link href="/" className="mx-4 font-semibold">
+        How it works
+      </Link>
+      <Link href="/" className="mx-4 font-semibold">
+        Pricing
+      </Link>
     </div>
   )
 }
@@ -127,33 +64,42 @@ export default withAuthUser()(function Index() {
   return (
     <>
       <Background />
-      <div className="flex flex-col h-full">
-        <Header />
-        <div className="flex flex-col items-center justify-center h-full">
+      <div>
+        <Screen className="flex flex-col">
+          <LandingHeader>
+            <HeaderTitle>Socrates</HeaderTitle>
+            <LandingHeaderNavigation />
+            <HeaderAuth />
+          </LandingHeader>
           <div
             className={classNames(
-              styles.Line,
-              'text-8xl font-semibold animate-bounce',
+              styles['Hero'],
+              'flex flex-col items-center justify-center h-full text-center',
             )}
           >
-            Empower your decisions
+            <div className={classNames(styles.Line)}>
+              Empower your decisions
+            </div>
+            <div className={classNames(styles.SubLine, 'hidden xs:block')}>
+              {/* {`The best in class tools that help you focus on what's important`} */}
+              {/* Eliminate the bias. Focus on the important. */}
+              {/* {`Tools that help you to eliminate the bias and focus on what's important`} */}
+              {`Tools to eliminate the bias and focus on what's important`}
+            </div>
+            <div className={classNames(styles.Cta)}>
+              <MainCTA />
+            </div>
+            <HoldConfirmationButton />
           </div>
-          <div
-            className={classNames(
-              styles.SubLine,
-              'text-xl font-medium text-gray-main-45 invisible xs:visible',
-            )}
-          >
-            {`The best in class tools that help you focus on what's important`}
-            {/* {`Tools and models that help you see the important`} */}
-            {/* Eliminate the bias. Focus on important outcomes. */}
-          </div>
-          <div className={classNames(styles.Cta)}>
-            <MainCTA />
-          </div>
-          <HoldConfirmationButton />
-        </div>
+        </Screen>
+        <Screen className="flex justify-center items-center">
+          How it works
+        </Screen>
       </div>
     </>
   )
 })
+
+function Screen({ className, ...props }) {
+  return <div className={classNames(className, 'h-screen')} {...props} />
+}

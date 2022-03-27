@@ -8,7 +8,11 @@ import {
 } from '@pavel/components'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
-import { useAutoFocus, usePointerProximity } from '@pavel/react-utils'
+import {
+  useAutoFocus,
+  useOnUnload,
+  usePointerProximity,
+} from '@pavel/react-utils'
 import {
   bindStorage,
   getFromStorage,
@@ -16,6 +20,10 @@ import {
   moveCursorToEnd,
 } from '@pavel/utils'
 import { LoadingStatus } from '@pavel/types'
+import { useRouter } from 'next/router'
+import { SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
+import classNames from 'classnames'
+import styles from './EmailPasswordForm.module.scss'
 
 type FormValues = { email: string; password: string }
 
@@ -35,15 +43,13 @@ function validate(values: FormValues) {
   return errors
 }
 
-const storageKey = 'email'
-const storage = isBrowser && sessionStorage
-
-const storedEmail = getFromStorage(storageKey, '', storage)
+export const EMAIL_STORAGE_KEY = 'email'
+export const EMAIL_STORAGE = isBrowser && sessionStorage
 
 const { remove: removeEmailFromStorage, set: saveEmailToStorage } = bindStorage(
   {
-    storage,
-    key: storageKey,
+    storage: EMAIL_STORAGE,
+    key: EMAIL_STORAGE_KEY,
   },
 )
 
@@ -60,6 +66,24 @@ export function EmailPasswordForm({
   buttonLoadingLabel: string
   onSubmit: (formValue: { email: string; password: string }) => Promise<unknown>
 }) {
+  const router = useRouter()
+
+  useOnUnload(removeEmailFromStorage)
+
+  useEffect(() => {
+    function clearEmailIfNeeded(path: string) {
+      if (![SIGN_UP, SIGN_IN].includes(path)) {
+        removeEmailFromStorage()
+      }
+    }
+
+    router.events.on('routeChangeStart', clearEmailIfNeeded)
+
+    return () => {
+      router.events.off('routeChangeStart', clearEmailIfNeeded)
+    }
+  }, [router])
+
   const [emailInput, setEmailInput] = useState<HTMLInputElement | undefined>()
   const [isCloseToButton, buttonRef] = usePointerProximity()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -82,7 +106,10 @@ export function EmailPasswordForm({
     },
     [onSubmit],
   )
-  const initialValues = { email: storedEmail, password: '' }
+  const initialValues = {
+    email: getFromStorage(EMAIL_STORAGE_KEY, '', EMAIL_STORAGE),
+    password: '',
+  }
   const {
     values,
     errors,
@@ -128,7 +155,9 @@ export function EmailPasswordForm({
   return (
     <>
       <div className="text-3xl font-bold mt-28">{title}</div>
-      <div className="text-sm mt-6 tracking-wide text-gray-1">{hint}</div>
+      <div className={classNames('text-sm mt-5 tracking-wide', styles['Hint'])}>
+        {hint}
+      </div>
       <form onSubmit={handleSubmit} className="mt-6">
         <Input
           name="email"
@@ -169,11 +198,9 @@ export function EmailPasswordForm({
           }
           validity={passwordValidity}
         />
-        {/* loading cursor wait */}
         <Button
           ref={buttonRef}
           className="w-full mt-8"
-          type="submit"
           disabled={isSubmitting || !isValid}
           loadingStatus={
             isSubmitting ? LoadingStatus.IN_PROGRESS : LoadingStatus.IDLE

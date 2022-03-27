@@ -1,7 +1,4 @@
 .ButtonBase {
-  transition-duration: 0.2s;
-  transition-property: color, box-shadow, background-color, opacity,
-    border-color;
   position: relative;
   display: inline-flex;
   justify-content: center;
@@ -11,8 +8,12 @@
     cursor: pointer;
   }
 
-  &.loading {
+  &.Loading {
     cursor: wait;
+  }
+
+  &:disabled:not(.Loading) {
+    cursor: not-allowed;
   }
 }
 
@@ -21,12 +22,37 @@
   border-radius: var(--border-radius);
 }
 
-.link {
+.Link {
+  --color-light-default: hsl(var(--c-1-25));
+  --color-light-hover: hsl(var(--c-1-10));
+  --color-dark-default: hsl(var(--c-1-90));
+  --color-dark-hover: hsl(var(--c-1-100));
+  --color: var(--color-light-default);
+
+  color: var(--color);
+  transition-property: color;
+  transition-duration: var(--duration-1);
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus-visible {
+    --color: var(--color-light-hover);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    & {
+      --color: var(--color-dark-default);
+
+      &:not(:disabled):hover,
+      &:not(:disabled):focus-visible {
+        --color: var(--color-dark-hover);
+      }
+    }
+  }
 }
 
 .outlined {
   --color: hsl(0deg, 0%, 10%);
-  --color-hover: hsl(0deg, 0%, 5%);
+  --color-light-hover: hsl(0deg, 0%, 5%);
 
   --border-color-default: hsl(0deg, 0%, 35%);
   --border-color-hover: hsl(0deg, 0%, 45%);
@@ -45,7 +71,7 @@
   }
 
   &:hover:not(:disabled) {
-    color: var(--color-hover);
+    color: var(--color-light-hover);
     border-color: var(--border-color-hover);
     background-color: var(--background-color-hover);
   }
@@ -57,68 +83,76 @@
   @media (prefers-color-scheme: dark) {
     & {
       --color: hsl(0deg, 0%, 90%);
-      --color-hover: hsl(0deg, 0%, 100%);
+      --color-light-hover: hsl(0deg, 0%, 100%);
 
       --border-color-default: hsla(0deg, 0%, 90%, 0.5);
       --border-color-hover: hsla(0deg, 0%, 90%, 0.7);
       --border-color-focus: hsla(0deg, 0%, 90%, 0.9);
     }
   }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
 }
 
-.button {
-  --color-default: hsl(0, 0%, 95%);
-  --color-hover: hsl(0, 0%, 100%);
+// TODO:
+// - Add focus ring
+.Filled {
+  --color-light-default: hsl(var(--c-0-95));
+  --color-light-hover: hsl(var(--c-0-100));
+  --color-light-disabled: hsl(var(--c-0-40));
+  --color-dark-default: hsl(var(--c-0-95));
+  --color-dark-hover: hsl(var(--c-0-100));
+  --color-dark-disabled: hsl(var(--c-1-70));
 
-  --background-default: hsl(110, 5%, 25%);
-  --background-hover: hsl(108, 5%, 19%);
+  --shadow-default: 0 2px 5px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 2px 3px rgba(0, 0, 0, 0.1),
+    0 2px 1px -1px rgba(0, 0, 0, 0.1);
 
-  --shadow-default: 0px 4px 6px rgba(0, 0, 0, 0.15),
-    0px 2px 2px rgba(0, 0, 0, 0.2);
-  --shadow-hover: 0px 6px 6px 2px rgba(0, 0, 0, 0.15),
-    0px 3px 2px rgba(0, 0, 0, 0.2);
+  --background-light-default: hsl(var(--c-1-30));
+  --background-light-hover: hsl(var(--c-1-25));
+  --background-light-disabled: hsl(var(--c-1-95));
+  --background-dark-default: hsl(var(--c-1-20));
+  --background-dark-hover: hsl(var(--c-1-25));
+  --background-dark-disabled: hsl(var(--c-1-20));
+
+  --color: var(--color-light-default);
+  --background-color: var(--background-light-default);
+  --shadow: var(--shadow-default);
+
+  color: var(--color);
+  background-color: var(--background-color);
+  transition-property: color, background-color, box-shadow;
+  transition-duration: var(--duration-1);
+
+  &:disabled {
+    --color: var(--color-light-disabled);
+    --background-color: var(--background-light-disabled);
+  }
 
   &:not(:disabled) {
-    box-shadow: theme('boxShadow.md');
+    box-shadow: var(--shadow);
   }
 
-  &:hover:not(:disabled) {
-    background-color: theme('backgroundColor.gray.9');
-
-    @media (prefers-color-scheme: dark) {
-      & {
-        background-color: theme('backgroundColor.gray.4');
-      }
-    }
-  }
-
-  &:focus:not(:disabled) {
-    background-color: theme('backgroundColor.gray.9');
-
-    @media (prefers-color-scheme: dark) {
-      & {
-        background-color: theme('backgroundColor.gray.4');
-      }
-    }
+  &:not(:disabled):hover,
+  &:not(:disabled):focus-visible {
+    --color: var(--color-light-hover);
+    --background-color: var(--background-light-hover);
+    --shadow: var(--shadow-hover);
   }
 
   @media (prefers-color-scheme: dark) {
-    &:hover:not(:disabled) {
-      border-color: #5f6368;
-    }
+    & {
+      --color: var(--color-dark-default);
+      --background-color: var(--background-dark-default);
 
-    &:focus:not(:disabled) {
-      border-color: #5f6368;
-    }
-  }
+      &:disabled {
+        --color: var(--color-dark-disabled);
+        --background-color: var(--background-dark-disabled);
+      }
 
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+      &:not(:disabled):hover,
+      &:not(:disabled):focus-visible {
+        --color: var(--color-dark-hover);
+        --background-color: var(--background-dark-hover);
+      }
+    }
   }
 }

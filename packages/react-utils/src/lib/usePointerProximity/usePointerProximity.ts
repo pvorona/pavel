@@ -3,7 +3,7 @@ import { getDistance2DBetweenPointAndRectangle } from '@pavel/utils'
 import { useState, useEffect } from 'react'
 
 export function usePointerProximity({
-  threshold = 20,
+  threshold = 5,
 }: { threshold?: number } = {}) {
   const [element, setElement] = useState<HTMLElement>()
   const [isCloseToElement, setIsCloseToElement] = useState(false)
@@ -17,15 +17,13 @@ export function usePointerProximity({
       [pointerPosition],
       ({ x, y }) => {
         const { left, top, right, bottom } = element.getBoundingClientRect()
-
         const distance = getDistance2DBetweenPointAndRectangle([x, y], {
           left,
           top,
           right,
           bottom,
         })
-
-        setIsCloseToElement(distance < threshold)
+        setIsCloseToElement(distance <= threshold)
       },
       { fireImmediately: false },
     )

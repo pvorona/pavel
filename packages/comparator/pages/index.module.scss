@@ -1,35 +1,41 @@
 .Line {
-  animation: drop var(--hero-title-animation-duration);
-  font-size: var(--space-6);
+  animation: appear var(--hero-title-animation-duration);
+  font-size: var(--space-500);
+  line-height: 1.14;
+  padding: 0 1em;
 }
 
 .SubLine {
   opacity: 0;
   animation: appear var(--hero-subtitle-animation-duration)
     var(--hero-subtitle-animation-delay) forwards;
-  font-size: var(--space-2);
-  margin-top: var(--space-2);
+  font-size: var(--space-125);
+  margin-top: var(--space-125);
+  padding: 0 3em;
+
+  --color-light: hsl(var(--c-1-45));
+  --color-dark: hsl(var(--c-1-60));
+  --color: var(--color-light);
+
+  color: var(--color);
+
+  @media (prefers-color-scheme: dark) {
+    --color: var(--color-dark);
+  }
 }
 
 .Cta {
   opacity: 0;
   animation: appear var(--hero-subtitle-animation-duration)
     calc(var(--hero-subtitle-animation-delay) + 1s) forwards;
-  margin-top: var(--space-3);
-}
-
-.Header {
-  opacity: 0;
-  animation: appear 2s calc(var(--hero-subtitle-animation-delay) + 2s) forwards;
-}
-
-@keyframes drop {
-  from {
-    opacity: 0;
-  }
+  margin-top: var(--space-200);
 }
 
 @keyframes appear {
+  from {
+    opacity: 0;
+  }
+
   to {
     opacity: 1;
   }
@@ -41,30 +47,55 @@
   inherits: false;
 }
 
+@property --neon-color-1 {
+  syntax: '<color>';
+  // initial-value: hsl(193, 100%, 68%);
+  initial-value: hsl(193, 100%, 50%);
+  inherits: true;
+}
+
+@property --neon-color-1-alternate {
+  syntax: '<color>';
+  initial-value: hsl(193, 100%, 50%);
+  inherits: true;
+}
+
+@property --neon-color-2 {
+  syntax: '<color>';
+  initial-value: hsl(225, 75%, 70%);
+  inherits: true;
+}
+
+@property --neon-color-3 {
+  syntax: '<color>';
+  initial-value: hsl(264, 100%, 80%);
+  inherits: true;
+}
+
 .Neon {
   --border-radius: 99999px;
   --border-size: 2px;
 
-  --animation-duration: 2.5s;
+  --animation-duration: 3s;
   --animation-delay: 2s;
+  --animation-timing-function: linear;
 
   --neon-color-1: hsl(193, 100%, 50%);
+  --neon-color-1-alternate: hsl(165, 100%, 50%);
   --neon-color-2: hsl(225, 75%, 70%);
   --neon-color-3: hsl(264, 100%, 80%);
 
-  // --background-color-default: hsla(225, 6%, 30%, 0.98);
-  // --background-color-hover: hsla(225, 6%, 30%, 0.92);
-  --background-color-default: hsla(225, 6%, 100%, 1);
-  --background-color-hover: hsla(225, 6%, 100%, 1);
+  --background-color-default: hsl(var(--c-1-100));
+  --background-color-hover: hsl(var(--c-1-100));
 
   --scale-x-default: 0.8;
-  --scale-y-default: 0.5;
+  --scale-y-default: 0.4;
 
   --scale-x-hover: 0.85;
   --scale-y-hover: 0.55;
 
-  --blur-default: 30px;
-  --blur-hover: 35px;
+  --blur-default: 18px;
+  --blur-hover: 18px;
 
   // Weaving
   --scale-x: var(--scale-x-default);
@@ -75,27 +106,37 @@
   --blur: var(--blur-default);
 
   background-color: var(--background-color);
-
   transition: background-color 0.2s;
 
-  &:hover,
-  &:focus-visible {
-    --background-color: var(--background-color-hover) !important;
+  &:not(:disabled):hover,
+  &:not(:disabled):focus-visible {
+    --background-color: var(--background-color-hover);
     --blur: var(--blur-hover);
 
     --scale-x: var(--scale-x-hover);
     --scale-y: var(--scale-y-hover);
     --border-size: 3px;
+
+    // --neon-color-1: hsl(317deg 100% 50%);
+    // --neon-color-1-alternate: hsl(184deg 100% 50%);
+    // --neon-color-2: hsl(225, 75%, 70%);
+    // --neon-color-3: hsl(264, 100%, 80%);
+
+    --neon-color-1: hsl(317, 100%, 50%);
+    --neon-color-1-alternate: hsl(184, 100%, 50%);
+    --neon-color-2: hsl(298, 75%, 70%);
+    --neon-color-3: hsl(6, 100%, 80%);
   }
 
   @media (prefers-color-scheme: dark) {
     & {
       --neon-color-1: hsl(193, 100%, 68%);
+      --neon-color-1-alternate: hsl(165, 100%, 68%);
       --neon-color-2: hsl(225, 75%, 56%);
       --neon-color-3: hsl(264, 100%, 38%);
 
-      --background-color-default: hsla(225, 6%, 13%, 0.98);
-      --background-color-hover: hsla(225, 6%, 13%, 0.8);
+      --background-color-default: hsla(var(--c-1-15) / 0.98);
+      --background-color-hover: hsla(var(--c-1-15) / 0.9);
 
       --scale-x-hover: var(--scale-x-default);
       --scale-y-hover: var(--scale-y-default);
@@ -119,13 +160,14 @@
   top: calc(-1 * var(--border-size));
   left: calc(-1 * var(--border-size));
   transition: all 0.2s;
-  animation: spin var(--animation-duration) var(--animation-delay) linear
-    infinite;
+  animation: spin var(--animation-duration) var(--animation-delay)
+    var(--animation-timing-function) infinite;
 }
 
 .Neon::after {
   position: absolute;
   content: '';
+  border-radius: 99999px;
   top: 30%;
   left: 0;
   right: 0;
@@ -141,14 +183,29 @@
     var(--neon-color-2) 43%,
     var(--neon-color-3)
   );
-  animation: spin var(--animation-duration)
-    calc(var(--animation-duration) + var(--animation-delay)) linear infinite;
+  animation: spin var(--animation-duration) calc(var(--animation-delay))
+    var(--animation-timing-function) infinite;
+}
+
+.Neon:hover::after {
+  top: 0;
+  animation: spin var(--animation-duration) calc(var(--animation-delay))
+      var(--animation-timing-function) infinite,
+    glow calc(var(--animation-duration)) calc(var(--animation-delay)) infinite;
+}
+
+@keyframes glow {
+  25% {
+    // transform: scaleX(0.8) scaleY(0.6);
+    transform: scale(0.8);
+  }
 }
 
 .NeonLabel {
   background-size: 100%;
   background-repeat: repeat;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 
   background-image: linear-gradient(
@@ -158,14 +215,28 @@
     var(--neon-color-3)
   );
   animation: spin var(--animation-duration)
-    calc(var(--animation-duration) + var(--animation-delay)) linear infinite;
+    calc(var(--animation-duration) + var(--animation-delay))
+    var(--animation-timing-function) infinite;
 }
 
 @keyframes spin {
   0% {
     --rotate: 0deg;
   }
+  40% {
+    --neon-color-1: initial;
+  }
+  55% {
+    --neon-color-1: var(--neon-color-1-alternate);
+  }
+  85% {
+    --neon-color-1: initial;
+  }
   100% {
     --rotate: 360deg;
   }
+}
+
+.Hero {
+  margin-top: var(--space-200);
 }

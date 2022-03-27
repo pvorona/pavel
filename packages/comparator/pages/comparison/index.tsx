@@ -9,13 +9,20 @@ import {
   createComparison,
   getComparisonsCollectionRef,
 } from '@pavel/comparator-shared'
-import { HeaderView, PageTitleView } from '../../modules'
+import {
+  HeaderAuth,
+  HeaderTitle,
+  HeaderView,
+  LandingHeader,
+  PageTitleView,
+} from '../../modules'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
   useAuthUser,
   AuthAction,
 } from 'next-firebase-auth'
+import styles from './Comparison.module.scss'
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
@@ -42,9 +49,10 @@ function ComparisonListPageWrapper() {
 
   return (
     <>
-      <HeaderView>
-        <PageTitleView>My Comparisons</PageTitleView>
-      </HeaderView>
+      <LandingHeader>
+        <HeaderTitle>Your comparisons</HeaderTitle>
+        <HeaderAuth />
+      </LandingHeader>
 
       <ComparisonList>
         {docsState.map(d => (
@@ -59,7 +67,7 @@ function ComparisonListPageWrapper() {
 
 export function ComparisonList({ children }: { children: ReactNode }) {
   return (
-    <div className="flex items-start h-full">
+    <div className={classNames(styles['Content'], 'flex items-start h-full')}>
       <AddComparisonCard />
       {children}
     </div>
@@ -88,7 +96,10 @@ export function AddComparisonCard() {
   return (
     <Card
       onClick={onClick}
-      className="bg-gray-4 text-white flex items-center justify-center text-4xl"
+      className={classNames(
+        'text-white flex items-center justify-center text-4xl',
+        styles['CreateComparison'],
+      )}
     >
       +
     </Card>
@@ -110,7 +121,8 @@ export const Card = forwardRef<HTMLAnchorElement, CardProps>(function Card(
       ref={ref}
       onClick={onClick}
       className={classNames(
-        'block shadow-2xl w-48 h-48 ml-3 rounded-sm',
+        styles['Card'],
+        'block w-48 h-48 rounded-sm',
         className,
       )}
       {...props}

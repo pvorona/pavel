@@ -6,6 +6,8 @@ import { TextField } from '@pavel/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { FeatureActions } from './FeatureActions'
 import { useState } from 'react'
+import classNames from 'classnames'
+import styles from './FeatureHeader.module.scss'
 
 export function FeatureHeader({ featureId }: { featureId: string }) {
   const dispatch = useDispatch()
@@ -48,7 +50,10 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
         <TextField
           onInput={onFeatureNameChange}
           placeholder="Feature name"
-          className="px-3 py-1 text-xs transition-colors text-gray-2 dark:text-gray-1 font-semibold opacity-50 tracking-[0.15em] uppercase"
+          className={classNames(
+            'px-3 py-1 text-xs transition-colors font-semibold tracking-[0.15em] uppercase',
+            styles['FeatureName'],
+          )}
         >
           {feature.name}
         </TextField>
@@ -58,7 +63,10 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
         <TextField
           onInput={onFeatureDescriptionChange}
           placeholder="No description"
-          className="px-3 inline-block min-w-[100px] text-xs text-gray-1 font-extralight tracking-wider"
+          className={classNames(
+            'px-3 inline-block min-w-[100px] text-xs font-extralight tracking-wider',
+            styles['FeatureDescription'],
+          )}
         >
           {feature.description}
         </TextField>

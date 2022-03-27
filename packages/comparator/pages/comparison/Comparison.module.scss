@@ -1,0 +1,17 @@
+.Content {
+  padding: var(--space-200-wider);
+  gap: 1rem;
+}
+
+.Card {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 20px -20px;
+
+  border: 1px solid #80808026;
+  display: flex;
+  padding: 1rem;
+  justify-content: center;
+}
+
+.CreateComparison {
+  background-color: hsl(var(--c-1-10));
+}

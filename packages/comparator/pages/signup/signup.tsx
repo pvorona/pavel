@@ -1,6 +1,12 @@
-import { auth, signInAnonymously, SIGN_IN } from '@pavel/comparator-shared'
+import { auth, SIGN_IN } from '@pavel/comparator-shared'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { EmailPasswordForm, SignInLayout } from '../modules'
+import {
+  EmailPasswordForm,
+  SignInLayout,
+  EMAIL_STORAGE_KEY,
+  EMAIL_STORAGE,
+  useTryAnonymously,
+} from '../../modules'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
@@ -8,6 +14,10 @@ import {
 } from 'next-firebase-auth'
 import { Button, Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
+import { removeFromStorage } from '@pavel/utils'
+import { LoadingStatus } from '@pavel/types'
+import styles from './SignUp.module.scss'
+import classNames from 'classnames'
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
@@ -25,18 +35,17 @@ function SignUpPage() {
   )
 }
 
+const removeEmailFromStorage = () => {
+  removeFromStorage(EMAIL_STORAGE_KEY, EMAIL_STORAGE)
+}
+
 function SignUpForm() {
+  const { tryAnonymously, status } = useTryAnonymously({
+    onSuccess: removeEmailFromStorage,
+  })
+
   function onSubmit({ email, password }: { email: string; password: string }) {
     return createUserWithEmailAndPassword(auth, email, password)
-  }
-
-  async function tryAnonymously() {
-    try {
-      await signInAnonymously()
-      // Clear stored email
-    } catch (error) {
-      console.error('Failed to sign in anonymously', error)
-    }
   }
 
   return (
@@ -48,15 +57,22 @@ function SignUpForm() {
         buttonLabel="Sign up"
         buttonLoadingLabel="Loading..."
       />
-      <div className="text-center mt-12 text-gray-1">
+      <div className={classNames('text-center mt-12', styles['Text'])}>
         Already have an account?
       </div>
-      <div className="text-center mt-1 text-gray-1 tracking-wide">
+      <div
+        className={classNames('text-center mt-1 tracking-wide', styles['Text'])}
+      >
         <NextLink href={SIGN_IN} passHref>
           <Link>Sign in</Link>
         </NextLink>{' '}
         or{' '}
-        <Button variant={Variant.Link} onClick={tryAnonymously}>
+        <Button
+          variant={Variant.Link}
+          onClick={tryAnonymously}
+          loadingStatus={status}
+          disabled={status === LoadingStatus.IN_PROGRESS}
+        >
           try anonymously
         </Button>
       </div>

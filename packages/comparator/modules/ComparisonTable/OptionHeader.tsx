@@ -1,12 +1,7 @@
-import {
-  selectIsLastOptionInCurrentComparisonById,
-  selectCurrentComparisonOptionIndexById,
-} from '../../modules/comparisons'
 import { memo, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { OptionActions } from './OptionActions'
 import { OptionTitle } from './OptionTitle'
-import { AddOptionLine } from './AddOptionLine'
 import useResizeObserver from 'use-resize-observer'
 import { setOptionSize } from './comparisonTable.slice'
 import { linear } from '@pavel/easing'
@@ -21,12 +16,6 @@ export const OptionHeader = memo(function OptionHeader({
     box: 'border-box',
     round: linear,
   })
-  const isLastOption = useSelector(
-    selectIsLastOptionInCurrentComparisonById(optionId),
-  )
-  const optionIndex = useSelector(
-    selectCurrentComparisonOptionIndexById(optionId),
-  )
 
   useEffect(() => {
     dispatch(setOptionSize({ size: { width, height }, optionId }))
@@ -34,14 +23,10 @@ export const OptionHeader = memo(function OptionHeader({
 
   return (
     <th ref={ref} className="relative z-10">
-      <AddOptionLine attachment="left" index={optionIndex} />
       <div className="group relative">
         <OptionTitle optionId={optionId} />
         <OptionActions optionId={optionId} />
       </div>
-      {isLastOption && (
-        <AddOptionLine attachment="right" index={optionIndex + 1} />
-      )}
     </th>
   )
 })
