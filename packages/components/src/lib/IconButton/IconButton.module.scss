@@ -1,7 +1,7 @@
 .icon {
-  --color-default: var(--c-1-45);
-  --color-hover: var(--c-1-15);
-  --color-focus: var(--c-1-15);
+  --color-default: hsl(var(--c-1-45));
+  --color-hover: hsl(var(--c-1-15));
+  --color-focus: hsl(var(--c-1-15));
 
   --icon-color: var(--color-default);
 
@@ -19,9 +19,9 @@
 
   @media (prefers-color-scheme: dark) {
     & {
-      --color-default: var(--c-1-45);
-      --color-hover: var(--c-1-80);
-      --color-focus: var(--c-1-100);
+      --color-default: hsl(var(--c-1-45));
+      --color-hover: hsl(var(--c-1-80));
+      --color-focus: hsl(var(--c-1-100));
     }
   }
 }

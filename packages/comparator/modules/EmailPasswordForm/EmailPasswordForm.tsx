@@ -22,6 +22,8 @@ import {
 import { LoadingStatus } from '@pavel/types'
 import { useRouter } from 'next/router'
 import { SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
+import classNames from 'classnames'
+import styles from './EmailPasswordForm.module.scss'
 
 type FormValues = { email: string; password: string }
 
@@ -41,13 +43,13 @@ function validate(values: FormValues) {
   return errors
 }
 
-export const emailStorageKey = 'email'
-export const emailStorage = isBrowser && sessionStorage
+export const EMAIL_STORAGE_KEY = 'email'
+export const EMAIL_STORAGE = isBrowser && sessionStorage
 
 const { remove: removeEmailFromStorage, set: saveEmailToStorage } = bindStorage(
   {
-    storage: emailStorage,
-    key: emailStorageKey,
+    storage: EMAIL_STORAGE,
+    key: EMAIL_STORAGE_KEY,
   },
 )
 
@@ -105,7 +107,7 @@ export function EmailPasswordForm({
     [onSubmit],
   )
   const initialValues = {
-    email: getFromStorage(emailStorageKey, '', emailStorage),
+    email: getFromStorage(EMAIL_STORAGE_KEY, '', EMAIL_STORAGE),
     password: '',
   }
   const {
@@ -153,7 +155,9 @@ export function EmailPasswordForm({
   return (
     <>
       <div className="text-3xl font-bold mt-28">{title}</div>
-      <div className="text-sm mt-5 tracking-wide text-c-1-60">{hint}</div>
+      <div className={classNames('text-sm mt-5 tracking-wide', styles['Hint'])}>
+        {hint}
+      </div>
       <form onSubmit={handleSubmit} className="mt-6">
         <Input
           name="email"
@@ -194,7 +198,6 @@ export function EmailPasswordForm({
           }
           validity={passwordValidity}
         />
-        {/* TODO: loading cursor wait */}
         <Button
           ref={buttonRef}
           className="w-full mt-8"

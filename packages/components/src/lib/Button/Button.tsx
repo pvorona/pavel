@@ -63,6 +63,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         [styles['Filled']]: variant === Variant.Filled,
         [styles['Link']]: variant === Variant.Link,
         [styles['outlined']]: variant === Variant.Outlined,
+        [styles['Loading']]: loadingStatus === LoadingStatus.IN_PROGRESS,
       },
       className,
     )
@@ -113,6 +114,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
       [styles['Filled']]: variant === Variant.Filled,
       [styles['Link']]: variant === Variant.Link,
       [styles['outlined']]: variant === Variant.Outlined,
+      [styles['Loading']]: loadingStatus === LoadingStatus.IN_PROGRESS,
     },
     className,
   )

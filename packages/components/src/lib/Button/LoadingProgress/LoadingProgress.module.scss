@@ -2,12 +2,7 @@ $animation-duration: 5s;
 $animation-delay: 0.5s;
 
 .progress {
-  --color-background: hsla(
-    var(--c-black-hue),
-    var(--c-black-sat),
-    var(--c-black-lit),
-    var(--c-black-alpha-1)
-  );
+  --color-background: hsla(var(--c-0-0) / 0.1);
 
   background-color: var(--color-background);
   position: absolute;

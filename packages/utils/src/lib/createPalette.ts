@@ -37,7 +37,7 @@ export function createPalette({
       const s = ensureInBounds(0, Math.round(getAdjustedSaturation(index)), 100)
       const l = ensureInBounds(0, Math.round(index * litMul), 100)
 
-      result.push(`hsl(${h}deg ${s}% ${l}%)`)
+      result.push(`${h}deg ${s}% ${l}%`)
     }
 
     return result

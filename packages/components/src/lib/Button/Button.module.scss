@@ -8,8 +8,12 @@
     cursor: pointer;
   }
 
-  &.loading {
+  &.Loading {
     cursor: wait;
+  }
+
+  &:disabled:not(.Loading) {
+    cursor: not-allowed;
   }
 }
 
@@ -19,10 +23,10 @@
 }
 
 .Link {
-  --color-light-default: var(--c-1-35);
-  --color-light-hover: var(--c-1-15);
-  --color-dark-default: var(--c-1-90);
-  --color-dark-hover: var(--c-1-100);
+  --color-light-default: hsl(var(--c-1-25));
+  --color-light-hover: hsl(var(--c-1-10));
+  --color-dark-default: hsl(var(--c-1-90));
+  --color-dark-hover: hsl(var(--c-1-100));
   --color: var(--color-light-default);
 
   color: var(--color);
@@ -86,54 +90,28 @@
       --border-color-focus: hsla(0deg, 0%, 90%, 0.9);
     }
   }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
 }
 
 // TODO:
 // - Add focus ring
-// - FIX DARK DISABLED
 .Filled {
-  --color-light-default: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-95)
-  );
-  --color-light-hover: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-100)
-  );
-  --color-light-disabled: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-40)
-  );
-  --color-dark-default: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-95)
-  );
-  --color-dark-hover: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-100)
-  );
-  --color-dark-disabled: var(--c-1-70);
+  --color-light-default: hsl(var(--c-0-95));
+  --color-light-hover: hsl(var(--c-0-100));
+  --color-light-disabled: hsl(var(--c-0-40));
+  --color-dark-default: hsl(var(--c-0-95));
+  --color-dark-hover: hsl(var(--c-0-100));
+  --color-dark-disabled: hsl(var(--c-1-70));
 
   --shadow-default: 0 2px 5px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1);
   --shadow-hover: 0 2px 3px rgba(0, 0, 0, 0.1),
     0 2px 1px -1px rgba(0, 0, 0, 0.1);
 
-  --background-light-default: var(--c-1-35);
-  --background-light-hover: var(--c-1-25);
-  --background-light-disabled: var(--c-1-95);
-  --background-dark-default: var(--c-1-20);
-  --background-dark-hover: var(--c-1-25);
-  --background-dark-disabled: var(--c-1-20);
+  --background-light-default: hsl(var(--c-1-30));
+  --background-light-hover: hsl(var(--c-1-25));
+  --background-light-disabled: hsl(var(--c-1-95));
+  --background-dark-default: hsl(var(--c-1-20));
+  --background-dark-hover: hsl(var(--c-1-25));
+  --background-dark-disabled: hsl(var(--c-1-20));
 
   --color: var(--color-light-default);
   --background-color: var(--background-light-default);
@@ -147,7 +125,6 @@
   &:disabled {
     --color: var(--color-light-disabled);
     --background-color: var(--background-light-disabled);
-    cursor: not-allowed;
   }
 
   &:not(:disabled) {

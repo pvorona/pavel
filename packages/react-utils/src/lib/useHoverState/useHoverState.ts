@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 
-export function useHover() {
+export function useHoverState() {
   const [isHovered, setIsHovered] = useState(false)
   const [element, setElement] = useState<HTMLElement | null>(null)
   const onMouseEnter = useCallback(() => {

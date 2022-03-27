@@ -3,8 +3,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import {
   EmailPasswordForm,
   SignInLayout,
-  emailStorageKey,
-  emailStorage,
+  EMAIL_STORAGE_KEY,
+  EMAIL_STORAGE,
   useTryAnonymously,
 } from '../../modules'
 import {
@@ -14,9 +14,10 @@ import {
 } from 'next-firebase-auth'
 import { Button, Link, Variant } from '@pavel/components'
 import NextLink from 'next/link'
-import { useCallback } from 'react'
 import { LoadingStatus } from '@pavel/types'
 import { removeFromStorage } from '@pavel/utils'
+import classNames from 'classnames'
+import styles from './SignIn.module.scss'
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
@@ -35,7 +36,7 @@ function SignInPage() {
 }
 
 const removeEmailFromStorage = () => {
-  removeFromStorage(emailStorageKey, emailStorage)
+  removeFromStorage(EMAIL_STORAGE_KEY, EMAIL_STORAGE)
 }
 
 function SignInForm() {
@@ -56,10 +57,10 @@ function SignInForm() {
         buttonLabel="Sign in"
         buttonLoadingLabel="Loading..."
       />
-      <div className="text-center mt-12 text-c-1-60">
+      <div className={classNames('text-center mt-12', styles['Text'])}>
         {"Don't have an account?"}
       </div>
-      <div className="text-center mt-1 text-c-1-60">
+      <div className={classNames('text-center mt-1', styles['Text'])}>
         <NextLink href={SIGN_UP} passHref>
           <Link>Sign up</Link>
         </NextLink>{' '}

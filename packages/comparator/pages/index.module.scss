@@ -13,10 +13,15 @@
   margin-top: var(--space-125);
   padding: 0 3em;
 
-  // No dark-light separation
-  --color: var(--c-1-60);
+  --color-light: hsl(var(--c-1-45));
+  --color-dark: hsl(var(--c-1-60));
+  --color: var(--color-light);
 
   color: var(--color);
+
+  @media (prefers-color-scheme: dark) {
+    --color: var(--color-dark);
+  }
 }
 
 .Cta {
@@ -73,7 +78,6 @@
 
   --animation-duration: 3s;
   --animation-delay: 2s;
-  // --animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1);
   --animation-timing-function: linear;
 
   --neon-color-1: hsl(193, 100%, 50%);
@@ -81,19 +85,9 @@
   --neon-color-2: hsl(225, 75%, 70%);
   --neon-color-3: hsl(264, 100%, 80%);
 
-  --background-color-default: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-100)
-  );
-  --background-color-hover: hsla(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-100)
-  );
+  --background-color-default: hsl(var(--c-1-100));
+  --background-color-hover: hsl(var(--c-1-100));
 
-  // --scale-x-default: 0.8;
-  // --scale-y-default: 0.5;
   --scale-x-default: 0.8;
   --scale-y-default: 0.4;
 
@@ -141,18 +135,8 @@
       --neon-color-2: hsl(225, 75%, 56%);
       --neon-color-3: hsl(264, 100%, 38%);
 
-      --background-color-default: hsla(
-        var(--c-1-hue),
-        var(--c-1-sat-1),
-        var(--c-1-lit-13),
-        0.98
-      );
-      --background-color-hover: hsla(
-        var(--c-1-hue),
-        var(--c-1-sat-1),
-        var(--c-1-lit-13),
-        0.9
-      );
+      --background-color-default: hsla(var(--c-1-15) / 0.98);
+      --background-color-hover: hsla(var(--c-1-15) / 0.9);
 
       --scale-x-hover: var(--scale-x-default);
       --scale-y-hover: var(--scale-y-default);

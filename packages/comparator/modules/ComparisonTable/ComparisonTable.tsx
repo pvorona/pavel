@@ -54,7 +54,7 @@ export const ComparisonTable = memo(function ComparisonTable() {
             <th
               ref={separatorRef}
               className={classNames(
-                'h-[1px] absolute bottom-0 bg-gray-5 p-0',
+                'h-[1px] absolute bottom-0 p-0',
                 styles['HeaderSeparator'],
               )}
             />

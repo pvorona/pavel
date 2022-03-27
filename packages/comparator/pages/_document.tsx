@@ -28,7 +28,7 @@ function buildClamp(
   }vw, ${maxFontSize}rem)`
 }
 
-const fonts = {
+const spaces = {
   '--space-125': {
     width: [320, 1440],
     value: [1, 1.25],
@@ -60,13 +60,19 @@ function getCustomProperties() {
       width: [minWidth, maxWidth],
       value: [minValue, maxValue],
     },
-  ] of Object.entries(fonts)) {
+  ] of Object.entries(spaces)) {
     const property = buildClamp(minWidth, maxWidth, minValue, maxValue)
     result[key] = property
   }
 
   return {
     ...result,
+    ...createPalette({
+      hue: 228,
+      baseSaturation: 0,
+      lightnessSteps: 21,
+      name: '--c-0',
+    }),
     ...createPalette({
       hue: 228,
       baseSaturation: 6,

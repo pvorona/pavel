@@ -1,7 +1,7 @@
 .Background {
-  --background-color: var(--c-1-90);
-  --fill: var(--c-1-95);
-  --scale: 2;
+  --background-color: hsl(var(--c-1-90));
+  --fill: hsl(var(--c-1-95));
+  --scale-initial: 2;
 
   position: absolute;
   top: 0;
@@ -10,14 +10,14 @@
   height: 175vh;
   z-index: -1;
   opacity: 0;
-  transform: scale(var(--scale)) translateY(10%);
+  transform: scale(var(--scale-initial)) translateY(10%);
 
   animation: a1 2s 2s forwards;
 
   @media (prefers-color-scheme: dark) {
     & {
-      --background-color: var(--c-1-20);
-      --fill: var(--c-1-20);
+      --background-color: hsl(var(--c-1-20));
+      --fill: hsl(var(--c-1-20));
     }
   }
 }

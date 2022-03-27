@@ -16,7 +16,7 @@ td {
 }
 
 .text-c-1-60 {
-  color: var(--c-1-60);
+  color: hsl(var(--c-1-60));
 }
 
 html {
@@ -26,74 +26,25 @@ html {
 
   --duration-1: 0.2s;
 
-  --c-1-hue: 228;
-  --c-1-sat-1: 6%;
-  --c-1-lit-13: 13%;
-  --c-1-lit-15: 15%;
-  --c-1-lit-17: 17%;
-  --c-1-lit-27: 27%;
-  --c-1-lit-33: 33%;
-  --c-1-lit-38: 38%;
-  --c-1-lit-48: 48%;
-  --c-1-lit-60: 60%;
-  --c-1-lit-70: 70%;
-  --c-1-lit-90: 90%;
-  --c-1-lit-95: 95%;
-  --c-1-lit-100: 100%;
-
-  --c-gray-hue: 0;
-  --c-gray-sat: 0%;
-  --c-gray-lit-0: 0%;
-  --c-gray-lit-20: 20%;
-  --c-gray-lit-40: 40%;
-  --c-gray-lit-95: 95%;
-  --c-gray-lit-100: 100%;
-
-  --c-black-hue: 0;
-  --c-black-sat: 0%;
-  --c-black-lit: 0%;
-  --c-black-alpha-1: 0.1;
-  --c-black-alpha-3: 0.3;
-
   font-family: 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
     sans-serif;
 }
 
 body {
-  --background-light: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-100)
-  );
-  --background-dark: var(--c-1-15);
+  --background-light: hsl(var(--c-0-100));
+  --background-dark: hsl(var(--c-1-15));
   --background: var(--background-light);
 
-  --selection-background-light: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-0)
-  );
-  --selection-background-dark: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-95)
-  );
+  --selection-background-light: hsl(var(--c-0-0));
+  --selection-background-dark: hsl(var(--c-0-95));
   --selection-background: var(--selection-background-light);
-  --selection-color-light: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-100)
-  );
-  --selection-color-dark: hsl(
-    var(--c-gray-hue),
-    var(--c-gray-sat),
-    var(--c-gray-lit-20)
-  );
+  --selection-color-light: hsl(var(--c-0-100));
+  --selection-color-dark: hsl(var(--c-0-20));
   --selection-color: var(--selection-color-light);
 
-  --color-light: var(--c-1-35);
-  --color-dark: var(--c-1-90);
+  --color-light: hsl(var(--c-1-35));
+  --color-dark: hsl(var(--c-1-90));
   --color: var(--color-light);
 
   color: var(--color);
