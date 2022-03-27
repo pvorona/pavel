@@ -17,6 +17,7 @@ export const initAuth = () => {
       console.error(err)
     },
     firebaseAdminInitConfig: {
+      databaseURL: ensureString(process.env['NEXT_PUBLIC_DATABASE_URL']),
       credential: {
         projectId: ensureString(
           process.env['NEXT_PUBLIC_FIREBASE_PROJECT_ID'],

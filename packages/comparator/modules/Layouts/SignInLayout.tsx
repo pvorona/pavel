@@ -1,4 +1,4 @@
-import { Background } from '../../pages/Background'
+import { Background } from '@pavel/components'
 
 export function SignInLayout(
   props: React.DetailedHTMLProps<

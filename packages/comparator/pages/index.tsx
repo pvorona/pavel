@@ -4,7 +4,7 @@ import { withAuthUser, useAuthUser, withAuthUserSSR } from 'next-firebase-auth'
 import { COMPARISON_LIST, SIGN_UP } from '@pavel/comparator-shared'
 import styles from './index.module.scss'
 import classNames from 'classnames'
-import { Background } from './Background'
+import { Background } from '@pavel/components'
 import { HeaderAuth, HeaderTitle, LandingHeader } from '../modules'
 
 export const getServerSideProps = withAuthUserSSR()()
