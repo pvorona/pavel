@@ -49,6 +49,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant = Variant.Filled,
       loadingStatus = LoadingStatus.IDLE,
       children,
+      labelClassName,
       ...props
     }: ButtonProps,
     ref,
@@ -62,8 +63,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         [styles['Filled']]: variant === Variant.Filled,
         [styles['Link']]: variant === Variant.Link,
         [styles['outlined']]: variant === Variant.Outlined,
-        [smButtonClassName]: isButtonLike && size === 'sm',
-        [mdButtonClassName]: isButtonLike && size === 'md',
       },
       className,
     )
@@ -72,7 +71,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button ref={ref} className={allClassNames} {...props}>
         <LoadingProgress status={loadingStatus} />
         {/* relative is required to create stacking context above progress indication */}
-        <div className="relative">{children}</div>
+        <div
+          className={classNames(labelClassName, 'relative w-full', {
+            [smButtonClassName]: isButtonLike && size === 'sm',
+            [mdButtonClassName]: isButtonLike && size === 'md',
+          })}
+        >
+          {children}
+        </div>
       </button>
     )
   },
@@ -107,8 +113,6 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
       [styles['Filled']]: variant === Variant.Filled,
       [styles['Link']]: variant === Variant.Link,
       [styles['outlined']]: variant === Variant.Outlined,
-      [smButtonClassName]: isButtonLike && size === 'sm',
-      [mdButtonClassName]: isButtonLike && size === 'md',
     },
     className,
   )
@@ -117,7 +121,14 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
     <a ref={ref} className={allClassNames} {...props}>
       <LoadingProgress status={loadingStatus} />
       {/* relative is required to create stacking context above progress indication */}
-      <div className={classNames(labelClassName, 'relative')}>{children}</div>
+      <div
+        className={classNames(labelClassName, 'relative w-full', {
+          [smButtonClassName]: isButtonLike && size === 'sm',
+          [mdButtonClassName]: isButtonLike && size === 'md',
+        })}
+      >
+        {children}
+      </div>
     </a>
   )
 })
