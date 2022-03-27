@@ -1,11 +1,4 @@
-import {
-  Link,
-  Variant,
-  HoldConfirmationButton,
-  ParallaxContainer,
-  ParallaxLayer,
-  ParallaxPage,
-} from '@pavel/components'
+import { Link, Variant, HoldConfirmationButton } from '@pavel/components'
 import NextLink from 'next/link'
 import { withAuthUser, useAuthUser, withAuthUserSSR } from 'next-firebase-auth'
 import { COMPARISON_LIST, SIGN_UP } from '@pavel/comparator-shared'
@@ -88,8 +81,10 @@ export default withAuthUser()(function Index() {
               Empower your decisions
             </div>
             <div className={classNames(styles.SubLine, 'hidden xs:block')}>
-              {`The best in class tools that help you focus on what's important`}
+              {/* {`The best in class tools that help you focus on what's important`} */}
               {/* Eliminate the bias. Focus on the important. */}
+              {/* {`Tools that help you to eliminate the bias and focus on what's important`} */}
+              {`Tools to eliminate the bias and focus on what's important`}
             </div>
             <div className={classNames(styles.Cta)}>
               <MainCTA />

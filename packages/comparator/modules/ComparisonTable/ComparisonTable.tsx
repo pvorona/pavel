@@ -49,12 +49,7 @@ export const ComparisonTable = memo(function ComparisonTable() {
       <LeftHoverBlock />
       <table ref={ref} className="min-w-[640px] mx-auto relative">
         <thead>
-          <tr
-            className={classNames(
-              'sticky top-0 z-20 bg-white',
-              styles['Header'],
-            )}
-          >
+          <tr className={classNames('sticky top-0 z-20', styles['Header'])}>
             <TableHeader />
             <th
               ref={separatorRef}
