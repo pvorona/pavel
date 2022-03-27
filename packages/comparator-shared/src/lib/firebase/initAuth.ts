@@ -74,7 +74,7 @@ export const initAuth = () => {
       overwrite: true,
       path: '/',
       sameSite: 'strict',
-      secure: false,
+      secure: true,
       signed: true,
     },
     onVerifyTokenError: err => {
