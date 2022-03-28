@@ -19,6 +19,12 @@ td {
   color: hsl(var(--c-1-60));
 }
 
+.dark:text-c-1-60 {
+  @media (prefers-color-scheme: dark) {
+    color: hsl(var(--c-1-60));
+  }
+}
+
 html {
   --hero-title-animation-duration: 3s;
   --hero-subtitle-animation-duration: 2s;
