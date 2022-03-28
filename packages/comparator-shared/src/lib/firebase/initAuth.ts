@@ -1,4 +1,5 @@
 import { ensureString } from '@pavel/assert'
+import { isServer } from '@pavel/utils'
 import { init } from 'next-firebase-auth'
 import { API_SIGN_IN, API_SIGN_OUT, COMPARISON_LIST, SIGN_IN } from '../routes'
 
@@ -16,25 +17,25 @@ export const initAuth = () => {
     onLogoutRequestError: err => {
       console.error(err)
     },
-    firebaseAdminInitConfig: {
-      databaseURL: ensureString(process.env['NEXT_PUBLIC_DATABASE_URL']),
-      credential: {
-        projectId: ensureString(
-          process.env['NEXT_PUBLIC_FIREBASE_PROJECT_ID'],
-          'NEXT_PUBLIC_FIREBASE_PROJECT_ID',
-        ),
-        clientEmail: process.env['FIREBASE_CLIENT_EMAIL']
-          ? ensureString(
-              process.env['FIREBASE_CLIENT_EMAIL'],
-              'FIREBASE_CLIENT_EMAIL',
-            )
-          : '',
-        // The private key must not be accessible on the client
-        privateKey: process.env['FIREBASE_PRIVATE_KEY']
-          ? JSON.parse(process.env['FIREBASE_PRIVATE_KEY'])
-          : undefined,
-      },
-    },
+    firebaseAdminInitConfig: isServer
+      ? {
+          databaseURL: ensureString(process.env['NEXT_PUBLIC_DATABASE_URL']),
+          credential: {
+            projectId: ensureString(
+              process.env['NEXT_PUBLIC_FIREBASE_PROJECT_ID'],
+              'NEXT_PUBLIC_FIREBASE_PROJECT_ID',
+            ),
+            clientEmail: process.env['FIREBASE_CLIENT_EMAIL']
+              ? ensureString(
+                  process.env['FIREBASE_CLIENT_EMAIL'],
+                  'FIREBASE_CLIENT_EMAIL',
+                )
+              : '',
+            // The private key must not be accessible on the client
+            privateKey: ensureString(process.env['FIREBASE_PRIVATE_KEY']),
+          },
+        }
+      : undefined,
     // Use application default credentials (takes precedence over fireaseAdminInitConfig if set)
     // useFirebaseAdminDefaultCredential: true,
     firebaseClientInitConfig: {
