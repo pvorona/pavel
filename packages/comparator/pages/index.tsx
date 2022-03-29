@@ -1,4 +1,9 @@
-import { Link, Variant, HoldConfirmationButton } from '@pavel/components'
+import {
+  Link,
+  Variant,
+  HoldConfirmationButton,
+  Button,
+} from '@pavel/components'
 import NextLink from 'next/link'
 import { withAuthUser, useAuthUser, withAuthUserSSR } from 'next-firebase-auth'
 import { COMPARISON_LIST, SIGN_UP } from '@pavel/comparator-shared'
@@ -47,15 +52,38 @@ function MainCTA() {
   )
 }
 
+const HOW_IT_WORKS_ID = 'how-it-works'
+const PRICING_ID = 'pricing'
+
 function LandingHeaderNavigation() {
   return (
     <div className="flex absolute left-1/2 -translate-x-1/2 bottom-[0.8em] invisible md:visible text-base">
-      <Link href="/" className="mx-4 font-semibold">
+      <Button
+        variant={Variant.Link}
+        onClick={() => {
+          document.getElementById(HOW_IT_WORKS_ID).scrollIntoView({
+            behavior: 'auto',
+            block: 'center',
+            inline: 'center',
+          })
+        }}
+        className="mx-4 font-semibold"
+      >
         How it works
-      </Link>
-      <Link href="/" className="mx-4 font-semibold">
+      </Button>
+      <Button
+        variant={Variant.Link}
+        onClick={() => {
+          document.getElementById(PRICING_ID).scrollIntoView({
+            behavior: 'auto',
+            block: 'center',
+            inline: 'center',
+          })
+        }}
+        className="mx-4 font-semibold"
+      >
         Pricing
-      </Link>
+      </Button>
     </div>
   )
 }
@@ -92,8 +120,14 @@ export default withAuthUser()(function Index() {
             <HoldConfirmationButton />
           </div>
         </Screen>
-        <Screen className="flex justify-center items-center">
+        <Screen
+          id={HOW_IT_WORKS_ID}
+          className="flex justify-center items-center"
+        >
           How it works
+        </Screen>
+        <Screen id={PRICING_ID} className="flex justify-center items-center">
+          Pricing
         </Screen>
       </div>
     </>

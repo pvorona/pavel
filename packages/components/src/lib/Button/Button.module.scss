@@ -57,7 +57,8 @@
   --color-dark-hover: hsl(var(--c-1-100));
   --color: var(--color-light-default);
 
-  --background-color-hover: hsla(var(--c-1-90) / 0.25);
+  --background-light-color-hover: hsla(var(--c-1-90) / 0.25);
+  --background-dark-color-hover: hsla(var(--c-1-30) / 0.25);
 
   color: var(--color);
   transition-property: background-color, color;
@@ -76,6 +77,7 @@
       &:not(:disabled):hover,
       &:not(:disabled):focus-visible {
         --color: var(--color-dark-hover);
+        background-color: var(--background-dark-color-hover);
       }
     }
   }
