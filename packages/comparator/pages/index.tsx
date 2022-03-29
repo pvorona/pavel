@@ -63,7 +63,7 @@ function LandingHeaderNavigation() {
 export default withAuthUser()(function Index() {
   return (
     <>
-      <Background />
+      <Background animate />
       <div>
         <Screen className="flex flex-col">
           <LandingHeader>

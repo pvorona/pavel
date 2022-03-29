@@ -1,6 +1,7 @@
+import classNames from 'classnames'
 import styles from './Background.module.scss'
 
-export const Background = () => {
+export const Background = ({ animate }: { animate?: boolean }) => {
   return (
     <svg
       width="1728"
@@ -8,7 +9,9 @@ export const Background = () => {
       viewBox="50 0 1728 2234"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={styles['Background']}
+      className={classNames(styles['Background'], {
+        [styles['WithFade']]: animate,
+      })}
       preserveAspectRatio="xMidYMin slice"
     >
       <circle cx="1510" cy="358" r="290" stroke="var(--background-color)" />
