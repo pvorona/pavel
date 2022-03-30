@@ -22,7 +22,7 @@ function MainCTA() {
       <NextLink href={COMPARISON_LIST} passHref>
         <Link
           variant={Variant.Unstyled}
-          className={classNames(styles['Neon'], 'shadow')}
+          className={classNames(styles['Neon'])}
           labelClassName={styles['NeonLabel']}
           rounded
           size="none"
@@ -37,7 +37,7 @@ function MainCTA() {
     <NextLink href={SIGN_UP} passHref>
       <Link
         variant={Variant.Unstyled}
-        className={classNames(styles['Neon'], 'shadow')}
+        className={classNames(styles['Neon'])}
         labelClassName={styles['NeonLabel']}
         rounded
         size="none"
