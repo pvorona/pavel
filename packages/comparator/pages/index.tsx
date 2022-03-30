@@ -90,7 +90,7 @@ export default withAuthUser()(function Index() {
       <Background animate />
       <div>
         <Screen className="flex flex-col">
-          <LandingHeader>
+          <LandingHeader animate>
             <HeaderTitle>Socrates</HeaderTitle>
             <LandingHeaderNavigation />
             <HeaderAuth />
@@ -124,7 +124,7 @@ export default withAuthUser()(function Index() {
           How it works
         </Screen>
         <Screen id={PRICING_ID} className="flex justify-center items-center">
-          Pricing
+          <Pricing />
         </Screen>
       </div>
     </>
@@ -133,4 +133,8 @@ export default withAuthUser()(function Index() {
 
 function Screen({ className, ...props }) {
   return <div className={classNames(className, 'h-screen')} {...props} />
+}
+
+function Pricing() {
+  return <div>Pricing</div>
 }

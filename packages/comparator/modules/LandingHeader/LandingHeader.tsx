@@ -34,15 +34,22 @@ function AuthSection() {
 }
 
 type LandingHeaderProps = PropsWithChildren<
-  DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+  DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+    animate?: boolean
+  }
 >
 
-export function LandingHeader({ children, ...props }: LandingHeaderProps) {
+export function LandingHeader({
+  children,
+  animate,
+  ...props
+}: LandingHeaderProps) {
   return (
     <div
       className={classNames(
         'flex justify-between items-baseline relative whitespace-nowrap',
-        styles['Header'],
+        [styles['Header']],
+        { [styles['Animated']]: animate },
       )}
       {...props}
     >
