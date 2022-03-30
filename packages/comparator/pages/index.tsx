@@ -25,9 +25,7 @@ function MainCTA() {
           className={classNames(styles['Neon'], 'shadow')}
           labelClassName={styles['NeonLabel']}
           rounded
-          style={{
-            width: 200,
-          }}
+          size="none"
         >
           Go to app
         </Link>
@@ -42,9 +40,7 @@ function MainCTA() {
         className={classNames(styles['Neon'], 'shadow')}
         labelClassName={styles['NeonLabel']}
         rounded
-        style={{
-          width: 235,
-        }}
+        size="none"
       >
         Try for free
       </Link>
@@ -112,12 +108,13 @@ export default withAuthUser()(function Index() {
               {/* {`The best in class tools that help you focus on what's important`} */}
               {/* Eliminate the bias. Focus on the important. */}
               {/* {`Tools that help you to eliminate the bias and focus on what's important`} */}
-              {`Tools to eliminate the bias and focus on what's important`}
+              {/* {`Tools to eliminate the bias and focus on what's important`} */}
+              {/* Take the bias out of your decision making process and make better choices, faster with an AI-powered advisor. */}
+              {`AI-powered advisor that let's you take the bias out of your decision making process and make better choices, faster.`}
             </div>
             <div className={classNames(styles.Cta)}>
               <MainCTA />
             </div>
-            <HoldConfirmationButton />
           </div>
         </Screen>
         <Screen

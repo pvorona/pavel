@@ -3,6 +3,7 @@
   font-size: var(--space-500);
   line-height: 1.14;
   padding: 0 1em;
+  font-family: 'Google Sans';
 }
 
 .SubLine {
@@ -11,7 +12,9 @@
     var(--hero-subtitle-animation-delay) forwards;
   font-size: var(--space-125);
   margin-top: var(--space-125);
-  padding: 0 3em;
+  width: 42%;
+  font-weight: 300;
+  line-height: 1.4;
 
   --color-light: hsl(var(--c-1-45));
   --color-dark: hsl(var(--c-1-60));
@@ -28,7 +31,6 @@
   opacity: 0;
   animation: appear var(--hero-subtitle-animation-duration)
     calc(var(--hero-subtitle-animation-delay) + 1s) forwards;
-  margin-top: var(--space-200);
 }
 
 @keyframes appear {
@@ -73,6 +75,13 @@
 }
 
 .Neon {
+  margin-top: var(--space-250);
+  text-transform: uppercase;
+  font-size: 1rem;
+  padding-block: 1.4em;
+  padding-inline: 5em;
+  letter-spacing: 0.05em;
+
   --border-radius: 99999px;
   --border-size: 2px;
 
@@ -235,8 +244,4 @@
   100% {
     --rotate: 360deg;
   }
-}
-
-.Hero {
-  margin-top: var(--space-200);
 }

@@ -22,7 +22,7 @@ export type BaseButtonProps = {
   className?: string
   variant?: Variant
   rounded?: boolean
-  size?: 'sm' | 'md'
+  size?: 'none' | 'sm' | 'md'
   loadingStatus?: LoadingStatus
   onClick?: (event: MouseEvent) => void
   labelClassName?: string

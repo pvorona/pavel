@@ -45,6 +45,10 @@ const spaces = {
     width: [320, 1440],
     value: [1.5, 2],
   },
+  '--space-250': {
+    width: [320, 1440],
+    value: [1.5, 2.5],
+  },
   '--space-500': {
     width: [320, 1440],
     value: [2, 5],
