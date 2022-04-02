@@ -20,6 +20,9 @@
 .ButtonLike {
   --border-radius: 0.25em;
   border-radius: var(--border-radius);
+  font-weight: 500;
+  // font-weight: 600;
+  letter-spacing: 0.025em;
 }
 
 .Link {
@@ -83,8 +86,6 @@
   }
 }
 
-// TODO:
-// - Add focus ring
 .Filled {
   --color-light-default: hsl(var(--c-0-95));
   --color-light-hover: hsl(var(--c-0-100));
@@ -93,8 +94,8 @@
   --color-dark-hover: hsl(var(--c-0-100));
   --color-dark-disabled: hsl(var(--c-1-70));
 
-  --background-light-default: hsl(var(--c-1-30));
-  --background-light-hover: hsl(var(--c-1-25));
+  --background-light-default: hsl(var(--c-1-20));
+  --background-light-hover: hsl(var(--c-1-15));
   --background-light-disabled: hsl(var(--c-1-95));
   --background-dark-default: hsl(var(--c-1-20));
   --background-dark-hover: hsl(var(--c-1-25));
@@ -111,6 +112,11 @@
   &:disabled {
     --color: var(--color-light-disabled);
     --background-color: var(--background-light-disabled);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--background-color);
+    outline-offset: 2px;
   }
 
   &:not(:disabled):hover,
