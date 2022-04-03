@@ -11,8 +11,7 @@
   animation: appear var(--hero-subtitle-animation-duration)
     var(--hero-subtitle-animation-delay) forwards;
   font-size: var(--space-125);
-  margin-top: var(--space-125);
-  // width: 42%;
+  margin-top: var(--space-100);
   font-weight: 300;
   line-height: 1.4;
   letter-spacing: 0.025em;
@@ -96,18 +95,23 @@
 .Neon {
   margin-top: var(--space-250);
   text-transform: uppercase;
-  font-size: 1rem;
-  padding-block: 1.4em;
-  padding-inline: 5em;
+  padding-block: 1.3em;
+  padding-inline: 4.2em;
   letter-spacing: 0.05em;
+
+  margin-top: 40px;
+  margin-bottom: -80px;
+
+  font-size: 1.1rem;
+  font-weight: 500;
 
   --rotate: 0deg;
 
   --duration-hover-animation: 0.5s;
 
   --border-radius: 99999px;
-  --border-size-default: 2px;
-  --border-size-hover: 2px;
+  --border-size-default: 4px;
+  --border-size-hover: 4px;
 
   --animation-duration: 3s;
   --animation-delay: 2s;

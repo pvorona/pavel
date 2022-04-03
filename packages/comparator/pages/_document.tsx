@@ -29,6 +29,10 @@ function buildClamp(
 }
 
 const spaces = {
+  '--space-100': {
+    width: [320, 1440],
+    value: [0.75, 1],
+  },
   '--space-125': {
     width: [320, 1440],
     value: [1, 1.25],

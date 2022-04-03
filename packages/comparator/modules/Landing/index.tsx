@@ -26,7 +26,9 @@ export function Hero() {
         {/* {`Comparison assistant that let's you take the bias out of your decision making process and make better choices, faster.`} */}
         {/* {`Socrates is a comparison assistant designed to help you make better choices, faster.`} */}
         {/* {`Socrates is a comparison assistant that helps you make better decisions, faster.`} */}
-        {`Socrates is a comparison assistant that helps you make better choices faster.`}
+        {/* {`Socrates is a comparison assistant that helps you make better choices faster.`} */}
+        {`Comparison assistant that helps you make better choices faster.`}
+        {/* {`Comparison assistant that helps making better choices faster.`} */}
       </div>
       <div className={classNames(styles.Cta)}>
         <MainCTA />
