@@ -95,8 +95,8 @@
 .Neon {
   margin-top: var(--space-250);
   text-transform: uppercase;
-  padding-block: 1.3em;
-  padding-inline: 4.2em;
+  padding-block: 1.2em;
+  padding-inline: 4em;
   letter-spacing: 0.05em;
 
   margin-top: 40px;
@@ -128,11 +128,11 @@
   --scale-x-default: 0.8;
   --scale-y-default: 0.4;
 
-  --scale-x-hover: 0.85;
-  --scale-y-hover: 0.85;
+  --scale-x-hover: 1;
+  --scale-y-hover: 1;
 
   --blur-default: 18px;
-  --blur-hover: 25px;
+  --blur-hover: 12px;
 
   // Weaving
   --scale-x: var(--scale-x-default);

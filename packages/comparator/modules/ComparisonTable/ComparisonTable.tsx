@@ -45,7 +45,7 @@ export const ComparisonTable = memo(function ComparisonTable() {
   }, [width])
 
   return (
-    <div className="w-full mt-2 flex">
+    <div className="w-full flex">
       <LeftHoverBlock />
       <table ref={ref} className="min-w-[640px] mx-auto relative">
         <thead>

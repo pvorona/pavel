@@ -1,0 +1,9 @@
+.Root {
+  color: hsl(var(--c-1-20));
+
+  @media (prefers-color-scheme: dark) {
+    & {
+      color: hsl(var(--c-1-85));
+    }
+  }
+}

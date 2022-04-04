@@ -2,6 +2,8 @@ import { TextField } from '@pavel/components'
 import { selectOptionNameById, setOptionProperty } from '../../modules/options'
 import { useSelector, useDispatch } from 'react-redux'
 import { memo } from 'react'
+import classNames from 'classnames'
+import styles from './OptionTitle.module.scss'
 
 export const OptionTitle = memo(function OptionTitle({
   optionId,
@@ -22,7 +24,10 @@ export const OptionTitle = memo(function OptionTitle({
 
   return (
     <TextField
-      className="px-12 py-4 w-full inline-block font-light text-4xl text-left whitespace-nowrap"
+      className={classNames(
+        styles['Root'],
+        'px-12 py-2 w-full inline-block font-semibold text-3xl text-left whitespace-nowrap',
+      )}
       onInput={onOptionNameChanged}
     >
       {optionName}

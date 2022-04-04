@@ -93,7 +93,6 @@ export function Comparison() {
       <OptionsObserver optionIds={optionIds} />
       <ComparisonObserver comparisonId={currentComparisonId} />
       <div className="flex flex-col">
-        <Header />
         <ComparisonTable />
       </div>
     </>

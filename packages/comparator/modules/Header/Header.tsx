@@ -55,7 +55,7 @@ export function BackIcon() {
       width="16"
       height="16"
       viewBox="0 0 10 10"
-      className="text-white rotate-180 mr-3"
+      className="text-white rotate-180 mr-3 absolute right-[100%]"
       stroke="currentColor"
       onClick={goBack}
     >
