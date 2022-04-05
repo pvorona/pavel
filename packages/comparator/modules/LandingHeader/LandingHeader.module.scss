@@ -6,6 +6,10 @@
   padding-inline: var(--space-300);
   padding-top: var(--space-200);
   color: hsl(var(--c-1-20));
+
+  @media (prefers-color-scheme: dark) {
+    color: hsl(var(--c-1-95));
+  }
 }
 
 .Animated {
