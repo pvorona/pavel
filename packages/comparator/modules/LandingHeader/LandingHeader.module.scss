@@ -3,7 +3,9 @@
   justify-content: space-between;
   align-items: center;
 
-  padding: calc(var(--space-200-wider) * 0.5) var(--space-200-wider);
+  padding-inline: var(--space-300);
+  padding-top: var(--space-200);
+  color: hsl(var(--c-1-20));
 }
 
 .Animated {
