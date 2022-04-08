@@ -11,7 +11,7 @@ const handler = async (req, res) => {
 
     return res.status(500).json({ message: 'Unexpected sign in error.', e })
   }
-  return res.sendStatus(200)
+  return res.status(200).send('OK')
 }
 
 export default handler
