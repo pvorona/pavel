@@ -73,10 +73,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         <LoadingProgress status={loadingStatus} />
         {/* relative is required to create stacking context above progress indication */}
         <div
-          className={classNames(labelClassName, 'relative w-full', {
-            [smButtonClassName]: isButtonLike && size === 'sm',
-            [mdButtonClassName]: isButtonLike && size === 'md',
-          })}
+          className={classNames(
+            labelClassName,
+            styles['Label'],
+            'relative w-full',
+            {
+              [smButtonClassName]: isButtonLike && size === 'sm',
+              [mdButtonClassName]: isButtonLike && size === 'md',
+            },
+          )}
         >
           {children}
         </div>

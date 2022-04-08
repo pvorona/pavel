@@ -12,9 +12,9 @@
   z-index: -1;
 
   &.WithFade {
-    opacity: 0;
-    transform: scale(var(--scale-initial)) translateY(10%);
-    animation: a1 2s 2s forwards;
+    // opacity: 0;
+    // transform: scale(var(--scale-initial)) translateY(10%);
+    // animation: a1 2s 2s forwards;
   }
 
   @media (prefers-color-scheme: dark) {

@@ -1,15 +1,15 @@
 .Line {
-  animation: appear var(--hero-title-animation-duration);
+  // animation: appear var(--hero-title-animation-duration);
   font-size: var(--space-500);
   line-height: 1.14;
   padding: 0 1em;
   font-family: 'Google Sans';
+  letter-spacing: -0.005em;
 }
 
 .SubLine {
-  opacity: 0;
-  animation: appear var(--hero-subtitle-animation-duration)
-    var(--hero-subtitle-animation-delay) forwards;
+  // opacity: 0;
+  // animation: appear var(--hero-subtitle-animation-duration) var(--hero-subtitle-animation-delay) forwards;
   font-size: var(--space-125);
   margin-top: var(--space-100);
   font-weight: 300;
@@ -28,9 +28,8 @@
 }
 
 .Cta {
-  opacity: 0;
-  animation: appear var(--hero-subtitle-animation-duration)
-    calc(var(--hero-subtitle-animation-delay) + 1s) forwards;
+  // opacity: 0;
+  // animation: appear var(--hero-subtitle-animation-duration) calc(var(--hero-subtitle-animation-delay) + 1s) forwards;
 }
 
 @keyframes appear {
@@ -103,15 +102,15 @@
   margin-bottom: -80px;
 
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
 
   --rotate: 0deg;
 
   --duration-hover-animation: 0.5s;
 
   --border-radius: 99999px;
-  --border-size-default: 4px;
-  --border-size-hover: 4px;
+  --border-size-default: 5px;
+  --border-size-hover: 5px;
 
   --animation-duration: 3s;
   --animation-delay: 2s;
@@ -131,8 +130,10 @@
   --scale-x-hover: 1;
   --scale-y-hover: 1;
 
-  --blur-default: 18px;
-  --blur-hover: 12px;
+  // --blur-default: 18px;
+  --blur-default: 0px;
+  // --blur-hover: 12px;
+  --blur-hover: 0px;
 
   // Weaving
   --scale-x: var(--scale-x-default);
@@ -290,5 +291,5 @@
 }
 
 .Hero {
-  margin-top: var(--space-250);
+  // margin-top: var(--space-250);
 }

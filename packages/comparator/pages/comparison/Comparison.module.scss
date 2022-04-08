@@ -1,15 +1,22 @@
 .Content {
-  padding: var(--space-200-wider);
+  padding: var(--space-300);
   gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .Card {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 20px -20px;
-
   border: 1px solid #80808026;
   display: flex;
-  padding: 1rem;
   justify-content: center;
+  padding: 2rem 3rem;
+  width: 100%;
+  font-weight: 700;
+  height: 100%;
+  font-size: 1.2rem;
+  color: hsl(var(--c-1-20));
+  border-radius: 4px;
 }
 
 .CreateComparison {
