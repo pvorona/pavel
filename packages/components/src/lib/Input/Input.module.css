@@ -43,7 +43,7 @@
 
     --color-box-shadow: hsla(var(--c-1-30));
     --color-box-shadow-hover: hsla(var(--c-1-50));
-    --color-box-shadow-focus: hsla(var(--c-1-80));
+    --color-box-shadow-focus: hsla(var(--c-1-70));
 
     --color-box-shadow-invalid: theme('colors.red.500');
 

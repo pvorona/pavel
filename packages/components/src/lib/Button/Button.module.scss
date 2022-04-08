@@ -2,7 +2,8 @@
   position: relative;
   display: inline-flex;
   justify-content: center;
-  outline: none;
+  outline: 3px solid transparent;
+  outline-offset: 3px;
 
   &:not(:disabled) {
     cursor: pointer;
@@ -64,7 +65,7 @@
   --background-dark-color-hover: hsla(var(--c-1-30) / 0.25);
 
   color: var(--color);
-  transition-property: background-color, color;
+  transition-property: background-color, color, outline;
   transition-duration: var(--duration-1);
 
   &:not(:disabled):hover,
@@ -106,7 +107,7 @@
 
   color: var(--color);
   background-color: var(--background-color);
-  transition-property: color, background-color, box-shadow;
+  transition-property: color, background-color, box-shadow, outline;
   transition-duration: var(--duration-1);
 
   &:disabled {
@@ -115,8 +116,15 @@
   }
 
   &:focus-visible {
-    outline: 3px solid var(--background-color);
-    outline-offset: 2px;
+    // outline: 3px solid var(--background-color);
+    // outline-offset: 3px;
+    outline-color: var(--background-color);
+
+    @media (prefers-color-scheme: dark) {
+      & {
+        outline-color: hsl(var(--c-1-30));
+      }
+    }
   }
 
   &:not(:disabled):hover,
