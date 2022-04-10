@@ -43,7 +43,7 @@ html {
 
 body {
   --background-light: hsl(var(--c-0-100));
-  --background-dark: hsl(var(--c-1-15));
+  --background-dark: linear-gradient(0, hsl(var(--c-1-10)), hsl(var(--c-1-25)));
   --background: var(--background-light);
 
   --selection-background-light: hsl(var(--c-0-20));
@@ -58,7 +58,7 @@ body {
   --color: var(--color-light);
 
   color: var(--color);
-  background-color: var(--background);
+  background: var(--background);
   height: 100%;
 
   &::selection,

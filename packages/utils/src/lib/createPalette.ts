@@ -17,17 +17,9 @@ export function createPalette({
 
   function privateCreatePalette() {
     const getAdjustedSaturation = (index: number) => {
-      if (index < items / 2) {
-        return baseSaturation * (Math.abs(index - items / 2) / (items / 2) + 1)
-      }
+      const shift = Math.abs(index - items / 2) / (items / 2)
 
-      if (index === items / 2) {
-        return baseSaturation
-      }
-
-      return (
-        baseSaturation * ((Math.abs(index - items / 2) / (items / 2)) * 2 + 1)
-      )
+      return baseSaturation * Math.pow(2, shift)
     }
 
     const result = []
