@@ -15,13 +15,20 @@ async function startApp() {
   ).then(r => r.json())
 
   document.addEventListener('DOMContentLoaded', async () => {
+    const startIndex = 5000
     // const itemsToShow = 13_908
     const itemsToShow = 1000
 
     try {
       const [data1O, data2O] = await Promise.all([series1, series2])
-      const data1: DataEntry[] = data1O.slice(0, itemsToShow)
-      const data2: DataEntry[] = data2O.slice(0, itemsToShow)
+      const data1: DataEntry[] = data1O.slice(
+        startIndex,
+        startIndex + itemsToShow,
+      )
+      const data2: DataEntry[] = data2O.slice(
+        startIndex,
+        startIndex + itemsToShow,
+      )
       const chartContainer = document.getElementById('chart')
 
       if (!chartContainer) {
@@ -64,7 +71,7 @@ async function startApp() {
           edgeColor: theme.overviewEdge,
         },
         viewBox: {
-          startIndex: (data1.length - 1) * 0.75,
+          startIndex: Math.floor((data1.length - 1) * 0.75),
           endIndex: data1.length - 1,
         },
         graphNames: ['A', 'B'],
