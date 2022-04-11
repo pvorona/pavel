@@ -45,3 +45,35 @@
     transform: scale(1) translateY(0);
   }
 }
+
+.Gradient-3 {
+  stroke: var(--background-color);
+
+  @media (prefers-color-scheme: dark) {
+    stroke: url(#gradient-3);
+  }
+}
+
+.Gradient-1 {
+  stroke: var(--background-color);
+
+  @media (prefers-color-scheme: dark) {
+    stroke: url(#gradient-1);
+  }
+}
+
+.Gradient-2 {
+  stroke: var(--background-color);
+
+  @media (prefers-color-scheme: dark) {
+    stroke: url(#gradient-2);
+  }
+}
+
+.Stop1 {
+  stop-color: hsl(var(--c-1-25));
+}
+
+.Stop2 {
+  stop-color: hsl(var(--c-1-25));
+}

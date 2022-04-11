@@ -26,6 +26,12 @@ td {
   }
 }
 
+.dark:hidden {
+  @media (prefers-color-scheme: dark) {
+    display: none;
+  }
+}
+
 html {
   --hero-title-animation-duration: 0s;
   --hero-subtitle-animation-duration: 0s;
