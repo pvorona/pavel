@@ -1,5 +1,5 @@
 import {
-  BEFORE_RENDER_PRIORITIES_IN_ORDER,
+  IDLE_PRIORITIES_IN_ORDER,
   RENDER_PRIORITIES_IN_ORDER,
   PRIORITY,
 } from '../constants'
@@ -10,7 +10,6 @@ import { requestIdleCallback, cancelIdleCallback } from '@pavel/utils'
 function createTaskQueue() {
   let animationFrameId: undefined | number = undefined
   let idleCallbackId: undefined | number = undefined
-
   let currentFrameQueueByPriority = initQueue()
 
   function scheduleIdleCallbackIfNeeded() {
@@ -32,8 +31,12 @@ function createTaskQueue() {
   function performIdleTasks(deadline: IdleDeadline) {
     idleCallbackId = undefined
 
-    for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
+    for (const priority of IDLE_PRIORITIES_IN_ORDER) {
       const queue = currentFrameQueueByPriority[priority]
+
+      // perform tasks until queue is empty
+      // if deadline is exceeded - stop idle queue execution
+      // make sure raf is scheduled if there are remaining tasks
 
       while (deadline.timeRemaining() > 0 && !queue.isEmpty) {
         const task = queue.dequeue()
@@ -43,7 +46,7 @@ function createTaskQueue() {
     }
 
     // Make sure frame is scheduled/cancelled if needed
-    for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
+    for (const priority of IDLE_PRIORITIES_IN_ORDER) {
       const queue = currentFrameQueueByPriority[priority]
 
       if (!queue.isEmpty) {
@@ -66,7 +69,7 @@ function createTaskQueue() {
 
     // Idle tasks can be in the queue event if idleCallbackId is undefined
     // If they didn't have enough time to run during idle time
-    for (const priority of BEFORE_RENDER_PRIORITIES_IN_ORDER) {
+    for (const priority of IDLE_PRIORITIES_IN_ORDER) {
       for (const task of currentFrameQueueByPriority[priority]) {
         task()
       }
