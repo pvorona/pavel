@@ -9,6 +9,16 @@ const AUTHORIZATION_TOKEN = 'fb205aac-97db-1764-8359-4242cbb10c79'
 const bot = new TelegramBot(TOKEN)
 
 exports.notification = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+
+  if (req.method === 'OPTIONS') {
+    res.set('Access-Control-Allow-Methods', 'POST')
+    res.set('Access-Control-Allow-Headers', 'Content-Type')
+    res.set('Access-Control-Max-Age', '3600')
+
+    return res.status(204).send('')
+  }
+
   if (req.method !== 'POST') {
     console.error(`Invalid method: ${req.method}`)
 
