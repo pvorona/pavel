@@ -14,7 +14,10 @@ import {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
   PropsWithChildren,
+  useEffect,
+  useState,
 } from 'react'
+import { usePrefersColorScheme } from '@pavel/react-utils'
 
 export const getServerSideProps = withAuthUserSSR()()
 
@@ -54,7 +57,23 @@ function LandingHeaderNavigation() {
   )
 }
 
-export default withAuthUser()(function Index() {
+export default withAuthUser()(function LandingPage() {
+  const isDark = usePrefersColorScheme()
+  useEffect(() => {
+    if (!isDark) {
+      return
+    }
+
+    document.body.style.setProperty(
+      '--background',
+      'var(--background-dark-landing)',
+    )
+
+    return () => {
+      document.body.style.removeProperty('--background')
+    }
+  }, [isDark])
+
   return (
     <>
       <Background animate />

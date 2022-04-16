@@ -1,5 +1,6 @@
 import { createPalette, isServer } from '@pavel/utils'
 import { Html, Head, Main, NextScript } from 'next/document'
+import { useRouter } from 'next/router'
 
 function getPxPerRem() {
   if (isServer) {
