@@ -28,14 +28,31 @@ export type BaseButtonProps = {
   labelClassName?: string
 }
 
-export type ButtonProps = BaseButtonProps & ButtonElementProps
+export type ButtonStyleOverrides = {
+  '--color-light-default'?: string
+  '--color-light-hover'?: string
+  '--color-light-disabled'?: string
+  '--color-dark-default'?: string
+  '--color-dark-hover'?: string
+  '--color-dark-disabled'?: string
+  '--background-light-default'?: string
+  '--background-light-hover'?: string
+  '--background-light-disabled'?: string
+  '--background-dark-default'?: string
+  '--background-dark-hover'?: string
+  '--background-dark-disabled'?: string
+}
+
+export type ButtonProps = BaseButtonProps &
+  ButtonElementProps & {
+    style?: React.CSSProperties & ButtonStyleOverrides
+  }
 
 type ButtonElementProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 >
 
-const smButtonClassName = 'py-2 px-6 text-sm'
 const mdButtonClassName = 'py-3 px-8 text-lg'
 
 const ButtonLikeVariants = [Variant.Filled, Variant.Outlined, Variant.Unstyled]
@@ -78,7 +95,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             styles['Label'],
             'relative w-full',
             {
-              [smButtonClassName]: isButtonLike && size === 'sm',
+              [styles['Small']]: isButtonLike && size === 'sm',
               [mdButtonClassName]: isButtonLike && size === 'md',
             },
           )}
@@ -90,9 +107,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   },
 )
 
-export type LinkProps = BaseButtonProps & AnchorElementProps
+export type LinkProps = BaseButtonProps &
+  LinkElementProps & {
+    style?: React.CSSProperties & ButtonStyleOverrides
+  }
 
-type AnchorElementProps = React.DetailedHTMLProps<
+type LinkElementProps = React.DetailedHTMLProps<
   React.AnchorHTMLAttributes<HTMLAnchorElement>,
   HTMLAnchorElement
 >
@@ -130,7 +150,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
       {/* relative is required to create stacking context above progress indication */}
       <div
         className={classNames(labelClassName, 'relative w-full', {
-          [smButtonClassName]: isButtonLike && size === 'sm',
+          [styles['Small']]: isButtonLike && size === 'sm',
           [mdButtonClassName]: isButtonLike && size === 'md',
         })}
       >

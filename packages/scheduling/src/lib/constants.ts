@@ -1,4 +1,3 @@
-// TODO: first class tasks that depend on other tasks
 export enum PRIORITY {
   BEFORE_RENDER = 'BEFORE_RENDER',
   READ = 'READ',

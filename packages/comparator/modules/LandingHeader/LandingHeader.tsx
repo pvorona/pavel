@@ -11,7 +11,15 @@ function AuthSection() {
 
   if (id) {
     return (
-      <Button onClick={signOut} variant={Variant.Link} size="sm">
+      <Button
+        onClick={signOut}
+        variant={Variant.Outlined}
+        size="sm"
+        rounded
+        style={{
+          '--background-dark-hover': 'hsl(var(--c-1-30))',
+        }}
+      >
         Sign out
       </Button>
     )
@@ -20,12 +28,28 @@ function AuthSection() {
   return (
     <>
       <NextLink href={SIGN_IN} passHref>
-        <Link rounded size="sm" variant={Variant.Outlined}>
+        <Link
+          rounded
+          size="sm"
+          variant={Variant.Outlined}
+          style={{
+            '--background-dark-hover': 'hsl(var(--c-1-30))',
+          }}
+        >
           Sign in
         </Link>
       </NextLink>
       <NextLink href={SIGN_UP} passHref>
-        <Link variant={Variant.Filled} className="ml-4" size="sm" rounded>
+        <Link
+          variant={Variant.Filled}
+          className="ml-4"
+          size="sm"
+          rounded
+          style={{
+            '--background-dark-default': 'hsl(var(--c-1-15))',
+            '--background-dark-hover': 'hsl(var(--c-1-10))',
+          }}
+        >
           Sign up
         </Link>
       </NextLink>

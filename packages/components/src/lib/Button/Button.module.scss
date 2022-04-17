@@ -61,17 +61,18 @@
   --color-dark-hover: hsl(var(--c-1-100));
   --color: var(--color-light-default);
 
-  --background-light-color-hover: hsla(var(--c-1-90) / 0.25);
-  --background-dark-color-hover: hsla(var(--c-1-30) / 0.25);
+  --background-light-hover: hsla(var(--c-1-90) / 0.25);
+  --background-dark-hover: hsla(var(--c-1-30) / 0.25);
 
   color: var(--color);
   transition-property: background-color, color, outline;
   transition-duration: var(--duration-1);
+  font-weight: 700;
 
   &:not(:disabled):hover,
   &:not(:disabled):focus-visible {
     --color: var(--color-light-hover);
-    background-color: var(--background-light-color-hover);
+    background-color: var(--background-light-hover);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -81,7 +82,7 @@
       &:not(:disabled):hover,
       &:not(:disabled):focus-visible {
         --color: var(--color-dark-hover);
-        background-color: var(--background-dark-color-hover);
+        background-color: var(--background-dark-hover);
       }
     }
   }
@@ -98,8 +99,8 @@
   --background-light-default: hsl(var(--c-1-25));
   --background-light-hover: hsl(var(--c-1-15));
   --background-light-disabled: hsl(var(--c-1-95));
-  --background-dark-default: hsl(var(--c-1-20));
-  --background-dark-hover: hsl(var(--c-1-25));
+  --background-dark-default: hsl(var(--c-1-25));
+  --background-dark-hover: hsl(var(--c-1-30));
   --background-dark-disabled: hsl(var(--c-1-20));
 
   --color: var(--color-light-default);
@@ -109,6 +110,7 @@
   background-color: var(--background-color);
   transition-property: color, background-color, box-shadow, outline;
   transition-duration: var(--duration-1);
+  font-weight: 700;
 
   &:disabled {
     --color: var(--color-light-disabled);
@@ -122,7 +124,7 @@
 
     @media (prefers-color-scheme: dark) {
       & {
-        outline-color: hsl(var(--c-1-30));
+        outline-color: hsl(var(--c-1-35));
       }
     }
   }
@@ -157,4 +159,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.Small {
+  padding-inline: 1.7rem;
+  padding-block: 0.7rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
