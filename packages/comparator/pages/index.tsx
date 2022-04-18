@@ -65,12 +65,12 @@ export default withAuthUser()(function LandingPage() {
     }
 
     document.body.style.setProperty(
-      '--background',
+      '--global-background',
       'var(--background-dark-landing)',
     )
 
     return () => {
-      document.body.style.removeProperty('--background')
+      document.body.style.removeProperty('--global-background')
     }
   }, [isDark])
 

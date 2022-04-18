@@ -55,7 +55,7 @@ body {
     hsl(var(--c-1-10)),
     hsl(var(--c-1-25)) calc(100% - 52px)
   );
-  --background: var(--background-light);
+  --global-background: var(--background-light);
 
   --selection-background-light: hsl(var(--c-0-20));
   --selection-background-dark: hsl(var(--c-0-95));
@@ -69,7 +69,7 @@ body {
   --color: var(--color-light);
 
   color: var(--color);
-  background: var(--background);
+  background: var(--global-background);
   height: 100%;
 
   &::selection,
@@ -81,7 +81,7 @@ body {
   @media (prefers-color-scheme: dark) {
     & {
       --color: var(--color-dark);
-      --background: var(--background-dark);
+      --global-background: var(--background-dark);
       --selection-background: var(--selection-background-dark);
       --selection-color: var(--selection-color-dark);
     }

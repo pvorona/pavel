@@ -44,6 +44,9 @@ export type ButtonStyleOverrides = {
   '--background-dark-default'?: string
   '--background-dark-hover'?: string
   '--background-dark-disabled'?: string
+  '--global-background'?: string
+  '--outline-color-dark'?: string
+  '--outline-color-light'?: string
 }
 
 export type ButtonProps = BaseButtonProps &
