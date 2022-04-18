@@ -36,10 +36,13 @@
   color: var(--color);
   transition-property: color;
   transition-duration: var(--duration-1);
+  font-weight: 600;
+  text-underline-position: from-font;
 
   &:not(:disabled):hover,
   &:not(:disabled):focus-visible {
     --color: var(--color-light-hover);
+    text-decoration: underline;
   }
 
   @media (prefers-color-scheme: dark) {
