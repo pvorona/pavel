@@ -8,11 +8,7 @@ import {
 } from '@pavel/components'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
-import {
-  useAutoFocus,
-  useOnUnload,
-  usePointerProximity,
-} from '@pavel/react-utils'
+import { useAutoFocus, useHoverState, useOnUnload } from '@pavel/react-utils'
 import {
   bindStorage,
   getFromStorage,
@@ -32,7 +28,7 @@ function validate(values: FormValues) {
   if (!values.email) {
     errors.email = 'Please enter email address'
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-    errors.email = 'Please enter real email address'
+    errors.email = 'Please enter valid email address'
   }
 
   if (!values.password) {
@@ -85,7 +81,7 @@ export function EmailPasswordForm({
   }, [router])
 
   const [emailInput, setEmailInput] = useState<HTMLInputElement | undefined>()
-  const [isCloseToButton, buttonRef] = usePointerProximity()
+  const { isHovered: isCloseToButton, ref: buttonRef } = useHoverState()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const ownOnSubmit = useCallback(
     async (
@@ -192,14 +188,18 @@ export function EmailPasswordForm({
           onBlur={handleBlur}
           value={values.password}
           icon={
-            <IconButton onClick={togglePasswordVisible}>
+            <IconButton
+              aria-label="Show password"
+              aria-checked={isPasswordVisible}
+              onClick={togglePasswordVisible}
+            >
               {isPasswordVisible ? <IconEyeClosed /> : <IconEyeOpen />}
             </IconButton>
           }
           validity={passwordValidity}
         />
         <Button
-          ref={buttonRef}
+          labelProps={{ ref: buttonRef }}
           className="w-full mt-8"
           disabled={isSubmitting || !isValid}
           loadingStatus={

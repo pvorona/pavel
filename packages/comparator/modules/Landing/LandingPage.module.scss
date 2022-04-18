@@ -203,35 +203,6 @@
     var(--animation-timing-function) infinite;
 }
 
-.Neon::after {
-  position: absolute;
-  content: '';
-  border-radius: 99999px;
-  top: 30%;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  height: 100%;
-  width: 100%;
-  transition: transform var(--duration-hover-animation),
-    filter var(--duration-hover-animation), top var(--duration-hover-animation);
-  transform: scaleX(var(--scale-x)) scaleY(var(--scale-y));
-  filter: blur(var(--blur));
-  background-image: linear-gradient(
-    var(--rotate),
-    var(--neon-color-1),
-    var(--neon-color-2) 43%,
-    var(--neon-color-3)
-  );
-  animation: spin var(--animation-duration) calc(var(--animation-delay))
-    var(--animation-timing-function) infinite;
-  will-change: transform;
-}
-
-.Neon:hover::after {
-  top: 0;
-}
-
 .NeonLabel {
   background-size: 100%;
   background-repeat: repeat;

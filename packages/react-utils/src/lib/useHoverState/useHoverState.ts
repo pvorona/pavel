@@ -3,9 +3,11 @@ import { useState, useCallback, useEffect } from 'react'
 export function useHoverState() {
   const [isHovered, setIsHovered] = useState(false)
   const [element, setElement] = useState<HTMLElement | null>(null)
+
   const onMouseEnter = useCallback(() => {
     setIsHovered(true)
   }, [])
+
   const onMouseLeave = useCallback(() => {
     setIsHovered(false)
   }, [])
@@ -14,8 +16,9 @@ export function useHoverState() {
     if (!element) {
       return
     }
-    element.addEventListener('mouseenter', onMouseEnter, { capture: true })
-    element.addEventListener('mouseleave', onMouseLeave, { capture: true })
+
+    element.addEventListener('mouseenter', onMouseEnter)
+    element.addEventListener('mouseleave', onMouseLeave)
 
     return () => {
       element.removeEventListener('mouseenter', onMouseEnter)

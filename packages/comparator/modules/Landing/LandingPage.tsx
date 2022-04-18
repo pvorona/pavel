@@ -130,7 +130,9 @@ function MainCTA() {
         <Link
           variant={Variant.Unstyled}
           className={classNames(styles['Neon'])}
-          labelClassName={styles['NeonLabel']}
+          labelProps={{
+            className: styles['NeonLabel'],
+          }}
           rounded
           size="none"
         >
@@ -145,7 +147,9 @@ function MainCTA() {
       <Link
         variant={Variant.Unstyled}
         className={classNames(styles['Neon'])}
-        labelClassName={styles['NeonLabel']}
+        labelProps={{
+          className: styles['NeonLabel'],
+        }}
         rounded
         size="none"
       >

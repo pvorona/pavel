@@ -25,7 +25,10 @@ export type BaseButtonProps = {
   size?: 'none' | 'sm' | 'md'
   loadingStatus?: LoadingStatus
   onClick?: (event: MouseEvent) => void
-  labelClassName?: string
+  labelProps?: React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+  >
 }
 
 export type ButtonStyleOverrides = {
@@ -66,7 +69,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant = Variant.Filled,
       loadingStatus = LoadingStatus.IDLE,
       children,
-      labelClassName,
+      labelProps,
       ...props
     }: ButtonProps,
     ref,
@@ -90,15 +93,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         <LoadingProgress status={loadingStatus} />
         {/* relative is required to create stacking context above progress indication */}
         <div
-          className={classNames(
-            labelClassName,
-            styles['Label'],
-            'relative w-full',
-            {
-              [styles['Small']]: isButtonLike && size === 'sm',
-              [mdButtonClassName]: isButtonLike && size === 'md',
-            },
-          )}
+          {...labelProps}
+          className={classNames(styles['Label'], 'relative w-full', {
+            [styles['Small']]: isButtonLike && size === 'sm',
+            [mdButtonClassName]: isButtonLike && size === 'md',
+          })}
         >
           {children}
         </div>
@@ -125,7 +124,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
     variant = Variant.Link,
     loadingStatus = LoadingStatus.IDLE,
     children,
-    labelClassName,
+    labelProps,
     ...props
   }: LinkProps,
   ref,
@@ -149,7 +148,8 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
       <LoadingProgress status={loadingStatus} />
       {/* relative is required to create stacking context above progress indication */}
       <div
-        className={classNames(labelClassName, 'relative w-full', {
+        {...labelProps}
+        className={classNames('relative w-full', {
           [styles['Small']]: isButtonLike && size === 'sm',
           [mdButtonClassName]: isButtonLike && size === 'md',
         })}

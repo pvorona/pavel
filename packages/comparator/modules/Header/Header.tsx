@@ -3,8 +3,7 @@ import {
   setCurrentComparisonProperty,
 } from '../comparisons'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, IconButton, TextField, Variant } from '@pavel/components'
-import { Avatars } from '../Avatars'
+import { Button, TextField, Variant } from '@pavel/components'
 import { useRouter } from 'next/router'
 import { COMPARISON_LIST } from '@pavel/comparator-shared'
 import { HeaderAuth, HeaderTitle, LandingHeader } from '../LandingHeader'

@@ -66,6 +66,11 @@
 
   --background-light-hover: hsla(var(--c-1-90) / 0.25);
   --background-dark-hover: hsla(var(--c-1-30) / 0.25);
+  --background-color: var(--background-light-hover);
+
+  --outline-color-light: hsl(var(--c-1-40));
+  --outline-color-dark: hsl(var(--c-1-35));
+  --outline-color: var(--outline-color-light);
 
   color: var(--color);
   transition-property: background-color, color, outline;
@@ -75,19 +80,24 @@
   &:not(:disabled):hover,
   &:not(:disabled):focus-visible {
     --color: var(--color-light-hover);
-    background-color: var(--background-light-hover);
+    background-color: var(--background-color);
   }
 
   @media (prefers-color-scheme: dark) {
     & {
       --color: var(--color-dark-default);
+      --background-color: var(--background-dark-hover);
+      --outline-color: var(--outline-color-dark);
 
       &:not(:disabled):hover,
       &:not(:disabled):focus-visible {
         --color: var(--color-dark-hover);
-        background-color: var(--background-dark-hover);
       }
     }
+  }
+
+  &:focus-visible {
+    outline-color: var(--outline-color);
   }
 }
 
@@ -106,8 +116,12 @@
   --background-dark-hover: hsl(var(--c-1-30));
   --background-dark-disabled: hsl(var(--c-1-20));
 
+  --outline-color-light: var(--background-color);
+  --outline-color-dark: hsl(var(--c-1-35));
+
   --color: var(--color-light-default);
   --background-color: var(--background-light-default);
+  --outline-color: var(--outline-color-light);
 
   color: var(--color);
   background-color: var(--background-color);
@@ -121,13 +135,11 @@
   }
 
   &:focus-visible {
-    // outline: 3px solid var(--background-color);
-    // outline-offset: 3px;
-    outline-color: var(--background-color);
+    outline-color: var(--outline-color);
 
     @media (prefers-color-scheme: dark) {
       & {
-        outline-color: hsl(var(--c-1-35));
+        --outline-color: var(--outline-color-dark);
       }
     }
   }
