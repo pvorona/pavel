@@ -69,7 +69,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant = Variant.Filled,
       loadingStatus = LoadingStatus.IDLE,
       children,
-      labelProps,
+      labelProps: { className: labelClassName, ...labelProps } = {},
       ...props
     }: ButtonProps,
     ref,
@@ -94,10 +94,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {/* relative is required to create stacking context above progress indication */}
         <div
           {...labelProps}
-          className={classNames(styles['Label'], 'relative w-full', {
-            [styles['Small']]: isButtonLike && size === 'sm',
-            [mdButtonClassName]: isButtonLike && size === 'md',
-          })}
+          className={classNames(
+            styles['Label'],
+            labelClassName,
+            'relative w-full',
+            {
+              [styles['Small']]: isButtonLike && size === 'sm',
+              [mdButtonClassName]: isButtonLike && size === 'md',
+            },
+          )}
         >
           {children}
         </div>
@@ -124,7 +129,8 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
     variant = Variant.Link,
     loadingStatus = LoadingStatus.IDLE,
     children,
-    labelProps,
+    labelProps: { className: labelClassName, ...labelProps } = {},
+
     ...props
   }: LinkProps,
   ref,
@@ -149,7 +155,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
       {/* relative is required to create stacking context above progress indication */}
       <div
         {...labelProps}
-        className={classNames('relative w-full', {
+        className={classNames('relative w-full', labelClassName, {
           [styles['Small']]: isButtonLike && size === 'sm',
           [mdButtonClassName]: isButtonLike && size === 'md',
         })}
