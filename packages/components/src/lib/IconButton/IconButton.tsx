@@ -3,6 +3,7 @@ import styles from './IconButton.module.scss'
 
 export const IconButton = ({
   onClick,
+  type = 'button',
   ...props
 }: React.DetailedHTMLProps<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -10,6 +11,7 @@ export const IconButton = ({
 >) => (
   <button
     onClick={onClick}
+    type={type}
     className={classNames(
       styles['icon'],
       'transition-colors cursor-pointer outline-none',
