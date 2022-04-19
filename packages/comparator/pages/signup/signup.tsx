@@ -53,7 +53,7 @@ function SignUpForm() {
       <EmailPasswordForm
         onSubmit={onSubmit}
         title="Sign up"
-        hint="Please enter your email and create password"
+        hint="Enter your email and create password"
         buttonLabel="Sign up"
         buttonLoadingLabel="Loading..."
       />

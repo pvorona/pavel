@@ -52,7 +52,7 @@ function SignInForm() {
     <>
       <EmailPasswordForm
         onSubmit={onSubmit}
-        hint="Please confirm your email and password"
+        hint="Confirm your email and password"
         title="Sign in"
         buttonLabel="Sign in"
         buttonLoadingLabel="Loading..."
