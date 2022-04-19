@@ -1,6 +1,6 @@
 import { signOut, SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
 import { Button, Variant, Link } from '@pavel/components'
-import { usePrefersColorScheme } from '@pavel/react-utils'
+import { useHasMounted, usePrefersColorScheme } from '@pavel/react-utils'
 import classNames from 'classnames'
 import { useAuthUser } from 'next-firebase-auth'
 import NextLink from 'next/link'
@@ -10,6 +10,9 @@ import styles from './LandingHeader.module.scss'
 function AuthSection() {
   const { id } = useAuthUser()
   const isDark = usePrefersColorScheme()
+  const hasMounted = useHasMounted()
+  const globalBackground =
+    isDark && hasMounted ? 'hsl(var(--c-1-20))' : undefined
 
   if (id) {
     return (
@@ -20,7 +23,7 @@ function AuthSection() {
         rounded
         style={{
           '--background-dark-hover': 'hsl(var(--c-1-30))',
-          '--global-background': isDark ? 'hsl(var(--c-1-20))' : undefined,
+          '--global-background': globalBackground,
           '--outline-color-dark': 'hsl(var(--c-1-50))',
         }}
       >
@@ -38,8 +41,8 @@ function AuthSection() {
           variant={Variant.Outlined}
           style={{
             '--background-dark-hover': 'hsl(var(--c-1-30))',
-            '--global-background': isDark ? 'hsl(var(--c-1-20))' : undefined,
-            '--outline-color-dark': 'hsl(var(--c-1-50))',
+            '--global-background': globalBackground,
+            '--outline-color-dark': 'hsl(var(--c-1-40))',
           }}
         >
           Sign in
@@ -54,8 +57,8 @@ function AuthSection() {
           style={{
             '--background-dark-default': 'hsl(var(--c-1-15))',
             '--background-dark-hover': 'hsl(var(--c-1-10))',
-            '--global-background': isDark ? 'hsl(var(--c-1-20))' : undefined,
-            '--outline-color-dark': 'hsl(var(--c-1-50))',
+            '--global-background': globalBackground,
+            '--outline-color-dark': 'hsl(var(--c-1-40))',
           }}
         >
           Sign up

@@ -4,7 +4,7 @@ import { useAuthUser } from 'next-firebase-auth'
 import { COMPARISON_LIST, SIGN_UP } from '@pavel/comparator-shared'
 import styles from './LandingPage.module.scss'
 import classNames from 'classnames'
-import { PropsWithChildren, ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 export function Hero() {
   return (
