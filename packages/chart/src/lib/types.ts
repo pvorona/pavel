@@ -57,8 +57,8 @@ export type TooltipOptions = {
 }
 
 export type ViewBoxOptions = {
-  startIndex: number
-  endIndex: number
+  start: number
+  end: number
 }
 
 export type ColorsOptions = { [key: string]: string }

@@ -1,7 +1,6 @@
 import { interpolate } from '@pavel/utils'
 import { Point } from '../components/types'
-import { interpolatePoint } from './interpolatePoint'
-import { ceil } from './math'
+import { ceil, floor, isInteger } from './math'
 
 export function mapDataToCoords(
   data: number[],
@@ -12,21 +11,22 @@ export function mapDataToCoords(
   { startIndex, endIndex }: { startIndex: number; endIndex: number },
   lineWidth: number,
 ): Point[] {
-  // half of the line width is deducted from both sides
+  // half of the line width is subtracted from both sides
   // to prevent line trimming on the edges
   const lineWidthBuffer = lineWidth / 2
   const minY = lineWidthBuffer
   const maxY = availableHeight - lineWidthBuffer
   const coords: Point[] = []
 
-  if (!Number.isInteger(startIndex)) {
+  if (!isInteger(startIndex)) {
     const x = 0
     const y = toScreenY(
       min,
       max,
       minY,
       maxY,
-      interpolatePoint(startIndex, data),
+      // interpolatePoint(startIndex, data),
+      getValueAt(startIndex, domain, data),
     )
 
     coords.push({ x, y })
@@ -34,7 +34,7 @@ export function mapDataToCoords(
 
   for (
     let currentIndex = ceil(startIndex);
-    currentIndex <= Math.floor(endIndex);
+    currentIndex <= floor(endIndex);
     currentIndex++
   ) {
     const x = toScreenX(domain, width, startIndex, endIndex, currentIndex)
@@ -43,15 +43,23 @@ export function mapDataToCoords(
       max,
       minY,
       maxY,
-      interpolatePoint(currentIndex, data),
+      getValueAt(currentIndex, domain, data),
+      // interpolatePoint(currentIndex, data),
     )
 
     coords.push({ x, y })
   }
 
-  if (!Number.isInteger(endIndex)) {
+  if (!isInteger(endIndex)) {
     const x = width
-    const y = toScreenY(min, max, minY, maxY, interpolatePoint(endIndex, data))
+    const y = toScreenY(
+      min,
+      max,
+      minY,
+      maxY,
+      // interpolatePoint(endIndex, data)
+      getValueAt(endIndex, domain, data),
+    )
 
     coords.push({ x, y })
   }
@@ -59,16 +67,30 @@ export function mapDataToCoords(
   return coords
 }
 
+function getValueAt(index: number, domain: number[], values: number[]): number {
+  if (isInteger(index)) {
+    return values[index]
+  }
+
+  const left = floor(index)
+  const right = ceil(index)
+  const leftX = domain[left]
+  const rightX = domain[right]
+  const x = getX(domain, index)
+
+  return interpolate(leftX, rightX, values[left], values[right], x)
+}
+
 // Gets x by fractional index
-function getX(xs: number[], index: number): number {
-  if (Number.isInteger(index)) {
+export function getX(xs: number[], index: number): number {
+  if (isInteger(index)) {
     return xs[index]
   }
 
-  return (
-    (xs[ceil(index)] - xs[Math.floor(index)]) * (index % 1) +
-    xs[Math.floor(index)]
-  )
+  const left = floor(index)
+  const right = ceil(index)
+
+  return interpolate(left, right, xs[left], xs[right], index)
 }
 
 export function toScreenX(

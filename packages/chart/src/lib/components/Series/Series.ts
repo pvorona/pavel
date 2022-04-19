@@ -6,22 +6,11 @@ import {
 } from '../renderers'
 import { ChartContext, ChartOptions } from '../../types'
 import { toBitMapSize } from '../../util'
-import {
-  MIN_VIEWBOX,
-  WHEEL_MULTIPLIER,
-  DEVIATION_FROM_STRAIGHT_LINE_DEGREES,
-  cursor,
-  MIN_HEIGHT,
-} from '../constants'
+import { cursor, MIN_HEIGHT } from '../constants'
 import { Component, Point } from '../types'
 import { createGraphs } from '../Graphs/createGraphs'
 import { scheduleTask } from '@pavel/scheduling'
-import {
-  addEventListeners,
-  ensureInBounds,
-  handleDrag,
-  interpolate,
-} from '@pavel/utils'
+import { addEventListeners, handleDrag, interpolate } from '@pavel/utils'
 
 export const Series: Component<ChartOptions, ChartContext> = (
   options,
@@ -29,17 +18,16 @@ export const Series: Component<ChartOptions, ChartContext> = (
     width,
     mainGraphPoints,
     inertOpacityStateByGraphName,
-    startIndex,
-    endIndex,
     isHovering,
     isGrabbingGraphs,
     activeCursor,
     mouseX,
-    isWheeling,
     canvasHeight,
     inertVisibleMin,
     inertVisibleMax,
     inertVisibleMinMaxByGraphName,
+    endX,
+    startX,
   },
 ) => {
   const { element, canvas, context } = createDOM()
@@ -147,7 +135,6 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
   function initDragListeners() {
     addEventListeners(element, {
-      wheel: onWheel,
       mouseenter(e) {
         isHovering.value = true
         mouseX.value = e.clientX
@@ -162,28 +149,20 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
     let prevMouseX = 0
 
-    const onGraphsDrag = (event: MouseEvent | Touch) => {
-      const visibleIndexRange = endIndex.value - startIndex.value
-      const newStartIndex = interpolate(
+    const handleGraphsDragMove = (e: MouseEvent | Touch) => {
+      const visibleRange = endX.value - startX.value
+      const newX = interpolate(
         0,
         width.value,
-        startIndex.value,
-        endIndex.value,
-        prevMouseX - event.clientX,
+        startX.value,
+        endX.value,
+        prevMouseX - e.clientX,
       )
 
-      startIndex.value = ensureInBounds(
-        newStartIndex,
-        0,
-        options.total - 1 - visibleIndexRange,
-      )
-      endIndex.value = ensureInBounds(
-        startIndex.value + visibleIndexRange,
-        0,
-        options.total - 1,
-      )
+      startX.value = newX
+      endX.value = newX + visibleRange
 
-      prevMouseX = event.clientX
+      prevMouseX = e.clientX
     }
 
     handleDrag(element, {
@@ -199,69 +178,7 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
         prevMouseX = 0
       },
-      onDragMove: onGraphsDrag,
+      onDragMove: handleGraphsDragMove,
     })
-  }
-
-  function onWheel(event: WheelEvent) {
-    event.preventDefault()
-    isWheeling.value = true
-
-    const angle = (Math.atan(event.deltaY / event.deltaX) * 180) / Math.PI
-
-    const viewBoxWidth = endIndex.value - startIndex.value
-    const dynamicFactor = (viewBoxWidth / MIN_VIEWBOX) * WHEEL_MULTIPLIER
-
-    if (
-      (angle < -(90 - DEVIATION_FROM_STRAIGHT_LINE_DEGREES) && angle >= -90) || // top right, bottom left
-      (angle > 90 - DEVIATION_FROM_STRAIGHT_LINE_DEGREES && angle <= 90) // top left, bottom right
-    ) {
-      const deltaY = event.deltaY
-
-      if (
-        deltaY < 0 &&
-        endIndex.value -
-          startIndex.value -
-          2 * Math.abs(deltaY * dynamicFactor) <
-          MIN_VIEWBOX
-      ) {
-        const center = (endIndex.value + startIndex.value) / 2
-        startIndex.value = ensureInBounds(
-          center - MIN_VIEWBOX / 2,
-          0,
-          options.total - 1 - MIN_VIEWBOX,
-        )
-        endIndex.value = ensureInBounds(
-          center + MIN_VIEWBOX / 2,
-          MIN_VIEWBOX,
-          options.total - 1,
-        )
-      } else {
-        startIndex.value = ensureInBounds(
-          startIndex.value - deltaY * dynamicFactor,
-          0,
-          options.total - 1 - MIN_VIEWBOX,
-        )
-        endIndex.value = ensureInBounds(
-          endIndex.value + deltaY * dynamicFactor,
-          startIndex.value + MIN_VIEWBOX,
-          options.total - 1,
-        )
-      }
-    } else if (
-      angle >= -DEVIATION_FROM_STRAIGHT_LINE_DEGREES &&
-      angle <= DEVIATION_FROM_STRAIGHT_LINE_DEGREES // left, right
-    ) {
-      startIndex.value = ensureInBounds(
-        startIndex.value + event.deltaX * dynamicFactor,
-        0,
-        options.total - 1 - viewBoxWidth,
-      )
-      endIndex.value = ensureInBounds(
-        startIndex.value + viewBoxWidth,
-        MIN_VIEWBOX,
-        options.total - 1,
-      )
-    }
   }
 }

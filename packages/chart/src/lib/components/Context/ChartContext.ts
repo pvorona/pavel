@@ -19,6 +19,7 @@ import {
 import { OpacityState, Point, EnabledGraphNames } from '../types'
 import { mapDataToCoords, createMinMaxView } from '../../util'
 import { special } from '@pavel/easing'
+import { xToIndex } from '../../util/xToIndex'
 
 export const ChartContext = (options: ChartOptions) => {
   const globalStartIndex = observable(0, {
@@ -32,10 +33,34 @@ export const ChartContext = (options: ChartOptions) => {
   const canvasHeight = compute([height], computeCanvasHeight, {
     name: 'canvasHeight',
   })
-  const startIndex = observable(options.viewBox.startIndex, {
-    name: 'startIndex',
+  const startX = observable(options.viewBox.start, { name: 'startX' })
+  const endX = observable(options.viewBox.end, {
+    name: 'endX',
   })
-  const endIndex = observable(options.viewBox.endIndex, { name: 'endIndex' })
+
+  const inertStartX = inert(TRANSITION.FAST)(startX)
+  const inertEndX = inert(TRANSITION.FAST)(endX)
+
+  const startIndex = computeLazy(
+    [inertStartX],
+    inertStartX => {
+      return xToIndex(options.domain, inertStartX)
+    },
+    {
+      name: 'startIndex',
+    },
+  )
+
+  const endIndex = computeLazy(
+    [inertEndX],
+    inertEndX => {
+      return xToIndex(options.domain, inertEndX)
+    },
+    {
+      name: 'endIndex',
+    },
+  )
+
   const mouseX = observable(0, { name: 'mouseX' })
   const isHovering = observable(false, { name: 'isHovering' })
   const isDragging = observable(false, { name: 'isDragging' })
@@ -83,10 +108,6 @@ export const ChartContext = (options: ChartOptions) => {
       return enabledGraphNames.length !== 0
     },
   )
-
-  const inertStartIndex = inert(TRANSITION.FAST)(startIndex)
-
-  const inertEndIndex = inert(TRANSITION.FAST)(endIndex)
 
   const {
     minMaxByGraphName: visibleMinMaxByGraphName,
@@ -172,8 +193,8 @@ export const ChartContext = (options: ChartOptions) => {
 
   const mainGraphPoints = computeLazy(
     [
-      inertStartIndex,
-      inertEndIndex,
+      startIndex,
+      endIndex,
       inertVisibleMax,
       inertVisibleMin,
       width,
@@ -248,6 +269,8 @@ export const ChartContext = (options: ChartOptions) => {
   })
 
   return {
+    startX,
+    endX,
     isHovering,
     isDragging,
     isWheeling,
@@ -259,8 +282,6 @@ export const ChartContext = (options: ChartOptions) => {
     mainGraphPoints,
     startIndex,
     endIndex,
-    inertStartIndex,
-    inertEndIndex,
     mouseX,
     inertOpacityStateByGraphName,
     visibleMax,
@@ -280,5 +301,7 @@ export const ChartContext = (options: ChartOptions) => {
     globalEndIndex,
     inertVisibleMax,
     inertVisibleMin,
+    inertStartX,
+    inertEndX,
   }
 }

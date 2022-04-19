@@ -1,2 +1,3 @@
-const { max, min, ceil, floor, pow } = Math
-export { max, ceil, floor, pow, min }
+export const { max, ceil, floor, pow, min } = Math
+
+export const { isInteger } = Number

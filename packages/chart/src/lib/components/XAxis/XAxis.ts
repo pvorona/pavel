@@ -41,7 +41,7 @@ const CACHE_TICKS_MULTIPLIER = 100
 
 export const XAxis: Component<ChartOptions, ChartContext> = (
   options,
-  { inertStartIndex, inertEndIndex, width },
+  { startIndex, endIndex, width },
 ) => {
   const labels = makeCached(formatTimestamp, {
     max: options.x.ticks * CACHE_TICKS_MULTIPLIER,
@@ -56,10 +56,8 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
     },
   } = options
   const height = fontSize + tickHeight + tickMargin
-  const factor = computeLazy(
-    [inertStartIndex, inertEndIndex],
-    (inertStartIndex, inertEndIndex) =>
-      computeScaleFactor(inertEndIndex - inertStartIndex, options.x.ticks),
+  const factor = computeLazy([startIndex, endIndex], (startIndex, endIndex) =>
+    computeScaleFactor(endIndex - startIndex, options.x.ticks),
   )
   const { element, context, canvas } = createDOM({
     height,
@@ -68,7 +66,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
   })
 
   scheduleTask(() => {
-    renderLabels(inertStartIndex.value, inertEndIndex.value, factor.value)
+    renderLabels(startIndex.value, endIndex.value, factor.value)
   })
 
   effect(
@@ -76,43 +74,33 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
     width => {
       setCanvasSize(canvas, toBitMapSize(width), toBitMapSize(height))
       setCanvasStyle(context)
-      renderLabels(inertStartIndex.value, inertEndIndex.value, factor.value)
+      renderLabels(startIndex.value, endIndex.value, factor.value)
     },
     { fireImmediately: false },
   )
 
   effect(
-    [inertStartIndex, inertEndIndex, factor],
-    (inertStartIndex, inertEndIndex, factor) => {
+    [startIndex, endIndex, factor],
+    (startIndex, endIndex, factor) => {
       clearRect(context, toBitMapSize(width.value), toBitMapSize(height))
-      renderLabels(inertStartIndex, inertEndIndex, factor)
+      renderLabels(startIndex, endIndex, factor)
     },
     { fireImmediately: false },
   )
 
   return { element }
 
-  function renderLabels(
-    inertStartIndex: number,
-    inertEndIndex: number,
-    factor: number,
-  ) {
+  function renderLabels(startIndex: number, endIndex: number, factor: number) {
     for (
       let i = getClosestGreaterOrEqualDivisibleInt(
-        Math.floor(inertStartIndex),
+        Math.floor(startIndex),
         factor,
       );
-      i <= Math.floor(inertEndIndex);
+      i <= Math.floor(endIndex);
       i += factor
     ) {
       const screenX = toBitMapSize(
-        toScreenX(
-          options.domain,
-          width.value,
-          inertStartIndex,
-          inertEndIndex,
-          i,
-        ),
+        toScreenX(options.domain, width.value, startIndex, endIndex, i),
       )
       const label = labels.get(options.domain[i])
       const { width: labelWidth } = context.measureText(label)
