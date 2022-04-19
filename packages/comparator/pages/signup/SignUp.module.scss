@@ -1,5 +1,6 @@
 .Text {
   color: hsl(var(--c-1-45));
+  letter-spacing: 0.02em;
 
   @media (prefers-color-scheme: dark) {
     color: hsl(var(--c-1-60));
