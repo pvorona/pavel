@@ -58,7 +58,7 @@
 
 .Outlined {
   --color-light-default: hsl(var(--c-1-25));
-  --color-light-hover: hsl(var(--c-1-10));
+  --color-light-hover: hsl(var(--c-1-5));
   --color-dark-default: hsl(var(--c-1-90));
   --color-dark-hover: hsl(var(--c-1-100));
   --color: var(--color-light-default);
@@ -67,7 +67,7 @@
   --background-dark-hover: hsla(var(--c-1-30) / 0.25);
   --background-color: var(--background-light-hover);
 
-  --outline-color-light: hsl(var(--c-1-40));
+  --outline-color-light: hsl(var(--c-1-15));
   --outline-color-dark: hsl(var(--c-1-35));
   --outline-color: var(--outline-color-light);
 
@@ -79,6 +79,9 @@
   &:not(:disabled):hover,
   &:not(:disabled):focus-visible {
     --color: var(--color-light-hover);
+  }
+
+  &:not(:disabled):not(:focus-visible):hover {
     background-color: var(--background-color);
   }
 
@@ -108,6 +111,7 @@
   --color-dark-default: hsl(var(--c-0-95));
   --color-dark-hover: hsl(var(--c-0-100));
   --color-dark-disabled: hsl(var(--c-1-70));
+  --color: var(--color-light-default);
 
   --background-light-default: hsl(var(--c-1-25));
   --background-light-hover: hsl(var(--c-1-15));
@@ -115,12 +119,10 @@
   --background-dark-default: hsl(var(--c-1-25));
   --background-dark-hover: hsl(var(--c-1-30));
   --background-dark-disabled: hsl(var(--c-1-20));
+  --background-color: var(--background-light-default);
 
   --outline-color-light: var(--background-color);
   --outline-color-dark: hsl(var(--c-1-35));
-
-  --color: var(--color-light-default);
-  --background-color: var(--background-light-default);
   --outline-color: var(--outline-color-light);
 
   color: var(--color);
