@@ -5,6 +5,7 @@
     "chart": "packages/chart",
     "chart-demo": "packages/chart-demo",
     "chart-demo-e2e": "packages/chart-demo-e2e",
+    "collector": "packages/collector",
     "comparator": "packages/comparator",
     "comparator-e2e": "packages/comparator-e2e",
     "comparator-shared": "packages/comparator-shared",
