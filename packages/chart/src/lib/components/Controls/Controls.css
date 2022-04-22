@@ -35,7 +35,7 @@
   transform: translateY(-50%);
   left: 10px;
   border-radius: 50%;
-  transition: background 0.2s;
+  transition: background var(--duration-1);
 }
 
 .button:checked ~ .like-button::before {

@@ -25,8 +25,8 @@ export const OptionTitle = memo(function OptionTitle({
   return (
     <TextField
       className={classNames(
-        styles['Root'],
-        'px-12 py-2 w-full inline-block font-semibold text-3xl text-left whitespace-nowrap',
+        styles.Root,
+        'px-12 py-2 w-full inline-block text-left whitespace-nowrap font-semibold text-3xl',
       )}
       onInput={onOptionNameChanged}
     >

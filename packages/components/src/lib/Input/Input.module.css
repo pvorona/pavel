@@ -1,5 +1,5 @@
 .container {
-  --time-transition-duration: 0.2s;
+  --time-transition-duration: var(--duration-1);
 
   --input-padding-horizontal: 15px;
   --space-16: 16px;

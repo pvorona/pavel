@@ -64,8 +64,8 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
           onInput={onFeatureDescriptionChange}
           placeholder="No description"
           className={classNames(
-            'px-3 inline-block min-w-[100px] text-xs font-extralight tracking-wider',
-            styles['FeatureDescription'],
+            'px-3 inline-block min-w-[100px] text-xs tracking-wider',
+            styles.FeatureDescription,
           )}
         >
           {feature.description}
