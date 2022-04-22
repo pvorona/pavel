@@ -30,7 +30,7 @@ export function Hero() {
         {`Comparison assistant that helps you make better choices faster.`}
         {/* {`Comparison assistant that helps making better choices faster.`} */}
       </div>
-      <div className={classNames(styles.Cta)}>
+      <div>
         <MainCTA />
       </div>
     </div>

@@ -1,15 +1,21 @@
 .Line {
-  // animation: appear var(--hero-title-animation-duration);
   font-size: var(--space-500);
   line-height: 1.14;
   padding: 0 1em;
   font-family: 'Google Sans';
   letter-spacing: -0.005em;
+
+  --color-light: hsl(var(--c-1-35));
+  --color-dark: hsl(var(--c-1-90));
+  --color: var(--color-light);
+  color: var(--color);
+
+  @media (prefers-color-scheme: dark) {
+    --color: var(--color-dark);
+  }
 }
 
 .SubLine {
-  // opacity: 0;
-  // animation: appear var(--hero-subtitle-animation-duration) var(--hero-subtitle-animation-delay) forwards;
   font-size: var(--space-125);
   margin-top: var(--space-100);
   font-weight: 300;
@@ -25,11 +31,6 @@
   @media (prefers-color-scheme: dark) {
     --color: var(--color-dark);
   }
-}
-
-.Cta {
-  // opacity: 0;
-  // animation: appear var(--hero-subtitle-animation-duration) calc(var(--hero-subtitle-animation-delay) + 1s) forwards;
 }
 
 @keyframes appear {
