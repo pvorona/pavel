@@ -12,7 +12,7 @@ function AuthSection() {
   const isDark = usePrefersColorScheme()
   const hasMounted = useHasMounted()
   const globalBackground =
-    isDark && hasMounted ? 'hsl(var(--c-1-20))' : undefined
+    isDark && hasMounted ? 'hsl(var(--c-1-25))' : undefined
 
   if (id) {
     return (

@@ -178,8 +178,8 @@
       // --neon-color-2: hsl(225, 75%, 56%);
       // --neon-color-3: hsl(264, 100%, 38%);
 
-      --background-color-default: hsla(var(--c-1-15) / 0.98);
-      --background-color-hover: hsla(var(--c-1-15) / 0.9);
+      --background-color-default: hsl(var(--c-1-15));
+      --background-color-hover: hsl(var(--c-1-15));
     }
   }
 }
