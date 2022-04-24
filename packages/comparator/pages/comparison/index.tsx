@@ -9,13 +9,7 @@ import {
   createComparison,
   getComparisonsCollectionRef,
 } from '@pavel/comparator-shared'
-import {
-  HeaderAuth,
-  HeaderTitle,
-  HeaderView,
-  LandingHeader,
-  PageTitleView,
-} from '../../modules'
+import { HeaderAuth, HeaderTitle, LandingHeader } from '../../modules'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
@@ -69,7 +63,7 @@ function ComparisonListPageWrapper() {
 export function ComparisonList({ children }: { children: ReactNode }) {
   return (
     <div className={classNames(styles['Content'])}>
-      <AddComparisonCard />
+      <CreateComparisonButton />
       {children}
     </div>
   )
@@ -81,7 +75,7 @@ export const ComparisonItem = forwardRef<HTMLAnchorElement, CardProps>(
   },
 )
 
-export function AddComparisonCard() {
+export function CreateComparisonButton() {
   const router = useRouter()
   const user = useAuthUser()
 
@@ -94,7 +88,11 @@ export function AddComparisonCard() {
     router.push(COMPARISON(id))
   }
 
-  return <Button>+</Button>
+  return (
+    <Button onClick={onClick} className="mb-4" size="sm">
+      Create comparison
+    </Button>
+  )
 }
 
 type CardProps = {
@@ -111,11 +109,7 @@ export const Card = forwardRef<HTMLAnchorElement, CardProps>(function Card(
     <a
       ref={ref}
       onClick={onClick}
-      className={classNames(
-        styles['Card'],
-        'block w-48 h-48 rounded-sm',
-        className,
-      )}
+      className={classNames(styles['Card'], className)}
       {...props}
     />
   )

@@ -1,22 +1,15 @@
 .Content {
-  padding: var(--space-300);
-  gap: 1rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  padding: var(--space-200) var(--space-300);
 }
 
 .Card {
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 20px -20px;
-  border: 1px solid #80808026;
-  display: flex;
-  justify-content: center;
-  padding: 2rem 3rem;
-  width: 100%;
-  font-weight: 700;
-  height: 100%;
-  font-size: 1.2rem;
+  display: block;
   border-radius: 4px;
   color: hsl(var(--c-1-20));
+  padding: 0.8rem 0;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  font-weight: 500;
 
   @media (prefers-color-scheme: dark) {
     & {

@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  Header,
   ComparisonTable,
   addComparison,
   ComparisonObserver,
@@ -9,6 +8,8 @@ import {
   setCurrentComparisonId,
   addOption,
   OptionsObserver,
+  HeaderAuth,
+  selectCurrentComparisonName,
 } from '../../modules'
 import { useMemo } from 'react'
 import { useRouter } from 'next/router'
@@ -25,7 +26,7 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
-import { GooeyLoader } from '@pavel/components'
+import { BackIcon } from '../../modules/BackButton'
 
 async function loadComparisonAndRelatedData(comparisonId: string) {
   const comparison = await fetchDoc<ComparisonModel>(
@@ -87,12 +88,19 @@ function ComparisonPageDataLoader() {
 export function Comparison() {
   const currentComparisonId = useSelector(selectCurrentComparisonId)
   const optionIds = useSelector(selectCurrentComparisonOptionIds)
+  const comparisonName = useSelector(selectCurrentComparisonName)
 
   return (
     <>
       <OptionsObserver optionIds={optionIds} />
       <ComparisonObserver comparisonId={currentComparisonId} />
       <div className="flex flex-col">
+        <div className="px-3 py-4 flex items-center justify-between">
+          <div className="font-medium tracking-wider flex items-center">
+            <BackIcon /> {comparisonName}
+          </div>
+          <HeaderAuth />
+        </div>
         <ComparisonTable />
       </div>
     </>

@@ -7,6 +7,7 @@ import { Button, TextField, Variant } from '@pavel/components'
 import { useRouter } from 'next/router'
 import { COMPARISON_LIST } from '@pavel/comparator-shared'
 import { HeaderAuth, HeaderTitle, LandingHeader } from '../LandingHeader'
+import { BackIcon } from '../BackButton'
 
 export function ComparisonName() {
   const dispatch = useDispatch()
@@ -39,27 +40,6 @@ export function ShareButton() {
       <span className="hidden md:inline">Share</span>
       <span className="md:hidden">S</span>
     </Button>
-  )
-}
-
-export function BackIcon() {
-  const router = useRouter()
-
-  function goBack() {
-    router.push(COMPARISON_LIST)
-  }
-
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 10 10"
-      className="text-white rotate-180 mr-3 absolute right-[100%]"
-      stroke="currentColor"
-      onClick={goBack}
-    >
-      <path d="M1 1l4 4-4 4"></path>
-    </svg>
   )
 }
 

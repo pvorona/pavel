@@ -1,5 +1,5 @@
 .TextField {
-  --placeholder-color: hsl(0deg, 0%, 46%);
+  --placeholder-color: hsl(var(--c-1-55));
 }
 
 .TextField[placeholder]:empty:before {
@@ -7,7 +7,13 @@
   white-space: nowrap;
   color: var(--placeholder-color);
   pointer-events: none;
-  font-weight: 200;
+  font-weight: 300;
+
+  @media (prefers-color-scheme: dark) {
+    & {
+      font-weight: 200;
+    }
+  }
 }
 
 .TextField[placeholder]:empty:focus:before {
