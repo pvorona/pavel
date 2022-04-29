@@ -1,59 +1,85 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { RecordKey } from '@pavel/types'
 import { AnyAction } from 'redux'
 import { Draft, produce } from 'immer'
 
-type ActionWithPayload<Type extends RecordKey, Payload> = {
-  type: Type
+type ActionType = string | number
+
+type ActionWithPayload<
+  SliceName extends string,
+  Type extends ActionType,
+  Payload,
+> = {
+  type: ScopedActionType<SliceName, Type>
   payload: Payload
 }
 
-type ActionWithoutPayload<Type extends RecordKey> = {
-  type: Type
+type ActionWithoutPayload<SliceName extends string, Type extends ActionType> = {
+  type: ScopedActionType<SliceName, Type>
 }
 
-type ActionCreatorWithPayload<Type extends RecordKey, Payload> = (
-  payload: Payload,
-) => ActionWithPayload<Type, Payload>
+type ActionCreatorWithPayload<
+  SliceName extends string,
+  Type extends ActionType,
+  Payload,
+> = (payload: Payload) => ActionWithPayload<SliceName, Type, Payload>
 
-type ActionCreatorWithoutPayload<Type extends RecordKey> =
-  () => ActionWithoutPayload<Type>
+type ActionCreatorWithoutPayload<
+  SliceName extends string,
+  Type extends ActionType,
+> = () => ActionWithoutPayload<SliceName, Type>
 
-type ActionHandlerWithPayload<State, Payload> = (
+type ActionReducerWithPayload<State, Payload> = (
   state: Draft<State>,
   payload: Payload,
 ) => void
 
-type ActionHandlerWithoutPayload<State> = (state: Draft<State>) => void
+type ActionReducerWithoutPayload<State> = (state: Draft<State>) => void
 
-type ActionHandlers<State> = {
-  [actionType: RecordKey]:
-    | ActionHandlerWithPayload<State, any>
-    | ActionHandlerWithoutPayload<State>
+type ActionReducers<State> = {
+  [actionType: ActionType]:
+    | ActionReducerWithPayload<State, any>
+    | ActionReducerWithoutPayload<State>
+}
+
+function createScopedReducers<
+  State = any,
+  Reducers extends ActionReducers<State> = ActionReducers<State>,
+  SliceName extends string = string,
+>(sliceName: SliceName, reducers: Reducers) {
+  const scopedReducers = {} as Reducers
+
+  for (const actionName in reducers) {
+    const scopedActionType = createScopedActionType(sliceName, actionName)
+
+    scopedReducers[scopedActionType] = reducers[actionName] as any
+  }
+
+  return scopedReducers
 }
 
 export function createSlice<
   State = any,
-  Handlers extends ActionHandlers<State> = ActionHandlers<State>,
+  Reducers extends ActionReducers<State> = ActionReducers<State>,
   Name extends string = string,
 >({
   initialState,
   name,
-  handlers = {} as Handlers,
+  reducers = {} as Reducers,
 }: {
   initialState: State
   name: Name
-  handlers?: Handlers
+  reducers?: Reducers
 }) {
-  function reducer(state = initialState, action: AnyAction) {
-    const handler = handlers[action.type]
+  const scopedReducers = createScopedReducers(name, reducers)
 
-    return typeof handler === 'function'
-      ? produce(state, draft => handler(draft, action.payload))
+  function reducer(state = initialState, action: AnyAction) {
+    const reduce = scopedReducers[action.type]
+    return typeof reduce === 'function'
+      ? produce(state, draft => reduce(draft, action.payload))
       : state
   }
 
-  const actions = extractActions(name, handlers)
+  const actions = extractActions(name, reducers)
 
   return {
     reducer,
@@ -63,42 +89,71 @@ export function createSlice<
 
 // "without payload" case should be before "with payload"
 // for correct inference
-type ActionCreatorForHandler<
-  ActionType extends RecordKey,
-  Handler,
-> = Handler extends ActionHandlerWithoutPayload<any>
-  ? ActionCreatorWithoutPayload<ActionType>
-  : Handler extends ActionHandlerWithPayload<any, infer Payload>
-  ? ActionCreatorWithPayload<ActionType, Payload>
+type ActionCreatorForReducer<
+  SliceName extends string,
+  ActionName extends ActionType,
+  Reducer,
+> = Reducer extends ActionReducerWithoutPayload<any>
+  ? ActionCreatorWithoutPayload<SliceName, ActionName>
+  : Reducer extends ActionReducerWithPayload<any, infer Payload>
+  ? ActionCreatorWithPayload<SliceName, ActionName, Payload>
   : never
 
-type ActionCreatorsForHandlers<Handlers extends ActionHandlers<any>> = {
-  [ActionType in keyof Handlers]: ActionCreatorForHandler<
-    ActionType,
-    Handlers[ActionType]
+type ActionCreatorsForReducers<
+  SliceName extends string,
+  Reducers extends ActionReducers<any>,
+> = {
+  [ActionName in keyof Reducers]: ActionCreatorForReducer<
+    SliceName,
+    ActionName extends string | number ? ActionName : never,
+    Reducers[ActionName]
   >
 }
 
-function extractActions<Handlers extends ActionHandlers<any>>(
-  sliceName: string,
-  handlers: Handlers,
-): ActionCreatorsForHandlers<Handlers> {
-  const actionCreators = {} as ActionCreatorsForHandlers<Handlers>
+type ScopedActionType<
+  SliceName extends string,
+  ActionName extends ActionType,
+> = `${SliceName}/${ActionName}`
 
-  for (const actionType in handlers) {
+function createScopedActionType<
+  SliceName extends string,
+  ActionName extends ActionType,
+>(
+  sliceName: SliceName,
+  actionName: ActionName,
+): ScopedActionType<SliceName, ActionName> {
+  return `${sliceName}/${actionName}`
+}
+
+function extractActions<
+  SliceName extends string,
+  Reducers extends ActionReducers<any>,
+>(
+  sliceName: SliceName,
+  reducers: Reducers,
+): ActionCreatorsForReducers<SliceName, Reducers> {
+  const actionCreators = {} as ActionCreatorsForReducers<SliceName, Reducers>
+
+  for (const reducerName in reducers) {
+    const actionType = `${sliceName}/${reducerName}` as ScopedActionType<
+      SliceName,
+      typeof reducerName
+    >
+
     const actionCreator = ((payload: any) => {
       return {
         type: actionType,
         payload,
       }
-    }) as ActionCreatorForHandler<
+    }) as ActionCreatorForReducer<
+      SliceName,
       typeof actionType,
-      typeof handlers[typeof actionType]
+      typeof reducers[typeof actionType]
     >
 
-    actionCreator.toString = () => `${sliceName}/${actionType}`
+    actionCreator.toString = () => actionType
 
-    actionCreators[actionType] = actionCreator
+    actionCreators[reducerName] = actionCreator as any
   }
 
   return actionCreators
@@ -112,7 +167,7 @@ function extractActions<Handlers extends ActionHandlers<any>>(
 //   initialState: {
 //     count: 0,
 //   },
-//   handlers: {
+//   reducers: {
 //     increment: state => ({ count: state.count + 1 }),
 //     incrementBy: (state, change: number) => ({ count: state.count + change }),
 //   },

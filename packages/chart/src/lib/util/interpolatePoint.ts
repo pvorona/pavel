@@ -1,4 +1,5 @@
 import { floor, ceil } from './math'
+import { interpolate } from '@pavel/utils'
 
 // Only works with evenly-spaced series
 export function interpolatePoint(point: number, values: number[]): number {
@@ -9,15 +10,4 @@ export function interpolatePoint(point: number, values: number[]): number {
     values[ceil(point)],
     point,
   )
-}
-
-export function interpolate<T extends number>(
-  x1: number,
-  x2: number,
-  y1: T,
-  y2: T,
-  x: number,
-): T {
-  if (x === x2) return y2
-  return (((y2 - y1) / (x2 - x1)) * (x - x1) + y1) as T
 }
