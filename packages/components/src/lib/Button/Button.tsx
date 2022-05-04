@@ -47,6 +47,7 @@ export type ButtonStyleOverrides = {
   '--global-background'?: string
   '--outline-color-dark'?: string
   '--outline-color-light'?: string
+  '--border-width'?: string
 }
 
 export type ButtonProps = BaseButtonProps &
@@ -81,7 +82,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const allClassNames = classNames(
       styles['ButtonBase'],
       {
-        'rounded-full': rounded,
+        [styles['Rounded']]: rounded,
         [styles['ButtonLike']]: isButtonLike,
         [styles['Filled']]: variant === Variant.Filled,
         [styles['Link']]: variant === Variant.Link,
@@ -142,7 +143,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Button(
   const allClassNames = classNames(
     styles['ButtonBase'],
     {
-      'rounded-full': rounded,
+      [styles['Rounded']]: rounded,
       [styles['ButtonLike']]: isButtonLike,
       [styles['Filled']]: variant === Variant.Filled,
       [styles['Link']]: variant === Variant.Link,

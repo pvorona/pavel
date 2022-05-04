@@ -1,0 +1,77 @@
+.Root {
+  position: relative;
+}
+
+.FilledLineContainer {
+  border-radius: 20px;
+  position: absolute;
+  left: 0;
+  top: 2px;
+  right: 0;
+  height: 1rem;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.FilledLine {
+  background-color: hsl(var(--c-1-20));
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  transform-origin: left;
+  will-change: transform;
+}
+
+.Input {
+  appearance: none;
+  height: 1rem;
+  background-color: #eceef9;
+  border-radius: 20px;
+  width: 100%;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: hsl(var(--c-1-20));
+    cursor: pointer;
+    transition: background 0.15s ease-in-out;
+
+    // &:hover {
+    //   background: $range-handle-color-hover;
+    // }
+  }
+
+  // &:active::-webkit-slider-thumb {
+  //   background: $range-handle-color-hover;
+  // }
+
+  // &::-moz-range-thumb {
+  //   width: $range-handle-size;
+  //   height: $range-handle-size;
+  //   border: 0;
+  //   border-radius: 50%;
+  //   background: $range-handle-color;
+  //   cursor: pointer;
+  //   transition: background 0.15s ease-in-out;
+
+  //   &:hover {
+  //     background: $range-handle-color-hover;
+  //   }
+  // }
+
+  // &:active::-moz-range-thumb {
+  //   background: $range-handle-color-hover;
+  // }
+
+  // // Focus state
+  // &:focus {
+  //   &::-webkit-slider-thumb {
+  //     box-shadow: 0 0 0 3px $shade-0, 0 0 0 6px $teal;
+  //   }
+  // }
+}

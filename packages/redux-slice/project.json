@@ -3,6 +3,16 @@
   "sourceRoot": "packages/redux-slice/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/redux-slice",
+        "main": "packages/redux-slice/src/index.ts",
+        "tsConfig": "packages/redux-slice/tsconfig.lib.json",
+        "assets": ["packages/redux-slice/*.md"]
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

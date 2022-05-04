@@ -1,0 +1,14 @@
+.RootNode {
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.RootNode,
+.Node {
+  line-height: 3rem;
+  color: hsl(var(--c-1-25));
+}
+
+.Node {
+  font-weight: 500;
+}

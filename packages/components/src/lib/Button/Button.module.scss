@@ -19,9 +19,9 @@
 
 .ButtonLike {
   --border-radius: 0.25em;
+  --font-weight: 500;
   border-radius: var(--border-radius);
-  font-weight: 500;
-  // font-weight: 600;
+  font-weight: var(--font-weight);
   letter-spacing: 0.025em;
 }
 
@@ -59,6 +59,7 @@
 .Outlined,
 .Filled {
   --border-width: 2px;
+  --font-weight: 700;
 }
 
 .Outlined {
@@ -81,7 +82,6 @@
   transition-property: color, box-shadow, border-color;
   transition-duration: var(--duration-1);
   border: var(--border-width) solid var(--border-color);
-  font-weight: 700;
   will-change: color, box-shadow, border-color;
 
   &:not(:disabled):hover,
@@ -142,7 +142,6 @@
   will-change: color, background-color, box-shadow, border-color;
   transition-duration: var(--duration-1);
   border: var(--border-width) solid var(--background-color);
-  font-weight: 700;
 
   &:disabled {
     --color: var(--color-light-disabled);
@@ -192,4 +191,8 @@
   padding-block: calc(0.7rem - var(--border-width));
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.Rounded {
+  --border-radius: 9999px;
 }

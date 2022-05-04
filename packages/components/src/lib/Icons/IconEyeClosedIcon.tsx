@@ -1,5 +1,5 @@
-export const IconEyeClosed = () => (
-  <svg width={24} height={24}>
+export const IconEyeClosed = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg width={24} height={24} {...props}>
     <path
       fill="currentColor"
       fillRule="nonzero"

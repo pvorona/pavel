@@ -1,4 +1,3 @@
-export * from './handleDrag'
 export * from './mapDataToCoords'
 export * from './math'
 export * from './getMinMax'

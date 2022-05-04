@@ -1,33 +1,5 @@
-import { createPalette, isServer } from '@pavel/utils'
+import { createFlexSpacing, createPalette } from '@pavel/utils'
 import { Html, Head, Main, NextScript } from 'next/document'
-import { useRouter } from 'next/router'
-
-function getPxPerRem() {
-  if (isServer) {
-    return 16
-  }
-
-  const root = document.querySelector('html')
-  return Number(getComputedStyle(root).fontSize.slice(0, -2))
-}
-
-function buildClamp(
-  minWidthPx: number,
-  maxWidthPx: number,
-  minFontSize: number,
-  maxFontSize: number,
-) {
-  const pixelsPerRem = getPxPerRem()
-  const minWidth = minWidthPx / pixelsPerRem
-  const maxWidth = maxWidthPx / pixelsPerRem
-
-  const slope = (maxFontSize - minFontSize) / (maxWidth - minWidth)
-  const yAxisIntersection = -minWidth * slope + minFontSize
-
-  return `clamp(${minFontSize}rem, ${yAxisIntersection}rem + ${
-    slope * 100
-  }vw, ${maxFontSize}rem)`
-}
 
 const spaces = {
   '--space-100': {
@@ -74,7 +46,7 @@ function getCustomProperties() {
       value: [minValue, maxValue],
     },
   ] of Object.entries(spaces)) {
-    const property = buildClamp(minWidth, maxWidth, minValue, maxValue)
+    const property = createFlexSpacing(minWidth, maxWidth, minValue, maxValue)
     result[key] = property
   }
 

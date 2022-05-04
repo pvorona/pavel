@@ -9,9 +9,9 @@ export function handleDrag(
     onDragMove,
     onDragEnd,
   }: {
-    onDragStart(e: MouseEvent | Touch): void
-    onDragMove(e: MouseEvent | Touch): void
-    onDragEnd(e: MouseEvent | Touch): void
+    onDragStart?: (e: MouseEvent | Touch) => void
+    onDragMove?: (e: MouseEvent | Touch) => void
+    onDragEnd?: (e: MouseEvent | Touch) => void
   },
 ) {
   element.addEventListener('mousedown', onStart)
@@ -24,20 +24,20 @@ export function handleDrag(
       if (e.which === 1) {
         document.addEventListener('mousemove', onMove)
         document.addEventListener('mouseup', onEnd)
-        onDragStart(e)
+        onDragStart?.(e)
       }
     } else {
       document.addEventListener('touchmove', onMove)
       document.addEventListener('touchend', onEnd)
-      onDragStart((e as TouchEvent).touches[0])
+      onDragStart?.((e as TouchEvent).touches[0])
     }
   }
 
   function onMove(e: MouseEvent | TouchEvent) {
     if (isMouseEvent(e)) {
-      onDragMove(e)
+      onDragMove?.(e)
     } else {
-      onDragMove(e.touches[0])
+      onDragMove?.(e.touches[0])
     }
   }
 
@@ -45,11 +45,22 @@ export function handleDrag(
     if (isMouseEvent(e)) {
       document.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseup', onEnd)
-      onDragEnd(e)
+      onDragEnd?.(e)
     } else {
       document.removeEventListener('touchmove', onMove)
       document.removeEventListener('touchend', onEnd)
-      onDragEnd(e.touches[0])
+      onDragEnd?.(e.touches[0])
     }
+  }
+
+  return () => {
+    element.removeEventListener('mousedown', onStart)
+    element.removeEventListener('touchstart', onStart)
+
+    document.removeEventListener('mousemove', onMove)
+    document.removeEventListener('touchmove', onMove)
+
+    document.removeEventListener('mouseup', onEnd)
+    document.removeEventListener('touchend', onEnd)
   }
 }
