@@ -6,7 +6,7 @@ export type Coordinate = {
 }
 
 export type PositionedMindMapNode = {
-  width: number
+  // width: number
   value: MindMapNode['value']
   coordinate: Coordinate
   children?: PositionedMindMapNode[]

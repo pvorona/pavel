@@ -23,7 +23,7 @@ export function computeGeometry(
   if (!node.children || node.children.length === 0) {
     return {
       ...node,
-      width: 1,
+      // width: 1,
       children: [],
       coordinate: currentCoordinate,
     }
@@ -33,13 +33,13 @@ export function computeGeometry(
     const positionedChildren = node.children.map(child =>
       computeGeometry(child, direction, currentCoordinate),
     )
-    const width = Math.max(...positionedChildren.map(child => child.width))
+    // const width = Math.max(...positionedChildren.map(child => child.width))
 
     return {
       ...node,
       coordinate: currentCoordinate,
       children: positionedChildren,
-      width,
+      // width,
     }
   }
 
