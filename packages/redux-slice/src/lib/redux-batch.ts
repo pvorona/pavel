@@ -3,6 +3,13 @@ import { Reducer, AnyAction, Middleware } from 'redux'
 
 const BATCH = 'BATCH'
 
+export function batch(actions: AnyAction[]) {
+  return {
+    type: BATCH,
+    payload: actions,
+  }
+}
+
 export function batchReducer<State>(
   reducer: Reducer<State | undefined>,
 ): Reducer<State | undefined> {
@@ -11,7 +18,7 @@ export function batchReducer<State>(
       return reducer(state, action)
     }
 
-    return action.actions.reduce((temporalState, action) => {
+    return action.payload.reduce((temporalState, action) => {
       assert(
         isObject(action),
         `Only plain actions can be batched. Received: ${action}`,
@@ -23,20 +30,20 @@ export function batchReducer<State>(
 }
 
 export const batchMiddleware: Middleware = () => next => action => {
-  if (!Array.isArray(action)) {
-    return next(action)
-  }
+  // if (!isBatchAction(action)) {
+  //   return next(action)
+  // }
 
-  const batchAction: BatchAction = { type: BATCH, actions: action }
+  // const batchAction: BatchAction = { type: BATCH, payload: action.payload }
 
-  next(batchAction)
+  next(action)
 }
 
 type BatchAction = {
   type: typeof BATCH
-  actions: AnyAction[]
+  payload: AnyAction[]
 }
 
 function isBatchAction(action: AnyAction): action is BatchAction {
-  return action.type === 'BATCH'
+  return action.type === BATCH
 }

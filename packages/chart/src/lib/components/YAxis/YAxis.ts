@@ -1,11 +1,8 @@
 import { computeLazy, effect } from '@pavel/observable'
 import { scheduleTask } from '@pavel/scheduling'
+import { interpolate } from '@pavel/utils'
 import { BitMapSize, ChartContext, ChartOptions } from '../../types'
-import {
-  getClosestGreaterOrEqualDivisibleInt,
-  interpolate,
-  toBitMapSize,
-} from '../../util'
+import { getClosestGreaterOrEqualDivisibleInt, toBitMapSize } from '../../util'
 import { clearRect, line, setCanvasSize } from '../renderers'
 
 export const YAxis = (

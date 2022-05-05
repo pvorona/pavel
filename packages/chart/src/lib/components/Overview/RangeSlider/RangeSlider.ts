@@ -161,7 +161,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
 
   viewBoxElement.addEventListener('wheel', onWheel)
 
-  function onLeftResizeHandlerMouseDown(event: MouseEvent) {
+  function onLeftResizeHandlerMouseDown(event: MouseEvent | Touch) {
     isDragging.value = true
     activeCursor.value = cursor.resize
     cursorResizeHandlerDelta = event.clientX - left.value
@@ -172,7 +172,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     activeCursor.value = cursor.default
   }
 
-  function onLeftResizeHandlerMouseMove(event: MouseEvent) {
+  function onLeftResizeHandlerMouseMove(event: MouseEvent | Touch) {
     const leftVar = ensureInOverviewBounds(
       event.clientX - cursorResizeHandlerDelta,
     )
@@ -184,7 +184,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     )
   }
 
-  function onRightResizeHandlerMouseDown(event: MouseEvent) {
+  function onRightResizeHandlerMouseDown(event: MouseEvent | Touch) {
     cursorResizeHandlerDelta = event.clientX - right.value
     isDragging.value = true
     activeCursor.value = cursor.resize
@@ -194,7 +194,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     return ensureInBounds(x, 0, width.value)
   }
 
-  function onViewBoxElementMouseDown(event: MouseEvent) {
+  function onViewBoxElementMouseDown(event: MouseEvent | Touch) {
     cursorResizeHandlerDelta = event.clientX - left.value
     isDragging.value = true
     activeCursor.value = cursor.grabbing
@@ -205,7 +205,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     activeCursor.value = cursor.default
   }
 
-  function onViewBoxElementMouseMove(event: MouseEvent) {
+  function onViewBoxElementMouseMove(event: MouseEvent | Touch) {
     const widthVar = right.value - left.value
     const nextLeft = event.clientX - cursorResizeHandlerDelta
     const stateLeft = ensureInBounds(nextLeft, 0, width.value - widthVar)
@@ -213,7 +213,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     right.value = stateLeft + widthVar
   }
 
-  function onRightResizeHandlerMouseMove(event: MouseEvent) {
+  function onRightResizeHandlerMouseMove(event: MouseEvent | Touch) {
     const rightVar = ensureInOverviewBounds(
       event.clientX - cursorResizeHandlerDelta,
     )

@@ -26,7 +26,7 @@ const comparisonTableSlice = createSlice({
       rightBlock: false,
     },
   } as ComparisonTableState,
-  handlers: {
+  reducers: {
     setOptionIdToRemove: (state, optionId: string) => {
       state.optionIdToRemove = optionId
     },

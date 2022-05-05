@@ -1,4 +1,4 @@
-import { createSlice } from '@pavel/redux-slice'
+import { batch, createSlice } from '@pavel/redux-slice'
 import { insertAt, removeAt } from '@pavel/utils'
 import {
   buildFeature,
@@ -9,11 +9,14 @@ import {
 import { ComparisonsState } from './types'
 import { addOption } from '../options'
 import { selectCurrentComparisonId } from './comparisons.selectors'
+import { AnyAction, Dispatch } from 'redux'
+import { ThunkAction } from 'redux-thunk'
+import { RootState } from '../../store'
 
 export const comparisonsByIdSlice = createSlice({
   name: 'comparisons.byId',
   initialState: {} as ComparisonsState['byId'],
-  handlers: {
+  reducers: {
     addComparison: (state, comparison: Comparison) => {
       state[comparison.id] = comparison
     },
@@ -107,23 +110,27 @@ export function addOptionToCurrentComparison({
   ownerId: string
   index: number
 }) {
-  return async function (dispatch, getState) {
+  return async function (dispatch: Dispatch, getState) {
     const currentComparisonId = selectCurrentComparisonId(getState())
     const option = await createOption(ownerId)
 
-    dispatch([
-      addOption(option),
-      addOptionIdToComparison({
-        index,
-        optionId: option.id,
-        id: currentComparisonId,
-      }),
-    ])
+    dispatch(
+      batch([
+        addOption(option),
+        addOptionIdToComparison({
+          index,
+          optionId: option.id,
+          id: currentComparisonId,
+        }),
+      ]),
+    )
   }
 }
 
-export function addFeatureToCurrentComparison(index: number) {
-  return function (dispatch, getState) {
+export const addFeatureToCurrentComparison = (
+  index: number,
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return function (dispatch: Dispatch, getState) {
     const currentComparisonId = selectCurrentComparisonId(getState())
 
     dispatch(

@@ -5,7 +5,7 @@ import { AuthState } from './auth.types'
 const authSlice = createSlice({
   name: 'auth',
   initialState: null as AuthState,
-  handlers: {
+  reducers: {
     setUser: (_, user: User) => user,
   },
 })

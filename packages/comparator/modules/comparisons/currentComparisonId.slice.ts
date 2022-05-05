@@ -4,7 +4,7 @@ import { ComparisonsState } from '.'
 export const currentComparisonIdSlice = createSlice({
   name: 'comparisons.currentComparisonId',
   initialState: null as ComparisonsState['currentComparisonId'],
-  handlers: {
+  reducers: {
     setCurrentComparisonId: (_, id: string) => id,
   },
 })

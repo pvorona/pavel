@@ -25,7 +25,7 @@ export const OptionActions = memo(function OptionActions({
   }
 
   function onRemoveOptionClick() {
-    dispatch(removeOptionIdFromCurrentComparison(optionId))
+    dispatch(removeOptionIdFromCurrentComparison(optionId) as any)
   }
 
   return (

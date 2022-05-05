@@ -74,7 +74,9 @@ const LeftHoverBlock = withAuthUser()(function LeftHoverBlock() {
   const dispatch = useDispatch()
 
   function onClick() {
-    dispatch(addOptionToCurrentComparison({ ownerId: user.id, index: 0 }))
+    dispatch(
+      addOptionToCurrentComparison({ ownerId: user.id, index: 0 }) as any,
+    )
   }
 
   function onMouseEnter() {
@@ -104,7 +106,7 @@ const RightHoverBlock = withAuthUser()(function RightHoverBlock() {
       addOptionToCurrentComparison({
         ownerId: user.id,
         index: optionIds.length,
-      }),
+      }) as any,
     )
   }
 

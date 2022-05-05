@@ -4,8 +4,6 @@ import {
 } from '../comparisons'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, TextField, Variant } from '@pavel/components'
-import { useRouter } from 'next/router'
-import { COMPARISON_LIST } from '@pavel/comparator-shared'
 import { HeaderAuth, HeaderTitle, LandingHeader } from '../LandingHeader'
 import { BackIcon } from '../BackButton'
 
@@ -14,7 +12,7 @@ export function ComparisonName() {
   const currentComparisonName = useSelector(selectCurrentComparisonName)
 
   const onComparisonNameChange = (value: string) => {
-    dispatch(setCurrentComparisonProperty({ name: value }))
+    dispatch(setCurrentComparisonProperty({ name: value }) as any)
   }
 
   return (

@@ -28,15 +28,15 @@ export function FeatureActions({
   const [isConfirmingDeletion, setIsConfirmingDeletion] = useState(false)
 
   function onToggleExpandedClick() {
-    dispatch(toggleFeatureExpandedInCurrentComparison(featureId))
+    dispatch(toggleFeatureExpandedInCurrentComparison(featureId) as any)
   }
 
   function onRemoveFeatureClick() {
-    dispatch(removeFeatureFromCurrentComparison(featureId))
+    dispatch(removeFeatureFromCurrentComparison(featureId) as any)
   }
 
   function onDescriptionExpandedClick() {
-    dispatch(toggleDescriptionExpandedInCurrentComparison(featureId))
+    dispatch(toggleDescriptionExpandedInCurrentComparison(featureId) as any)
   }
 
   return (

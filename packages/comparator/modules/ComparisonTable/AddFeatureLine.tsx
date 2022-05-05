@@ -44,7 +44,7 @@ export const AddFeatureLine = memo(function AddFeatureLine({
   }, [button, circle, svg, width])
 
   function onClick() {
-    dispatch(addFeatureToCurrentComparison(index))
+    dispatch(addFeatureToCurrentComparison(index) as any)
   }
 
   return (

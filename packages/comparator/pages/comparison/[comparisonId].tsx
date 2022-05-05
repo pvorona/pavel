@@ -27,6 +27,7 @@ import {
   AuthAction,
 } from 'next-firebase-auth'
 import { BackIcon } from '../../modules/BackButton'
+import { batch } from '@pavel/redux-slice'
 
 async function loadComparisonAndRelatedData(comparisonId: string) {
   const comparison = await fetchDoc<ComparisonModel>(
@@ -62,11 +63,14 @@ function ComparisonPageDataLoader() {
         ? () =>
             loadComparisonAndRelatedData(comparisonId).then(
               ({ options, comparison }) => {
-                dispatch([
+                const actions = [
                   ...options.map(option => addOption(option)),
                   addComparison(comparison),
                   setCurrentComparisonId(comparison.id),
-                ])
+                ]
+                const batchAction = batch(actions)
+
+                dispatch(batchAction)
               },
             )
         : false,

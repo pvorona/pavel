@@ -1,5 +1,11 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+import {
+  createStore,
+  combineReducers,
+  applyMiddleware,
+  Dispatch,
+  AnyAction,
+} from 'redux'
+import thunk, { ThunkAction } from 'redux-thunk'
 import {
   authReducer,
   comparisonsReducer,
@@ -19,3 +25,5 @@ export const store = createStore(
   ),
   applyMiddleware(batchMiddleware, thunk),
 )
+
+export type RootState = ReturnType<typeof store.getState>

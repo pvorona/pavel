@@ -19,7 +19,7 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
       setFeaturePropertyInCurrentComparison({
         featureId,
         name: value,
-      }),
+      }) as any,
     )
   }
 
@@ -28,7 +28,7 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
       setFeaturePropertyInCurrentComparison({
         featureId,
         description: value,
-      }),
+      }) as any,
     )
   }
 

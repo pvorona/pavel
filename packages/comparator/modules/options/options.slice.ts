@@ -5,7 +5,7 @@ import { Option } from '@pavel/comparator-shared'
 export const optionsByIdSlice = createSlice({
   name: 'options.byId',
   initialState: {} as OptionsState['byId'],
-  handlers: {
+  reducers: {
     addOption: (state, option: Option) => {
       state[option.id] = option
     },

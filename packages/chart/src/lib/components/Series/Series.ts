@@ -162,14 +162,14 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
     let prevMouseX = 0
 
-    const onGraphsDrag = (e: MouseEvent) => {
+    const onGraphsDrag = (event: MouseEvent | Touch) => {
       const visibleIndexRange = endIndex.value - startIndex.value
       const newStartIndex = interpolate(
         0,
         width.value,
         startIndex.value,
         endIndex.value,
-        prevMouseX - e.clientX,
+        prevMouseX - event.clientX,
       )
 
       startIndex.value = ensureInBounds(
@@ -183,15 +183,15 @@ export const Series: Component<ChartOptions, ChartContext> = (
         options.total - 1,
       )
 
-      prevMouseX = e.clientX
+      prevMouseX = event.clientX
     }
 
     handleDrag(element, {
-      onDragStart: (e: MouseEvent) => {
+      onDragStart: event => {
         isGrabbingGraphs.value = true
         activeCursor.value = cursor.grabbing
 
-        prevMouseX = e.clientX
+        prevMouseX = event.clientX
       },
       onDragEnd: () => {
         isGrabbingGraphs.value = false

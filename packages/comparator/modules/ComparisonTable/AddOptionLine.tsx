@@ -63,7 +63,7 @@ export const AddOptionLine = memo(function AddOptionLine({
   }, [button, circle, svg, height])
 
   function onClick() {
-    dispatch(addOptionToCurrentComparison({ ownerId: user.id, index }))
+    dispatch(addOptionToCurrentComparison({ ownerId: user.id, index }) as any)
   }
 
   return (

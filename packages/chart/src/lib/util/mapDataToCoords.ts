@@ -1,5 +1,6 @@
+import { interpolate } from '@pavel/utils'
 import { Point } from '../components/types'
-import { interpolate, interpolatePoint } from './interpolatePoint'
+import { interpolatePoint } from './interpolatePoint'
 import { ceil } from './math'
 
 export function mapDataToCoords(
