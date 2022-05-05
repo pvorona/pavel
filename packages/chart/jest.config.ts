@@ -1,6 +1,6 @@
 module.exports = {
   displayName: 'chart',
-  preset: '../../jest.preset.js',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -11,4 +11,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/packages/chart',
+  preset: '../../jest.preset.ts',
 }

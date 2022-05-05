@@ -158,15 +158,15 @@ describe('computeGeometry', () => {
   })
 })
 
-describe('computeMaxBranchingLevel', () => {
-  it('works with nodes without children', () => {
-    const node: MindMapNode = {
-      value: 'root',
-      children: [],
-    }
-    const result = computeMaxBranchingLevel(node)
-    const expectedResult = 0
+// describe('computeMaxBranchingLevel', () => {
+//   it('works with nodes without children', () => {
+//     const node: MindMapNode = {
+//       value: 'root',
+//       children: [],
+//     }
+//     const result = computeMaxBranchingLevel(node)
+//     const expectedResult = 0
 
-    expect(result).toStrictEqual(expectedResult)
-  })
-})
+//     expect(result).toStrictEqual(expectedResult)
+//   })
+// })

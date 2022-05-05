@@ -1,5 +1,4 @@
 {
-  "root": "packages/redux-slice",
   "sourceRoot": "packages/redux-slice/src",
   "projectType": "library",
   "targets": {
@@ -24,7 +23,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/redux-slice"],
       "options": {
-        "jestConfig": "packages/redux-slice/jest.config.js",
+        "jestConfig": "packages/redux-slice/jest.config.ts",
         "passWithNoTests": true
       }
     }

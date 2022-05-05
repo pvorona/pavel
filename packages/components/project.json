@@ -1,5 +1,4 @@
 {
-  "root": "packages/components",
   "sourceRoot": "packages/components/src",
   "projectType": "library",
   "tags": [],
@@ -35,7 +34,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/components"],
       "options": {
-        "jestConfig": "packages/components/jest.config.js",
+        "jestConfig": "packages/components/jest.config.ts",
         "passWithNoTests": true
       }
     }

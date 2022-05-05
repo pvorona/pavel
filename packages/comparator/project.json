@@ -1,5 +1,4 @@
 {
-  "root": "packages/comparator",
   "sourceRoot": "packages/comparator",
   "projectType": "application",
   "targets": {
@@ -12,7 +11,8 @@
         "outputPath": "dist/packages/comparator"
       },
       "configurations": {
-        "production": {}
+        "production": {},
+        "development": {}
       }
     },
     "serve": {
@@ -25,8 +25,13 @@
         "production": {
           "buildTarget": "comparator:build:production",
           "dev": false
+        },
+        "development": {
+          "buildTarget": "comparator:build:development",
+          "dev": true
         }
-      }
+      },
+      "defaultConfiguration": "development"
     },
     "export": {
       "executor": "@nrwl/next:export",
@@ -38,7 +43,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/comparator"],
       "options": {
-        "jestConfig": "packages/comparator/jest.config.js",
+        "jestConfig": "packages/comparator/jest.config.ts",
         "passWithNoTests": true
       }
     },

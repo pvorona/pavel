@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'observable',
-  preset: '../../jest.preset.js',
+  displayName: 'react-utils',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/packages/observable',
+  coverageDirectory: '../../coverage/packages/react-utils',
+  preset: '../../jest.preset.ts',
 }

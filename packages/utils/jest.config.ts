@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'assert',
-  preset: '../../jest.preset.js',
+  displayName: 'utils',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/packages/assert',
+  coverageDirectory: '../../coverage/packages/utils',
+  preset: '../../jest.preset.ts',
 }

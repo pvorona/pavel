@@ -1,5 +1,4 @@
 {
-  "root": "packages/assert",
   "sourceRoot": "packages/assert/src",
   "projectType": "library",
   "targets": {
@@ -24,7 +23,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/assert"],
       "options": {
-        "jestConfig": "packages/assert/jest.config.js",
+        "jestConfig": "packages/assert/jest.config.ts",
         "passWithNoTests": true
       }
     }

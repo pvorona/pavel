@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'scheduling',
-  preset: '../../jest.preset.js',
+  displayName: 'comparator-shared',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/packages/scheduling',
+  coverageDirectory: '../../coverage/packages/comparator-shared',
+  preset: '../../jest.preset.ts',
 }

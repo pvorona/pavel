@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'utils',
-  preset: '../../jest.preset.js',
+  displayName: 'mindmap-ui',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/packages/utils',
+  coverageDirectory: '../../coverage/packages/mindmap-ui',
+  preset: '../../jest.preset.ts',
 }

@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'react-utils',
-  preset: '../../jest.preset.js',
+  displayName: 'easing',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/packages/react-utils',
+  coverageDirectory: '../../coverage/packages/easing',
+  preset: '../../jest.preset.ts',
 }

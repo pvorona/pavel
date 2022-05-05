@@ -1,5 +1,4 @@
 {
-  "root": "packages/react-utils",
   "sourceRoot": "packages/react-utils/src",
   "projectType": "library",
   "targets": {
@@ -24,7 +23,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/react-utils"],
       "options": {
-        "jestConfig": "packages/react-utils/jest.config.js",
+        "jestConfig": "packages/react-utils/jest.config.ts",
         "passWithNoTests": true
       }
     }

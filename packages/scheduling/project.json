@@ -1,5 +1,4 @@
 {
-  "root": "packages/scheduling",
   "sourceRoot": "packages/scheduling/src",
   "projectType": "library",
   "targets": {
@@ -24,7 +23,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/scheduling"],
       "options": {
-        "jestConfig": "packages/scheduling/jest.config.js",
+        "jestConfig": "packages/scheduling/jest.config.ts",
         "passWithNoTests": true
       }
     }

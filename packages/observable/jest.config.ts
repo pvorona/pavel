@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'redux-slice',
-  preset: '../../jest.preset.js',
+  displayName: 'observable',
+
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,6 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/packages/redux-slice',
+  coverageDirectory: '../../coverage/packages/observable',
+  preset: '../../jest.preset.ts',
 }

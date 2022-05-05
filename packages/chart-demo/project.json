@@ -1,6 +1,5 @@
 {
   "projectType": "application",
-  "root": "packages/chart-demo",
   "sourceRoot": "packages/chart-demo/src",
   "tags": [],
   "targets": {
@@ -37,6 +36,12 @@
           "namedChunks": false,
           "extractLicenses": true,
           "vendorChunk": false
+        },
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
         }
       }
     },
@@ -48,8 +53,12 @@
       "configurations": {
         "production": {
           "buildTarget": "chart-demo:build:production"
+        },
+        "development": {
+          "buildTarget": "chart-demo:build:development"
         }
-      }
+      },
+      "defaultConfiguration": "development"
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
@@ -62,7 +71,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/chart-demo"],
       "options": {
-        "jestConfig": "packages/chart-demo/jest.config.js",
+        "jestConfig": "packages/chart-demo/jest.config.ts",
         "passWithNoTests": true
       }
     }

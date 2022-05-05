@@ -1,5 +1,4 @@
 {
-  "root": "packages/notification-service",
   "sourceRoot": "packages/notification-service/src",
   "projectType": "application",
   "targets": {
@@ -43,7 +42,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/notification-service"],
       "options": {
-        "jestConfig": "packages/notification-service/jest.config.js",
+        "jestConfig": "packages/notification-service/jest.config.ts",
         "passWithNoTests": true
       }
     }

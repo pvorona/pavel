@@ -1,5 +1,4 @@
 {
-  "root": "packages/mindmap-ui",
   "sourceRoot": "packages/mindmap-ui/src",
   "projectType": "library",
   "tags": [],
@@ -35,7 +34,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/mindmap-ui"],
       "options": {
-        "jestConfig": "packages/mindmap-ui/jest.config.js",
+        "jestConfig": "packages/mindmap-ui/jest.config.ts",
         "passWithNoTests": true
       }
     }

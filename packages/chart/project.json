@@ -1,5 +1,4 @@
 {
-  "root": "packages/chart",
   "sourceRoot": "packages/chart/src",
   "projectType": "library",
   "targets": {
@@ -24,7 +23,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/chart"],
       "options": {
-        "jestConfig": "packages/chart/jest.config.js",
+        "jestConfig": "packages/chart/jest.config.ts",
         "passWithNoTests": true
       }
     }

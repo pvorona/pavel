@@ -5,8 +5,6 @@ import {
   selectTranslateX,
   selectTranslateY,
   setScale,
-  setTranslateX,
-  setTranslateY,
   shiftByX,
   shiftByY,
 } from '../../modules'

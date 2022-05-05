@@ -1,5 +1,4 @@
 {
-  "root": "packages/comparator-shared",
   "sourceRoot": "packages/comparator-shared/src",
   "projectType": "library",
   "tags": [],
@@ -35,7 +34,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/comparator-shared"],
       "options": {
-        "jestConfig": "packages/comparator-shared/jest.config.js",
+        "jestConfig": "packages/comparator-shared/jest.config.ts",
         "passWithNoTests": true
       }
     }

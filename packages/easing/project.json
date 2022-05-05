@@ -1,5 +1,4 @@
 {
-  "root": "packages/easing",
   "sourceRoot": "packages/easing/src",
   "projectType": "library",
   "targets": {
@@ -24,7 +23,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/easing"],
       "options": {
-        "jestConfig": "packages/easing/jest.config.js",
+        "jestConfig": "packages/easing/jest.config.ts",
         "passWithNoTests": true
       }
     }

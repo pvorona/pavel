@@ -1,5 +1,4 @@
 {
-  "root": "packages/collector",
   "sourceRoot": "packages/collector/src",
   "projectType": "application",
   "targets": {
@@ -43,7 +42,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/collector"],
       "options": {
-        "jestConfig": "packages/collector/jest.config.js",
+        "jestConfig": "packages/collector/jest.config.ts",
         "passWithNoTests": true
       }
     }

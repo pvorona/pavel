@@ -1,5 +1,4 @@
 {
-  "root": "packages/observable",
   "sourceRoot": "packages/observable/src",
   "projectType": "library",
   "targets": {
@@ -24,7 +23,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/packages/observable"],
       "options": {
-        "jestConfig": "packages/observable/jest.config.js",
+        "jestConfig": "packages/observable/jest.config.ts",
         "passWithNoTests": true
       }
     }
