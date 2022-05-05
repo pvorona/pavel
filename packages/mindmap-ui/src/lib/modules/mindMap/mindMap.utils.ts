@@ -1,3 +1,4 @@
+import { makeCached } from '@pavel/utils'
 import { MindMapNode } from '../tree'
 import { Coordinate, PositionedMindMapNode } from './mindMap.types'
 
@@ -23,7 +24,7 @@ export function computeGeometry(
   if (!node.children || node.children.length === 0) {
     return {
       ...node,
-      // width: 1,
+      width: computeBranchingWidth(node),
       children: [],
       coordinate: currentCoordinate,
     }
@@ -33,25 +34,26 @@ export function computeGeometry(
     const positionedChildren = node.children.map(child =>
       computeGeometry(child, direction, currentCoordinate),
     )
-    // const width = Math.max(...positionedChildren.map(child => child.width))
 
     return {
       ...node,
       coordinate: currentCoordinate,
       children: positionedChildren,
-      // width,
+      width: computeBranchingWidth(node),
     }
   }
 
   if (node.children.length % 2 === 0) {
     const branchSize = node.children.length / 2
     const positionedChildren: PositionedMindMapNode[] = []
+    const width = computeBranchingWidth(node)
+    const averageBranchWidth = (width - 1) / 2 / branchSize
 
     for (let i = 0; i < branchSize; i++) {
       const child = node.children[i]
       const childOrigin = addCoordinates(currentCoordinate, {
         x: 0,
-        y: -branchSize + i + 0.5,
+        y: (i - branchSize) * averageBranchWidth,
       })
       const positionedChild = computeGeometry(child, direction, childOrigin)
       positionedChildren.push(positionedChild)
@@ -61,7 +63,7 @@ export function computeGeometry(
       const child = node.children[i]
       const childOrigin = addCoordinates(currentCoordinate, {
         x: 0,
-        y: i - branchSize + 1 - 0.5,
+        y: (i - branchSize + 1) * averageBranchWidth,
       })
       const positionedChild = computeGeometry(child, direction, childOrigin)
       positionedChildren.push(positionedChild)
@@ -71,19 +73,22 @@ export function computeGeometry(
       ...node,
       children: positionedChildren,
       coordinate: currentCoordinate,
+      width,
     }
   }
 
   if (node.children.length % 2 !== 0) {
     const branchSize = Math.floor(node.children.length / 2)
     const positionedChildren: PositionedMindMapNode[] = []
+    const width = computeBranchingWidth(node)
+    const averageBranchWidth = (width - 1) / 2 / branchSize
 
     for (let i = 0; i < branchSize; i++) {
       const child = node.children[i]
       // Account for direction
       const childOrigin = addCoordinates(currentCoordinate, {
         x: 0,
-        y: -branchSize + i,
+        y: (i - branchSize) * averageBranchWidth,
       })
       const positionedChild = computeGeometry(child, direction, childOrigin)
       positionedChildren.push(positionedChild)
@@ -103,7 +108,7 @@ export function computeGeometry(
       // Account for direction
       const childOrigin = addCoordinates(currentCoordinate, {
         x: 0,
-        y: i - branchSize,
+        y: (i - branchSize) * averageBranchWidth,
       })
       const positionedChild = computeGeometry(child, direction, childOrigin)
       positionedChildren.push(positionedChild)
@@ -113,16 +118,31 @@ export function computeGeometry(
       ...node,
       children: positionedChildren,
       coordinate: currentCoordinate,
+      width,
     }
   }
 
   throw new Error('Not implemented')
 }
 
-export function computeMaxBranchingLevel(node: MindMapNode): number {
+export function computeBranchingWidth(node: MindMapNode): number {
   if (!node.children || node.children.length === 0) {
     return 1
   }
 
-  return 0
+  const evenChildrenCountModifier = node.children.length % 2 === 0 ? 1 : 0
+
+  return (
+    sum(node.children.map(computeBranchingWidth)) + evenChildrenCountModifier
+  )
+}
+
+function sum(numbers: number[]): number {
+  let sum = 0
+
+  for (const number of numbers) {
+    sum += number
+  }
+
+  return sum
 }
