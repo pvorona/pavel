@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux'
 import { mindMapReducer, treeReducer, viewModeReducer } from '../modules'
+import { combineReducers } from '@reduxjs/toolkit'
 
 export const reducer = combineReducers({
   viewMode: viewModeReducer,

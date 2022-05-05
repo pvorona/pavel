@@ -1,4 +1,4 @@
-import { createSlice } from '@pavel/redux-slice'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getQueryParam } from '@pavel/utils'
 import { VIEW_MODE_QUERY_NAME } from './viewMode.constants'
 import { ViewMode } from './viewMode.types'
@@ -23,7 +23,7 @@ const uiModeSlice = createSlice({
   name: 'viewMode',
   initialState: INITIAL_VIEW_MODE,
   reducers: {
-    setViewMode: (_, mode: ViewMode) => {
+    setViewMode: (_, { payload: mode }: PayloadAction<ViewMode>) => {
       return mode
     },
   },

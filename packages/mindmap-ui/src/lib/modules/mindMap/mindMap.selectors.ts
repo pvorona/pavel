@@ -1,5 +1,5 @@
+import { createSelector } from '@reduxjs/toolkit'
 import { RootState } from '../../store'
-import { createSelector } from 'reselect'
 import { selectRootNode } from '../tree'
 import { computeGeometry } from './mindMap.utils'
 

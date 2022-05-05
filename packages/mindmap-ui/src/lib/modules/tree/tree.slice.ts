@@ -1,4 +1,4 @@
-import { createSlice } from '@pavel/redux-slice'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { MindMapNode } from './tree.types'
 
 export type TreeState = {
@@ -17,13 +17,13 @@ const treeSlice = createSlice({
   name: 'tree',
   initialState: INITIAL_STATE,
   reducers: {
-    setTree: (state, tree: MindMapNode) => {
+    setTree: (state, { payload: tree }: PayloadAction<MindMapNode>) => {
       state.root = tree
     },
-    setTreeId: (state, id: string) => {
+    setTreeId: (state, { payload: id }: PayloadAction<string>) => {
       state.id = id
     },
-    setText: (state, text: string) => {
+    setText: (state, { payload: text }: PayloadAction<string>) => {
       state.text = text
     },
   },

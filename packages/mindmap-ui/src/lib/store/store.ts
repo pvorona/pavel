@@ -1,31 +1,24 @@
-import { createStore, applyMiddleware } from 'redux'
 import { mindMapMiddleware, viewModeMiddleware } from '../modules'
 import {
   observeTreeMiddleware,
   updateTreeMiddleware,
 } from '../modules/tree/tree.middleware'
 import { reducer } from './reducer'
+import { CombinedState, configureStore, PreloadedState } from '@reduxjs/toolkit'
+import { RootState } from './types'
+import { NoInfer } from '@reduxjs/toolkit/dist/tsHelpers'
 
-const store = createStore(
-  reducer,
-  applyMiddleware(
-    viewModeMiddleware,
-    updateTreeMiddleware,
-    observeTreeMiddleware,
-    mindMapMiddleware,
-  ),
-)
-
-export const makeStore = (preloadedState: Partial<RootState>) =>
-  createStore(
+export const makeStore = (
+  preloadedState: PreloadedState<CombinedState<NoInfer<RootState>>>,
+) =>
+  configureStore({
     reducer,
     preloadedState,
-    applyMiddleware(
-      viewModeMiddleware,
-      updateTreeMiddleware,
-      observeTreeMiddleware,
-      mindMapMiddleware,
-    ),
-  )
-
-export type RootState = ReturnType<typeof store.getState>
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware().concat(
+        viewModeMiddleware,
+        updateTreeMiddleware,
+        observeTreeMiddleware,
+        mindMapMiddleware,
+      ),
+  })

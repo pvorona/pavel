@@ -8,6 +8,7 @@
   "private": true,
   "dependencies": {
     "@nrwl/next": "14.1.1",
+    "@reduxjs/toolkit": "^1.8.1",
     "autoprefixer": "^10.4.2",
     "classnames": "^2.3.1",
     "core-js": "^3.6.5",
