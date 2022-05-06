@@ -33,14 +33,29 @@ export const PositionedNode = memo(function PositionedNode({
     return null
   }
 
-  const anchorX = parentRect ? parentRect.x + parentRect.width : 0
+  const anchorX = (() => {
+    if (!parentRect) {
+      return { left: 0 }
+    }
+
+    if (node.coordinate.x < 0) {
+      return { right: -parentRect.x + SPACING.HORIZONTAL }
+    }
+
+    return {
+      left: parentRect.x + parentRect.width + SPACING.HORIZONTAL,
+    }
+  })()
   const top = node.coordinate.y * SPACING.VERTICAL
-  const left = anchorX + SPACING.HORIZONTAL
 
   return (
     <>
       {parentRect && currentNodeRect && (
-        <NodeLink parentRect={parentRect} currentNodeRect={currentNodeRect} />
+        <NodeLink
+          node={node}
+          parentRect={parentRect}
+          currentNodeRect={currentNodeRect}
+        />
       )}
       <div
         ref={setElement}
@@ -48,9 +63,13 @@ export const PositionedNode = memo(function PositionedNode({
           [styles['RootNode']]: isRoot,
           [styles['Node']]: !isRoot,
         })}
-        style={{ top, left, color: isRoot ? undefined : 'hsl(var(--c-1-20))' }}
+        style={{
+          top,
+          color: isRoot ? undefined : 'hsl(var(--c-1-20))',
+          ...anchorX,
+        }}
       >
-        {node.value}
+        {node.value} {JSON.stringify(node.coordinate)} {node.width}
       </div>
       {node.children?.map((child, index) => (
         <PositionedNode node={child} key={index} parentRect={currentNodeRect} />

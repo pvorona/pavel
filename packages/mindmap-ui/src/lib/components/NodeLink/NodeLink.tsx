@@ -1,18 +1,33 @@
 import { memo } from 'react'
-import { Rect, SPACING } from '../../modules'
+import { PositionedMindMapNode, Rect, SPACING } from '../../modules'
 
 export const NodeLink = memo(function NodeLink({
+  node,
   parentRect,
   currentNodeRect,
 }: {
+  node: PositionedMindMapNode
   parentRect: Rect
   currentNodeRect: Rect
 }) {
-  const anchorX = parentRect.x + parentRect.width
-  const anchorY = parentRect.y + parentRect.height / 2
-
+  const isLeft = node.coordinate.x < 0
   const isStraight = currentNodeRect.y === parentRect.y
   const isUpward = currentNodeRect.y < parentRect.y
+
+  const anchorX = (() => {
+    if (isLeft) {
+      return { right: Math.abs(parentRect.x) }
+    }
+
+    return { left: parentRect.x + parentRect.width }
+  })()
+  const anchorY = parentRect.y + parentRect.height / 2
+  const transform = (() => {
+    const scaleY = isUpward ? -1 : 1
+    const scaleX = isLeft ? -1 : 1
+
+    return { transform: `scale(${scaleX}, ${scaleY})` }
+  })()
 
   const lineHeight = isStraight
     ? SPACING.STROKE_WIDTH
@@ -45,12 +60,12 @@ export const NodeLink = memo(function NodeLink({
         stroke: 'hsl(var(--c-2-70))',
         strokeWidth: SPACING.STROKE_WIDTH,
         position: 'absolute',
-        left: anchorX,
         top: !isUpward ? anchorY : undefined,
         bottom: isUpward ? -anchorY : undefined,
-        transform: isUpward ? 'scaleY(-1)' : undefined,
         strokeLinecap: 'round',
         fill: 'none',
+        ...anchorX,
+        ...transform,
       }}
     >
       <path d={pathD} />

@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { RootState } from '../../store'
 import { selectRootNode } from '../tree'
-import { computeGeometry } from './mindMap.utils'
+import { computeGeometry, createPositionedTree } from './mindMap.utils'
 
 const selectMindMapState = (state: RootState) => state.mindMap
 
@@ -26,5 +26,5 @@ export const selectIsSliderVisible = createSelector(
 )
 
 export const selectPositionedTree = createSelector(selectRootNode, rootNode =>
-  rootNode ? computeGeometry(rootNode) : null,
+  rootNode ? createPositionedTree(rootNode) : null,
 )
