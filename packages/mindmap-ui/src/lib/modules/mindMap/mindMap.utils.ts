@@ -1,4 +1,4 @@
-import { makeCached } from '@pavel/utils'
+import { sum } from '@pavel/utils'
 import { MindMapNode } from '../tree'
 import { Coordinate, PositionedMindMapNode } from './mindMap.types'
 
@@ -33,7 +33,7 @@ export function computeGeometry(
   const positionedChildren: PositionedMindMapNode[] = []
   const width = computeBranchingWidth(node)
 
-  let currentOffset = -width / 2
+  let currentOffset = width === 1 ? -0.5 : -(width - 1) / 2
   for (let i = 0; i < node.children.length; i++) {
     const child = node.children[i]
     const childWidth = computeBranchingWidth(child)
@@ -65,14 +65,4 @@ export function computeBranchingWidth(node: MindMapNode): number {
   return (
     sum(node.children.map(computeBranchingWidth)) + evenChildrenCountModifier
   )
-}
-
-function sum(numbers: number[]): number {
-  let sum = 0
-
-  for (const number of numbers) {
-    sum += number
-  }
-
-  return sum
 }

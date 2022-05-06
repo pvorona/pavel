@@ -7,3 +7,9 @@ export const SCALE = {
 }
 
 export const HIDE_SLIDER_DELAY = 1_000
+
+export const SPACING = {
+  VERTICAL: 16 * 3,
+  HORIZONTAL: 16 * 2,
+  STROKE_WIDTH: 4,
+}

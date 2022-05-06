@@ -5,6 +5,13 @@ export type Coordinate = {
   y: number
 }
 
+export type Rect = {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 export type PositionedMindMapNode = {
   width: number
   value: MindMapNode['value']
