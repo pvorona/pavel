@@ -15,6 +15,12 @@ function getCustomProperties() {
       lightnessSteps: 21,
       name: '--c-1',
     }),
+    ...createPalette({
+      hue: 228,
+      baseSaturation: 60,
+      lightnessSteps: 21,
+      name: '--c-2',
+    }),
   }
 }
 

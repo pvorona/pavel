@@ -30,99 +30,29 @@ export function computeGeometry(
     }
   }
 
-  if (node.children.length === 1) {
-    const positionedChildren = node.children.map(child =>
-      computeGeometry(child, direction, currentCoordinate),
-    )
+  const positionedChildren: PositionedMindMapNode[] = []
+  const width = computeBranchingWidth(node)
 
-    return {
-      ...node,
-      coordinate: currentCoordinate,
-      children: positionedChildren,
-      width: computeBranchingWidth(node),
-    }
+  let currentOffset = -width / 2
+  for (let i = 0; i < node.children.length; i++) {
+    const child = node.children[i]
+    const childWidth = computeBranchingWidth(child)
+    const childOrigin = addCoordinates(currentCoordinate, {
+      x: 0,
+      y: currentOffset + childWidth / 2,
+    })
+    const positionedChild = computeGeometry(child, direction, childOrigin)
+    positionedChildren.push(positionedChild)
+
+    currentOffset += childWidth
   }
 
-  if (node.children.length % 2 === 0) {
-    const branchSize = node.children.length / 2
-    const positionedChildren: PositionedMindMapNode[] = []
-    const width = computeBranchingWidth(node)
-    const averageBranchWidth = (width - 1) / 2 / branchSize
-
-    for (let i = 0; i < branchSize; i++) {
-      const child = node.children[i]
-      const childOrigin = addCoordinates(currentCoordinate, {
-        x: 0,
-        y: (i - branchSize) * averageBranchWidth,
-      })
-      const positionedChild = computeGeometry(child, direction, childOrigin)
-      positionedChildren.push(positionedChild)
-    }
-
-    for (let i = branchSize; i < node.children.length; i++) {
-      const child = node.children[i]
-      const childOrigin = addCoordinates(currentCoordinate, {
-        x: 0,
-        y: (i - branchSize + 1) * averageBranchWidth,
-      })
-      const positionedChild = computeGeometry(child, direction, childOrigin)
-      positionedChildren.push(positionedChild)
-    }
-
-    return {
-      ...node,
-      children: positionedChildren,
-      coordinate: currentCoordinate,
-      width,
-    }
+  return {
+    ...node,
+    children: positionedChildren,
+    coordinate: currentCoordinate,
+    width,
   }
-
-  if (node.children.length % 2 !== 0) {
-    const branchSize = Math.floor(node.children.length / 2)
-    const positionedChildren: PositionedMindMapNode[] = []
-    const width = computeBranchingWidth(node)
-    const averageBranchWidth = (width - 1) / 2 / branchSize
-
-    for (let i = 0; i < branchSize; i++) {
-      const child = node.children[i]
-      // Account for direction
-      const childOrigin = addCoordinates(currentCoordinate, {
-        x: 0,
-        y: (i - branchSize) * averageBranchWidth,
-      })
-      const positionedChild = computeGeometry(child, direction, childOrigin)
-      positionedChildren.push(positionedChild)
-    }
-
-    const middleChild = node.children[branchSize]
-    const positionedMiddleChild = computeGeometry(
-      middleChild,
-      direction,
-      currentCoordinate,
-    )
-
-    positionedChildren.push(positionedMiddleChild)
-
-    for (let i = branchSize + 1; i < node.children.length; i++) {
-      const child = node.children[i]
-      // Account for direction
-      const childOrigin = addCoordinates(currentCoordinate, {
-        x: 0,
-        y: (i - branchSize) * averageBranchWidth,
-      })
-      const positionedChild = computeGeometry(child, direction, childOrigin)
-      positionedChildren.push(positionedChild)
-    }
-
-    return {
-      ...node,
-      children: positionedChildren,
-      coordinate: currentCoordinate,
-      width,
-    }
-  }
-
-  throw new Error('Not implemented')
 }
 
 export function computeBranchingWidth(node: MindMapNode): number {

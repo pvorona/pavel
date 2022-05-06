@@ -10,5 +10,5 @@ export const Tree = memo(function Tree() {
     return <span>Loading</span>
   }
 
-  return <PositionedNode node={positionedRootNode} root origin={ORIGIN} />
+  return <PositionedNode node={positionedRootNode} isRoot origin={ORIGIN} />
 })

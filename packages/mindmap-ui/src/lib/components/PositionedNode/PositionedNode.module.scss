@@ -1,14 +1,15 @@
 .RootNode {
   font-weight: 700;
   font-size: 2rem;
+  color: hsl(var(--c-1-25));
 }
 
 .RootNode,
 .Node {
-  line-height: 3rem;
-  color: hsl(var(--c-1-25));
+  line-height: 1;
 }
 
 .Node {
   font-weight: 500;
+  font-size: 1rem;
 }
