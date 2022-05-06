@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Rect, SPACING } from '../../modules'
 
-export const Link = memo(function Link({
+export const NodeLink = memo(function NodeLink({
   parentRect,
   currentNodeRect,
 }: {

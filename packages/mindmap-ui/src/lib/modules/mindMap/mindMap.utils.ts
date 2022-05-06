@@ -12,12 +12,13 @@ export function addCoordinates(a: Coordinate, b: Coordinate): Coordinate {
 export const ORIGIN: Coordinate = { x: 0, y: 0 }
 export const DIRECTION = {
   RIGHT: { x: 1, y: 0 },
+  LEFT: { x: -1, y: 0 },
 } as const
 
 export function computeGeometry(
   node: MindMapNode,
   direction: Coordinate = DIRECTION.RIGHT,
-  origin: Coordinate = ORIGIN,
+  origin: Coordinate = DIRECTION.LEFT,
 ): PositionedMindMapNode {
   const currentCoordinate = addCoordinates(origin, direction)
 

@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { memo, useEffect, useState } from 'react'
 import { PositionedMindMapNode, Rect, SPACING } from '../../modules'
-import { Link } from '../Link'
+import { NodeLink } from '../NodeLink'
 import styles from './PositionedNode.module.scss'
 
 export const PositionedNode = memo(function PositionedNode({
@@ -34,14 +34,13 @@ export const PositionedNode = memo(function PositionedNode({
   }
 
   const anchorX = parentRect ? parentRect.x + parentRect.width : 0
-
   const top = node.coordinate.y * SPACING.VERTICAL
   const left = anchorX + SPACING.HORIZONTAL
 
   return (
     <>
       {parentRect && currentNodeRect && (
-        <Link parentRect={parentRect} currentNodeRect={currentNodeRect} />
+        <NodeLink parentRect={parentRect} currentNodeRect={currentNodeRect} />
       )}
       <div
         ref={setElement}
