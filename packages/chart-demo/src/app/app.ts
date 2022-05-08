@@ -1,6 +1,7 @@
 import { Chart, ChartOptions } from '@pavel/chart'
 import { theme } from './theme'
 import './app.scss'
+import { assert } from '@pavel/assert'
 
 type DataEntry = { timestamp: number; value: number }
 
@@ -31,9 +32,9 @@ async function startApp() {
       )
       const chartContainer = document.getElementById('chart')
 
-      if (!chartContainer) {
-        throw new Error('Cannot find #chart container')
-      }
+      assert(chartContainer !== null, 'Cannot find #chart container')
+
+      const domain = data1.map(d => d.timestamp)
 
       const options: ChartOptions = {
         x: {
@@ -71,11 +72,11 @@ async function startApp() {
           edgeColor: theme.overviewEdge,
         },
         viewBox: {
-          startIndex: Math.floor((data1.length - 1) * 0.75),
-          endIndex: data1.length - 1,
+          start: domain[0],
+          end: domain[domain.length - 1],
         },
         graphNames: ['A', 'B'],
-        domain: data1.map(d => d.timestamp),
+        domain,
         data: {
           A: data1.map(d => d.value),
           B: data2.map(d => d.value),

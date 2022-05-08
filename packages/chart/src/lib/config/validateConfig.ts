@@ -88,8 +88,8 @@ export function validateViewBoxOptions(
   options: ViewBoxOptions,
 ): ViewBoxOptions {
   return {
-    startIndex: assertNonNegativeNumber(options.startIndex),
-    endIndex: assertNonNegativeNumber(options.endIndex),
+    start: assertNonNegativeNumber(options.start),
+    end: assertNonNegativeNumber(options.end),
   }
 }
 

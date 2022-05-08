@@ -1,13 +1,8 @@
 import { effect, observable, observe } from '@pavel/observable'
-import { ensureInBounds, handleDrag } from '@pavel/utils'
+import { ensureInBounds, handleDrag, interpolate } from '@pavel/utils'
 import { ChartContext, ChartOptions } from '../../../types'
 import { areNumbersClose } from '../../../util'
-import {
-  cursor,
-  DEVIATION_FROM_STRAIGHT_LINE_DEGREES,
-  MIN_VIEWBOX,
-  WHEEL_MULTIPLIER,
-} from '../../constants'
+import { cursor } from '../../constants'
 import { Component } from '../../types'
 
 import './overview-resize-handler.css'
@@ -25,13 +20,14 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     width,
     isDragging,
     activeCursor,
-    isWheeling,
-    inertStartIndex,
-    inertEndIndex,
     inertVisibleMax,
     inertVisibleMin,
     inertGlobalMinMaxByGraphName,
     inertVisibleMinMaxByGraphName,
+    startX,
+    endX,
+    inertStartX,
+    inertEndX,
   } = context
 
   const {
@@ -61,42 +57,69 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     viewBoxElement.style.right = `${width - right}px`
   })
 
-  observe([startIndex, width], (startIndex, width) => {
-    // interpolate
-    const newLeft = (startIndex / (options.total - 1)) * width
+  observe([startX, width], (startX, width) => {
+    const newLeft = interpolate(
+      options.domain[0],
+      options.domain[options.domain.length - 1],
+      0,
+      width,
+      startX,
+    )
 
     if (!areNumbersClose(left.value, newLeft)) {
       left.value = newLeft
     }
   })
 
-  observe([endIndex, width], (endIndex, width) => {
-    // interpolate
-    const newRight = (endIndex / (options.total - 1)) * width
+  observe([endX, width], (endX, width) => {
+    const newRight = interpolate(
+      options.domain[0],
+      options.domain[options.domain.length - 1],
+      0,
+      width,
+      endX,
+    )
 
     if (!areNumbersClose(right.value, newRight)) {
       right.value = newRight
     }
   })
 
-  observe([left], left => {
-    // interpolate
-    const newStartIndex = (left / width.value) * (options.total - 1)
+  observe([left, width], (left, width) => {
+    const newX = interpolate(
+      0,
+      width,
+      options.domain[0],
+      options.domain[options.total - 1],
+      left,
+    )
+    const boundedNewX = ensureInBounds(
+      newX,
+      options.domain[0],
+      options.domain[options.domain.length - 1],
+    )
 
-    if (!areNumbersClose(startIndex.value, newStartIndex)) {
-      startIndex.value = newStartIndex
+    if (!areNumbersClose(startX.value, boundedNewX)) {
+      startX.value = boundedNewX
     }
   })
 
-  observe([right], right => {
-    // interpolate
-    const newEndIndex = Math.min(
-      (right / width.value) * (options.total - 1),
-      options.total - 1,
+  observe([right, width], (right, width) => {
+    const newX = interpolate(
+      0,
+      width,
+      options.domain[0],
+      options.domain[options.total - 1],
+      right,
+    )
+    const boundedNewX = ensureInBounds(
+      newX,
+      options.domain[0],
+      options.domain[options.domain.length - 1],
     )
 
-    if (!areNumbersClose(endIndex.value, newEndIndex)) {
-      endIndex.value = newEndIndex
+    if (!areNumbersClose(endX.value, boundedNewX)) {
+      endX.value = boundedNewX
     }
   })
 
@@ -116,8 +139,8 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
 
     left.value = newLeft
     right.value = newRight
-    inertStartIndex.complete()
-    inertEndIndex.complete()
+    inertStartX.complete()
+    inertEndX.complete()
     inertVisibleMax.complete()
     inertVisibleMin.complete()
     inertGlobalMinMaxByGraphName.complete()
@@ -135,8 +158,8 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
 
     left.value = newLeft
     right.value = newRight
-    inertStartIndex.complete()
-    inertEndIndex.complete()
+    inertStartX.complete()
+    inertEndX.complete()
     inertVisibleMax.complete()
     inertVisibleMin.complete()
     inertGlobalMinMaxByGraphName.complete()
@@ -158,8 +181,6 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     onDragMove: onViewBoxElementMouseMove,
     onDragEnd: onViewBoxElementMouseUp,
   })
-
-  viewBoxElement.addEventListener('wheel', onWheel)
 
   function onLeftResizeHandlerMouseDown(event: MouseEvent | Touch) {
     isDragging.value = true
@@ -222,70 +243,6 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       left.value + minimalPixelsBetweenResizeHandlers,
       rightVar,
     )
-  }
-
-  // Exact copy of Series#onWheel
-  function onWheel(e: WheelEvent) {
-    e.preventDefault()
-    isWheeling.value = true
-
-    const angle = (Math.atan(e.deltaY / e.deltaX) * 180) / Math.PI
-
-    const viewBoxWidth = endIndex.value - startIndex.value
-    const dynamicFactor = (viewBoxWidth / MIN_VIEWBOX) * WHEEL_MULTIPLIER
-
-    if (
-      (angle < -(90 - DEVIATION_FROM_STRAIGHT_LINE_DEGREES) && angle >= -90) || // top right, bottom left
-      (angle > 90 - DEVIATION_FROM_STRAIGHT_LINE_DEGREES && angle <= 90) // top left, bottom right
-    ) {
-      const deltaY = e.deltaY
-
-      if (
-        deltaY < 0 &&
-        endIndex.value -
-          startIndex.value -
-          2 * Math.abs(deltaY * dynamicFactor) <
-          MIN_VIEWBOX
-      ) {
-        const center = (endIndex.value + startIndex.value) / 2
-        startIndex.value = ensureInBounds(
-          center - MIN_VIEWBOX / 2,
-          0,
-          options.total - 1 - MIN_VIEWBOX,
-        )
-
-        endIndex.value = ensureInBounds(
-          center + MIN_VIEWBOX / 2,
-          MIN_VIEWBOX,
-          options.total - 1,
-        )
-      } else {
-        startIndex.value = ensureInBounds(
-          startIndex.value - deltaY * dynamicFactor,
-          0,
-          options.total - 1 - MIN_VIEWBOX,
-        )
-        endIndex.value = ensureInBounds(
-          endIndex.value + deltaY * dynamicFactor,
-          startIndex.value + MIN_VIEWBOX,
-          options.total - 1,
-        )
-      }
-    } else if (
-      angle >= -DEVIATION_FROM_STRAIGHT_LINE_DEGREES &&
-      angle <= DEVIATION_FROM_STRAIGHT_LINE_DEGREES // left, right
-    ) {
-      startIndex.value = ensureInBounds(
-        startIndex.value + e.deltaX * dynamicFactor,
-        0,
-        options.total - 1 - viewBoxWidth,
-      )
-      endIndex.value = ensureInBounds(
-        startIndex.value + viewBoxWidth,
-        MIN_VIEWBOX,
-        options.total - 1,
-      )
-    }
   }
 
   return { element: viewBoxElement }
