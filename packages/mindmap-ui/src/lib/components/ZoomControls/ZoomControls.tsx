@@ -1,5 +1,6 @@
 import { AddIcon, IconButton, RemoveIcon, SearchIcon } from '@pavel/components'
 import classNames from 'classnames'
+import { memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   SCALE,
@@ -14,7 +15,7 @@ import {
 import { RangeSlider } from '../RangeSlider'
 import { Surface } from '../Surface'
 
-export function ZoomControls() {
+export const ZoomControls = memo(function ZoomControls() {
   const viewMode = useSelector(selectViewMode)
   const scale = useSelector(selectScale)
   const isSliderVisible = useSelector(selectIsSliderVisible)
@@ -87,4 +88,4 @@ export function ZoomControls() {
       </Surface>
     </div>
   )
-}
+})

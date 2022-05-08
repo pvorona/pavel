@@ -14,20 +14,14 @@ let lastUpdatedTime = Date.now()
 export const observeTreeMiddleware: Middleware = store => next => {
   const valueObserver = (tree: MindMapNode) => {
     if (Date.now() - lastUpdatedTime <= UPDATE_TREE_DEBOUNCE_MS) {
-      console.log(`[${Date.now()}] Skipping update`, tree)
-
       return
     }
-
-    console.log(`[${Date.now()}] Applying tree`, tree)
 
     store.dispatch(setTree(tree))
     const newText = treeToMarkdown(tree)
     const text = selectText(store.getState())
 
     if (text !== newText) {
-      console.log(`[${Date.now()}] Applying text`, newText)
-
       store.dispatch({
         type: setText.toString(),
         payload: newText,
@@ -35,10 +29,10 @@ export const observeTreeMiddleware: Middleware = store => next => {
       })
     }
   }
+
   const errorObserver = console.error
   const id = selectTreeId(store.getState())
   const startObserving = (id: string) => {
-    console.log(`[${Date.now()}] Start observing`)
     return observeTree({
       id,
       valueObserver,
@@ -67,8 +61,6 @@ export const updateTreeMiddleware: Middleware = store => next => {
   let debounceTimeoutId: undefined | NodeJS.Timeout = undefined
 
   async function updateTree(id: string, tree: MindMapNode) {
-    console.log(`[${Date.now()}] Sending`, tree)
-
     debounceTimeoutId = undefined
 
     try {
@@ -83,14 +75,10 @@ export const updateTreeMiddleware: Middleware = store => next => {
 
     if (action.type === setText.toString()) {
       if (action.skipPush) {
-        console.log(`[${Date.now()}] Skipping internal update`)
-
         return
       }
 
       lastUpdatedTime = Date.now()
-
-      console.log(`[${Date.now()}] Modified`, action.payload)
 
       if (debounceTimeoutId) {
         clearTimeout(debounceTimeoutId)

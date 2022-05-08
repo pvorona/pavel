@@ -1,4 +1,5 @@
 import { Button, MarkdownIcon, MindMapIcon, Variant } from '@pavel/components'
+import { memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   setViewMode as setViewModeAction,
@@ -27,9 +28,26 @@ const notActiveStyles = {
   '--font-weight': 700,
 }
 
-export function ViewModeSwitch() {
+export const ViewModeSwitch = memo(function ViewModeSwitch() {
   const viewMode = useSelector(selectViewMode)
   const dispatch = useDispatch()
+
+  function handleMindMapClick() {
+    if (viewMode === ViewMode.MINDMAP) {
+      return
+    }
+
+    dispatch(setViewModeAction(ViewMode.MINDMAP))
+  }
+
+  function handleMarkdownClick() {
+    if (viewMode === ViewMode.MARKDOWN) {
+      return
+    }
+
+    dispatch(setViewModeAction(ViewMode.MARKDOWN))
+  }
+
   const mindmapButtonStyleProps = (() => {
     const isActive = viewMode === ViewMode.MINDMAP
     const variant = Variant.Filled
@@ -53,20 +71,16 @@ export function ViewModeSwitch() {
 
   return (
     <Surface className="fixed top-8 left-12 py-1 px-1" rounded withBorder>
-      <Button
-        rounded
-        onClick={() => dispatch(setViewModeAction(ViewMode.MINDMAP))}
-        {...mindmapButtonStyleProps}
-      >
+      <Button rounded onClick={handleMindMapClick} {...mindmapButtonStyleProps}>
         <MindMapIcon className="-ml-3 mr-3" /> Mind Map
       </Button>
       <Button
         rounded
-        onClick={() => dispatch(setViewModeAction(ViewMode.MARKDOWN))}
+        onClick={handleMarkdownClick}
         {...markdownButtonStyleProps}
       >
         <MarkdownIcon className="-ml-3 mr-3" /> Markdown
       </Button>
     </Surface>
   )
-}
+})

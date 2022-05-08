@@ -33,7 +33,7 @@ export function treeToMarkdown(tree: MindMapNode): string {
   return treeToLines(tree).join('\n')
 }
 
-function countLeadingWhitespace(string: string): number {
+function getLeadingWhitespaceCount(string: string): number {
   return string.search(/\S|$/)
 }
 
@@ -43,7 +43,7 @@ export function markdownToTree(text: string): MindMapNode | undefined {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
-    const whitespaceCount = countLeadingWhitespace(line)
+    const whitespaceCount = getLeadingWhitespaceCount(line)
     const level = whitespaceCount / LEVEL_INDENT.length
 
     if (i === 0 && level !== 0) {
