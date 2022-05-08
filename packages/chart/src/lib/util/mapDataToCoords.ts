@@ -25,7 +25,6 @@ export function mapDataToCoords(
       max,
       minY,
       maxY,
-      // interpolatePoint(startIndex, data),
       getValueAt(startIndex, domain, data),
     )
 
@@ -44,7 +43,6 @@ export function mapDataToCoords(
       minY,
       maxY,
       getValueAt(currentIndex, domain, data),
-      // interpolatePoint(currentIndex, data),
     )
 
     coords.push({ x, y })
@@ -57,7 +55,6 @@ export function mapDataToCoords(
       max,
       minY,
       maxY,
-      // interpolatePoint(endIndex, data)
       getValueAt(endIndex, domain, data),
     )
 

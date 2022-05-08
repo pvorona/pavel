@@ -14,8 +14,8 @@ export function handleDrag(
     onDragEnd?: (e: MouseEvent | Touch) => void
   },
 ) {
-  element.addEventListener('mousedown', onStart)
-  element.addEventListener('touchstart', onStart)
+  element.addEventListener('mousedown', onStart, { passive: false })
+  element.addEventListener('touchstart', onStart, { passive: false })
 
   function onStart(e: MouseEvent | TouchEvent) {
     e.preventDefault()

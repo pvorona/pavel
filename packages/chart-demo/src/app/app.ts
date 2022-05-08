@@ -1,21 +1,40 @@
 import { Chart, ChartOptions } from '@pavel/chart'
-import { assert } from '@pavel/assert'
 import { theme } from './theme'
 import './app.scss'
+import { assert } from '@pavel/assert'
 
 type DataEntry = { timestamp: number; value: number }
 
 document.body.style.background = theme.body || theme.background
 
 async function startApp() {
-  const seriesPromise = fetch('./assets/data/SPX.json').then(r => r.json())
+  const series1 = fetch(
+    './assets/data/dj/1593495762538-1593515829173.json',
+  ).then(r => r.json())
+  const series2 = fetch(
+    './assets/data/dj/1593520483683-1593533756968.json',
+  ).then(r => r.json())
 
   document.addEventListener('DOMContentLoaded', async () => {
+    const startIndex = 5000
+    // const itemsToShow = 13_908
+    const itemsToShow = 1000
+
     try {
-      const series = await seriesPromise
+      const [data1O, data2O] = await Promise.all([series1, series2])
+      const data1: DataEntry[] = data1O.slice(
+        startIndex,
+        startIndex + itemsToShow,
+      )
+      const data2: DataEntry[] = data2O.slice(
+        startIndex,
+        startIndex + itemsToShow,
+      )
       const chartContainer = document.getElementById('chart')
 
       assert(chartContainer !== null, 'Cannot find #chart container')
+
+      const domain = data1.map(d => d.timestamp)
 
       const options: ChartOptions = {
         x: {
@@ -53,14 +72,14 @@ async function startApp() {
           edgeColor: theme.overviewEdge,
         },
         viewBox: {
-          start: new Date(series[0].timestamp).getTime(),
-          end: new Date(series[series.length - 1].timestamp).getTime(),
+          start: domain[0],
+          end: domain[domain.length - 1],
         },
         graphNames: ['A', 'B'],
-        domain: series.map(d => new Date(d.timestamp).getTime()),
+        domain,
         data: {
-          A: series.map(d => d.bid),
-          B: series.map(d => d.ofr),
+          A: data1.map(d => d.value),
+          B: data2.map(d => d.value),
         },
         lineJoin: {
           A: 'bevel',
@@ -71,7 +90,7 @@ async function startApp() {
           B: 'butt',
         },
         colors: { A: theme.series[0], B: theme.series[1] },
-        total: series.length,
+        total: data1.length,
         visibility: {
           A: true,
           B: true,

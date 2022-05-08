@@ -11,8 +11,8 @@ import { validateConfig } from '../../config'
 import {
   DEVIATION_FROM_STRAIGHT_LINE_DEGREES,
   MIN_VIEWBOX_MS,
-  WHEEL_MULTIPLIER,
 } from '../constants'
+import { ensureInBounds } from '@pavel/utils'
 
 export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
   const options = validateConfig(uncheckedOptions)
@@ -22,19 +22,15 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
 
   parent.appendChild(element)
 
-  const resizeListener = throttleTask(function measureContainerSize() {
+  const handleResize = throttleTask(function measureContainerSize() {
     width.value = parent.offsetWidth
     height.value = parent.offsetHeight
   }, PRIORITY.READ)
 
-  window.addEventListener('resize', resizeListener)
-  element.addEventListener('wheel', handleWheel)
+  window.addEventListener('resize', handleResize)
+  element.addEventListener('wheel', handleWheel, { passive: false })
 
-  return { element, destroy }
-
-  function destroy() {
-    window.removeEventListener('resize', resizeListener)
-  }
+  return { element }
 
   function handleWheel(event: WheelEvent) {
     event.preventDefault()
@@ -43,7 +39,7 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
 
     const angle = (Math.atan(event.deltaY / event.deltaX) * 180) / Math.PI
     const viewBoxWidth = endX.value - startX.value
-    const dynamicFactor = (viewBoxWidth / MIN_VIEWBOX_MS) * WHEEL_MULTIPLIER
+    const dynamicFactor = viewBoxWidth / MIN_VIEWBOX_MS
 
     if (
       (angle < -(90 - DEVIATION_FROM_STRAIGHT_LINE_DEGREES) && angle >= -90) || // top right, bottom left
@@ -53,23 +49,46 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
 
       if (
         deltaY < 0 &&
-        endX.value - startX.value - 2 * Math.abs(deltaY * dynamicFactor) <
-          MIN_VIEWBOX_MS
+        viewBoxWidth - 2 * Math.abs(deltaY * dynamicFactor) < MIN_VIEWBOX_MS
       ) {
-        const center = (endX.value + startX.value) / 2
+        const center = (startX.value + endX.value) / 2
 
-        startX.value = center - MIN_VIEWBOX_MS / 2
-        endX.value = center + MIN_VIEWBOX_MS / 2
+        startX.value = ensureInBounds(
+          center - MIN_VIEWBOX_MS / 2,
+          options.domain[0],
+          options.domain[options.domain.length - 1] - MIN_VIEWBOX_MS,
+        )
+        endX.value = ensureInBounds(
+          center + MIN_VIEWBOX_MS / 2,
+          options.domain[0] + MIN_VIEWBOX_MS,
+          options.domain[options.domain.length - 1],
+        )
       } else {
-        startX.value = startX.value - deltaY * dynamicFactor
-        endX.value = endX.value + deltaY * dynamicFactor
+        startX.value = ensureInBounds(
+          startX.value - deltaY * dynamicFactor,
+          options.domain[0],
+          options.domain[options.domain.length - 1] - MIN_VIEWBOX_MS,
+        )
+        endX.value = ensureInBounds(
+          endX.value + deltaY * dynamicFactor,
+          startX.value + MIN_VIEWBOX_MS,
+          options.domain[options.domain.length - 1],
+        )
       }
     } else if (
       angle >= -DEVIATION_FROM_STRAIGHT_LINE_DEGREES &&
       angle <= DEVIATION_FROM_STRAIGHT_LINE_DEGREES // left, right
     ) {
-      startX.value = startX.value + event.deltaX * dynamicFactor
-      endX.value = startX.value + viewBoxWidth
+      startX.value = ensureInBounds(
+        startX.value + event.deltaX * dynamicFactor,
+        options.domain[0],
+        options.domain[options.domain.length - 1] - viewBoxWidth,
+      )
+      endX.value = ensureInBounds(
+        startX.value + viewBoxWidth,
+        options.domain[0],
+        options.domain[options.domain.length - 1],
+      )
     }
   }
 

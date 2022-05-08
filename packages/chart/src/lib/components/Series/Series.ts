@@ -10,7 +10,12 @@ import { cursor, MIN_HEIGHT } from '../constants'
 import { Component, Point } from '../types'
 import { createGraphs } from '../Graphs/createGraphs'
 import { scheduleTask } from '@pavel/scheduling'
-import { addEventListeners, handleDrag, interpolate } from '@pavel/utils'
+import {
+  addEventListeners,
+  ensureInBounds,
+  handleDrag,
+  interpolate,
+} from '@pavel/utils'
 
 export const Series: Component<ChartOptions, ChartContext> = (
   options,
@@ -149,20 +154,28 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
     let prevMouseX = 0
 
-    const handleGraphsDragMove = (e: MouseEvent | Touch) => {
+    const handleDragMove = (event: MouseEvent | Touch) => {
       const visibleRange = endX.value - startX.value
       const newX = interpolate(
         0,
         width.value,
         startX.value,
         endX.value,
-        prevMouseX - e.clientX,
+        prevMouseX - event.clientX,
       )
 
-      startX.value = newX
-      endX.value = newX + visibleRange
+      startX.value = ensureInBounds(
+        newX,
+        options.domain[0],
+        options.domain[options.domain.length - 1] - visibleRange,
+      )
+      endX.value = ensureInBounds(
+        startX.value + visibleRange,
+        options.domain[0],
+        options.domain[options.domain.length - 1],
+      )
 
-      prevMouseX = e.clientX
+      prevMouseX = event.clientX
     }
 
     handleDrag(element, {
@@ -178,7 +191,7 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
         prevMouseX = 0
       },
-      onDragMove: handleGraphsDragMove,
+      onDragMove: handleDragMove,
     })
   }
 }

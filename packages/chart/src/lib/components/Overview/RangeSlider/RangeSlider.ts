@@ -1,6 +1,7 @@
 import { effect, observable, observe } from '@pavel/observable'
 import { ensureInBounds, handleDrag, interpolate } from '@pavel/utils'
 import { ChartContext, ChartOptions } from '../../../types'
+import { areNumbersClose } from '../../../util'
 import { cursor } from '../../constants'
 import { Component } from '../../types'
 
@@ -65,7 +66,9 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       startX,
     )
 
-    left.value = newLeft
+    if (!areNumbersClose(left.value, newLeft)) {
+      left.value = newLeft
+    }
   })
 
   observe([endX, width], (endX, width) => {
@@ -77,7 +80,9 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       endX,
     )
 
-    right.value = newRight
+    if (!areNumbersClose(right.value, newRight)) {
+      right.value = newRight
+    }
   })
 
   observe([left, width], (left, width) => {
@@ -88,8 +93,15 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       options.domain[options.total - 1],
       left,
     )
+    const boundedNewX = ensureInBounds(
+      newX,
+      options.domain[0],
+      options.domain[options.domain.length - 1],
+    )
 
-    startX.value = newX
+    if (!areNumbersClose(startX.value, boundedNewX)) {
+      startX.value = boundedNewX
+    }
   })
 
   observe([right, width], (right, width) => {
@@ -100,8 +112,15 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       options.domain[options.total - 1],
       right,
     )
+    const boundedNewX = ensureInBounds(
+      newX,
+      options.domain[0],
+      options.domain[options.domain.length - 1],
+    )
 
-    endX.value = newX
+    if (!areNumbersClose(endX.value, boundedNewX)) {
+      endX.value = boundedNewX
+    }
   })
 
   let cursorResizeHandlerDelta = 0
@@ -162,8 +181,6 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     onDragMove: onViewBoxElementMouseMove,
     onDragEnd: onViewBoxElementMouseUp,
   })
-
-  // viewBoxElement.addEventListener('wheel', onWheel)
 
   function onLeftResizeHandlerMouseDown(event: MouseEvent | Touch) {
     isDragging.value = true

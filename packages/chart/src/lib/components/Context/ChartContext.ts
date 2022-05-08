@@ -42,7 +42,9 @@ export const ChartContext = (options: ChartOptions) => {
   const inertEndX = inert(TRANSITION.FAST)(endX)
 
   const startIndex = computeLazy(
-    [inertStartX],
+    // TODO
+    // [inertStartX],
+    [startX],
     inertStartX => {
       return xToIndex(options.domain, inertStartX)
     },
@@ -52,7 +54,9 @@ export const ChartContext = (options: ChartOptions) => {
   )
 
   const endIndex = computeLazy(
-    [inertEndX],
+    // TODO
+    // [inertEndX],
+    [endX],
     inertEndX => {
       return xToIndex(options.domain, inertEndX)
     },
