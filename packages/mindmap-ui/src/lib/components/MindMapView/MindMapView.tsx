@@ -39,7 +39,7 @@ export function MindMapView() {
       dispatch(setScale(scale + change))
     }
 
-    element.addEventListener('wheel', handleWheel)
+    element.addEventListener('wheel', handleWheel, { passive: false })
 
     return () => {
       element.removeEventListener('wheel', handleWheel)

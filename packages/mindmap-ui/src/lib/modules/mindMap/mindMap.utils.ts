@@ -11,6 +11,9 @@ export function addCoordinates(a: Coordinate, b: Coordinate): Coordinate {
 
 export const ORIGIN: Coordinate = { x: 0, y: 0 }
 export const DIRECTION = {
+  NONE: { x: 0, y: 0 },
+  UP: { x: 0, y: -1 },
+  DOWN: { x: 0, y: 1 },
   RIGHT: { x: 1, y: 0 },
   LEFT: { x: -1, y: 0 },
 } as const
@@ -34,7 +37,8 @@ export function computeGeometry(
   const positionedChildren: PositionedMindMapNode[] = []
   const width = computeBranchingWidth(node)
 
-  let currentOffset = width === 1 ? -0.5 : -(width - 1) / 2
+  let currentOffset = -width / 2
+
   for (let i = 0; i < node.children.length; i++) {
     const child = node.children[i]
     const childWidth = computeBranchingWidth(child)
@@ -61,9 +65,5 @@ export function computeBranchingWidth(node: MindMapNode): number {
     return 1
   }
 
-  const evenChildrenCountModifier = node.children.length % 2 === 0 ? 1 : 0
-
-  return (
-    sum(node.children.map(computeBranchingWidth)) + evenChildrenCountModifier
-  )
+  return sum(node.children.map(computeBranchingWidth))
 }
