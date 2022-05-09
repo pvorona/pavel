@@ -5,7 +5,6 @@ function getRectVerticalCenter(rect: Rect): number {
   return rect.y + rect.height / 2
 }
 
-// TODO: Currently only works in ltr layouts
 export const NodeLink = memo(function NodeLink({
   parentRect,
   currentNodeRect,
@@ -17,6 +16,17 @@ export const NodeLink = memo(function NodeLink({
   node: PositionedMindMapNode
   parent: PositionedMindMapNode
 }) {
+  const horizontalDirection = (() => {
+    if (node.coordinate.x < parent.coordinate.x) {
+      return DIRECTION.LEFT
+    }
+
+    if (node.coordinate.x > parent.coordinate.x) {
+      return DIRECTION.RIGHT
+    }
+
+    throw new Error('Not implemented')
+  })()
   const verticalDirection = (() => {
     if (node.coordinate.y < parent.coordinate.y) {
       return DIRECTION.UP
@@ -38,14 +48,39 @@ export const NodeLink = memo(function NodeLink({
   const top = Math.min(currentTop, parentTop)
   const bottom = Math.max(currentBottom, parentBottom)
 
-  const left = parentRect.x + parentRect.width
-  const right = currentNodeRect.x
+  const horizontalPosition = (() => {
+    if (horizontalDirection === DIRECTION.LEFT) {
+      return {
+        right: parentRect.x,
+        left: currentNodeRect.x + currentNodeRect.width,
+      }
+    }
+
+    if (horizontalDirection === DIRECTION.RIGHT) {
+      return {
+        right: currentNodeRect.x,
+        left: parentRect.x + parentRect.width,
+      }
+    }
+
+    throw new Error('Not implemented')
+  })()
 
   const height = Math.abs(top - bottom)
-  const width = Math.abs(right - left)
+  const width = horizontalPosition.right - horizontalPosition.left
 
   const pathD = (() => {
-    const startX = SPACING.STROKE_WIDTH
+    const startX = (() => {
+      if (horizontalDirection === DIRECTION.RIGHT) {
+        return SPACING.STROKE_WIDTH
+      }
+
+      if (horizontalDirection === DIRECTION.LEFT) {
+        return width - SPACING.STROKE_WIDTH
+      }
+
+      throw new Error('Not implemented')
+    })()
     const startY = (() => {
       if (verticalDirection === DIRECTION.DOWN) {
         return parentRect.height / 2
@@ -61,7 +96,17 @@ export const NodeLink = memo(function NodeLink({
 
       throw new Error('Not implemented')
     })()
-    const endX = width - SPACING.STROKE_WIDTH
+    const endX = (() => {
+      if (horizontalDirection === DIRECTION.LEFT) {
+        return SPACING.STROKE_WIDTH
+      }
+
+      if (horizontalDirection === DIRECTION.RIGHT) {
+        return width - SPACING.STROKE_WIDTH
+      }
+
+      throw new Error('Not implemented')
+    })()
     const endY = (() => {
       if (verticalDirection === DIRECTION.UP) {
         return currentNodeRect.height / 2
@@ -95,12 +140,11 @@ export const NodeLink = memo(function NodeLink({
         stroke: 'hsl(var(--c-2-70))',
         strokeWidth: SPACING.STROKE_WIDTH,
         position: 'absolute',
-        left,
         top,
-        right,
         bottom,
         strokeLinecap: 'round',
         fill: 'none',
+        ...horizontalPosition,
       }}
     >
       <path d={pathD} />

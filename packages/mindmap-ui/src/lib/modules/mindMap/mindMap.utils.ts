@@ -18,10 +18,44 @@ export const DIRECTION = {
   LEFT: { x: -1, y: 0 },
 } as const
 
+export function createPositionedTree(node: MindMapNode): PositionedMindMapNode {
+  if (!node.children || node.children.length === 0) {
+    return computeGeometry(node)
+  }
+
+  const childrenCount = node.children.length
+  const halfChildrenCount = Math.floor(childrenCount / 2)
+
+  const left = node.children.slice(0, halfChildrenCount)
+  const right = node.children.slice(halfChildrenCount)
+
+  const withLeftChildren = { ...node, children: left }
+  const withRightChildren = { ...node, children: right }
+
+  const withLeftChildrenPositioned = computeGeometry(
+    withLeftChildren,
+    DIRECTION.LEFT,
+  )
+  const withRightChildrenPositioned = computeGeometry(
+    withRightChildren,
+    DIRECTION.RIGHT,
+  )
+
+  const positionedRootNode = {
+    ...withLeftChildrenPositioned,
+    children: [
+      ...(withLeftChildrenPositioned.children ?? []),
+      ...(withRightChildrenPositioned.children ?? []),
+    ],
+  }
+
+  return positionedRootNode
+}
+
 export function computeGeometry(
   node: MindMapNode,
   direction: Coordinate = DIRECTION.RIGHT,
-  origin: Coordinate = DIRECTION.LEFT,
+  origin: Coordinate = ORIGIN,
 ): PositionedMindMapNode {
   const currentCoordinate = addCoordinates(origin, direction)
 

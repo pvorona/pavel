@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { memo, useEffect, useState } from 'react'
-import { PositionedMindMapNode, Rect, SPACING } from '../../modules'
+import { DIRECTION, PositionedMindMapNode, Rect, SPACING } from '../../modules'
 import { NodeLink } from '../NodeLink'
 import styles from './PositionedNode.module.scss'
 
@@ -54,7 +54,18 @@ export const PositionedNode = memo(function PositionedNode({
     return null
   }
 
-  const anchorX = parentRect ? parentRect.x + parentRect.width : 0
+  const horizontalDirection = (() => {
+    if (node.coordinate.x < 0) {
+      return DIRECTION.LEFT
+    }
+
+    if (node.coordinate.x > 0) {
+      return DIRECTION.RIGHT
+    }
+
+    return DIRECTION.NONE
+  })()
+
   const top = (() => {
     if (!currentNodeRect) {
       return 0
@@ -62,7 +73,23 @@ export const PositionedNode = memo(function PositionedNode({
 
     return currentNodeRect.y
   })()
-  const left = anchorX + SPACING.HORIZONTAL
+  const horizontalPosition = (() => {
+    if (!parentRect) {
+      return { left: 0 }
+    }
+
+    if (horizontalDirection === DIRECTION.LEFT) {
+      return { right: -parentRect.x + SPACING.HORIZONTAL }
+    }
+
+    if (horizontalDirection === DIRECTION.RIGHT) {
+      return {
+        left: parentRect.x + parentRect.width + SPACING.HORIZONTAL,
+      }
+    }
+
+    throw new Error('Not implemented')
+  })()
 
   return (
     <>
@@ -80,7 +107,11 @@ export const PositionedNode = memo(function PositionedNode({
           [styles['RootNode']]: isRoot,
           [styles['Node']]: !isRoot,
         })}
-        style={{ top, left, color: isRoot ? undefined : 'hsl(var(--c-1-20))' }}
+        style={{
+          top,
+          color: isRoot ? undefined : 'hsl(var(--c-1-20))',
+          ...horizontalPosition,
+        }}
       >
         {node.value}
       </div>
