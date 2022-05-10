@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 
-export function sendNotification(message) {
+export function sendNotification(message: string) {
   return fetch(
     'https://europe-central2-notification-service-347307.cloudfunctions.net/notification',
     {

@@ -1,1 +1,3 @@
-require('./app/notification.test')
+import { sendNotification } from './app'
+
+sendNotification('Hello')
