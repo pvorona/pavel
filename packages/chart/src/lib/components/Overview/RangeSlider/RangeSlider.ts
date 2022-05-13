@@ -15,8 +15,6 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
   context,
 ) => {
   const {
-    startIndex,
-    endIndex,
     width,
     isDragging,
     activeCursor,
@@ -38,22 +36,35 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
     rightSide,
   } = createDOM()
 
-  // Compute with set
-  const left = observable(
-    // interpolate
-    (startIndex.get() / (options.total - 1)) * width.get(),
-    {
-      is: areNumbersClose,
-    },
-  )
+  function computeLeft(startX: number, width: number): number {
+    return interpolate(
+      options.domain[0],
+      options.domain[options.domain.length - 1],
+      0,
+      width,
+      startX,
+    )
+  }
 
-  const right = observable(
-    // interpolate
-    (endIndex.get() / (options.total - 1)) * width.get(),
-    {
-      is: areNumbersClose,
-    },
-  )
+  function computeRight(endX: number, width: number): number {
+    return interpolate(
+      options.domain[0],
+      options.domain[options.domain.length - 1],
+      0,
+      width,
+      endX,
+    )
+  }
+
+  // Compute with set
+  const left = observable(computeLeft(startX.get(), width.get()), {
+    is: areNumbersClose,
+  })
+
+  // Compute with set
+  const right = observable(computeRight(endX.get(), width.get()), {
+    is: areNumbersClose,
+  })
 
   effect([left], left => {
     viewBoxElement.style.left = `${left}px`
@@ -64,25 +75,13 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
   })
 
   observe([startX, width], (startX, width) => {
-    const newLeft = interpolate(
-      options.domain[0],
-      options.domain[options.domain.length - 1],
-      0,
-      width,
-      startX,
-    )
+    const newLeft = computeLeft(startX, width)
 
     left.set(newLeft)
   })
 
   observe([endX, width], (endX, width) => {
-    const newRight = interpolate(
-      options.domain[0],
-      options.domain[options.domain.length - 1],
-      0,
-      width,
-      endX,
-    )
+    const newRight = computeRight(endX, width)
 
     right.set(newRight)
   })
@@ -95,13 +94,8 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       options.domain[options.total - 1],
       left,
     )
-    const boundedNewX = ensureInBounds(
-      newX,
-      options.domain[0],
-      options.domain[options.domain.length - 1],
-    )
 
-    startX.set(boundedNewX)
+    startX.set(newX)
   })
 
   observe([right, width], (right, width) => {
@@ -112,13 +106,8 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       options.domain[options.total - 1],
       right,
     )
-    const boundedNewX = ensureInBounds(
-      newX,
-      options.domain[0],
-      options.domain[options.domain.length - 1],
-    )
 
-    endX.set(boundedNewX)
+    endX.set(newX)
   })
 
   let cursorResizeHandlerDelta = 0

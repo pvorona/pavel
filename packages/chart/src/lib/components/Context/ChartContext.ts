@@ -20,6 +20,7 @@ import { OpacityState, Point, EnabledGraphNames } from '../types'
 import { mapDataToCoords, createMinMaxView, areNumbersClose } from '../../util'
 import { special } from '@pavel/easing'
 import { xToIndex } from '../../util/xToIndex'
+import { ensureInBounds } from '@pavel/utils'
 
 export const ChartContext = (options: ChartOptions) => {
   const globalStartIndex = observable(0, {
@@ -36,10 +37,32 @@ export const ChartContext = (options: ChartOptions) => {
   const startX = observable(options.viewBox.start, {
     id: 'startX',
     is: areNumbersClose,
+    intercept: {
+      set: (newValue, { set }) => {
+        const boundedValue = ensureInBounds(
+          newValue,
+          options.domain[0],
+          options.domain[options.domain.length - 1],
+        )
+
+        set(boundedValue)
+      },
+    },
   })
   const endX = observable(options.viewBox.end, {
     id: 'endX',
     is: areNumbersClose,
+    intercept: {
+      set: (newValue, { set }) => {
+        const boundedValue = ensureInBounds(
+          newValue,
+          options.domain[0],
+          options.domain[options.domain.length - 1],
+        )
+
+        set(boundedValue)
+      },
+    },
   })
 
   const inertStartX = inert(TRANSITION.FAST)(startX)
