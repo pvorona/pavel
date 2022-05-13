@@ -1,8 +1,8 @@
 import { createObservers, lazyValue } from '@pavel/utils'
-import { createName } from '../createName'
-import { Named } from '../types'
+import { createId } from '../createId'
+import { Identifiable } from '../types'
 
-export type ObservableLazyOptions = Partial<Named>
+export type ObservableLazyOptions = Partial<Identifiable>
 
 const OBSERVABLE_LAZY_GROUP = 'ObservableLazy'
 
@@ -10,7 +10,7 @@ export function observableLazy<T>(
   compute: () => T,
   options?: ObservableLazyOptions,
 ) {
-  const name = createName(OBSERVABLE_LAZY_GROUP, options)
+  const id = createId(OBSERVABLE_LAZY_GROUP, options)
   const holder = lazyValue(compute)
   const observers = createObservers()
 
@@ -20,11 +20,9 @@ export function observableLazy<T>(
   }
 
   return {
-    name,
+    id,
     notifyChanged,
     observe: observers.register,
-    get value() {
-      return holder.get()
-    },
+    get: holder.get,
   }
 }

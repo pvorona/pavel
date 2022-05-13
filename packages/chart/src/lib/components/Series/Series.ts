@@ -39,11 +39,11 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
   scheduleTask(() => {
     renderPoints(
-      mainGraphPoints.value,
-      inertOpacityStateByGraphName.value,
-      inertVisibleMin.value,
-      inertVisibleMax.value,
-      inertVisibleMinMaxByGraphName.value,
+      mainGraphPoints.get(),
+      inertOpacityStateByGraphName.get(),
+      inertVisibleMin.get(),
+      inertVisibleMax.get(),
+      inertVisibleMinMaxByGraphName.get(),
     )
   })
 
@@ -52,11 +52,11 @@ export const Series: Component<ChartOptions, ChartContext> = (
     (width, height) => {
       setCanvasSize(canvas, toBitMapSize(width), toBitMapSize(height))
       renderPoints(
-        mainGraphPoints.value,
-        inertOpacityStateByGraphName.value,
-        inertVisibleMin.value,
-        inertVisibleMax.value,
-        inertVisibleMinMaxByGraphName.value,
+        mainGraphPoints.get(),
+        inertOpacityStateByGraphName.get(),
+        inertVisibleMin.get(),
+        inertVisibleMax.get(),
+        inertVisibleMinMaxByGraphName.get(),
       )
     },
     { fireImmediately: false },
@@ -79,8 +79,8 @@ export const Series: Component<ChartOptions, ChartContext> = (
     ) => {
       clearRect(
         context,
-        toBitMapSize(width.value),
-        toBitMapSize(canvasHeight.value),
+        toBitMapSize(width.get()),
+        toBitMapSize(canvasHeight.get()),
       )
       renderPoints(
         mainGraphPoints,
@@ -107,8 +107,8 @@ export const Series: Component<ChartOptions, ChartContext> = (
       graphNames: options.graphNames,
       lineWidth: options.lineWidth,
       strokeStyles: options.colors,
-      height: canvasHeight.value,
-      width: width.value,
+      height: canvasHeight.get(),
+      width: width.get(),
       lineJoinByName: options.lineJoin,
       lineCapByName: options.lineCap,
       min,
@@ -132,8 +132,8 @@ export const Series: Component<ChartOptions, ChartContext> = (
   function createDOM() {
     return createGraphs({
       width: options.width,
-      height: canvasHeight.value,
-      containerHeight: canvasHeight.value,
+      height: canvasHeight.get(),
+      containerHeight: canvasHeight.get(),
       containerMinHeight: MIN_HEIGHT,
     })
   }
@@ -141,38 +141,42 @@ export const Series: Component<ChartOptions, ChartContext> = (
   function initDragListeners() {
     addEventListeners(element, {
       mouseenter(e) {
-        isHovering.value = true
-        mouseX.value = e.clientX
+        isHovering.set(true)
+        mouseX.set(e.clientX)
       },
       mouseleave() {
-        isHovering.value = false
+        isHovering.set(false)
       },
       mousemove(e) {
-        mouseX.value = e.clientX
+        mouseX.set(e.clientX)
       },
     })
 
     let prevMouseX = 0
 
     const handleDragMove = (event: MouseEvent | Touch) => {
-      const visibleRange = endX.value - startX.value
+      const visibleRange = endX.get() - startX.get()
       const newX = interpolate(
         0,
-        width.value,
-        startX.value,
-        endX.value,
+        width.get(),
+        startX.get(),
+        endX.get(),
         prevMouseX - event.clientX,
       )
 
-      startX.value = ensureInBounds(
-        newX,
-        options.domain[0],
-        options.domain[options.domain.length - 1] - visibleRange,
+      startX.set(
+        ensureInBounds(
+          newX,
+          options.domain[0],
+          options.domain[options.domain.length - 1] - visibleRange,
+        ),
       )
-      endX.value = ensureInBounds(
-        startX.value + visibleRange,
-        options.domain[0],
-        options.domain[options.domain.length - 1],
+      endX.set(
+        ensureInBounds(
+          startX.get() + visibleRange,
+          options.domain[0],
+          options.domain[options.domain.length - 1],
+        ),
       )
 
       prevMouseX = event.clientX
@@ -180,14 +184,14 @@ export const Series: Component<ChartOptions, ChartContext> = (
 
     handleDrag(element, {
       onDragStart: event => {
-        isGrabbingGraphs.value = true
-        activeCursor.value = cursor.grabbing
+        isGrabbingGraphs.set(true)
+        activeCursor.set(cursor.grabbing)
 
         prevMouseX = event.clientX
       },
       onDragEnd: () => {
-        isGrabbingGraphs.value = false
-        activeCursor.value = cursor.default
+        isGrabbingGraphs.set(false)
+        activeCursor.set(cursor.default)
 
         prevMouseX = 0
       },

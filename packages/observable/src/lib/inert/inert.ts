@@ -8,7 +8,7 @@ import {
   TargetOrTargetDescriptor,
 } from './types'
 import { constructTransition } from './constructTransition'
-import { createName, wrapName } from '../createName'
+import { createId, wrapId } from '../createId'
 import { PRIORITY, throttleTask } from '@pavel/scheduling'
 import { TransitionTimingOptions } from '../transition'
 import { createObservers } from '@pavel/utils'
@@ -73,12 +73,12 @@ export const inert =
     )
     // Can get lazy. Use case for idleValue?
     const transition = constructTransition(
-      target.value,
+      target.get(),
       options,
       interpolate as any,
     )
     const observers = createObservers()
-    const name = wrapName(createName(INERT_GROUP, options), target.name)
+    const name = wrapId(createId(INERT_GROUP, options), target.id)
 
     // TODO: don't emit values when there are no observers.
     // Ensure emitting renews if new observers join while transition is in progress
@@ -124,21 +124,17 @@ export const inert =
     }
 
     function complete() {
-      set(target.value as never)
+      set(target.get() as never)
     }
 
     observe([target], setTarget, { fireImmediately: false })
 
     return {
-      name,
+      id: name,
       setTransition,
-      get value() {
-        return get() as never
-      },
+      get,
       // Remove setter and use complete?
-      set value(newValue) {
-        set(newValue)
-      },
+      set,
       complete,
       observe: observers.register,
     }

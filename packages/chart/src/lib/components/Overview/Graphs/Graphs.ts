@@ -88,11 +88,11 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
 
   scheduleTask(() => {
     renderPoints(
-      overviewGraphPoints.value,
-      inertOpacityStateByGraphName.value,
-      inertGlobalMin.value,
-      inertGlobalMax.value,
-      inertGlobalMinMaxByGraphName.value,
+      overviewGraphPoints.get(),
+      inertOpacityStateByGraphName.get(),
+      inertGlobalMin.get(),
+      inertGlobalMax.get(),
+      inertGlobalMinMaxByGraphName.get(),
     )
   })
 
@@ -105,11 +105,11 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
         toBitMapSize(canvasHeight),
       )
       renderPoints(
-        overviewGraphPoints.value,
-        inertOpacityStateByGraphName.value,
-        inertGlobalMin.value,
-        inertGlobalMax.value,
-        inertGlobalMinMaxByGraphName.value,
+        overviewGraphPoints.get(),
+        inertOpacityStateByGraphName.get(),
+        inertGlobalMin.get(),
+        inertGlobalMax.get(),
+        inertGlobalMinMaxByGraphName.get(),
       )
     },
     { fireImmediately: false },
@@ -132,7 +132,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
     ) => {
       clearRect(
         graphs.context,
-        toBitMapSize(width.value),
+        toBitMapSize(width.get()),
         toBitMapSize(canvasHeight),
       )
       renderPoints(
@@ -161,7 +161,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       lineWidth: options.overview.lineWidth,
       strokeStyles: options.colors,
       height: canvasHeight,
-      width: width.value,
+      width: width.get(),
       lineJoinByName: options.lineJoin,
       lineCapByName: options.lineCap,
       min,
@@ -174,7 +174,7 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
 
   function createDOM() {
     const graphs = createGraphs({
-      width: width.value,
+      width: width.get(),
       height: canvasHeight,
     })
     graphs.element.style.marginTop = `${VIEWBOX_TOP_BOTTOM_BORDER_WIDTH}px`
