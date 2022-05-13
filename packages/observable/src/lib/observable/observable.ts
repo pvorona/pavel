@@ -1,5 +1,5 @@
-import { EagerSubject, Gettable, Named, Settable } from '../types'
-import { createName } from '../createName'
+import { EagerSubject, Gettable, Identifiable, Settable } from '../types'
+import { createId } from '../createName'
 import { createObservers } from '@pavel/utils'
 
 type InterceptorOptions<T> = {
@@ -12,7 +12,7 @@ type InterceptorOptions<T> = {
   }
 }
 
-export type ObservableOptions<T> = Partial<Named> &
+export type ObservableOptions<T> = Partial<Identifiable> &
   InterceptorOptions<T> & {
     is?: (a: T, b: T) => boolean
   }
@@ -24,7 +24,7 @@ export function observable<T>(
   options?: ObservableOptions<T>,
 ): EagerSubject<T> {
   const observers = createObservers<[T]>()
-  const name = createName(OBSERVABLE_GROUP, options)
+  const name = createId(OBSERVABLE_GROUP, options)
 
   let value = initialValue
 
@@ -43,7 +43,7 @@ export function observable<T>(
   }
 
   return {
-    name,
+    id: name,
     get() {
       if (options?.intercept?.get) {
         return options.intercept.get({ get, set })

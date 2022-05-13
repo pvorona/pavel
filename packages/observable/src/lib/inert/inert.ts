@@ -8,7 +8,7 @@ import {
   TargetOrTargetDescriptor,
 } from './types'
 import { constructTransition } from './constructTransition'
-import { createName, wrapName } from '../createName'
+import { createId, wrapName } from '../createName'
 import { PRIORITY, throttleTask } from '@pavel/scheduling'
 import { TransitionTimingOptions } from '../transition'
 import { createObservers } from '@pavel/utils'
@@ -78,7 +78,7 @@ export const inert =
       interpolate as any,
     )
     const observers = createObservers()
-    const name = wrapName(createName(INERT_GROUP, options), target.name)
+    const name = wrapName(createId(INERT_GROUP, options), target.id)
 
     // TODO: don't emit values when there are no observers.
     // Ensure emitting renews if new observers join while transition is in progress
@@ -130,7 +130,7 @@ export const inert =
     observe([target], setTarget, { fireImmediately: false })
 
     return {
-      name,
+      id: name,
       setTransition,
       get,
       // Remove setter and use complete?

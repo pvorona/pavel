@@ -1,18 +1,19 @@
 import { getOrInitMap } from '@pavel/utils'
+import { Identifiable } from '../types'
 
 const countByGroup = new Map<string, number>()
 
-export function createName(
+export function createId(
   groupName: string,
-  options?: { name?: string } | number,
-  name?: string,
+  options?: Partial<Identifiable> | number,
+  id?: string,
 ): string {
-  if (typeof options === 'object' && options.name) {
-    return options.name
+  if (typeof options === 'object' && options.id) {
+    return options.id
   }
 
-  if (name) {
-    return name
+  if (id) {
+    return id
   }
 
   const index = getOrInitMap(countByGroup, groupName, 0)

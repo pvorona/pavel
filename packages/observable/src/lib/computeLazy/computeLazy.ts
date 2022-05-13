@@ -2,24 +2,24 @@ import { collectValues } from '../utils'
 import {
   ReadonlyLazySubject,
   ObservedTypesOf,
-  Named,
+  Identifiable,
   ReadonlySubject,
 } from '../types'
 import { observe } from '../observe'
-import { createName } from '../createName'
+import { createId } from '../createName'
 import { observableLazy } from '../observable'
 
 const COMPUTE_LAZY_GROUP = 'ComputeLazy'
 
-export type ComputeLazyOptions = Partial<Named>
+export type ComputeLazyOptions = Partial<Identifiable>
 
 export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
   deps: readonly [...A],
   compute: (...args: ObservedTypesOf<A>) => T,
   options?: ComputeLazyOptions,
 ): ReadonlyLazySubject<T> {
-  const name = createName(COMPUTE_LAZY_GROUP, options, compute.name)
-  const holder = observableLazy(recompute, { name })
+  const id = createId(COMPUTE_LAZY_GROUP, options, compute.name)
+  const holder = observableLazy(recompute, { id })
 
   observe(deps, holder.notifyChanged, {
     fireImmediately: false,

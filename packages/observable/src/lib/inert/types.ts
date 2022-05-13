@@ -7,13 +7,13 @@ import {
 import {
   ReadonlyEagerSubject,
   ReadonlyLazySubject,
-  Named,
+  Identifiable,
   LazySubject,
   ObservedTypeOf,
 } from '../types'
 
 export type InertOptions =
-  | (TransitionTimingOptionsObject & Partial<Named>)
+  | (TransitionTimingOptionsObject & Partial<Identifiable>)
   | number
 
 export type AnimatableValue = number

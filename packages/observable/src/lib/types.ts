@@ -20,18 +20,23 @@ export type Settable<T> = {
   set: (value: T) => void
 }
 
-export type Named = Readonly<{ name: string }>
+export type Identifiable = Readonly<{ id: string }>
 
 export type EagerSubject<T> = EagerObservable<T> &
   Gettable<T> &
   Settable<T> &
-  Named
+  Identifiable
 
-export type LazySubject<T> = LazyObservable & Gettable<T> & Settable<T> & Named
+export type LazySubject<T> = LazyObservable &
+  Gettable<T> &
+  Settable<T> &
+  Identifiable
 
-export type ReadonlyEagerSubject<T> = EagerObservable<T> & Gettable<T> & Named
+export type ReadonlyEagerSubject<T> = EagerObservable<T> &
+  Gettable<T> &
+  Identifiable
 
-export type ReadonlyLazySubject<T> = LazyObservable & Gettable<T> & Named
+export type ReadonlyLazySubject<T> = LazyObservable & Gettable<T> & Identifiable
 
 export type ReadonlySubject<T> =
   | ReadonlyEagerSubject<T>

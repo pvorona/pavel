@@ -23,22 +23,22 @@ import { xToIndex } from '../../util/xToIndex'
 
 export const ChartContext = (options: ChartOptions) => {
   const globalStartIndex = observable(0, {
-    name: 'globalStartIndex',
+    id: 'globalStartIndex',
   })
   const globalEndIndex = observable(options.total - 1, {
-    name: 'globalEndIndex',
+    id: 'globalEndIndex',
   })
-  const width = observable(options.width, { name: 'width' })
-  const height = observable(options.height, { name: 'height' })
+  const width = observable(options.width, { id: 'width' })
+  const height = observable(options.height, { id: 'height' })
   const canvasHeight = compute([height], computeCanvasHeight, {
-    name: 'canvasHeight',
+    id: 'canvasHeight',
   })
   const startX = observable(options.viewBox.start, {
-    name: 'startX',
+    id: 'startX',
     is: areNumbersClose,
   })
   const endX = observable(options.viewBox.end, {
-    name: 'endX',
+    id: 'endX',
     is: areNumbersClose,
   })
 
@@ -53,7 +53,7 @@ export const ChartContext = (options: ChartOptions) => {
       return xToIndex(options.domain, inertStartX)
     },
     {
-      name: 'startIndex',
+      id: 'startIndex',
     },
   )
 
@@ -65,18 +65,18 @@ export const ChartContext = (options: ChartOptions) => {
       return xToIndex(options.domain, inertEndX)
     },
     {
-      name: 'endIndex',
+      id: 'endIndex',
     },
   )
 
-  const mouseX = observable(0, { name: 'mouseX' })
-  const isHovering = observable(false, { name: 'isHovering' })
-  const isDragging = observable(false, { name: 'isDragging' })
-  const isGrabbingGraphs = observable(false, { name: 'isGrabbingGraphs' })
+  const mouseX = observable(0, { id: 'mouseX' })
+  const isHovering = observable(false, { id: 'isHovering' })
+  const isDragging = observable(false, { id: 'isDragging' })
+  const isGrabbingGraphs = observable(false, { id: 'isGrabbingGraphs' })
   const isWheeling = resetWhenInactive(WHEEL_CLEAR_TIMEOUT)(
-    observable(false, { name: 'isWheeling' }),
+    observable(false, { id: 'isWheeling' }),
   )
-  const activeCursor = observable(cursor.default, { name: 'activeCursor' })
+  const activeCursor = observable(cursor.default, { id: 'activeCursor' })
   const enabledStateByGraphName = observable(
     options.graphNames.reduce(
       (state, graphName) => ({
@@ -85,7 +85,7 @@ export const ChartContext = (options: ChartOptions) => {
       }),
       {} as EnabledGraphNames,
     ),
-    { name: 'enabledStateByGraphName' },
+    { id: 'enabledStateByGraphName' },
   )
 
   function computeCanvasHeight(containerHeight: number) {
