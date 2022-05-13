@@ -23,6 +23,6 @@ export function createId(
   return `[${groupName}#${index}]`
 }
 
-export function wrapName(wrapperName: string, childName: string): string {
+export function wrapId(wrapperName: string, childName: string): string {
   return `[${wrapperName}(${childName})]`
 }

@@ -1,5 +1,5 @@
 import { EagerSubject, Gettable, Identifiable, Settable } from '../types'
-import { createId } from '../createName'
+import { createId } from '../createId'
 import { createObservers } from '@pavel/utils'
 
 type InterceptorOptions<T> = {

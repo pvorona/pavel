@@ -1,4 +1,4 @@
-import { createId } from '../createName'
+import { createId } from '../createId'
 import { observable } from '../observable'
 import { observe } from '../observe'
 import {

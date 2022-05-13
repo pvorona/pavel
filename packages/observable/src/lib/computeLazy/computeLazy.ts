@@ -6,7 +6,7 @@ import {
   ReadonlySubject,
 } from '../types'
 import { observe } from '../observe'
-import { createId } from '../createName'
+import { createId } from '../createId'
 import { observableLazy } from '../observable'
 
 const COMPUTE_LAZY_GROUP = 'ComputeLazy'

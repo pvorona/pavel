@@ -1,5 +1,5 @@
 import { createObservers, lazyValue } from '@pavel/utils'
-import { createId } from '../createName'
+import { createId } from '../createId'
 import { Identifiable } from '../types'
 
 export type ObservableLazyOptions = Partial<Identifiable>
