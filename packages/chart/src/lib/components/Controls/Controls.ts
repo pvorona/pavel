@@ -11,8 +11,10 @@ export const Controls: Component<ChartOptions, ChartContext> = (
   element.style.top = '20px'
 
   function onButtonClick(graphName: string) {
-    enabledStateByGraphName.value[graphName] =
-      !enabledStateByGraphName.value[graphName]
+    enabledStateByGraphName.set({
+      ...enabledStateByGraphName.get(),
+      [graphName]: !enabledStateByGraphName.get()[graphName],
+    })
   }
 
   config.graphNames.forEach(graphName => {

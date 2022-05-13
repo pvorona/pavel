@@ -3,13 +3,13 @@ import { observable } from '../observable'
 
 export const pointerPosition = observable({ x: 0, y: 0 })
 
-function onMouseMove(e: MouseEvent) {
-  pointerPosition.value = {
-    x: e.clientX,
-    y: e.clientY,
-  }
-}
-
 if (isBrowser) {
+  function onMouseMove(e: MouseEvent) {
+    pointerPosition.set({
+      x: e.clientX,
+      y: e.clientY,
+    })
+  }
+
   window.addEventListener('mousemove', onMouseMove)
 }

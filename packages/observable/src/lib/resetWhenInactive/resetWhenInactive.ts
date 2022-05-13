@@ -18,27 +18,27 @@ export const resetWhenInactive =
       target.name,
     )
     const delay = getDelay(options)
-    const initialValue = target.value
+    const initialValue = target.get()
 
     let timeoutId: undefined | number
 
     function reset() {
-      target.value = initialValue
+      target.set(initialValue)
     }
 
     return {
       name,
-      set value(newValue) {
+      set(newValue) {
         if (timeoutId) {
           clearTimeout(timeoutId)
         }
 
         timeoutId = window.setTimeout(reset, delay)
 
-        target.value = newValue
+        target.set(newValue)
       },
-      get value() {
-        return target.value
+      get() {
+        return target.get()
       },
       observe: target.observe,
     }

@@ -23,8 +23,8 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
   parent.appendChild(element)
 
   const handleResize = throttleTask(function measureContainerSize() {
-    width.value = parent.offsetWidth
-    height.value = parent.offsetHeight
+    width.set(parent.offsetWidth)
+    height.set(parent.offsetHeight)
   }, PRIORITY.READ)
 
   window.addEventListener('resize', handleResize)
@@ -35,10 +35,10 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
   function handleWheel(event: WheelEvent) {
     event.preventDefault()
 
-    isWheeling.value = true
+    isWheeling.set(true)
 
     const angle = (Math.atan(event.deltaY / event.deltaX) * 180) / Math.PI
-    const viewBoxWidth = endX.value - startX.value
+    const viewBoxWidth = endX.get() - startX.get()
     const dynamicFactor = viewBoxWidth / MIN_VIEWBOX_MS
 
     if (
@@ -51,43 +51,55 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
         deltaY < 0 &&
         viewBoxWidth - 2 * Math.abs(deltaY * dynamicFactor) < MIN_VIEWBOX_MS
       ) {
-        const center = (startX.value + endX.value) / 2
+        const center = (startX.get() + endX.get()) / 2
 
-        startX.value = ensureInBounds(
-          center - MIN_VIEWBOX_MS / 2,
-          options.domain[0],
-          options.domain[options.domain.length - 1] - MIN_VIEWBOX_MS,
+        startX.set(
+          ensureInBounds(
+            center - MIN_VIEWBOX_MS / 2,
+            options.domain[0],
+            options.domain[options.domain.length - 1] - MIN_VIEWBOX_MS,
+          ),
         )
-        endX.value = ensureInBounds(
-          center + MIN_VIEWBOX_MS / 2,
-          options.domain[0] + MIN_VIEWBOX_MS,
-          options.domain[options.domain.length - 1],
+        endX.set(
+          ensureInBounds(
+            center + MIN_VIEWBOX_MS / 2,
+            options.domain[0] + MIN_VIEWBOX_MS,
+            options.domain[options.domain.length - 1],
+          ),
         )
       } else {
-        startX.value = ensureInBounds(
-          startX.value - deltaY * dynamicFactor,
-          options.domain[0],
-          options.domain[options.domain.length - 1] - MIN_VIEWBOX_MS,
+        startX.set(
+          ensureInBounds(
+            startX.get() - deltaY * dynamicFactor,
+            options.domain[0],
+            options.domain[options.domain.length - 1] - MIN_VIEWBOX_MS,
+          ),
         )
-        endX.value = ensureInBounds(
-          endX.value + deltaY * dynamicFactor,
-          startX.value + MIN_VIEWBOX_MS,
-          options.domain[options.domain.length - 1],
+        endX.set(
+          ensureInBounds(
+            endX.get() + deltaY * dynamicFactor,
+            startX.get() + MIN_VIEWBOX_MS,
+            options.domain[options.domain.length - 1],
+          ),
         )
       }
     } else if (
       angle >= -DEVIATION_FROM_STRAIGHT_LINE_DEGREES &&
       angle <= DEVIATION_FROM_STRAIGHT_LINE_DEGREES // left, right
     ) {
-      startX.value = ensureInBounds(
-        startX.value + event.deltaX * dynamicFactor,
-        options.domain[0],
-        options.domain[options.domain.length - 1] - viewBoxWidth,
+      startX.set(
+        ensureInBounds(
+          startX.get() + event.deltaX * dynamicFactor,
+          options.domain[0],
+          options.domain[options.domain.length - 1] - viewBoxWidth,
+        ),
       )
-      endX.value = ensureInBounds(
-        startX.value + viewBoxWidth,
-        options.domain[0],
-        options.domain[options.domain.length - 1],
+      endX.set(
+        ensureInBounds(
+          startX.get() + viewBoxWidth,
+          options.domain[0],
+          options.domain[options.domain.length - 1],
+        ),
       )
     }
   }

@@ -17,7 +17,7 @@ import {
   WHEEL_CLEAR_TIMEOUT,
 } from '../constants'
 import { OpacityState, Point, EnabledGraphNames } from '../types'
-import { mapDataToCoords, createMinMaxView } from '../../util'
+import { mapDataToCoords, createMinMaxView, areNumbersClose } from '../../util'
 import { special } from '@pavel/easing'
 import { xToIndex } from '../../util/xToIndex'
 
@@ -33,9 +33,13 @@ export const ChartContext = (options: ChartOptions) => {
   const canvasHeight = compute([height], computeCanvasHeight, {
     name: 'canvasHeight',
   })
-  const startX = observable(options.viewBox.start, { name: 'startX' })
+  const startX = observable(options.viewBox.start, {
+    name: 'startX',
+    is: areNumbersClose,
+  })
   const endX = observable(options.viewBox.end, {
     name: 'endX',
+    is: areNumbersClose,
   })
 
   const inertStartX = inert(TRANSITION.FAST)(startX)

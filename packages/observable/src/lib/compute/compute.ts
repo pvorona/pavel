@@ -21,7 +21,7 @@ export function compute<A extends ReadonlySubject<unknown>[], T>(
   const holder = observable(undefined as unknown as T, { name })
 
   observe(deps, (...values) => {
-    holder.value = compute(...values)
+    holder.set(compute(...values))
   })
 
   return holder

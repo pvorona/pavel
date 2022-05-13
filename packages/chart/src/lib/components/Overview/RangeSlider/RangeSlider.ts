@@ -41,12 +41,18 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
   // Compute with set
   const left = observable(
     // interpolate
-    (startIndex.value / (options.total - 1)) * width.value,
+    (startIndex.get() / (options.total - 1)) * width.get(),
+    {
+      is: areNumbersClose,
+    },
   )
 
   const right = observable(
     // interpolate
-    (endIndex.value / (options.total - 1)) * width.value,
+    (endIndex.get() / (options.total - 1)) * width.get(),
+    {
+      is: areNumbersClose,
+    },
   )
 
   effect([left], left => {
@@ -66,9 +72,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       startX,
     )
 
-    if (!areNumbersClose(left.value, newLeft)) {
-      left.value = newLeft
-    }
+    left.set(newLeft)
   })
 
   observe([endX, width], (endX, width) => {
@@ -80,9 +84,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       endX,
     )
 
-    if (!areNumbersClose(right.value, newRight)) {
-      right.value = newRight
-    }
+    right.set(newRight)
   })
 
   observe([left, width], (left, width) => {
@@ -99,9 +101,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       options.domain[options.domain.length - 1],
     )
 
-    if (!areNumbersClose(startX.value, boundedNewX)) {
-      startX.value = boundedNewX
-    }
+    startX.set(boundedNewX)
   })
 
   observe([right, width], (right, width) => {
@@ -118,9 +118,7 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       options.domain[options.domain.length - 1],
     )
 
-    if (!areNumbersClose(endX.value, boundedNewX)) {
-      endX.value = boundedNewX
-    }
+    endX.set(boundedNewX)
   })
 
   let cursorResizeHandlerDelta = 0
@@ -129,16 +127,16 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
   rightSide.addEventListener('mousedown', onRightSideClick)
 
   function onLeftSideClick(event: MouseEvent) {
-    const viewBoxWidth = right.value - left.value
+    const viewBoxWidth = right.get() - left.get()
     const newLeft = ensureInBounds(
       event.clientX - viewBoxWidth / 2,
       0,
-      width.value,
+      width.get(),
     )
     const newRight = newLeft + viewBoxWidth
 
-    left.value = newLeft
-    right.value = newRight
+    left.set(newLeft)
+    right.set(newRight)
     inertStartX.complete()
     inertEndX.complete()
     inertVisibleMax.complete()
@@ -148,16 +146,16 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
   }
 
   function onRightSideClick(event: MouseEvent) {
-    const viewBoxWidth = right.value - left.value
+    const viewBoxWidth = right.get() - left.get()
     const newRight = ensureInBounds(
       event.clientX + viewBoxWidth / 2,
       0,
-      width.value,
+      width.get(),
     )
     const newLeft = newRight - viewBoxWidth
 
-    left.value = newLeft
-    right.value = newRight
+    left.set(newLeft)
+    right.set(newRight)
     inertStartX.complete()
     inertEndX.complete()
     inertVisibleMax.complete()
@@ -183,14 +181,14 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
   })
 
   function onLeftResizeHandlerMouseDown(event: MouseEvent | Touch) {
-    isDragging.value = true
-    activeCursor.value = cursor.resize
-    cursorResizeHandlerDelta = event.clientX - left.value
+    isDragging.set(true)
+    activeCursor.set(cursor.resize)
+    cursorResizeHandlerDelta = event.clientX - left.get()
   }
 
   function onDragEnd() {
-    isDragging.value = false
-    activeCursor.value = cursor.default
+    isDragging.set(false)
+    activeCursor.set(cursor.default)
   }
 
   function onLeftResizeHandlerMouseMove(event: MouseEvent | Touch) {
@@ -198,50 +196,54 @@ export const RangeSlider: Component<ChartOptions, ChartContext> = (
       event.clientX - cursorResizeHandlerDelta,
     )
 
-    left.value = ensureInBounds(
-      leftVar,
-      0,
-      right.value - minimalPixelsBetweenResizeHandlers,
+    left.set(
+      ensureInBounds(
+        leftVar,
+        0,
+        right.get() - minimalPixelsBetweenResizeHandlers,
+      ),
     )
   }
 
   function onRightResizeHandlerMouseDown(event: MouseEvent | Touch) {
-    cursorResizeHandlerDelta = event.clientX - right.value
-    isDragging.value = true
-    activeCursor.value = cursor.resize
+    cursorResizeHandlerDelta = event.clientX - right.get()
+    isDragging.set(true)
+    activeCursor.set(cursor.resize)
   }
 
   function ensureInOverviewBounds(x: number) {
-    return ensureInBounds(x, 0, width.value)
+    return ensureInBounds(x, 0, width.get())
   }
 
   function onViewBoxElementMouseDown(event: MouseEvent | Touch) {
-    cursorResizeHandlerDelta = event.clientX - left.value
-    isDragging.value = true
-    activeCursor.value = cursor.grabbing
+    cursorResizeHandlerDelta = event.clientX - left.get()
+    isDragging.set(true)
+    activeCursor.set(cursor.grabbing)
   }
 
   function onViewBoxElementMouseUp() {
-    isDragging.value = false
-    activeCursor.value = cursor.default
+    isDragging.set(false)
+    activeCursor.set(cursor.default)
   }
 
   function onViewBoxElementMouseMove(event: MouseEvent | Touch) {
-    const widthVar = right.value - left.value
+    const widthVar = right.get() - left.get()
     const nextLeft = event.clientX - cursorResizeHandlerDelta
-    const stateLeft = ensureInBounds(nextLeft, 0, width.value - widthVar)
-    left.value = stateLeft
-    right.value = stateLeft + widthVar
+    const stateLeft = ensureInBounds(nextLeft, 0, width.get() - widthVar)
+    left.set(stateLeft)
+    right.set(stateLeft + widthVar)
   }
 
   function onRightResizeHandlerMouseMove(event: MouseEvent | Touch) {
     const rightVar = ensureInOverviewBounds(
       event.clientX - cursorResizeHandlerDelta,
     )
-    right.value = ensureInBounds(
-      rightVar,
-      left.value + minimalPixelsBetweenResizeHandlers,
-      rightVar,
+    right.set(
+      ensureInBounds(
+        rightVar,
+        left.get() + minimalPixelsBetweenResizeHandlers,
+        rightVar,
+      ),
     )
   }
 

@@ -1,12 +1,8 @@
 import { interpolate, makeCached } from '@pavel/utils'
-import { computeLazy, effect, observe } from '@pavel/observable'
+import { computeLazy, effect } from '@pavel/observable'
 import { scheduleTask } from '@pavel/scheduling'
 import { ChartContext, ChartOptions } from '../../types'
-import {
-  toScreenX,
-  toBitMapSize,
-  getClosestGreaterOrEqualDivisibleInt,
-} from '../../util'
+import { toBitMapSize, getClosestGreaterOrEqualDivisibleInt } from '../../util'
 import { clearRect, setCanvasSize } from '../renderers'
 import { Component } from '../types'
 
@@ -66,7 +62,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
   })
 
   scheduleTask(() => {
-    renderLabels(startX.value, endX.value, factor.value)
+    renderLabels(startX.get(), endX.get(), factor.get())
   })
 
   effect(
@@ -74,7 +70,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
     width => {
       setCanvasSize(canvas, toBitMapSize(width), toBitMapSize(height))
       setCanvasStyle(context)
-      renderLabels(startX.value, endX.value, factor.value)
+      renderLabels(startX.get(), endX.get(), factor.get())
     },
     { fireImmediately: false },
   )
@@ -82,7 +78,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
   effect(
     [startX, endX, factor],
     (startX, endX, factor) => {
-      clearRect(context, toBitMapSize(width.value), toBitMapSize(height))
+      clearRect(context, toBitMapSize(width.get()), toBitMapSize(height))
       renderLabels(startX, endX, factor)
     },
     { fireImmediately: false },
@@ -96,12 +92,12 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
       i <= Math.floor(endX);
       i += factor
     ) {
-      const screenX = toBitMapSize(interpolate(startX, endX, 0, width.value, i))
+      const screenX = toBitMapSize(interpolate(startX, endX, 0, width.get(), i))
       const label = labels.get(i)
       const { width: labelWidth } = context.measureText(label)
 
       if (screenX < labelWidth / 2) continue
-      if (toBitMapSize(width.value) - screenX < labelWidth / 2) continue
+      if (toBitMapSize(width.get()) - screenX < labelWidth / 2) continue
 
       context.fillText(label, screenX, 0)
     }
@@ -127,7 +123,7 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
       throw new Error('Failed to acquire context')
     }
 
-    setCanvasSize(canvas, toBitMapSize(width.value), toBitMapSize(height))
+    setCanvasSize(canvas, toBitMapSize(width.get()), toBitMapSize(height))
     setCanvasStyle(context)
 
     return { element: canvas, canvas, context }

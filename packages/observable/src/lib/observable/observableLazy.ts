@@ -23,8 +23,6 @@ export function observableLazy<T>(
     name,
     notifyChanged,
     observe: observers.register,
-    get value() {
-      return holder.get()
-    },
+    get: holder.get,
   }
 }

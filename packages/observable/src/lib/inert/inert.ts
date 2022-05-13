@@ -73,7 +73,7 @@ export const inert =
     )
     // Can get lazy. Use case for idleValue?
     const transition = constructTransition(
-      target.value,
+      target.get(),
       options,
       interpolate as any,
     )
@@ -124,7 +124,7 @@ export const inert =
     }
 
     function complete() {
-      set(target.value as never)
+      set(target.get() as never)
     }
 
     observe([target], setTarget, { fireImmediately: false })
@@ -132,13 +132,9 @@ export const inert =
     return {
       name,
       setTransition,
-      get value() {
-        return get() as never
-      },
+      get,
       // Remove setter and use complete?
-      set value(newValue) {
-        set(newValue)
-      },
+      set,
       complete,
       observe: observers.register,
     }
