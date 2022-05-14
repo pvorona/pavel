@@ -12,7 +12,7 @@ import {
   DEVIATION_FROM_STRAIGHT_LINE_DEGREES,
   MIN_VIEWBOX_MS,
 } from '../constants'
-import { ensureInBounds } from '@pavel/utils'
+import { ensureInBounds, interpolate } from '@pavel/utils'
 
 export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
   const options = validateConfig(uncheckedOptions)
@@ -68,16 +68,38 @@ export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
           ),
         )
       } else {
+        const focusX = interpolate(
+          0,
+          width.get(),
+          startX.get(),
+          endX.get(),
+          event.clientX,
+        )
+        const shiftStartX = interpolate(
+          focusX,
+          focusX + viewBoxWidth / 2,
+          0,
+          deltaY * dynamicFactor,
+          startX.get(),
+        )
+        const shiftEndX = interpolate(
+          focusX,
+          focusX + viewBoxWidth / 2,
+          0,
+          deltaY * dynamicFactor,
+          endX.get(),
+        )
+
         startX.set(
           ensureInBounds(
-            startX.get() - deltaY * dynamicFactor,
+            startX.get() + shiftStartX,
             options.domain[0],
             options.domain[options.domain.length - 1] - MIN_VIEWBOX_MS,
           ),
         )
         endX.set(
           ensureInBounds(
-            endX.get() + deltaY * dynamicFactor,
+            endX.get() + shiftEndX,
             startX.get() + MIN_VIEWBOX_MS,
             options.domain[options.domain.length - 1],
           ),
