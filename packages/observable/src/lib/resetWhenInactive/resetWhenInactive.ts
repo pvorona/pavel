@@ -1,4 +1,4 @@
-import { createId, wrapId } from '../createId'
+import { createId, createWrapperId } from '../createId'
 import { EagerSubject, Identifiable } from '../types'
 
 type ResetWhenInactiveOptions =
@@ -13,7 +13,10 @@ const RESET_WHEN_INACTIVE_GROUP = 'ResetWhenInactive'
 export const resetWhenInactive =
   (options: ResetWhenInactiveOptions) =>
   <T>(target: EagerSubject<T>): EagerSubject<T> => {
-    const name = wrapId(createId(RESET_WHEN_INACTIVE_GROUP, options), target.id)
+    const name = createWrapperId(
+      createId(RESET_WHEN_INACTIVE_GROUP, options),
+      target.id,
+    )
     const delay = getDelay(options)
     const initialValue = target.get()
 
