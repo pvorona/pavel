@@ -74,17 +74,18 @@ export type OptionalChartOptions = {
 }
 
 export type ExternalChartOptions = DeepPartial<OptionalChartOptions> & {
-  readonly viewBox: ViewBoxOptions
-  readonly visibility: VisibilityState
-  readonly total: number
-  readonly width: number
-  readonly height: number
   readonly data: DataByGraphName
   readonly domain: readonly number[]
   readonly graphNames: readonly string[]
 }
 
-export type InternalChartOptions = DeepRequired<ExternalChartOptions>
+export type InternalChartOptions = DeepRequired<ExternalChartOptions> & {
+  readonly width: number
+  readonly height: number
+  readonly visibility: VisibilityState
+  readonly total: number
+  readonly viewBox: ViewBoxOptions
+}
 
 // type Series = {
 //   title?: string

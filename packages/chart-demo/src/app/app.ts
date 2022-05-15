@@ -34,30 +34,12 @@ async function startApp() {
 
       assert(!isNull(chartContainer), 'Chart container is not found')
 
-      const domain = data1.map(d => d.timestamp)
-
       const options: ExternalChartOptions = {
-        width: chartContainer.offsetWidth,
-        height: chartContainer.offsetHeight,
-        viewBox: {
-          start: domain[0],
-          end: domain[domain.length - 1],
-        },
         graphNames: ['A', 'B'],
-        domain,
+        domain: data1.map(d => d.timestamp),
         data: {
           A: data1.map(d => d.value),
           B: data2.map(d => d.value),
-        },
-        total: data1.length,
-        visibility: {
-          A: true,
-          B: true,
-        },
-        tooltip: {
-          lineColor: theme.tooltipLine,
-          backgroundColor: theme.tooltipBackgroundColor,
-          color: theme.tooltipColor,
         },
       }
 

@@ -18,7 +18,7 @@ export const Chart = (
   parent: HTMLElement,
   uncheckedOptions: ExternalChartOptions,
 ) => {
-  const options = createConfig(uncheckedOptions)
+  const options = createConfig(parent, uncheckedOptions)
   const context = ChartContext(options)
   const { width, height, endX, startX, isWheeling } = context
   const { element } = createDOM()
