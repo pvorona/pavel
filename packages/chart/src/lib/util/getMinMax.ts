@@ -4,7 +4,7 @@ import { interpolatePoint } from './interpolatePoint'
 export function getMinMax(
   startIndex: number,
   endIndex: number,
-  values: number[],
+  values: readonly number[],
 ): { min: number; max: number } {
   const firstValue = interpolatePoint(startIndex, values)
   const lastValue = interpolatePoint(endIndex, values)

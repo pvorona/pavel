@@ -1,3 +1,4 @@
+import { InternalChartOptions } from '../../types'
 import { hexToRGB, toBitMapSize, toScreenY } from '../../util'
 import { Point } from '../types'
 import { lineTo } from './lineTo'
@@ -10,10 +11,10 @@ export function renderLineSeriesWithAreaGradient({
   points,
   graphNames,
   lineWidth,
-  strokeStyles,
+  colors,
   opacityState,
-  lineJoinByName,
-  lineCapByName,
+  lineJoin,
+  lineCap,
   width,
   height,
   minMaxByGraphName,
@@ -22,12 +23,12 @@ export function renderLineSeriesWithAreaGradient({
 }: {
   context: CanvasRenderingContext2D
   points: { [key: string]: Point[] }
-  graphNames: string[]
-  lineWidth: number
-  strokeStyles: { [key: string]: string }
+  graphNames: InternalChartOptions['graphNames']
+  lineWidth: InternalChartOptions['lineWidth']
+  colors: InternalChartOptions['colors']
   opacityState: { [key: string]: number }
-  lineJoinByName: { [series: string]: CanvasLineJoin }
-  lineCapByName: { [series: string]: CanvasLineCap }
+  lineJoin: InternalChartOptions['lineJoin']
+  lineCap: InternalChartOptions['lineCap']
   width: number
   height: number
   minMaxByGraphName: Record<string, { min: number; max: number }>
@@ -40,18 +41,15 @@ export function renderLineSeriesWithAreaGradient({
 
     if (opacity === 0) continue
 
-    const color = `rgba(${hexToRGB(strokeStyles[graphName])},${opacity})`
-    const gradientColorStart = `rgba(${hexToRGB(strokeStyles[graphName])},${
-      opacity / 4
-    })`
-    const gradientColorStop = `rgba(${hexToRGB(strokeStyles[graphName])},${
-      opacity / 32
-    })`
+    const color = colors[i % graphNames.length]
+    const rgbColor = `rgba(${hexToRGB(color)},${opacity})`
+    const gradientColorStart = `rgba(${hexToRGB(color)},${opacity / 4})`
+    const gradientColorStop = `rgba(${hexToRGB(color)},${opacity / 32})`
 
-    context.strokeStyle = color
+    context.strokeStyle = rgbColor
     context.lineWidth = toBitMapSize(lineWidth)
-    context.lineJoin = lineJoinByName[graphName]
-    context.lineCap = lineCapByName[graphName]
+    context.lineJoin = lineJoin
+    context.lineCap = lineCap
     context.beginPath()
 
     for (let j = 0; j < points[graphName].length; j++) {

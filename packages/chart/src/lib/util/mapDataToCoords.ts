@@ -3,8 +3,8 @@ import { Point } from '../components/types'
 import { ceil, floor, isInteger } from './math'
 
 export function mapDataToCoords(
-  data: number[],
-  domain: number[],
+  data: readonly number[],
+  domain: readonly number[],
   max: number,
   min: number,
   { width, height: availableHeight }: { width: number; height: number },
@@ -64,7 +64,11 @@ export function mapDataToCoords(
   return coords
 }
 
-function getValueAt(index: number, domain: number[], values: number[]): number {
+function getValueAt(
+  index: number,
+  domain: readonly number[],
+  values: readonly number[],
+): number {
   if (isInteger(index)) {
     return values[index]
   }
@@ -79,7 +83,7 @@ function getValueAt(index: number, domain: number[], values: number[]): number {
 }
 
 // Gets x by fractional index
-export function getX(xs: number[], index: number): number {
+export function getX(xs: readonly number[], index: number): number {
   if (isInteger(index)) {
     return xs[index]
   }
@@ -91,7 +95,7 @@ export function getX(xs: number[], index: number): number {
 }
 
 export function toScreenX(
-  xs: number[],
+  xs: readonly number[],
   width: number,
   startIndex: number,
   endIndex: number,

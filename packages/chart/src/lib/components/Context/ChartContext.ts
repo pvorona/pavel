@@ -9,7 +9,7 @@ import {
   interpolateMap,
   interpolateMinMax,
 } from '@pavel/observable'
-import { ChartOptions } from '../../types'
+import { InternalChartOptions } from '../../types'
 import {
   cursor,
   TRANSITION,
@@ -22,7 +22,7 @@ import { special } from '@pavel/easing'
 import { xToIndex } from '../../util/xToIndex'
 import { ensureInBounds } from '@pavel/utils'
 
-export const ChartContext = (options: ChartOptions) => {
+export const ChartContext = (options: InternalChartOptions) => {
   const globalStartIndex = observable(0, {
     id: 'globalStartIndex',
   })
@@ -115,11 +115,9 @@ export const ChartContext = (options: ChartOptions) => {
     return Math.max(
       containerHeight -
         options.overview.height -
-        options.x.tick.height -
-        options.x.tick.margin -
         options.x.label.fontSize -
-        options.x.marginBottom -
-        options.x.marginTop,
+        options.x.margin.blockEnd -
+        options.x.margin.blockStart,
       MIN_HEIGHT,
     )
   }

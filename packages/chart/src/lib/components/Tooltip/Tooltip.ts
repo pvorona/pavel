@@ -1,6 +1,6 @@
 import { Lambda } from '@pavel/types'
 import { effect, computeLazy } from '@pavel/observable'
-import { ChartContext, ChartOptions } from '../../types'
+import { ChartContext, InternalChartOptions } from '../../types'
 import { getTooltipDateText } from '../../util'
 import { DOT_SIZE, CENTER_OFFSET as DOT_CENTER_OFFSET } from '../constants'
 import { Component, Point } from '../types'
@@ -9,7 +9,7 @@ import './TooltipLine.css'
 import './Title.css'
 import './Tooltip.css'
 
-export const Tooltip: Component<ChartOptions, ChartContext> = (
+export const Tooltip: Component<InternalChartOptions, ChartContext> = (
   options,
   {
     isHovering,
@@ -169,9 +169,11 @@ export const Tooltip: Component<ChartOptions, ChartContext> = (
 
     const tooltipValues: { [key: string]: HTMLDivElement } = {}
     const tooltipGraphInfos: { [key: string]: HTMLDivElement } = {}
-    options.graphNames.forEach(graphName => {
+    options.graphNames.forEach((graphName, seriesIndex) => {
+      const color = options.colors[seriesIndex % options.graphNames.length]
+
       const tooltipGraphInfo = document.createElement('div')
-      tooltipGraphInfo.style.color = options.colors[graphName]
+      tooltipGraphInfo.style.color = color
       tooltipGraphInfo.style.padding = '0 10px 10px'
       tooltipGraphInfos[graphName] = tooltipGraphInfo
 
@@ -195,11 +197,12 @@ export const Tooltip: Component<ChartOptions, ChartContext> = (
 
     const tooltipCircles: { [key: string]: HTMLDivElement } = {}
     for (let i = 0; i < options.graphNames.length; i++) {
+      const color = options.colors[i % options.graphNames.length]
       const circle = document.createElement('div')
       circle.style.width = `${DOT_SIZE}px`
       circle.style.height = `${DOT_SIZE}px`
-      circle.style.borderColor = options.colors[options.graphNames[i]]
-      circle.style.backgroundColor = options.colors[options.graphNames[i]]
+      circle.style.borderColor = color
+      circle.style.backgroundColor = color
       circle.className = 'tooltip__dot'
       tooltipCircles[options.graphNames[i]] = circle
       tooltipContainer.appendChild(circle)

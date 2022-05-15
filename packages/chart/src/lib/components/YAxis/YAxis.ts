@@ -1,12 +1,12 @@
 import { computeLazy, effect } from '@pavel/observable'
 import { scheduleTask } from '@pavel/scheduling'
 import { interpolate } from '@pavel/utils'
-import { BitMapSize, ChartContext, ChartOptions } from '../../types'
+import { BitMapSize, ChartContext, InternalChartOptions } from '../../types'
 import { getClosestGreaterOrEqualDivisibleInt, toBitMapSize } from '../../util'
 import { clearRect, line, setCanvasSize } from '../renderers'
 
 export const YAxis = (
-  options: ChartOptions,
+  options: InternalChartOptions,
   {
     width,
     canvasHeight: height,
@@ -101,12 +101,16 @@ export const YAxis = (
       const y1 = screenY
       const x2 = toBitMapSize(width)
       const y2 = screenY
-      const textY = screenY - toBitMapSize(options.y.label.marginBottom)
+      const textY = screenY - toBitMapSize(options.y.label.margin.blockEnd)
       const label = `${i}`
 
       if (textY - toBitMapSize(options.y.label.fontSize) < 0) continue
 
-      context.fillText(label, toBitMapSize(options.y.label.marginLeft), textY)
+      context.fillText(
+        label,
+        toBitMapSize(options.y.label.margin.inlineStart),
+        textY,
+      )
       line(context, x1, y1, x2, y2)
     }
     context.stroke()

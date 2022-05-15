@@ -11,8 +11,8 @@ export function createMinMaxView(
   startIndex: ReadonlyLazySubject<number>,
   endIndex: ReadonlyLazySubject<number>,
   enabledGraphNames: ReadonlySubject<string[]>,
-  graphNames: string[],
-  dataByGraphName: { [graphName: string]: number[] },
+  graphNames: readonly string[],
+  dataByGraphName: { readonly [graphName: string]: readonly number[] },
 ) {
   const minMaxByGraphName = computeLazy(
     [startIndex, endIndex],

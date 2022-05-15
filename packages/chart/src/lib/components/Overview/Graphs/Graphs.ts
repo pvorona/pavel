@@ -4,7 +4,7 @@ import {
   renderLineSeriesWithAreaGradient,
   setCanvasSize,
 } from '../../renderers'
-import { ChartContext, ChartOptions } from '../../../types'
+import { ChartContext, InternalChartOptions } from '../../../types'
 import { special } from '@pavel/easing'
 import { mapDataToCoords, toBitMapSize } from '../../../util'
 import { TRANSITION } from '../../constants'
@@ -14,7 +14,7 @@ import { scheduleTask } from '@pavel/scheduling'
 
 const VIEWBOX_TOP_BOTTOM_BORDER_WIDTH = 2
 
-export const Graphs: Component<ChartOptions, ChartContext> = (
+export const Graphs: Component<InternalChartOptions, ChartContext> = (
   options,
   context,
 ) => {
@@ -159,11 +159,11 @@ export const Graphs: Component<ChartOptions, ChartContext> = (
       context: graphs.context,
       graphNames: options.graphNames,
       lineWidth: options.overview.lineWidth,
-      strokeStyles: options.colors,
+      colors: options.colors,
       height: canvasHeight,
       width: width.get(),
-      lineJoinByName: options.lineJoin,
-      lineCapByName: options.lineCap,
+      lineJoin: options.lineJoin,
+      lineCap: options.lineCap,
       min,
       max,
       minMaxByGraphName,

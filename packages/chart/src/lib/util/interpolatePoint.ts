@@ -1,7 +1,10 @@
 import { floor, ceil } from './math'
 import { interpolate } from '@pavel/utils'
 
-export function interpolatePoint(index: number, values: number[]): number {
+export function interpolatePoint(
+  index: number,
+  values: readonly number[],
+): number {
   return interpolate(
     floor(index),
     ceil(index),

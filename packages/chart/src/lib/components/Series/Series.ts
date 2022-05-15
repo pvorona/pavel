@@ -4,7 +4,7 @@ import {
   renderLineSeriesWithAreaGradient,
   setCanvasSize,
 } from '../renderers'
-import { ChartContext, ChartOptions } from '../../types'
+import { ChartContext, InternalChartOptions } from '../../types'
 import { toBitMapSize } from '../../util'
 import { cursor, MIN_HEIGHT } from '../constants'
 import { Component, Point } from '../types'
@@ -17,7 +17,7 @@ import {
   interpolate,
 } from '@pavel/utils'
 
-export const Series: Component<ChartOptions, ChartContext> = (
+export const Series: Component<InternalChartOptions, ChartContext> = (
   options,
   {
     width,
@@ -106,11 +106,11 @@ export const Series: Component<ChartOptions, ChartContext> = (
       context: context,
       graphNames: options.graphNames,
       lineWidth: options.lineWidth,
-      strokeStyles: options.colors,
+      colors: options.colors,
       height: canvasHeight.get(),
       width: width.get(),
-      lineJoinByName: options.lineJoin,
-      lineCapByName: options.lineCap,
+      lineJoin: options.lineJoin,
+      lineCap: options.lineCap,
       min,
       max,
       minMaxByGraphName,

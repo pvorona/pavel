@@ -1,7 +1,7 @@
 import { interpolate, makeCached } from '@pavel/utils'
 import { computeLazy, effect } from '@pavel/observable'
 import { scheduleTask } from '@pavel/scheduling'
-import { ChartContext, ChartOptions } from '../../types'
+import { ChartContext, InternalChartOptions } from '../../types'
 import { toBitMapSize, getClosestGreaterOrEqualDivisibleInt } from '../../util'
 import { clearRect, setCanvasSize } from '../renderers'
 import { Component } from '../types'
@@ -35,7 +35,7 @@ import { Component } from '../types'
 
 const CACHE_TICKS_MULTIPLIER = 100
 
-export const XAxis: Component<ChartOptions, ChartContext> = (
+export const XAxis: Component<InternalChartOptions, ChartContext> = (
   options,
   { startX, endX, width },
 ) => {
@@ -44,21 +44,18 @@ export const XAxis: Component<ChartOptions, ChartContext> = (
   })
   const {
     x: {
-      color,
-      marginBottom,
-      marginTop,
-      tick: { height: tickHeight, margin: tickMargin },
-      label: { fontSize, fontFamily },
+      label: { fontSize, fontFamily, color },
+      margin: { blockStart, blockEnd },
     },
   } = options
-  const height = fontSize + tickHeight + tickMargin
+  const height = fontSize
   const factor = computeLazy([startX, endX], (startX, endX) =>
     computeScaleFactor(endX - startX, options.x.ticks),
   )
   const { element, context, canvas } = createDOM({
     height,
-    marginBottom,
-    marginTop,
+    marginBottom: blockEnd,
+    marginTop: blockStart,
   })
 
   scheduleTask(() => {

@@ -1,7 +1,7 @@
-import { Chart, ChartOptions } from '@pavel/chart'
+import { Chart, ExternalChartOptions } from '@pavel/chart'
 import { theme } from './theme'
 import './app.scss'
-import { assert } from '@pavel/assert'
+import { assert, isNull } from '@pavel/assert'
 
 type DataEntry = { timestamp: number; value: number }
 
@@ -32,45 +32,13 @@ async function startApp() {
       )
       const chartContainer = document.getElementById('chart')
 
-      assert(chartContainer !== null, 'Cannot find #chart container')
+      assert(!isNull(chartContainer), 'Chart container is not found')
 
       const domain = data1.map(d => d.timestamp)
 
-      const options: ChartOptions = {
-        x: {
-          color: theme.x,
-          marginBottom: 7,
-          marginTop: 10,
-          ticks: 8,
-          tick: {
-            height: 0,
-            margin: 0,
-          },
-          label: {
-            fontSize: 12,
-            fontFamily: 'system-ui, sans-serif',
-          },
-        },
-        y: {
-          color: theme.y,
-          ticks: 6,
-          label: {
-            color: theme.yLabel,
-            fontSize: 12,
-            fontFamily: 'system-ui, sans-serif',
-            marginBottom: 7,
-            marginLeft: 10,
-          },
-        },
+      const options: ExternalChartOptions = {
         width: chartContainer.offsetWidth,
         height: chartContainer.offsetHeight,
-        lineWidth: theme.lineWidth || 1,
-        overview: {
-          height: 100,
-          lineWidth: theme.overviewLineWidth || 1,
-          overlayColor: theme.overviewBackdrop,
-          edgeColor: theme.overviewEdge,
-        },
         viewBox: {
           start: domain[0],
           end: domain[domain.length - 1],
@@ -81,15 +49,6 @@ async function startApp() {
           A: data1.map(d => d.value),
           B: data2.map(d => d.value),
         },
-        lineJoin: {
-          A: 'bevel',
-          B: 'bevel',
-        },
-        lineCap: {
-          A: 'butt',
-          B: 'butt',
-        },
-        colors: { A: theme.series[0], B: theme.series[1] },
         total: data1.length,
         visibility: {
           A: true,

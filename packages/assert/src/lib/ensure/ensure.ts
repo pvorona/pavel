@@ -1,13 +1,15 @@
 export const ensure =
-  <T>(predicate: (value: unknown) => boolean) =>
+  <T>(...predicates: ((value: unknown) => boolean)[]) =>
   (value: unknown, identifier?: string): T => {
-    if (predicate(value)) {
-      return value as T
+    for (const predicate of predicates) {
+      if (!predicate(value)) {
+        throw new Error(
+          `Expected ${value} to satisfy predicate${
+            identifier ? ` when evaluating ${identifier}` : ''
+          }`,
+        )
+      }
     }
 
-    throw new Error(
-      `Expected ${value} to satisfy predicate${
-        identifier ? ` when evaluating ${identifier}` : ''
-      }`,
-    )
+    return value as T
   }

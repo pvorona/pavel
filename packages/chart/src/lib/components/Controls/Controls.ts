@@ -1,7 +1,7 @@
-import { ChartContext, ChartOptions } from '../../types'
+import { ChartContext, InternalChartOptions } from '../../types'
 import { Component } from '../types'
 
-export const Controls: Component<ChartOptions, ChartContext> = (
+export const Controls: Component<InternalChartOptions, ChartContext> = (
   config,
   { enabledStateByGraphName },
 ) => {
@@ -17,7 +17,7 @@ export const Controls: Component<ChartOptions, ChartContext> = (
     })
   }
 
-  config.graphNames.forEach(graphName => {
+  config.graphNames.forEach((graphName, seriesIndex) => {
     const label = document.createElement('label')
     label.style.marginRight = '15px'
 
@@ -29,7 +29,7 @@ export const Controls: Component<ChartOptions, ChartContext> = (
 
     const button = document.createElement('div')
     button.className = 'like-button'
-    button.style.color = config.colors[graphName]
+    button.style.color = config.colors[seriesIndex % config.graphNames.length]
 
     const text = document.createElement('div')
     text.className = 'button-text'

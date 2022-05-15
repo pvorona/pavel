@@ -1,3 +1,3 @@
-export function isInteger(n: number): boolean {
+export function isInteger(n: unknown): boolean {
   return Number.isInteger(n)
 }

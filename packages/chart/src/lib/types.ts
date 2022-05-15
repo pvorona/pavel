@@ -1,34 +1,34 @@
-import { Nominal } from '@pavel/types'
+import { DeepPartial, DeepRequired, Nominal } from '@pavel/types'
 import { ChartContext } from './components'
 
-export interface ChartData {
-  columns: (number | string)[][]
-  types: { [key: string]: string }
-  colors: { [key: string]: string }
-  names: { [key: string]: string }
-}
-
 export interface VisibilityState {
-  [key: string]: boolean
+  readonly [key: string]: boolean
 }
 
 export interface DataByGraphName {
-  [key: string]: number[]
+  readonly [key: string]: readonly number[]
 }
 
+type BlockMarginTrait = {
+  blockStart?: number
+  blockEnd?: number
+}
+
+type InlineMarginTrait = {
+  inlineStart?: number
+  inlineEnd?: number
+}
+
+type Margin = BlockMarginTrait & InlineMarginTrait
+
 export type XOptions = {
-  color: string
+  margin: Margin
   ticks: number
-  tick: {
-    height: number
-    margin: number
-  }
   label: {
+    color: string
     fontSize: number
     fontFamily: string
   }
-  marginBottom: number
-  marginTop: number
 }
 
 export type YOptions = {
@@ -38,57 +38,53 @@ export type YOptions = {
     color: string
     fontSize: number
     fontFamily: string
-    marginBottom: number
-    marginLeft: number
+    margin?: Margin
   }
 }
 
 export type OverviewOptions = {
-  height: number
-  lineWidth: number
-  overlayColor: string
-  edgeColor: string
+  readonly height: number
+  readonly lineWidth: number
+  readonly overlayColor: string
+  readonly edgeColor: string
 }
 
 export type TooltipOptions = {
-  lineColor: string
-  backgroundColor: string
-  color: string
+  readonly lineColor: string
+  readonly backgroundColor: string
+  readonly color: string
 }
 
 export type ViewBoxOptions = {
-  start: number
-  end: number
+  readonly start: number
+  readonly end: number
 }
 
 export type ColorsOptions = { [key: string]: string }
 
-export type LineJoinOptions = {
-  [series: string]: CanvasLineJoin
+export type OptionalChartOptions = {
+  readonly x: XOptions
+  readonly y: YOptions
+  readonly overview: OverviewOptions
+  readonly tooltip: TooltipOptions
+  readonly lineWidth: number
+  readonly colors: readonly string[]
+  readonly lineJoin: CanvasLineJoin
+  readonly lineCap: CanvasLineCap
 }
 
-export type LineCapOptions = {
-  [series: string]: CanvasLineCap
+export type ExternalChartOptions = DeepPartial<OptionalChartOptions> & {
+  readonly viewBox: ViewBoxOptions
+  readonly visibility: VisibilityState
+  readonly total: number
+  readonly width: number
+  readonly height: number
+  readonly data: DataByGraphName
+  readonly domain: readonly number[]
+  readonly graphNames: readonly string[]
 }
 
-export type ChartOptions = Readonly<{
-  x: XOptions
-  y: YOptions
-  overview: OverviewOptions
-  tooltip: TooltipOptions
-  viewBox: ViewBoxOptions
-  visibility: VisibilityState
-  total: number
-  width: number
-  height: number
-  lineWidth: number
-  colors: ColorsOptions
-  data: DataByGraphName
-  lineJoin: LineJoinOptions
-  lineCap: LineCapOptions
-  domain: number[]
-  graphNames: string[]
-}>
+export type InternalChartOptions = DeepRequired<ExternalChartOptions>
 
 // type Series = {
 //   title?: string

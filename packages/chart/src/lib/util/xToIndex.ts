@@ -1,6 +1,6 @@
 import { interpolate } from '@pavel/utils'
 
-export function xToIndex(xs: number[], x: number): number {
+export function xToIndex(xs: readonly number[], x: number): number {
   const start = xs[0]
 
   if (x < start) {

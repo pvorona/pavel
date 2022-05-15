@@ -1,5 +1,5 @@
 import { Controls } from '../Controls'
-import { ChartOptions } from '../../types'
+import { ExternalChartOptions } from '../../types'
 import { Overview } from '../Overview'
 import { XAxis } from '../XAxis'
 import { YAxis } from '../YAxis'
@@ -7,15 +7,18 @@ import { Tooltip } from '../Tooltip'
 import { Series } from '../Series'
 import { ChartContext } from '../Context'
 import { throttleTask, PRIORITY } from '@pavel/scheduling'
-import { validateConfig } from '../../config'
+import { createConfig } from '../../config'
 import {
   DEVIATION_FROM_STRAIGHT_LINE_DEGREES,
   MIN_VIEWBOX_MS,
 } from '../constants'
 import { ensureInBounds, interpolate } from '@pavel/utils'
 
-export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
-  const options = validateConfig(uncheckedOptions)
+export const Chart = (
+  parent: HTMLElement,
+  uncheckedOptions: ExternalChartOptions,
+) => {
+  const options = createConfig(uncheckedOptions)
   const context = ChartContext(options)
   const { width, height, endX, startX, isWheeling } = context
   const { element } = createDOM()

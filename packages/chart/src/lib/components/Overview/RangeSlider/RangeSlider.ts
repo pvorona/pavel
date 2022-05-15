@@ -1,6 +1,6 @@
 import { effect, observable, observe } from '@pavel/observable'
 import { ensureInBounds, handleDrag, interpolate } from '@pavel/utils'
-import { ChartContext, ChartOptions } from '../../../types'
+import { ChartContext, InternalChartOptions } from '../../../types'
 import { areNumbersClose } from '../../../util'
 import { cursor } from '../../constants'
 import { Component } from '../../types'
@@ -10,7 +10,7 @@ import './overview-viewbox.css'
 
 const minimalPixelsBetweenResizeHandlers = 10
 
-export const RangeSlider: Component<ChartOptions, ChartContext> = (
+export const RangeSlider: Component<InternalChartOptions, ChartContext> = (
   options,
   context,
 ) => {
