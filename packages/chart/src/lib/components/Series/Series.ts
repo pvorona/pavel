@@ -114,6 +114,7 @@ export const Series: Component<InternalChartOptions, ChartContext> = (
       min,
       max,
       minMaxByGraphName,
+      gradient:options.gradient,
     })
   }
 

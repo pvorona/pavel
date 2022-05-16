@@ -62,6 +62,10 @@ export type ViewBoxOptions = {
 
 export type ColorsOptions = { [key: string]: string }
 
+export type GradientOptions = {
+  readonly [series: string]: boolean
+}
+
 export type OptionalChartOptions = {
   readonly x: XOptions
   readonly y: YOptions
@@ -77,14 +81,15 @@ export type ExternalChartOptions = DeepPartial<OptionalChartOptions> & {
   readonly data: DataByGraphName
   readonly domain: readonly number[]
   readonly graphNames: readonly string[]
+  readonly visibility?: VisibilityState
+  readonly viewBox?: ViewBoxOptions
+  readonly gradient?: GradientOptions
 }
 
 export type InternalChartOptions = DeepRequired<ExternalChartOptions> & {
   readonly width: number
   readonly height: number
-  readonly visibility: VisibilityState
   readonly total: number
-  readonly viewBox: ViewBoxOptions
 }
 
 // type Series = {

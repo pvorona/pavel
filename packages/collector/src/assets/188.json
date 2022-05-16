@@ -1,0 +1,106 @@
+[
+  {
+    "timestamp": "2022-04-21T09:59:18.832Z",
+    "bidQty": 477,
+    "bid": 4493,
+    "ofrQty": 477,
+    "ofr": 4494.1,
+    "_id": "62612af6b7abb228586f2efc"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:18.837Z",
+    "bidQty": 477,
+    "bid": 4493,
+    "ofrQty": 477,
+    "ofr": 4494,
+    "_id": "62612af6b7abb228586f2efd"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:19.019Z",
+    "bidQty": 477,
+    "bid": 4493,
+    "ofrQty": 477,
+    "ofr": 4493.9,
+    "_id": "62612af7b7abb228586f2efe"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:19.024Z",
+    "bidQty": 477,
+    "bid": 4492.9,
+    "ofrQty": 477,
+    "ofr": 4493.9,
+    "_id": "62612af7b7abb228586f2eff"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:19.291Z",
+    "bidQty": 477,
+    "bid": 4493,
+    "ofrQty": 477,
+    "ofr": 4493.9,
+    "_id": "62612af7b7abb228586f2f00"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:20.709Z",
+    "bidQty": 477,
+    "bid": 4493,
+    "ofrQty": 477,
+    "ofr": 4494,
+    "_id": "62612af9b7abb228586f2f01"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:22.089Z",
+    "bidQty": 477,
+    "bid": 4492.9,
+    "ofrQty": 477,
+    "ofr": 4493.9,
+    "_id": "62612afab7abb228586f2f03"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:22.089Z",
+    "bidQty": 477,
+    "bid": 4493,
+    "ofrQty": 477,
+    "ofr": 4493.9,
+    "_id": "62612afab7abb228586f2f02"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:22.250Z",
+    "bidQty": 477,
+    "bid": 4492.8,
+    "ofrQty": 477,
+    "ofr": 4493.8,
+    "_id": "62612afab7abb228586f2f04"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:22.715Z",
+    "bidQty": 477,
+    "bid": 4492.6,
+    "ofrQty": 477,
+    "ofr": 4494.1,
+    "_id": "62612afab7abb228586f2f05"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:22.769Z",
+    "bidQty": 477,
+    "bid": 4492.9,
+    "ofrQty": 477,
+    "ofr": 4493.9,
+    "_id": "62612afab7abb228586f2f06"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:25.600Z",
+    "bidQty": 477,
+    "bid": 4493,
+    "ofrQty": 477,
+    "ofr": 4493.9,
+    "_id": "62612afdb7abb228586f2f07"
+  },
+  {
+    "timestamp": "2022-04-21T09:59:25.856Z",
+    "bidQty": 477,
+    "bid": 4493,
+    "ofrQty": 477,
+    "ofr": 4494,
+    "_id": "62612afdb7abb228586f2f08"
+  }
+]

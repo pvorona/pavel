@@ -170,20 +170,20 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
     const tooltipValues: { [key: string]: HTMLDivElement } = {}
     const tooltipGraphInfos: { [key: string]: HTMLDivElement } = {}
     options.graphNames.forEach((graphName, seriesIndex) => {
-      const color = options.colors[seriesIndex % options.graphNames.length]
+      const color = options.colors[seriesIndex % options.colors.length]
 
       const tooltipGraphInfo = document.createElement('div')
       tooltipGraphInfo.style.color = color
       tooltipGraphInfo.style.padding = '0 10px 10px'
       tooltipGraphInfos[graphName] = tooltipGraphInfo
 
-      const tooltipValue = document.createElement('div')
-      tooltipValue.style.fontWeight = 'bold'
-      tooltipGraphInfo.appendChild(tooltipValue)
-
       const graphNameElement = document.createElement('div')
+      graphNameElement.style.fontWeight = 'bold'
       graphNameElement.innerText = graphName
       tooltipGraphInfo.appendChild(graphNameElement)
+
+      const tooltipValue = document.createElement('div')
+      tooltipGraphInfo.appendChild(tooltipValue)
 
       tooltipValues[graphName] = tooltipValue
       tooltipLegendContainer.appendChild(tooltipGraphInfo)
@@ -197,7 +197,7 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
 
     const tooltipCircles: { [key: string]: HTMLDivElement } = {}
     for (let i = 0; i < options.graphNames.length; i++) {
-      const color = options.colors[i % options.graphNames.length]
+      const color = options.colors[i % options.colors.length]
       const circle = document.createElement('div')
       circle.style.width = `${DOT_SIZE}px`
       circle.style.height = `${DOT_SIZE}px`

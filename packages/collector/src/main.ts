@@ -1,5 +1,9 @@
-import { startCollector } from './app'
+// import { startCollector } from './app'
 
-console.log(`[${new Date()}] Starting app`)
+import { startAnalyzer } from './app/startAnalyzer'
 
-startCollector()
+// console.log(`[${new Date()}] Starting app`)
+
+// startCollector()
+
+startAnalyzer()

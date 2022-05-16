@@ -1,0 +1,42 @@
+[
+  {
+    "timestamp": "2022-04-21T13:24:12.257Z",
+    "bidQty": 477,
+    "bid": 4502,
+    "ofrQty": 477,
+    "ofr": 4503,
+    "_id": "62615afcb7abb228586f7ccd"
+  },
+  {
+    "timestamp": "2022-04-21T13:24:12.369Z",
+    "bidQty": 477,
+    "bid": 4502,
+    "ofrQty": 477,
+    "ofr": 4502.9,
+    "_id": "62615afcb7abb228586f7cce"
+  },
+  {
+    "timestamp": "2022-04-21T13:24:14.982Z",
+    "bidQty": 477,
+    "bid": 4502.2,
+    "ofrQty": 477,
+    "ofr": 4503,
+    "_id": "62615affb7abb228586f7ccf"
+  },
+  {
+    "timestamp": "2022-04-21T13:24:14.990Z",
+    "bidQty": 477,
+    "bid": 4502.2,
+    "ofrQty": 477,
+    "ofr": 4503.2,
+    "_id": "62615affb7abb228586f7cd0"
+  },
+  {
+    "timestamp": "2022-04-21T13:24:15.066Z",
+    "bidQty": 477,
+    "bid": 4502.2,
+    "ofrQty": 477,
+    "ofr": 4503.1,
+    "_id": "62615affb7abb228586f7cd1"
+  }
+]
