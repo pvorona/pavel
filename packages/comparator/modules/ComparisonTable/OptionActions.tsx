@@ -30,7 +30,7 @@ export const OptionActions = memo(function OptionActions({
 
   return (
     <HoldConfirmationButton
-      className="absolute top-1/2 -translate-y-1/2 mr-5 mt-1 right-0 opacity-0 scale-0 transition-all group-hover:opacity-100 group-focus-within:opacity-100 group-hover:scale-100 group-focus-within:scale-100"
+      className="absolute top-1/2 -translate-y-1/2 mr-[0.7rem] mt-[3px] right-0 opacity-0 scale-0 transition-all group-hover:opacity-100 group-focus-within:opacity-100 group-hover:scale-100 group-focus-within:scale-100"
       onMouseEnter={onRemoveOptionMouseEnter}
       onMouseLeave={onRemoveOptionMouseLeave}
       onFocus={onRemoveOptionMouseEnter}

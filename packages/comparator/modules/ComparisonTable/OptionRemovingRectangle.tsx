@@ -5,6 +5,7 @@ import {
   selectOptionSizeById,
   selectTableSize,
 } from './comparisonTable.selectors'
+import styles from './OptionRemovingRectangle.module.scss'
 
 export function OptionRemovingRectangle({ optionId }: { optionId: string }) {
   const { width } = useSelector(selectOptionSizeById(optionId))
@@ -20,7 +21,8 @@ export function OptionRemovingRectangle({ optionId }: { optionId: string }) {
         height,
       }}
       className={classNames(
-        'absolute top-0 z-30 -translate-x-[1px] pointer-events-none rounded-sm bg-red-400 bg-opacity-20 border border-red-400 opacity-0 transition-opacity',
+        styles.Rectangle,
+        'absolute top-0 z-30 -translate-x-[1px] pointer-events-none rounded-sm border border-red-400 opacity-0 transition-opacity',
         {
           'opacity-100': isPreparingToRemoveOption,
         },

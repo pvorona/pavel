@@ -9,6 +9,7 @@ import { AddFeatureLine } from './AddFeatureLine'
 import { FeatureHeader } from './FeatureHeader'
 import { OptionFeatureCell } from './OptionFeatureCell'
 import classNames from 'classnames'
+import styles from './FeatureRow.module.scss'
 
 export const FeatureRow = memo(function FeatureRow({
   featureId,
@@ -46,7 +47,10 @@ export const FeatureRow = memo(function FeatureRow({
       {isFeatureExpanded && (
         <tr>
           {optionIds.map(optionId => (
-            <td key={optionId} className="align-top">
+            <td
+              key={optionId}
+              className={classNames('align-top', styles.FeatureCell)}
+            >
               <OptionFeatureCell featureId={featureId} optionId={optionId} />
             </td>
           ))}
