@@ -99,7 +99,7 @@ export function Comparison() {
       <OptionsObserver optionIds={optionIds} />
       <ComparisonObserver comparisonId={currentComparisonId} />
       <div className="flex flex-col">
-        <div className="px-3 py-4 flex items-center justify-between">
+        <div className="p-3 flex items-center justify-between">
           <div className="font-medium tracking-wider flex items-center">
             <BackIcon /> {comparisonName}
           </div>

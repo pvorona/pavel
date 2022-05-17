@@ -41,7 +41,7 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
   }
 
   return (
-    <div className="inline-block sticky left-0">
+    <div className="sticky left-0">
       <div
         className="flex flex-row items-center group"
         onMouseEnter={showFeatureActions}
@@ -64,7 +64,7 @@ export function FeatureHeader({ featureId }: { featureId: string }) {
           onInput={onFeatureDescriptionChange}
           placeholder="No description"
           className={classNames(
-            'px-3 pb-2 inline-block min-w-[100px] text-xs tracking-wider',
+            'px-3 mb-2 inline-block min-w-[100px] text-xs tracking-wider',
             styles.FeatureDescription,
           )}
         >
