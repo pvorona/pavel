@@ -1,14 +1,14 @@
-import { isFunction } from 'lodash'
+import { isFunction } from '@pavel/assert'
 import { useEffect, useState } from 'react'
 
-type LoadedState<T> = { status: 'completed'; data: T }
-type FailedState<E> = { status: 'failed'; error: E }
+type SuccessState<T> = { status: 'success'; data: T }
+type FailureState<E> = { status: 'failure'; error: E }
 
-type Loadable<T, E = unknown> =
+type Loadable<T, E = Error> =
   | { status: 'idle' }
   | { status: 'loading' }
-  | LoadedState<T>
-  | FailedState<E>
+  | SuccessState<T>
+  | FailureState<E>
 
 const IDLE = { status: 'idle' } as const
 const LOADING = { status: 'loading' } as const
@@ -28,9 +28,9 @@ export function useLoadable<T>(load: false | (() => Promise<T>)): Loadable<T> {
       try {
         const data = await load()
 
-        setState({ status: 'completed', data })
+        setState({ status: 'success', data })
       } catch (error) {
-        setState({ status: 'failed', error })
+        setState({ status: 'failure', error: error as Error })
       }
     }
 
@@ -40,15 +40,19 @@ export function useLoadable<T>(load: false | (() => Promise<T>)): Loadable<T> {
   return state
 }
 
-export function isFailed<E>(loadable: Loadable<E>): loadable is FailedState<E> {
-  return loadable.status === 'failed'
+export function isFailed<E extends Error = Error>(
+  loadable: Loadable<unknown>,
+): loadable is FailureState<E> {
+  return loadable.status === 'failure'
 }
 
-export function isLoaded<T>(loadable: Loadable<T>): loadable is LoadedState<T> {
-  return loadable.status === 'completed'
+export function isLoaded<T>(
+  loadable: Loadable<T>,
+): loadable is SuccessState<T> {
+  return loadable.status === 'success'
 }
-export function isSettled<T, E>(
+export function isSettled<T, E extends Error = Error>(
   loadable: Loadable<T, E>,
-): loadable is LoadedState<T> | FailedState<E> {
+): loadable is SuccessState<T> | FailureState<E> {
   return isFailed(loadable) || isLoaded(loadable)
 }
