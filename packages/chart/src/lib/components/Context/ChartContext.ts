@@ -37,31 +37,27 @@ export const ChartContext = (options: InternalChartOptions) => {
   const startX = observable(options.viewBox.start, {
     id: 'startX',
     is: areNumbersClose,
-    intercept: {
-      set: (newValue, { set }) => {
-        const boundedValue = ensureInBounds(
-          newValue,
-          options.domain[0],
-          options.domain[options.domain.length - 1],
-        )
+    set: (newValue, { set }) => {
+      const boundedValue = ensureInBounds(
+        newValue,
+        options.domain[0],
+        options.domain[options.domain.length - 1],
+      )
 
-        set(boundedValue)
-      },
+      set(boundedValue)
     },
   })
   const endX = observable(options.viewBox.end, {
     id: 'endX',
     is: areNumbersClose,
-    intercept: {
-      set: (newValue, { set }) => {
-        const boundedValue = ensureInBounds(
-          newValue,
-          options.domain[0],
-          options.domain[options.domain.length - 1],
-        )
+    set: (newValue, { set }) => {
+      const boundedValue = ensureInBounds(
+        newValue,
+        options.domain[0],
+        options.domain[options.domain.length - 1],
+      )
 
-        set(boundedValue)
-      },
+      set(boundedValue)
     },
   })
 

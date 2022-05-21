@@ -48,7 +48,7 @@ describe('effect', () => {
 
     mock.mockClear()
 
-    o1.value = 3
+    o1.set(3)
 
     expect(mock).not.toHaveBeenCalled()
 
@@ -57,7 +57,7 @@ describe('effect', () => {
     expect(mock).toHaveBeenLastCalledWith(3, 2)
     expect(mock).toHaveBeenCalledTimes(1)
 
-    o2.value = 4
+    o2.set(4)
 
     expect(mock).toHaveBeenCalledTimes(1)
 
@@ -84,8 +84,8 @@ it('does not fire after unobserve is called', () => {
 
   unobserve()
 
-  o1.value = 3
-  o2.value = 4
+  o1.set(3)
+  o2.set(4)
 
   jest.advanceTimersByTime(FRAME_INTERVAL)
 
@@ -105,10 +105,10 @@ it('performs task with the latest values and cancel all previous tasks', () => {
 
   mock.mockClear()
 
-  o1.value = 3
-  o2.value = 4
-  o1.value = 5
-  o1.value = 6
+  o1.set(3)
+  o2.set(4)
+  o1.set(5)
+  o1.set(6)
 
   expect(mock).not.toHaveBeenCalled()
 

@@ -27,9 +27,9 @@ describe('computeLazy', () => {
 
     const c = computeLazy([o1, o2], observer)
 
-    expect(c.value).toStrictEqual([1, 2])
-    expect(c.value).toStrictEqual([1, 2])
-    expect(c.value).toStrictEqual([1, 2])
+    expect(c.get()).toStrictEqual([1, 2])
+    expect(c.get()).toStrictEqual([1, 2])
+    expect(c.get()).toStrictEqual([1, 2])
 
     expect(observer).toHaveBeenCalledTimes(1)
   })
@@ -40,8 +40,8 @@ describe('computeLazy', () => {
 
     computeLazy([o1, o2], observer)
 
-    o1.value = 3
-    o2.value = 4
+    o1.set(3)
+    o2.set(4)
 
     expect(observer).not.toHaveBeenCalled()
   })
@@ -53,14 +53,14 @@ describe('computeLazy', () => {
 
     const c = computeLazy([o1, o2], observer)
 
-    expect(c.value).toStrictEqual([1, 2])
+    expect(c.get()).toStrictEqual([1, 2])
 
-    o1.value = 3
-    o2.value = 4
+    o1.set(3)
+    o2.set(4)
 
-    expect(c.value).toStrictEqual([3, 4])
-    expect(c.value).toStrictEqual([3, 4])
-    expect(c.value).toStrictEqual([3, 4])
+    expect(c.get()).toStrictEqual([3, 4])
+    expect(c.get()).toStrictEqual([3, 4])
+    expect(c.get()).toStrictEqual([3, 4])
     expect(observer).toHaveBeenNthCalledWith(1, 1, 2)
     expect(observer).toHaveBeenNthCalledWith(2, 3, 4)
     expect(observer).toHaveBeenCalledTimes(2)
@@ -76,12 +76,12 @@ describe('computeLazy', () => {
 
     expect(observer).not.toHaveBeenCalled()
 
-    o1.value = 3
+    o1.set(3)
 
     expect(observer).toHaveBeenCalledTimes(1)
 
     unobserve()
-    o2.value = 4
+    o2.set(4)
 
     expect(observer).toHaveBeenCalledTimes(1)
   })

@@ -29,17 +29,17 @@ describe('compute', () => {
 
       compute([o1, o2, o3], performComputation)
 
-      o1.value = 4
+      o1.set(4)
 
       expect(performComputation).toHaveBeenCalledTimes(2)
       expect(performComputation).toHaveBeenLastCalledWith(4, 2, 3)
 
-      o2.value = 5
+      o2.set(5)
 
       expect(performComputation).toHaveBeenCalledTimes(3)
       expect(performComputation).toHaveBeenLastCalledWith(4, 5, 3)
 
-      o3.value = 6
+      o3.set(6)
 
       expect(performComputation).toHaveBeenCalledTimes(4)
       expect(performComputation).toHaveBeenLastCalledWith(4, 5, 6)
@@ -52,17 +52,17 @@ describe('compute', () => {
 
       compute([o1, o2, o3], performComputation)
 
-      o1.value = 1
-      o1.value = 1
-      o1.value = 1
+      o1.set(1)
+      o1.set(1)
+      o1.set(1)
 
-      o2.value = 2
-      o2.value = 2
-      o2.value = 2
+      o2.set(2)
+      o2.set(2)
+      o2.set(2)
 
-      o3.value = 3
-      o3.value = 3
-      o3.value = 3
+      o3.set(3)
+      o3.set(3)
+      o3.set(3)
 
       expect(performComputation).toHaveBeenCalledTimes(1)
     })
@@ -73,30 +73,30 @@ describe('compute', () => {
       const o3 = observable(3)
       const c = compute([o1, o2, o3], performComputation)
 
-      expect(c.value).toStrictEqual(1 + 2 + 3)
-      expect(c.value).toStrictEqual(1 + 2 + 3)
-      expect(c.value).toStrictEqual(1 + 2 + 3)
+      expect(c.get()).toStrictEqual(1 + 2 + 3)
+      expect(c.get()).toStrictEqual(1 + 2 + 3)
+      expect(c.get()).toStrictEqual(1 + 2 + 3)
       expect(performComputation).toHaveBeenCalledTimes(1)
 
-      o1.value = 4
+      o1.set(4)
 
-      expect(c.value).toStrictEqual(4 + 2 + 3)
-      expect(c.value).toStrictEqual(4 + 2 + 3)
-      expect(c.value).toStrictEqual(4 + 2 + 3)
+      expect(c.get()).toStrictEqual(4 + 2 + 3)
+      expect(c.get()).toStrictEqual(4 + 2 + 3)
+      expect(c.get()).toStrictEqual(4 + 2 + 3)
       expect(performComputation).toHaveBeenCalledTimes(2)
 
-      o2.value = 5
+      o2.set(5)
 
-      expect(c.value).toStrictEqual(4 + 5 + 3)
-      expect(c.value).toStrictEqual(4 + 5 + 3)
-      expect(c.value).toStrictEqual(4 + 5 + 3)
+      expect(c.get()).toStrictEqual(4 + 5 + 3)
+      expect(c.get()).toStrictEqual(4 + 5 + 3)
+      expect(c.get()).toStrictEqual(4 + 5 + 3)
       expect(performComputation).toHaveBeenCalledTimes(3)
 
-      o3.value = 6
+      o3.set(6)
 
-      expect(c.value).toStrictEqual(4 + 5 + 6)
-      expect(c.value).toStrictEqual(4 + 5 + 6)
-      expect(c.value).toStrictEqual(4 + 5 + 6)
+      expect(c.get()).toStrictEqual(4 + 5 + 6)
+      expect(c.get()).toStrictEqual(4 + 5 + 6)
+      expect(c.get()).toStrictEqual(4 + 5 + 6)
       expect(performComputation).toHaveBeenCalledTimes(4)
     })
   })
@@ -112,32 +112,32 @@ describe('compute', () => {
 
     expect(observer).toHaveBeenCalledTimes(0)
 
-    o1.value = 4
+    o1.set(4)
 
     expect(observer).toHaveBeenCalledTimes(1)
     expect(observer).toHaveBeenLastCalledWith(4 + 2 + 3)
 
-    o2.value = 5
+    o2.set(5)
 
     expect(observer).toHaveBeenCalledTimes(2)
     expect(observer).toHaveBeenLastCalledWith(4 + 5 + 3)
 
-    o3.value = 6
+    o3.set(6)
 
     expect(observer).toHaveBeenCalledTimes(3)
     expect(observer).toHaveBeenLastCalledWith(4 + 5 + 6)
 
-    o1.value = 4
-    o1.value = 4
-    o1.value = 4
+    o1.set(4)
+    o1.set(4)
+    o1.set(4)
 
-    o2.value = 5
-    o2.value = 5
-    o2.value = 5
+    o2.set(5)
+    o2.set(5)
+    o2.set(5)
 
-    o3.value = 6
-    o3.value = 6
-    o3.value = 6
+    o3.set(6)
+    o3.set(6)
+    o3.set(6)
 
     expect(observer).toHaveBeenCalledTimes(3)
   })
