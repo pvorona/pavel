@@ -1,6 +1,7 @@
 import { merge } from 'lodash'
 import {
   ExternalChartOptions,
+  GradientOptions,
   InternalChartOptions,
   VisibilityState,
 } from '../types'
@@ -35,12 +36,24 @@ export function createConfig(
     },
   }
 
+  const gradient = options.graphNames.reduce(
+    (accumulated, series) => ({
+      ...accumulated,
+      [series]: true,
+    }),
+    {} as GradientOptions,
+  )
+  const gradientOptions = {
+    gradient,
+  }
+
   return merge(
     DEFAULT_CHART_OPTIONS,
     sizeOptions,
     visibilityOptions,
     totalOptions,
     viewBoxOptions,
+    gradientOptions,
     options,
   ) as InternalChartOptions
 }

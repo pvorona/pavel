@@ -29,7 +29,7 @@ export const Controls: Component<InternalChartOptions, ChartContext> = (
 
     const button = document.createElement('div')
     button.className = 'like-button'
-    button.style.color = config.colors[seriesIndex % config.graphNames.length]
+    button.style.color = config.colors[seriesIndex % config.colors.length]
 
     const text = document.createElement('div')
     text.className = 'button-text'

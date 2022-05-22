@@ -8,7 +8,7 @@
   display: inline-block;
   outline: none;
   border: 1px solid;
-  padding: 11px 19px 11px 42px;
+  padding: 11px 19px 11px 2.5em;
   background: none;
   border-radius: 8px;
   font-size: 14px;
@@ -27,8 +27,8 @@
 
 .like-button::before {
   content: '';
-  width: 1.5em;
-  height: 1.5em;
+  width: 1em;
+  height: 1em;
   position: absolute;
   border: 1px solid currentColor;
   top: 50%;
@@ -40,18 +40,6 @@
 
 .button:checked ~ .like-button::before {
   background: currentColor;
-}
-
-.button:checked ~ .like-button::after {
-  content: '';
-  width: 0.3em;
-  height: 0.6em;
-  position: absolute;
-  border-right: 1px solid white;
-  border-bottom: 1px solid white;
-  top: 50%;
-  transform: translateY(-63%) translateX(9px) rotate(55deg) skew(5deg);
-  left: 10px;
 }
 
 .button-text {

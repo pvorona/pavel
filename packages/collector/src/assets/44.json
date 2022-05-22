@@ -1,0 +1,410 @@
+[
+  {
+    "timestamp": "2022-04-21T07:46:35.385Z",
+    "bidQty": 477,
+    "bid": 4487.9,
+    "ofrQty": 477,
+    "ofr": 4488.8,
+    "_id": "62610bdbb7abb228586eed4a"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:35.391Z",
+    "bidQty": 477,
+    "bid": 4487.7,
+    "ofrQty": 477,
+    "ofr": 4488.7,
+    "_id": "62610bdbb7abb228586eed4b"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:35.438Z",
+    "bidQty": 477,
+    "bid": 4487.8,
+    "ofrQty": 477,
+    "ofr": 4488.7,
+    "_id": "62610bdbb7abb228586eed4c"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:35.603Z",
+    "bidQty": 477,
+    "bid": 4487.9,
+    "ofrQty": 477,
+    "ofr": 4488.7,
+    "_id": "62610bdbb7abb228586eed4d"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:36.248Z",
+    "bidQty": 477,
+    "bid": 4487.8,
+    "ofrQty": 477,
+    "ofr": 4488.7,
+    "_id": "62610bdcb7abb228586eed4e"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:38.465Z",
+    "bidQty": 477,
+    "bid": 4487.8,
+    "ofrQty": 477,
+    "ofr": 4488.8,
+    "_id": "62610bdeb7abb228586eed4f"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:38.474Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4488.8,
+    "_id": "62610bdeb7abb228586eed50"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:38.558Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610bdeb7abb228586eed51"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:38.565Z",
+    "bidQty": 477,
+    "bid": 4487.9,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610bdeb7abb228586eed52"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:38.566Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610bdeb7abb228586eed53"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:38.653Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4488.8,
+    "_id": "62610bdeb7abb228586eed54"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:41.949Z",
+    "bidQty": 477,
+    "bid": 4487.9,
+    "ofrQty": 477,
+    "ofr": 4488.8,
+    "_id": "62610be1b7abb228586eed55"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:43.048Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4488.8,
+    "_id": "62610be3b7abb228586eed56"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:43.436Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610be3b7abb228586eed57"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:44.661Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4489,
+    "_id": "62610be4b7abb228586eed58"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:44.690Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4489.1,
+    "_id": "62610be4b7abb228586eed59"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:44.795Z",
+    "bidQty": 477,
+    "bid": 4488.1,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610be5b7abb228586eed5a"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:44.814Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610be5b7abb228586eed5b"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:45.819Z",
+    "bidQty": 477,
+    "bid": 4488.1,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610be6b7abb228586eed5c"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:45.820Z",
+    "bidQty": 477,
+    "bid": 4488.2,
+    "ofrQty": 477,
+    "ofr": 4489,
+    "_id": "62610be6b7abb228586eed5e"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:45.819Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4489.1,
+    "_id": "62610be6b7abb228586eed5d"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:45.895Z",
+    "bidQty": 477,
+    "bid": 4488.2,
+    "ofrQty": 477,
+    "ofr": 4489.1,
+    "_id": "62610be6b7abb228586eed5f"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:46.048Z",
+    "bidQty": 477,
+    "bid": 4488.3,
+    "ofrQty": 477,
+    "ofr": 4489.2,
+    "_id": "62610be6b7abb228586eed60"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:46.048Z",
+    "bidQty": 477,
+    "bid": 4487.9,
+    "ofrQty": 477,
+    "ofr": 4489.9,
+    "_id": "62610be6b7abb228586eed61"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:46.055Z",
+    "bidQty": 477,
+    "bid": 4488.3,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be6b7abb228586eed62"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:46.336Z",
+    "bidQty": 477,
+    "bid": 4488.5,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be6b7abb228586eed64"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:46.105Z",
+    "bidQty": 477,
+    "bid": 4488.4,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be6b7abb228586eed63"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:46.691Z",
+    "bidQty": 477,
+    "bid": 4488.4,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be6b7abb228586eed65"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:46.985Z",
+    "bidQty": 477,
+    "bid": 4488.5,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be7b7abb228586eed66"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:47.886Z",
+    "bidQty": 477,
+    "bid": 4488.4,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be7b7abb228586eed67"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:47.891Z",
+    "bidQty": 477,
+    "bid": 4488.3,
+    "ofrQty": 477,
+    "ofr": 4489.2,
+    "_id": "62610be7b7abb228586eed68"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:47.939Z",
+    "bidQty": 477,
+    "bid": 4488.4,
+    "ofrQty": 477,
+    "ofr": 4489.2,
+    "_id": "62610be7b7abb228586eed69"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:48.014Z",
+    "bidQty": 477,
+    "bid": 4488.4,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be8b7abb228586eed6a"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:49.169Z",
+    "bidQty": 477,
+    "bid": 4488.5,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be9b7abb228586eed6b"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:49.340Z",
+    "bidQty": 477,
+    "bid": 4488.3,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be9b7abb228586eed6c"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:49.388Z",
+    "bidQty": 477,
+    "bid": 4488.4,
+    "ofrQty": 477,
+    "ofr": 4489.3,
+    "_id": "62610be9b7abb228586eed6d"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:49.437Z",
+    "bidQty": 477,
+    "bid": 4488.4,
+    "ofrQty": 477,
+    "ofr": 4489.2,
+    "_id": "62610be9b7abb228586eed6e"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:49.627Z",
+    "bidQty": 477,
+    "bid": 4488.3,
+    "ofrQty": 477,
+    "ofr": 4489.2,
+    "_id": "62610be9b7abb228586eed6f"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:51.651Z",
+    "bidQty": 477,
+    "bid": 4488.2,
+    "ofrQty": 477,
+    "ofr": 4489.2,
+    "_id": "62610bebb7abb228586eed70"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:51.673Z",
+    "bidQty": 477,
+    "bid": 4488.2,
+    "ofrQty": 477,
+    "ofr": 4489.1,
+    "_id": "62610bebb7abb228586eed71"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:51.896Z",
+    "bidQty": 477,
+    "bid": 4488.2,
+    "ofrQty": 477,
+    "ofr": 4489.2,
+    "_id": "62610bebb7abb228586eed72"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:52.438Z",
+    "bidQty": 477,
+    "bid": 4488.2,
+    "ofrQty": 477,
+    "ofr": 4489.1,
+    "_id": "62610becb7abb228586eed73"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:52.576Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4489,
+    "_id": "62610becb7abb228586eed74"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:52.570Z",
+    "bidQty": 477,
+    "bid": 4488.2,
+    "ofrQty": 477,
+    "ofr": 4489,
+    "_id": "62610becb7abb228586eed75"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:52.620Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4489.1,
+    "_id": "62610becb7abb228586eed76"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:52.852Z",
+    "bidQty": 477,
+    "bid": 4488.1,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610becb7abb228586eed77"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:52.852Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4489.1,
+    "_id": "62610becb7abb228586eed78"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:52.854Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4489,
+    "_id": "62610becb7abb228586eed79"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:52.915Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4489.1,
+    "_id": "62610becb7abb228586eed7a"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:55.766Z",
+    "bidQty": 477,
+    "bid": 4488.1,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610bf0b7abb228586eed7b"
+  },
+  {
+    "timestamp": "2022-04-21T07:46:55.770Z",
+    "bidQty": 477,
+    "bid": 4488,
+    "ofrQty": 477,
+    "ofr": 4488.9,
+    "_id": "62610bf0b7abb228586eed7c"
+  }
+]

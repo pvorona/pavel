@@ -20,6 +20,7 @@ export function renderLineSeriesWithAreaGradient({
   minMaxByGraphName,
   min,
   max,
+  gradient,
 }: {
   context: CanvasRenderingContext2D
   points: { [key: string]: Point[] }
@@ -34,6 +35,7 @@ export function renderLineSeriesWithAreaGradient({
   minMaxByGraphName: Record<string, { min: number; max: number }>
   min: number
   max: number
+  gradient: InternalChartOptions['gradient']
 }) {
   for (let i = 0; i < graphNames.length; i++) {
     const graphName = graphNames[i]
@@ -41,7 +43,7 @@ export function renderLineSeriesWithAreaGradient({
 
     if (opacity === 0) continue
 
-    const color = colors[i % graphNames.length]
+    const color = colors[i % colors.length]
     const rgbColor = `rgba(${hexToRGB(color)},${opacity})`
     const gradientColorStart = `rgba(${hexToRGB(color)},${opacity / 4})`
     const gradientColorStop = `rgba(${hexToRGB(color)},${opacity / 32})`
@@ -52,12 +54,24 @@ export function renderLineSeriesWithAreaGradient({
     context.lineCap = lineCap
     context.beginPath()
 
-    for (let j = 0; j < points[graphName].length; j++) {
-      const { x, y } = points[graphName][j]
+    for (
+      let pointIndex = 0;
+      pointIndex < points[graphName].length;
+      pointIndex++
+    ) {
+      const { x, y } = points[graphName][pointIndex]
+
+      if (pointIndex !== 0) {
+        lineTo(
+          context,
+          toBitMapSize(x),
+          toBitMapSize(points[graphName][pointIndex - 1].y),
+        )
+      }
 
       lineTo(context, toBitMapSize(x), toBitMapSize(y))
 
-      if (j === points[graphName].length - 1) {
+      if (pointIndex === points[graphName].length - 1 && gradient[graphName]) {
         const yStart = toScreenY(
           min,
           max,
@@ -65,10 +79,9 @@ export function renderLineSeriesWithAreaGradient({
           height,
           minMaxByGraphName[graphName].max,
         )
-
         const gradient = context.createLinearGradient(
           0,
-          // Ignore line width for now
+          // TODO: Ignore line width for now
           toBitMapSize(yStart),
           0,
           toBitMapSize(height),
