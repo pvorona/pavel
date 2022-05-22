@@ -276,16 +276,12 @@ export const ChartContext = (options: InternalChartOptions) => {
   )
 
   effect([activeCursor], activeCursor => {
-    for (const key in cursor) {
-      const className = cursor[key]
-
-      if (className) {
-        document.body.classList.remove(className)
-      }
-    }
-
-    if (activeCursor) {
+    if (activeCursor !== cursor.default) {
       document.body.classList.add(activeCursor)
+
+      return () => {
+        document.body.classList.remove(activeCursor)
+      }
     }
   })
 

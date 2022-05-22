@@ -14,14 +14,19 @@ const DEFAULT_OPTIONS: Options = {
 
 export function effect<T extends ReadonlySubject<unknown>[]>(
   deps: readonly [...T],
-  observer: (...args: ObservedTypesOf<T>) => void,
+  observer: (...args: ObservedTypesOf<T>) => void | Lambda,
   options = DEFAULT_OPTIONS,
 ): Lambda {
-  const scheduleNotifyWithCleanup = throttleTask(function performEffect() {
-    observer(...collectValues(deps))
+  let cleanup: void | Lambda
+  const scheduleNotification = throttleTask(function performEffect() {
+    if (cleanup) {
+      cleanup()
+    }
+
+    cleanup = observer(...collectValues(deps))
   })
 
-  return observe(deps, scheduleNotifyWithCleanup, {
+  return observe(deps, scheduleNotification, {
     collectValues: false,
     ...options,
   })
