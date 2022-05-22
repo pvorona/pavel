@@ -11,6 +11,7 @@ import { createConfig } from '../../config'
 import {
   DEVIATION_FROM_STRAIGHT_LINE_DEGREES,
   MIN_VIEWBOX_MS,
+  WHEEL_SPEED,
 } from '../constants'
 import { ensureInBounds, interpolate } from '@pavel/utils'
 
@@ -42,7 +43,13 @@ export const Chart = (
 
     const angle = (Math.atan(event.deltaY / event.deltaX) * 180) / Math.PI
     const viewBoxWidth = endX.get() - startX.get()
-    const dynamicFactor = viewBoxWidth / MIN_VIEWBOX_MS
+    const dynamicFactor = interpolate(
+      0,
+      options.domain[options.domain.length - 1] - options.domain[0],
+      0,
+      WHEEL_SPEED,
+      viewBoxWidth,
+    )
 
     if (
       (angle < -(90 - DEVIATION_FROM_STRAIGHT_LINE_DEGREES) && angle >= -90) || // top right, bottom left

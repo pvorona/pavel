@@ -63,7 +63,6 @@ export const inert = <T extends AnimatableSubject<AnimatableValue>>(
     return interpolateMap
   })() as Interpolate<ObservedTypeOf<T>>
 
-  // Can get lazy. Use case for idleValue?
   const transition = constructTransition(initialValue, options, interpolate)
   const observers = createObservers()
   const id = createWrapperId(createId(INERT_GROUP, options), target.id)
