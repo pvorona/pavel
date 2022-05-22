@@ -1,5 +1,5 @@
 import { observable } from '../observable'
-import { inert, interpolateMap } from './inert'
+import { inert } from './inert'
 
 const DURATION = 100
 
@@ -15,7 +15,7 @@ describe('with numbers', () => {
 
   it('starts with initial value', () => {
     const o = observable(0)
-    const animation = inert(DURATION)(o)
+    const animation = inert({ duration: DURATION, target: o })
 
     expect(animation.get()).toStrictEqual(0)
     expect(o.get()).toStrictEqual(animation.get())
@@ -23,7 +23,7 @@ describe('with numbers', () => {
 
   it('does not change over time if the source is stationary', () => {
     const o = observable(0)
-    const animation = inert(DURATION)(o)
+    const animation = inert({ duration: DURATION, target: o })
 
     jest.advanceTimersByTime(DURATION * 10)
 
@@ -33,7 +33,7 @@ describe('with numbers', () => {
 
   it('transitions to the end value using the transition', () => {
     const o = observable(0)
-    const animation = inert(DURATION)(o)
+    const animation = inert({ duration: DURATION, target: o })
     const endValue = 100
 
     o.set(endValue)
@@ -99,7 +99,7 @@ describe('with numbers', () => {
 
   it('transitions to the new end value if the target changed during the animation', () => {
     const o = observable(0)
-    const animation = inert(DURATION)(o)
+    const animation = inert({ duration: DURATION, target: o })
 
     o.set(1000)
 
@@ -143,9 +143,9 @@ describe('with objects', () => {
       c: 0,
       d: 0,
     })
-    const animation = inert(DURATION)({
+    const animation = inert({
+      duration: DURATION,
       target: o,
-      interpolate: interpolateMap,
     })
 
     expect(animation.get()).toStrictEqual({
@@ -163,9 +163,9 @@ describe('with objects', () => {
       c: 0,
       d: 0,
     })
-    const animation = inert(DURATION)({
+    const animation = inert({
+      duration: DURATION,
       target: o,
-      interpolate: interpolateMap,
     })
 
     o.set({
@@ -251,9 +251,9 @@ describe('with objects', () => {
       c: 0,
       d: 0,
     })
-    const animation = inert(DURATION)({
+    const animation = inert({
+      duration: DURATION,
       target: o,
-      interpolate: interpolateMap,
     })
 
     o.set({

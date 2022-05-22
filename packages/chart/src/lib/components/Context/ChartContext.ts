@@ -6,8 +6,6 @@ import {
   resetWhenInactive,
   inert,
   compute,
-  interpolateMap,
-  interpolateMinMax,
 } from '@pavel/observable'
 import { InternalChartOptions } from '../../types'
 import {
@@ -61,8 +59,8 @@ export const ChartContext = (options: InternalChartOptions) => {
     },
   })
 
-  const inertStartX = inert(TRANSITION.FAST)(startX)
-  const inertEndX = inert(TRANSITION.FAST)(endX)
+  const inertStartX = inert({ duration: TRANSITION.FAST, target: startX })
+  const inertEndX = inert({ duration: TRANSITION.FAST, target: endX })
 
   const startIndex = computeLazy(
     // TODO
@@ -149,19 +147,19 @@ export const ChartContext = (options: InternalChartOptions) => {
   const inertVisibleMax = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-  })(visibleMax)
+    target: visibleMax,
+  })
 
   const inertVisibleMin = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-  })(visibleMin)
+    target: visibleMin,
+  })
 
   const inertVisibleMinMaxByGraphName = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-  })({
     target: visibleMinMaxByGraphName,
-    interpolate: interpolateMinMax,
   })
 
   const {
@@ -179,19 +177,19 @@ export const ChartContext = (options: InternalChartOptions) => {
   const inertGlobalMax = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-  })(globalMax)
+    target: globalMax,
+  })
 
   const inertGlobalMin = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-  })(globalMin)
+    target: globalMin,
+  })
 
   const inertGlobalMinMaxByGraphName = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-  })({
     target: globalMinMaxByGraphName,
-    interpolate: interpolateMinMax,
   })
 
   // why lazy
@@ -211,9 +209,7 @@ export const ChartContext = (options: InternalChartOptions) => {
   const inertOpacityStateByGraphName = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-  })({
     target: opacityStateByGraphName,
-    interpolate: interpolateMap,
   })
 
   const mainGraphPoints = computeLazy(

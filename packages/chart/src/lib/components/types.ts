@@ -1,9 +1,9 @@
 export interface EnabledGraphNames {
-  [key: string]: boolean
+  readonly [key: string]: boolean
 }
 
-export interface OpacityState {
-  [key: string]: number
+export type OpacityState = {
+  readonly [key: string]: number
 }
 
 export interface Point {

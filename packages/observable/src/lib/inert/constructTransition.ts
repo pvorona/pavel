@@ -1,17 +1,14 @@
 import { Interpolate, createTransition, Transition } from '../transition'
+import { ObservedTypeOf } from '../types'
 import { createTransitionOptions } from './createTransitionOptions'
-import { AnyAnimatableValue, InertOptions } from './types'
+import { AnimatableSubject, InertOptions } from './types'
 
-export const constructTransition = <T extends AnyAnimatableValue>(
-  value: T,
-  options: InertOptions,
-  computeIntermediateValue: Interpolate<T>,
-): Transition<T> => {
-  const transitionOptions = createTransitionOptions(
-    options,
-    value,
-    computeIntermediateValue,
-  )
+export const constructTransition = <T extends AnimatableSubject<unknown>>(
+  value: ObservedTypeOf<T>,
+  options: InertOptions<T>,
+  interpolate: Interpolate<ObservedTypeOf<T>>,
+): Transition<ObservedTypeOf<T>> => {
+  const transitionOptions = createTransitionOptions(options, value, interpolate)
 
   return createTransition(transitionOptions)
 }
