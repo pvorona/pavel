@@ -1,12 +1,40 @@
 import { DeepPartial, DeepRequired, Nominal } from '@pavel/types'
 import { ChartContext } from './components'
 
-export interface VisibilityState {
+export type VisibilityState = {
   readonly [key: string]: boolean
 }
 
-export interface DataByGraphName {
-  readonly [key: string]: readonly number[]
+export type Graph =
+  | {
+      readonly key: string
+      readonly label?: string
+    }
+  | string
+
+export type DataArrayTrait = {
+  readonly domain: string
+  readonly data: DataArray
+}
+
+export type DataObjectTrait = {
+  readonly domain: readonly number[]
+  readonly data: {
+    readonly [graph: string]: readonly number[]
+  }
+}
+
+export type DataTrait = DataArrayTrait | DataObjectTrait
+
+export type DataArray = readonly {
+  readonly [domainOrSeriesKey: string]: number
+}[]
+
+export type DataObject = {
+  readonly domain: readonly number[]
+  values: {
+    readonly [graph: string]: readonly number[]
+  }
 }
 
 type BlockMarginTrait = {
@@ -44,7 +72,7 @@ export type YOptions = {
 
 export type OverviewOptions = {
   readonly height: number
-  readonly lineWidth: number
+  readonly lineWidth: LineWidth
   readonly overlayColor: string
   readonly edgeColor: string
 }
@@ -59,6 +87,8 @@ export type ViewBoxOptions = {
   readonly start: number
   readonly end: number
 }
+
+type LineWidth = 1 | 2 | 3 | 4
 
 export type ColorsOptions = { [key: string]: string }
 
@@ -79,7 +109,7 @@ export type OptionalChartOptions = {
   readonly y: YOptions
   readonly overview: OverviewOptions
   readonly tooltip: TooltipOptions
-  readonly lineWidth: number
+  readonly lineWidth: LineWidth
   readonly colors: readonly string[]
   readonly lineJoin: CanvasLineJoin
   readonly lineCap: CanvasLineCap
@@ -88,10 +118,8 @@ export type OptionalChartOptions = {
 export type MappedOptions = 'graphs'
 
 export type ExternalChartOptions = DeepPartial<OptionalChartOptions> & {
-  readonly data: DataByGraphName
-  readonly domain: readonly number[]
   readonly graphs: readonly ExternalGraph[]
-}
+} & DataTrait
 
 export type InternalChartOptions = Omit<
   DeepRequired<ExternalChartOptions>,
@@ -119,7 +147,6 @@ export type InternalChartOptions = Omit<
 //   visible: true,
 // }]
 
-// type LineWidth = 1 | 2 | 3 | 4;
 // type LineStyle = 'solid' | 'dashed'
 
 // type Series = {

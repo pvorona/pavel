@@ -1,6 +1,8 @@
-import { isString } from '@pavel/assert'
+import { isString, isArray } from '@pavel/assert'
 import { merge } from 'lodash'
 import {
+  DataArrayTrait,
+  DataObjectTrait,
   ExternalChartOptions,
   ExternalGraph,
   InternalChartOptions,
@@ -30,14 +32,10 @@ export function createConfig(
   )
   const visibilityOptions = { visibility }
 
-  const totalOptions = {
-    total: options.domain.length,
-  }
-
   const viewBoxOptions = {
     viewBox: {
-      start: options.domain[0],
-      end: options.domain[options.domain.length - 1],
+      start: getDomainValueAt(options, 0),
+      end: getDomainValueAt(options, getTotalItems(options) - 1),
     },
   }
 
@@ -45,7 +43,6 @@ export function createConfig(
     DEFAULT_CHART_OPTIONS,
     sizeOptions,
     visibilityOptions,
-    totalOptions,
     viewBoxOptions,
     options,
     graphsTrait,
@@ -77,4 +74,35 @@ function getGraphLabel(graph: ExternalGraph): string {
   }
 
   return graph.label
+}
+
+export function isDataArray(
+  options: DataArrayTrait | DataObjectTrait,
+): options is DataArrayTrait {
+  return isArray(options.data)
+}
+
+export function isDataObject(
+  options: DataArrayTrait | DataObjectTrait,
+): options is DataObjectTrait {
+  return 'domain' in options
+}
+
+export function getTotalItems(options: ExternalChartOptions): number {
+  if (isDataArray(options)) {
+    return options.data.length
+  }
+
+  return options.domain.length
+}
+
+export function getDomainValueAt(
+  options: ExternalChartOptions,
+  index: number,
+): number {
+  if (isDataArray(options)) {
+    return options.data[index][options.domain]
+  }
+
+  return options.domain[index]
 }
