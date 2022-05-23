@@ -19,6 +19,7 @@ import { mapDataToCoords, createMinMaxView, areNumbersClose } from '../../util'
 import { special } from '@pavel/easing'
 import { xToIndex } from '../../util/xToIndex'
 import { ensureInBounds } from '@pavel/utils'
+import { getDomainValueAt, getTotalItems } from '../../config'
 
 export const ChartContext = (options: InternalChartOptions) => {
   const globalStartIndex = observable(0, {
@@ -38,8 +39,8 @@ export const ChartContext = (options: InternalChartOptions) => {
     set: (newValue, { set }) => {
       const boundedValue = ensureInBounds(
         newValue,
-        options.domain[0],
-        options.domain[options.domain.length - 1],
+        getDomainValueAt(options, 0),
+        getDomainValueAt(options, getTotalItems(options) - 1),
       )
 
       set(boundedValue)
@@ -51,8 +52,8 @@ export const ChartContext = (options: InternalChartOptions) => {
     set: (newValue, { set }) => {
       const boundedValue = ensureInBounds(
         newValue,
-        options.domain[0],
-        options.domain[options.domain.length - 1],
+        getDomainValueAt(options, 0),
+        getDomainValueAt(options, getTotalItems(options) - 1),
       )
 
       set(boundedValue)
