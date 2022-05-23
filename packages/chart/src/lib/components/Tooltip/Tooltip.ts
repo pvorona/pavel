@@ -1,4 +1,3 @@
-import { Lambda } from '@pavel/types'
 import { effect, computeLazy } from '@pavel/observable'
 import { ChartContext, InternalChartOptions } from '../../types'
 import { getTooltipDateText } from '../../util'
@@ -53,12 +52,6 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
     },
   )
 
-  let updateTooltipPositionAndTextEffectUnobserve: undefined | Lambda =
-    undefined
-  let updateTooltipCirclesVisibilityEffectUnobserve: undefined | Lambda =
-    undefined
-  let updateTooltipGraphInfoEffectUnobserve: undefined | Lambda = undefined
-
   effect([isTooltipVisible], isTooltipVisible => {
     if (isTooltipVisible) {
       tooltipLine.style.visibility = 'visible'
@@ -81,12 +74,12 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
         },
       )
 
-      updateTooltipPositionAndTextEffectUnobserve = effect(
+      const updateTooltipPositionAndTextEffectUnobserve = effect(
         [mainGraphPoints, enabledGraphKeys, tooltipIndex, startIndex],
         updateTooltipPositionAndText,
       )
 
-      updateTooltipCirclesVisibilityEffectUnobserve = effect(
+      const updateTooltipCirclesVisibilityEffectUnobserve = effect(
         [enabledGraphKeys],
         enabledGraphKeys => {
           options.graphs.forEach(
@@ -97,7 +90,7 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
         },
       )
 
-      updateTooltipGraphInfoEffectUnobserve = effect(
+      const updateTooltipGraphInfoEffectUnobserve = effect(
         [enabledGraphKeys],
         enabledGraphKeys => {
           options.graphs.forEach(graph => {
@@ -107,23 +100,17 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
           })
         },
       )
-    } else {
-      tooltipLine.style.visibility = ''
-      tooltip.style.display = ''
 
-      options.graphs.forEach(graph => {
-        tooltipCircles[graph.key].style.visibility = ''
-      })
+      return () => {
+        tooltipLine.style.visibility = ''
+        tooltip.style.display = ''
 
-      if (updateTooltipPositionAndTextEffectUnobserve) {
+        options.graphs.forEach(graph => {
+          tooltipCircles[graph.key].style.visibility = ''
+        })
+
         updateTooltipPositionAndTextEffectUnobserve()
-      }
-
-      if (updateTooltipCirclesVisibilityEffectUnobserve) {
         updateTooltipCirclesVisibilityEffectUnobserve()
-      }
-
-      if (updateTooltipGraphInfoEffectUnobserve) {
         updateTooltipGraphInfoEffectUnobserve()
       }
     }
