@@ -148,7 +148,7 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
     tooltip.className = 'tooltip'
 
     const tooltipDate = document.createElement('div')
-    tooltipDate.style.padding = '10px 10px 0'
+    tooltipDate.style.padding = '12px 16px 0'
     tooltip.appendChild(tooltipDate)
 
     const tooltipLegendContainer = document.createElement('div')
@@ -162,7 +162,7 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
 
       const tooltipGraphInfo = document.createElement('div')
       tooltipGraphInfo.style.color = color
-      tooltipGraphInfo.style.padding = '0 10px 10px'
+      tooltipGraphInfo.style.padding = '0 16px 12px'
       tooltipGraphInfos[graph.key] = tooltipGraphInfo
 
       const graphNameElement = document.createElement('div')
@@ -171,6 +171,7 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
       tooltipGraphInfo.appendChild(graphNameElement)
 
       const tooltipValue = document.createElement('div')
+      tooltipValue.style.marginTop = '4px'
       tooltipGraphInfo.appendChild(tooltipValue)
 
       tooltipValues[graph.key] = tooltipValue
