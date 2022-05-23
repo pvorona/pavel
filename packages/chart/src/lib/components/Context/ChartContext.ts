@@ -95,10 +95,10 @@ export const ChartContext = (options: InternalChartOptions) => {
   )
   const activeCursor = observable(cursor.default, { id: 'activeCursor' })
   const enabledStateByGraphName = observable(
-    options.graphNames.reduce(
-      (state, graphName) => ({
+    options.graphs.reduce(
+      (state, graph) => ({
         ...state,
-        [graphName]: options.visibility[graphName],
+        [graph.key]: options.visibility[graph.key],
       }),
       {} as EnabledGraphNames,
     ),
@@ -116,17 +116,17 @@ export const ChartContext = (options: InternalChartOptions) => {
     )
   }
 
-  const enabledGraphNames = computeLazy(
+  const enabledGraphKeys = computeLazy(
     [enabledStateByGraphName],
     function enabledGraphNamesCompute(enabledStateByGraphName) {
-      return options.graphNames.filter(
-        graphName => enabledStateByGraphName[graphName],
-      )
+      return options.graphs
+        .filter(graph => enabledStateByGraphName[graph.key])
+        .map(graph => graph.key)
     },
   )
 
   const isAnyGraphEnabled = computeLazy(
-    [enabledGraphNames],
+    [enabledGraphKeys],
     enabledGraphNames => {
       return enabledGraphNames.length !== 0
     },
@@ -139,8 +139,8 @@ export const ChartContext = (options: InternalChartOptions) => {
   } = createMinMaxView(
     startIndex,
     endIndex,
-    enabledGraphNames,
-    options.graphNames,
+    enabledGraphKeys,
+    options.graphs,
     options.data,
   )
 
@@ -169,8 +169,8 @@ export const ChartContext = (options: InternalChartOptions) => {
   } = createMinMaxView(
     globalStartIndex,
     globalEndIndex,
-    enabledGraphNames,
-    options.graphNames,
+    enabledGraphKeys,
+    options.graphs,
     options.data,
   )
 
@@ -196,10 +196,10 @@ export const ChartContext = (options: InternalChartOptions) => {
   const opacityStateByGraphName = computeLazy(
     [enabledStateByGraphName],
     function opacityStateByGraphNameCompute(enabledStateByGraphName) {
-      return options.graphNames.reduce(
-        (state, graphName) => ({
+      return options.graphs.reduce(
+        (state, graph) => ({
           ...state,
-          [graphName]: Number(enabledStateByGraphName[graphName]),
+          [graph.key]: Number(enabledStateByGraphName[graph.key]),
         }),
         {} as OpacityState,
       )
@@ -229,11 +229,11 @@ export const ChartContext = (options: InternalChartOptions) => {
       width,
       canvasHeight,
     ) {
-      return options.graphNames.reduce(
-        (points, graphName) => ({
+      return options.graphs.reduce(
+        (points, graph) => ({
           ...points,
-          [graphName]: mapDataToCoords(
-            options.data[graphName],
+          [graph.key]: mapDataToCoords(
+            options.data[graph.key],
             options.domain,
             max,
             min,
@@ -294,7 +294,7 @@ export const ChartContext = (options: InternalChartOptions) => {
     isGrabbingGraphs,
     activeCursor,
     enabledStateByGraphName,
-    enabledGraphNames,
+    enabledGraphKeys,
     isAnyGraphEnabled,
     mainGraphPoints,
     startIndex,

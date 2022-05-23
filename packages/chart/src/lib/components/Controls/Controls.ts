@@ -10,14 +10,14 @@ export const Controls: Component<InternalChartOptions, ChartContext> = (
   element.style.right = '20px'
   element.style.top = '20px'
 
-  function onButtonClick(graphName: string) {
+  function onButtonClick(graphKey: string) {
     enabledStateByGraphName.set({
       ...enabledStateByGraphName.get(),
-      [graphName]: !enabledStateByGraphName.get()[graphName],
+      [graphKey]: !enabledStateByGraphName.get()[graphKey],
     })
   }
 
-  config.graphNames.forEach((graphName, seriesIndex) => {
+  config.graphs.forEach((graph, graphIndex) => {
     const label = document.createElement('label')
     label.style.marginRight = '15px'
 
@@ -25,15 +25,15 @@ export const Controls: Component<InternalChartOptions, ChartContext> = (
     input.checked = true
     input.type = 'checkbox'
     input.className = 'button'
-    input.onclick = () => onButtonClick(graphName)
+    input.onclick = () => onButtonClick(graph.key)
 
     const button = document.createElement('div')
     button.className = 'like-button'
-    button.style.color = config.colors[seriesIndex % config.graphNames.length]
+    button.style.color = config.colors[graphIndex % config.graphs.length]
 
     const text = document.createElement('div')
     text.className = 'button-text'
-    text.innerText = graphName
+    text.innerText = graph.label
 
     button.appendChild(text)
     label.appendChild(input)

@@ -5,28 +5,25 @@ import {
   ReadonlySubject,
   ReadonlyLazySubject,
 } from '@pavel/observable'
+import { InternalGraph } from '../types'
 import { getMinMax } from './getMinMax'
 
 export function createMinMaxView(
   startIndex: ReadonlyLazySubject<number>,
   endIndex: ReadonlyLazySubject<number>,
-  enabledGraphNames: ReadonlySubject<string[]>,
-  graphNames: readonly string[],
-  dataByGraphName: { readonly [graphName: string]: readonly number[] },
+  enabledGraphKeys: ReadonlySubject<string[]>,
+  graphs: readonly InternalGraph[],
+  dataByGraphKey: { readonly [graphKey: string]: readonly number[] },
 ) {
   const minMaxByGraphName = computeLazy(
     [startIndex, endIndex],
     (startIndex, endIndex) => {
       const result: { [graphName: string]: { min: number; max: number } } = {}
 
-      for (let i = 0; i < graphNames.length; i++) {
-        const graphName = graphNames[i]
+      for (let i = 0; i < graphs.length; i++) {
+        const { key } = graphs[i]
 
-        result[graphName] = getMinMax(
-          startIndex,
-          endIndex,
-          dataByGraphName[graphName],
-        )
+        result[key] = getMinMax(startIndex, endIndex, dataByGraphKey[key])
       }
 
       return result
@@ -34,16 +31,16 @@ export function createMinMaxView(
   )
 
   const max = computeLazy(
-    [minMaxByGraphName, enabledGraphNames],
-    (visibleMinMaxByGraphName, enabledGraphNames) => {
-      if (enabledGraphNames.length === 0) {
+    [minMaxByGraphName, enabledGraphKeys],
+    (visibleMinMaxByGraphName, enabledGraphKeys) => {
+      if (enabledGraphKeys.length === 0) {
         return prevVisibleMax.get()
       }
 
       let result = -Infinity
 
-      for (const graphName of enabledGraphNames) {
-        result = Math.max(result, visibleMinMaxByGraphName[graphName].max)
+      for (const graphKey of enabledGraphKeys) {
+        result = Math.max(result, visibleMinMaxByGraphName[graphKey].max)
       }
 
       return result
@@ -51,16 +48,16 @@ export function createMinMaxView(
   )
 
   const min = computeLazy(
-    [minMaxByGraphName, enabledGraphNames],
-    (visibleMinMaxByGraphName, enabledGraphNames) => {
-      if (enabledGraphNames.length === 0) {
+    [minMaxByGraphName, enabledGraphKeys],
+    (visibleMinMaxByGraphName, enabledGraphKeys) => {
+      if (enabledGraphKeys.length === 0) {
         return prevVisibleMin.get()
       }
 
       let result = +Infinity
 
-      for (const graphName of enabledGraphNames) {
-        result = Math.min(result, visibleMinMaxByGraphName[graphName].min)
+      for (const graphKey of enabledGraphKeys) {
+        result = Math.min(result, visibleMinMaxByGraphName[graphKey].min)
       }
 
       return result

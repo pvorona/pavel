@@ -17,7 +17,7 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
     isWheeling,
     isGrabbingGraphs,
     isAnyGraphEnabled,
-    enabledGraphNames,
+    enabledGraphKeys,
     mainGraphPoints,
     startIndex,
     mouseX,
@@ -70,10 +70,10 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
         [mouseX, mainGraphPoints],
         function tooltipIndexCompute(x, points) {
           let closestPointIndex = 0
-          for (let i = 1; i < points[options.graphNames[0]].length; i++) {
-            const distance = Math.abs(points[options.graphNames[0]][i].x - x)
+          for (let i = 1; i < points[options.graphs[0].key].length; i++) {
+            const distance = Math.abs(points[options.graphs[0].key][i].x - x)
             const closesDistance = Math.abs(
-              points[options.graphNames[0]][closestPointIndex].x - x,
+              points[options.graphs[0].key][closestPointIndex].x - x,
             )
             if (distance < closesDistance) closestPointIndex = i
           }
@@ -82,27 +82,28 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
       )
 
       updateTooltipPositionAndTextEffectUnobserve = effect(
-        [mainGraphPoints, enabledGraphNames, tooltipIndex, startIndex],
+        [mainGraphPoints, enabledGraphKeys, tooltipIndex, startIndex],
         updateTooltipPositionAndText,
       )
 
       updateTooltipCirclesVisibilityEffectUnobserve = effect(
-        [enabledGraphNames],
-        enabledGraphNames => {
-          options.graphNames.forEach(
-            graphName =>
-              (tooltipCircles[graphName].style.visibility =
-                enabledGraphNames.indexOf(graphName) > -1 ? 'visible' : ''),
+        [enabledGraphKeys],
+        enabledGraphKeys => {
+          options.graphs.forEach(
+            graph =>
+              (tooltipCircles[graph.key].style.visibility =
+                enabledGraphKeys.indexOf(graph.key) > -1 ? 'visible' : ''),
           )
         },
       )
 
       updateTooltipGraphInfoEffectUnobserve = effect(
-        [enabledGraphNames],
-        enabledGraphNames => {
-          options.graphNames.forEach(graphName => {
-            tooltipGraphInfo[graphName].hidden =
-              !enabledGraphNames.includes(graphName)
+        [enabledGraphKeys],
+        enabledGraphKeys => {
+          options.graphs.forEach(graph => {
+            tooltipGraphInfo[graph.key].hidden = !enabledGraphKeys.includes(
+              graph.key,
+            )
           })
         },
       )
@@ -110,8 +111,8 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
       tooltipLine.style.visibility = ''
       tooltip.style.display = ''
 
-      options.graphNames.forEach(graphName => {
-        tooltipCircles[graphName].style.visibility = ''
+      options.graphs.forEach(graph => {
+        tooltipCircles[graph.key].style.visibility = ''
       })
 
       if (updateTooltipPositionAndTextEffectUnobserve) {
@@ -132,20 +133,20 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
 
   function updateTooltipPositionAndText(
     points: Record<string, Point[]>,
-    enabledGraphNames: string[],
+    enabledGraphKeys: string[],
     index: number,
     startIndex: number,
   ) {
-    const { x } = points[enabledGraphNames[0]][index]
+    const { x } = points[enabledGraphKeys[0]][index]
     tooltipLine.style.transform = `translateX(${x}px)`
     const dataIndex = index + Math.floor(startIndex)
-    for (let i = 0; i < enabledGraphNames.length; i++) {
-      const { x, y } = points[enabledGraphNames[i]][index]
-      tooltipCircles[enabledGraphNames[i]].style.transform = `translateX(${
+    for (let i = 0; i < enabledGraphKeys.length; i++) {
+      const { x, y } = points[enabledGraphKeys[i]][index]
+      tooltipCircles[enabledGraphKeys[i]].style.transform = `translateX(${
         x + DOT_CENTER_OFFSET
       }px) translateY(${y + DOT_CENTER_OFFSET}px)`
-      tooltipValues[enabledGraphNames[i]].innerText = String(
-        options.data[enabledGraphNames[i]][dataIndex],
+      tooltipValues[enabledGraphKeys[i]].innerText = String(
+        options.data[enabledGraphKeys[i]][dataIndex],
       )
       // tooltipValues[enabledGraphNames[i]].innerText = getShortNumber(options.data[enabledGraphNames[i]][dataIndex])
     }
@@ -169,23 +170,23 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
 
     const tooltipValues: { [key: string]: HTMLDivElement } = {}
     const tooltipGraphInfos: { [key: string]: HTMLDivElement } = {}
-    options.graphNames.forEach((graphName, seriesIndex) => {
-      const color = options.colors[seriesIndex % options.graphNames.length]
+    options.graphs.forEach((graph, graphIndex) => {
+      const color = options.colors[graphIndex % options.graphs.length]
 
       const tooltipGraphInfo = document.createElement('div')
       tooltipGraphInfo.style.color = color
       tooltipGraphInfo.style.padding = '0 10px 10px'
-      tooltipGraphInfos[graphName] = tooltipGraphInfo
-
-      const tooltipValue = document.createElement('div')
-      tooltipValue.style.fontWeight = 'bold'
-      tooltipGraphInfo.appendChild(tooltipValue)
+      tooltipGraphInfos[graph.key] = tooltipGraphInfo
 
       const graphNameElement = document.createElement('div')
-      graphNameElement.innerText = graphName
+      graphNameElement.innerText = graph.label
+      graphNameElement.style.fontWeight = 'bold'
       tooltipGraphInfo.appendChild(graphNameElement)
 
-      tooltipValues[graphName] = tooltipValue
+      const tooltipValue = document.createElement('div')
+      tooltipGraphInfo.appendChild(tooltipValue)
+
+      tooltipValues[graph.key] = tooltipValue
       tooltipLegendContainer.appendChild(tooltipGraphInfo)
     })
 
@@ -196,15 +197,15 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
     tooltipContainer.appendChild(tooltipLine)
 
     const tooltipCircles: { [key: string]: HTMLDivElement } = {}
-    for (let i = 0; i < options.graphNames.length; i++) {
-      const color = options.colors[i % options.graphNames.length]
+    for (let i = 0; i < options.graphs.length; i++) {
+      const color = options.colors[i % options.graphs.length]
       const circle = document.createElement('div')
       circle.style.width = `${DOT_SIZE}px`
       circle.style.height = `${DOT_SIZE}px`
       circle.style.borderColor = color
       circle.style.backgroundColor = color
       circle.className = 'tooltip__dot'
-      tooltipCircles[options.graphNames[i]] = circle
+      tooltipCircles[options.graphs[i].key] = circle
       tooltipContainer.appendChild(circle)
     }
 
