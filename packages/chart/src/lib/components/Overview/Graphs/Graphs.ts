@@ -42,11 +42,11 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
       inertGlobalMin,
       width,
     ) => {
-      return options.graphNames.reduce(
-        (points, graphName) => ({
+      return options.graphs.reduce(
+        (points, graph) => ({
           ...points,
-          [graphName]: mapDataToCoords(
-            options.data[graphName],
+          [graph.key]: mapDataToCoords(
+            options.data[graph.key],
             options.domain,
             inertGlobalMax,
             inertGlobalMin,
@@ -157,7 +157,7 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
       opacityState: inertOpacityStateByGraphName,
       points: overviewGraphPoints,
       context: graphs.context,
-      graphNames: options.graphNames,
+      graphs: options.graphs,
       lineWidth: options.overview.lineWidth,
       colors: options.colors,
       height: canvasHeight,

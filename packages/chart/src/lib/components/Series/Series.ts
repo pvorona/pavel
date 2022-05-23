@@ -104,7 +104,7 @@ export const Series: Component<InternalChartOptions, ChartContext> = (
       points,
       opacityState,
       context: context,
-      graphNames: options.graphNames,
+      graphs: options.graphs,
       lineWidth: options.lineWidth,
       colors: options.colors,
       height: canvasHeight.get(),

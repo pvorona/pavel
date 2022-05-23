@@ -1,7 +1,10 @@
+import { isString } from '@pavel/assert'
 import { merge } from 'lodash'
 import {
   ExternalChartOptions,
+  ExternalGraph,
   InternalChartOptions,
+  InternalGraph,
   VisibilityState,
 } from '../types'
 import { DEFAULT_CHART_OPTIONS } from './constants'
@@ -15,10 +18,13 @@ export function createConfig(
     height: element.offsetHeight,
   }
 
-  const visibility = options.graphNames.reduce(
-    (accumulated, series) => ({
+  const graphs = options.graphs.map(createInternalGraph)
+  const graphsTrait = { graphs }
+
+  const visibility = graphs.reduce(
+    (accumulated, graph) => ({
       ...accumulated,
-      [series]: true,
+      [graph.key]: true,
     }),
     {} as VisibilityState,
   )
@@ -42,5 +48,33 @@ export function createConfig(
     totalOptions,
     viewBoxOptions,
     options,
+    graphsTrait,
   ) as InternalChartOptions
+}
+
+function createInternalGraph(graph: ExternalGraph): InternalGraph {
+  const key = getGraphKey(graph)
+  const label = getGraphLabel(graph)
+
+  return { key, label }
+}
+
+function getGraphKey(graph: ExternalGraph): string {
+  if (isString(graph)) {
+    return graph
+  }
+
+  return graph.key
+}
+
+function getGraphLabel(graph: ExternalGraph): string {
+  if (isString(graph)) {
+    return graph
+  }
+
+  if (!graph.label) {
+    return graph.key
+  }
+
+  return graph.label
 }

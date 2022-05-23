@@ -9,7 +9,7 @@ const TRANSPARENT = `rgba(0,0,0,0)`
 export function renderLineSeriesWithAreaGradient({
   context,
   points,
-  graphNames,
+  graphs,
   lineWidth,
   colors,
   opacityState,
@@ -23,7 +23,7 @@ export function renderLineSeriesWithAreaGradient({
 }: {
   context: CanvasRenderingContext2D
   points: { [key: string]: Point[] }
-  graphNames: InternalChartOptions['graphNames']
+  graphs: InternalChartOptions['graphs']
   lineWidth: InternalChartOptions['lineWidth']
   colors: InternalChartOptions['colors']
   opacityState: { [key: string]: number }
@@ -35,13 +35,13 @@ export function renderLineSeriesWithAreaGradient({
   min: number
   max: number
 }) {
-  for (let i = 0; i < graphNames.length; i++) {
-    const graphName = graphNames[i]
-    const opacity = opacityState[graphName]
+  for (let i = 0; i < graphs.length; i++) {
+    const graph = graphs[i]
+    const opacity = opacityState[graph.key]
 
     if (opacity === 0) continue
 
-    const color = colors[i % graphNames.length]
+    const color = colors[i % graphs.length]
     const rgbColor = `rgba(${hexToRGB(color)},${opacity})`
     const gradientColorStart = `rgba(${hexToRGB(color)},${opacity / 4})`
     const gradientColorStop = `rgba(${hexToRGB(color)},${opacity / 32})`
@@ -52,18 +52,18 @@ export function renderLineSeriesWithAreaGradient({
     context.lineCap = lineCap
     context.beginPath()
 
-    for (let j = 0; j < points[graphName].length; j++) {
-      const { x, y } = points[graphName][j]
+    for (let j = 0; j < points[graph.key].length; j++) {
+      const { x, y } = points[graph.key][j]
 
       lineTo(context, toBitMapSize(x), toBitMapSize(y))
 
-      if (j === points[graphName].length - 1) {
+      if (j === points[graph.key].length - 1) {
         const yStart = toScreenY(
           min,
           max,
           0,
           height,
-          minMaxByGraphName[graphName].max,
+          minMaxByGraphName[graph.key].max,
         )
 
         const gradient = context.createLinearGradient(
@@ -91,7 +91,7 @@ export function renderLineSeriesWithAreaGradient({
         lineTo(
           context,
           toBitMapSize(0 - MARGIN_OVERSHOOT),
-          toBitMapSize(points[graphName][0].y),
+          toBitMapSize(points[graph.key][0].y),
         )
         context.fillStyle = gradient
         context.fill()

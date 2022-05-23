@@ -35,7 +35,7 @@ async function startApp() {
       assert(!isNull(chartContainer), 'Chart container is not found')
 
       const options: ExternalChartOptions = {
-        graphNames: ['A', 'B'],
+        graphs: ['A', 'B'],
         domain: data1.map(d => d.timestamp),
         data: {
           A: data1.map(d => d.value),
