@@ -21,5 +21,5 @@ export function getClosestGreaterDivisibleInt(
   n: number,
   divisor: number,
 ): number {
-  return n + divisor - (n % divisor)
+  return Math.round(n + divisor - (n % divisor))
 }
