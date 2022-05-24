@@ -38,3 +38,7 @@ export const MIN_VIEWBOX_MS = 10
 export const WHEEL_SPEED = 0.001
 
 export const DEVIATION_FROM_STRAIGHT_LINE_DEGREES = 45
+
+export const DEFAULT_MARKER_LINE_WIDTH = 2
+
+export const DEFAULT_MARKER_COLOR = '#2EB086'

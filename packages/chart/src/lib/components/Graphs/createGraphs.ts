@@ -1,3 +1,4 @@
+import { assert, isNull } from '@pavel/assert'
 import { toBitMapSize } from '../../util'
 import { setCanvasSize } from '../renderers'
 import './Graphs.css'
@@ -28,9 +29,7 @@ export function createGraphs({
   const context = canvas.getContext('2d')
   element.appendChild(canvas)
 
-  if (context === null) {
-    throw new Error('Failed to acquire canvas context')
-  }
+  assert(!isNull(context), 'Cannot acquire canvas context')
 
   return { element, context, canvas }
 }

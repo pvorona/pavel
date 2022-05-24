@@ -67,7 +67,13 @@ export const YAxis = (
   effect(
     [inertVisibleMin, inertVisibleMax, factor],
     (inertVisibleMin, inertVisibleMax, factor) => {
-      clearRect(context, toBitMapSize(width.get()), toBitMapSize(height.get()))
+      clearRect(
+        context,
+        0,
+        0,
+        toBitMapSize(width.get()),
+        toBitMapSize(height.get()),
+      )
       renderLabelsAndGrid(
         inertVisibleMin,
         inertVisibleMax,

@@ -14,6 +14,7 @@ import {
   WHEEL_SPEED,
 } from '../constants'
 import { ensureInBounds, interpolate } from '@pavel/utils'
+import { Markers } from '../Markers'
 
 export const Chart = (
   parent: HTMLElement,
@@ -137,6 +138,7 @@ export const Chart = (
     element.style.flexDirection = 'column'
 
     const series = Series(options, context)
+    const markers = Markers(options, context)
     const overview = Overview(options, context)
     const controls = Controls(options, context)
     const tooltip = Tooltip(options, context)
@@ -144,6 +146,7 @@ export const Chart = (
     const yAxis = YAxis(options, context)
 
     series.element.appendChild(tooltip.element)
+    series.element.appendChild(markers.element)
     element.appendChild(series.element)
     element.appendChild(xAxis.element)
     element.appendChild(yAxis.element)

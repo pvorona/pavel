@@ -34,13 +34,29 @@ async function startApp() {
 
       assert(!isNull(chartContainer), 'Chart container is not found')
 
+      const domain = data1.map(d => d.timestamp)
+
       const options: ExternalChartOptions = {
         graphs: ['A', 'B'],
-        domain: data1.map(d => d.timestamp),
+        domain,
         data: {
           A: data1.map(d => d.value),
           B: data2.map(d => d.value),
         },
+        markers: [
+          // {
+          //   type: 'x',
+          //   x: domain[500],
+          //   color: '#d85c7b',
+          //   lineWidth: 2,
+          // },
+          // {
+          //   type: 'x',
+          //   x: domain[600],
+          //   color: '#2EB086',
+          //   lineWidth: 2,
+          // },
+        ],
       }
 
       Chart(chartContainer, options)

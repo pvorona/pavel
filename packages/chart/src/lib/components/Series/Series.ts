@@ -19,7 +19,9 @@ import {
 
 export const Series: Component<InternalChartOptions, ChartContext> = (
   options,
-  {
+  chartContext,
+) => {
+  const {
     width,
     mainGraphPoints,
     inertOpacityStateByGraphName,
@@ -33,8 +35,7 @@ export const Series: Component<InternalChartOptions, ChartContext> = (
     inertVisibleMinMaxByGraphName,
     endX,
     startX,
-  },
-) => {
+  } = chartContext
   const { element, canvas, context } = createDOM()
 
   scheduleTask(() => {
@@ -79,6 +80,8 @@ export const Series: Component<InternalChartOptions, ChartContext> = (
     ) => {
       clearRect(
         context,
+        0,
+        0,
         toBitMapSize(width.get()),
         toBitMapSize(canvasHeight.get()),
       )

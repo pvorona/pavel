@@ -1,10 +1,16 @@
-import { isString } from '@pavel/assert'
+import { assertNever, isString } from '@pavel/assert'
 import { merge } from 'lodash'
+import {
+  DEFAULT_MARKER_COLOR,
+  DEFAULT_MARKER_LINE_WIDTH,
+} from '../components/constants'
 import {
   ExternalChartOptions,
   ExternalGraph,
+  ExternalMarker,
   InternalChartOptions,
   InternalGraph,
+  InternalMarker,
   VisibilityState,
 } from '../types'
 import { DEFAULT_CHART_OPTIONS } from './constants'
@@ -41,6 +47,9 @@ export function createConfig(
     },
   }
 
+  const markers = (options.markers ?? []).map(createInternalMarker)
+  const markersTrait = { markers }
+
   return merge(
     DEFAULT_CHART_OPTIONS,
     sizeOptions,
@@ -49,6 +58,7 @@ export function createConfig(
     viewBoxOptions,
     options,
     graphsTrait,
+    markersTrait,
   ) as InternalChartOptions
 }
 
@@ -77,4 +87,26 @@ function getGraphLabel(graph: ExternalGraph): string {
   }
 
   return graph.label
+}
+
+function createInternalMarker(marker: ExternalMarker): InternalMarker {
+  if (marker.type === 'x') {
+    return {
+      type: marker.type,
+      x: marker.x,
+      lineWidth: marker.lineWidth ?? DEFAULT_MARKER_LINE_WIDTH,
+      color: marker.color ?? DEFAULT_MARKER_COLOR,
+    }
+  }
+
+  if (marker.type === 'y') {
+    return {
+      type: marker.type,
+      y: marker.y,
+      lineWidth: marker.lineWidth ?? DEFAULT_MARKER_LINE_WIDTH,
+      color: marker.color ?? DEFAULT_MARKER_COLOR,
+    }
+  }
+
+  assertNever(marker)
 }
