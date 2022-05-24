@@ -60,8 +60,6 @@ export type ViewBoxOptions = {
   readonly end: number
 }
 
-export type ColorsOptions = { [key: string]: string }
-
 export type ExternalGraph =
   | {
       readonly key: string
@@ -74,7 +72,43 @@ export type InternalGraph = {
   readonly label: string
 }
 
-export type OptionalChartOptions = {
+export type LineWidth = 1 | 2 | 3 | 4
+
+export type ExternalXMarker = {
+  type: 'x'
+  x: number
+  color?: string
+  lineWidth?: LineWidth
+}
+
+export type ExternalYMarker = {
+  type: 'y'
+  y: number
+  color?: string
+  lineWidth?: LineWidth
+}
+
+export type ExternalMarker = ExternalXMarker | ExternalYMarker
+
+export type InternalXMarker = {
+  type: 'x'
+  x: number
+  color: string
+  lineWidth: LineWidth
+}
+
+export type InternalYMarker = {
+  type: 'y'
+  y: number
+  color: string
+  lineWidth: LineWidth
+}
+
+export type InternalMarker = InternalXMarker | InternalYMarker
+
+export type InternalMarkerType = InternalMarker['type']
+
+export type DeeplyOptionalChartOptions = {
   readonly x: XOptions
   readonly y: YOptions
   readonly overview: OverviewOptions
@@ -85,13 +119,18 @@ export type OptionalChartOptions = {
   readonly lineCap: CanvasLineCap
 }
 
+export type OptionalChartOptions = {
+  readonly markers?: readonly ExternalMarker[]
+}
+
 export type MappedOptions = 'graphs'
 
-export type ExternalChartOptions = DeepPartial<OptionalChartOptions> & {
-  readonly data: DataByGraphName
-  readonly domain: readonly number[]
-  readonly graphs: readonly ExternalGraph[]
-}
+export type ExternalChartOptions = DeepPartial<DeeplyOptionalChartOptions> &
+  OptionalChartOptions & {
+    readonly data: DataByGraphName
+    readonly domain: readonly number[]
+    readonly graphs: readonly ExternalGraph[]
+  }
 
 export type InternalChartOptions = Omit<
   DeepRequired<ExternalChartOptions>,
@@ -102,7 +141,8 @@ export type InternalChartOptions = Omit<
   readonly visibility: VisibilityState
   readonly total: number
   readonly viewBox: ViewBoxOptions
-  readonly graphs: InternalGraph[]
+  readonly graphs: readonly InternalGraph[]
+  readonly markers: readonly InternalMarker[]
 }
 
 // type Series = {
@@ -135,6 +175,13 @@ export type InternalChartOptions = Omit<
 //   lineStyle?: LineStyle
 // };
 
-export type BitMapSize = Nominal<number, 'BitMapSize'>
+export type BitMapSize = Nominal<number, 'BitMapSize'> | 0
 
 export type ChartContext = ReturnType<typeof ChartContext>
+
+export type Line = {
+  x1: number
+  y1: number
+  x2: number
+  y2: number
+}

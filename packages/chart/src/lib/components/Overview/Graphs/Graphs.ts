@@ -132,6 +132,8 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
     ) => {
       clearRect(
         graphs.context,
+        0,
+        0,
         toBitMapSize(width.get()),
         toBitMapSize(canvasHeight),
       )

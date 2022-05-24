@@ -75,7 +75,7 @@ export const XAxis: Component<InternalChartOptions, ChartContext> = (
   effect(
     [startX, endX, factor],
     (startX, endX, factor) => {
-      clearRect(context, toBitMapSize(width.get()), toBitMapSize(height))
+      clearRect(context, 0, 0, toBitMapSize(width.get()), toBitMapSize(height))
       renderLabels(startX, endX, factor)
     },
     { fireImmediately: false },

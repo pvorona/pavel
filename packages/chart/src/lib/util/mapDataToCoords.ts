@@ -110,6 +110,15 @@ export function toScreenX(
   )
 }
 
+export function xToScreenX(
+  startX: number,
+  endX: number,
+  width: number,
+  x: number,
+) {
+  return interpolate(startX, endX, 0, width, x)
+}
+
 export function toScreenY(
   minValue: number,
   maxValue: number,

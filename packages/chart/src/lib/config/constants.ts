@@ -1,4 +1,4 @@
-import { OptionalChartOptions } from '../types'
+import { DeeplyOptionalChartOptions } from '../types'
 
 const tooltipAlpha = 0.5
 const yLineAlpha = 0.15
@@ -22,7 +22,7 @@ const theme = {
   yLabel: `hsla(198, 17%, 77%, ${yLabelAlpha})`,
 }
 
-export const DEFAULT_CHART_OPTIONS: OptionalChartOptions = {
+export const DEFAULT_CHART_OPTIONS: DeeplyOptionalChartOptions = {
   x: {
     margin: {
       blockStart: 10,
