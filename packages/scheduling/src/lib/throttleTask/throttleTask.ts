@@ -12,7 +12,7 @@ export function throttleTask(fn: Lambda, priority = PRIORITY.WRITE): Lambda {
 
     scheduled = true
 
-    scheduleTask(() => {
+    scheduleTask(function executeScheduledTask() {
       fn()
       scheduled = false
     }, priority)

@@ -10,6 +10,7 @@ import { requestIdleCallback, cancelIdleCallback } from '@pavel/utils'
 function createTaskQueue() {
   let animationFrameId: undefined | number = undefined
   let idleCallbackId: undefined | number = undefined
+  let currentFrameTimestamp: undefined | DOMHighResTimeStamp = undefined
   let currentFrameQueueByPriority = initQueue()
 
   function scheduleIdleCallbackIfNeeded() {
@@ -34,10 +35,6 @@ function createTaskQueue() {
     for (const priority of IDLE_PRIORITIES_IN_ORDER) {
       const queue = currentFrameQueueByPriority[priority]
 
-      // perform tasks until queue is empty
-      // if deadline is exceeded - stop idle queue execution
-      // make sure raf is scheduled if there are remaining tasks
-
       while (deadline.timeRemaining() > 0 && !queue.isEmpty) {
         const task = queue.dequeue()
 
@@ -57,8 +54,9 @@ function createTaskQueue() {
     }
   }
 
-  // function performScheduledTasks(timestamp: number) {
-  function performFrameTasks() {
+  function performFrameTasks(timestamp: DOMHighResTimeStamp) {
+    currentFrameTimestamp = timestamp
+
     // We were not able to run idle tasks before the next frame
     // Let's run them now before frame tasks
     if (idleCallbackId !== undefined) {
@@ -86,10 +84,11 @@ function createTaskQueue() {
 
     for (const priority of RENDER_PRIORITIES_IN_ORDER) {
       for (const task of queue[priority]) {
-        // task(timestamp)
         task()
       }
     }
+
+    currentFrameTimestamp = timestamp
   }
 
   function scheduleTask(task: Lambda, priority = PRIORITY.WRITE): Lambda {
@@ -111,7 +110,11 @@ function createTaskQueue() {
     }
   }
 
-  return { scheduleTask }
+  function getCurrentFrameTimestamp(): DOMHighResTimeStamp | undefined {
+    return currentFrameTimestamp
+  }
+
+  return { scheduleTask, getCurrentFrameTimestamp }
 }
 
-export const { scheduleTask } = createTaskQueue()
+export const { scheduleTask, getCurrentFrameTimestamp } = createTaskQueue()
