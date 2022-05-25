@@ -7,7 +7,11 @@ import {
 } from './types'
 import { constructTransition } from './constructTransition'
 import { createId, createWrapperId } from '../createId'
-import { PRIORITY, throttleTask } from '@pavel/scheduling'
+import {
+  getCurrentFrameTimestamp,
+  PRIORITY,
+  throttleTask,
+} from '@pavel/scheduling'
 import { Interpolate, TransitionTimingOptions } from '../transition'
 import { createObservers } from '@pavel/utils'
 import { RecordKey } from '@pavel/types'
@@ -67,6 +71,9 @@ export const inert = <T extends AnimatableSubject<AnimatableValue>>(
   const observers = createObservers()
   const id = createWrapperId(createId(INERT_GROUP, options), target.id)
 
+  let lastFrameTimestamp: DOMHighResTimeStamp | undefined = undefined
+  let lastValue: ObservedTypeOf<T> | undefined = undefined
+
   // TODO: don't emit values when there are no observers.
   // Ensure emitting renews if new observers join while transition is in progress
   const throttledNotifyBeforeNextRender = throttleTask(
@@ -75,9 +82,18 @@ export const inert = <T extends AnimatableSubject<AnimatableValue>>(
   )
 
   const get = () => {
-    // TODO: only compute value once per frame
+    const currentFrameTimestamp = getCurrentFrameTimestamp()
+
+    if (currentFrameTimestamp === lastFrameTimestamp) {
+      return lastValue as ObservedTypeOf<T>
+    }
+
+    lastFrameTimestamp = currentFrameTimestamp
+
     // TODO: compute value using requestAnimationFrame parameter instead of performance.now()
     const { value, hasCompleted } = transition.getCurrentValue()
+
+    lastValue = value
 
     if (!hasCompleted) {
       throttledNotifyBeforeNextRender()
