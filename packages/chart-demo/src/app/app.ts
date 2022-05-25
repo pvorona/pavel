@@ -2,6 +2,7 @@ import { Chart, ExternalChartOptions } from '@pavel/chart'
 import { theme } from './theme'
 import './app.scss'
 import { assert, isNull } from '@pavel/assert'
+import { toCanonicalRect } from '@pavel/utils'
 
 type DataEntry = { timestamp: number; value: number }
 
@@ -55,6 +56,16 @@ async function startApp() {
           //   x: domain[600],
           //   color: '#2EB086',
           //   lineWidth: 2,
+          // },
+          // {
+          //   type: 'rect',
+          //   ...toCanonicalRect(
+          //     domain[500],
+          //     data1[500].value,
+          //     domain[600],
+          //     data1[600].value,
+          //   ),
+          //   fill: '#17d59964',
           // },
         ],
       }

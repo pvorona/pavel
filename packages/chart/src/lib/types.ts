@@ -88,7 +88,19 @@ export type ExternalYMarker = {
   lineWidth?: LineWidth
 }
 
-export type ExternalMarker = ExternalXMarker | ExternalYMarker
+export type ExternalRectMarker = {
+  type: 'rect'
+  x: number
+  y: number
+  width: number
+  height: number
+  fill?: string
+}
+
+export type ExternalMarker =
+  | ExternalXMarker
+  | ExternalYMarker
+  | ExternalRectMarker
 
 export type InternalXMarker = {
   type: 'x'
@@ -104,7 +116,19 @@ export type InternalYMarker = {
   lineWidth: LineWidth
 }
 
-export type InternalMarker = InternalXMarker | InternalYMarker
+export type InternalRectMarker = {
+  type: 'rect'
+  x: number
+  y: number
+  width: number
+  height: number
+  fill: string
+}
+
+export type InternalMarker =
+  | InternalXMarker
+  | InternalYMarker
+  | InternalRectMarker
 
 export type InternalMarkerType = InternalMarker['type']
 
@@ -178,10 +202,3 @@ export type InternalChartOptions = Omit<
 export type BitMapSize = Nominal<number, 'BitMapSize'> | 0
 
 export type ChartContext = ReturnType<typeof ChartContext>
-
-export type Line = {
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-}

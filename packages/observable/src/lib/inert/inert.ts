@@ -16,7 +16,7 @@ import { Interpolate, TransitionTimingOptions } from '../transition'
 import { createObservers } from '@pavel/utils'
 import { RecordKey } from '@pavel/types'
 import { ObservedTypeOf } from '../types'
-import { isNumber, isObject } from '@pavel/assert'
+import { isNumber, isObject, isUndefined } from '@pavel/assert'
 
 const INERT_GROUP = 'Inert'
 
@@ -84,7 +84,10 @@ export const inert = <T extends AnimatableSubject<AnimatableValue>>(
   const get = () => {
     const currentFrameTimestamp = getCurrentFrameTimestamp()
 
-    if (currentFrameTimestamp === lastFrameTimestamp) {
+    if (
+      !isUndefined(currentFrameTimestamp) &&
+      currentFrameTimestamp === lastFrameTimestamp
+    ) {
       return lastValue as ObservedTypeOf<T>
     }
 

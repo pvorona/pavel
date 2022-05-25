@@ -17,13 +17,14 @@ export function effect<T extends ReadonlySubject<unknown>[]>(
   observer: (...args: ObservedTypesOf<T>) => void | Lambda,
   options = DEFAULT_OPTIONS,
 ): Lambda {
-  let cleanup: void | Lambda
+  let effectCleanup: void | Lambda
+
   const scheduleNotification = throttleTask(function performEffect() {
-    if (cleanup) {
-      cleanup()
+    if (effectCleanup) {
+      effectCleanup()
     }
 
-    cleanup = observer(...collectValues(deps))
+    effectCleanup = observer(...collectValues(deps))
   })
 
   return observe(deps, scheduleNotification, {

@@ -21,12 +21,26 @@ import { xToIndex } from '../../util/xToIndex'
 import { ensureInBounds } from '@pavel/utils'
 
 export const ChartContext = (options: InternalChartOptions) => {
-  const globalStartIndex = observable(0, {
-    id: 'globalStartIndex',
+  const globalStartX = observable(options.domain[0], {
+    id: 'globalStartX',
   })
-  const globalEndIndex = observable(options.total - 1, {
-    id: 'globalEndIndex',
+  const globalEndX = observable(options.domain[options.domain.length - 1], {
+    id: 'globalEndX',
   })
+  const globalStartIndex = compute(
+    [globalStartX],
+    globalStartX => xToIndex(options.domain, globalStartX),
+    {
+      id: 'globalStartIndex',
+    },
+  )
+  const globalEndIndex = compute(
+    [globalEndX],
+    globalEndX => xToIndex(options.domain, globalEndX),
+    {
+      id: 'globalEndIndex',
+    },
+  )
   const width = observable(options.width, { id: 'width' })
   const height = observable(options.height, { id: 'height' })
   const canvasHeight = compute([height], computeCanvasHeight, {
@@ -320,5 +334,7 @@ export const ChartContext = (options: InternalChartOptions) => {
     inertVisibleMin,
     inertStartX,
     inertEndX,
+    globalStartX,
+    globalEndX,
   }
 }

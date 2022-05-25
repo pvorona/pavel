@@ -108,5 +108,16 @@ function createInternalMarker(marker: ExternalMarker): InternalMarker {
     }
   }
 
+  if (marker.type === 'rect') {
+    return {
+      type: marker.type,
+      x: marker.x,
+      y: marker.y,
+      width: marker.width,
+      height: marker.height,
+      fill: marker.fill ?? DEFAULT_MARKER_COLOR,
+    }
+  }
+
   assertNever(marker)
 }

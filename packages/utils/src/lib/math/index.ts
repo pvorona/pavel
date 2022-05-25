@@ -1,1 +1,5 @@
 export * from './sum'
+export * from './math'
+export * from './toCanonicalRect'
+export * from './types'
+export * from './getSimpleMovingAverage'

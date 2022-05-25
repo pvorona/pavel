@@ -138,7 +138,18 @@ export const Chart = (
     element.style.flexDirection = 'column'
 
     const series = Series(options, context)
-    const markers = Markers(options, context)
+    const markers = Markers(
+      {
+        startX,
+        endX,
+        markers: options.markers,
+        width,
+        height: context.canvasHeight,
+        min: context.inertVisibleMin,
+        max: context.inertVisibleMax,
+      },
+      context,
+    )
     const overview = Overview(options, context)
     const controls = Controls(options, context)
     const tooltip = Tooltip(options, context)
