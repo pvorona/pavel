@@ -17,7 +17,7 @@ export function renderLineSeriesWithAreaGradient({
   lineCap,
   width,
   height,
-  minMaxByGraphName,
+  minMaxByGraphKey,
   min,
   max,
 }: {
@@ -31,7 +31,7 @@ export function renderLineSeriesWithAreaGradient({
   lineCap: InternalChartOptions['lineCap']
   width: number
   height: number
-  minMaxByGraphName: Record<string, { min: number; max: number }>
+  minMaxByGraphKey: Record<string, { min: number; max: number }>
   min: number
   max: number
 }) {
@@ -63,7 +63,7 @@ export function renderLineSeriesWithAreaGradient({
           max,
           0,
           height,
-          minMaxByGraphName[graph.key].max,
+          minMaxByGraphKey[graph.key].max,
         )
 
         const gradient = context.createLinearGradient(

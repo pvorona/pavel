@@ -15,10 +15,10 @@ export function createMinMaxView(
   graphs: readonly InternalGraph[],
   dataByGraphKey: { readonly [graphKey: string]: readonly number[] },
 ) {
-  const minMaxByGraphName = computeLazy(
+  const minMaxByGraphKey = computeLazy(
     [startIndex, endIndex],
     (startIndex, endIndex) => {
-      const result: { [graphName: string]: { min: number; max: number } } = {}
+      const result: { [graphKey: string]: { min: number; max: number } } = {}
 
       for (let i = 0; i < graphs.length; i++) {
         const { key } = graphs[i]
@@ -31,8 +31,8 @@ export function createMinMaxView(
   )
 
   const max = computeLazy(
-    [minMaxByGraphName, enabledGraphKeys],
-    (visibleMinMaxByGraphName, enabledGraphKeys) => {
+    [minMaxByGraphKey, enabledGraphKeys],
+    (minMaxByGraphKey, enabledGraphKeys) => {
       if (enabledGraphKeys.length === 0) {
         return prevVisibleMax.get()
       }
@@ -40,7 +40,7 @@ export function createMinMaxView(
       let result = -Infinity
 
       for (const graphKey of enabledGraphKeys) {
-        result = Math.max(result, visibleMinMaxByGraphName[graphKey].max)
+        result = Math.max(result, minMaxByGraphKey[graphKey].max)
       }
 
       return result
@@ -48,8 +48,8 @@ export function createMinMaxView(
   )
 
   const min = computeLazy(
-    [minMaxByGraphName, enabledGraphKeys],
-    (visibleMinMaxByGraphName, enabledGraphKeys) => {
+    [minMaxByGraphKey, enabledGraphKeys],
+    (minMaxByGraphKey, enabledGraphKeys) => {
       if (enabledGraphKeys.length === 0) {
         return prevVisibleMin.get()
       }
@@ -57,7 +57,7 @@ export function createMinMaxView(
       let result = +Infinity
 
       for (const graphKey of enabledGraphKeys) {
-        result = Math.min(result, visibleMinMaxByGraphName[graphKey].min)
+        result = Math.min(result, minMaxByGraphKey[graphKey].min)
       }
 
       return result
@@ -76,5 +76,5 @@ export function createMinMaxView(
     prevVisibleMin.set(visibleMin)
   })
 
-  return { minMaxByGraphName, min, max }
+  return { minMaxByGraphKey, min, max }
 }

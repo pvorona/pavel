@@ -14,7 +14,7 @@ import {
   MIN_HEIGHT,
   WHEEL_CLEAR_TIMEOUT,
 } from '../constants'
-import { OpacityState, Point, EnabledGraphNames } from '../types'
+import { OpacityState, Point, EnabledGraphKeys } from '../types'
 import { mapDataToCoords, createMinMaxView, areNumbersClose } from '../../util'
 import { special } from '@pavel/easing'
 import { xToIndex } from '../../util/xToIndex'
@@ -108,15 +108,15 @@ export const ChartContext = (options: InternalChartOptions) => {
     observable(false, { id: 'isWheeling' }),
   )
   const activeCursor = observable(cursor.default, { id: 'activeCursor' })
-  const enabledStateByGraphName = observable(
+  const enabledStateByGraphKey = observable(
     options.graphs.reduce(
       (state, graph) => ({
         ...state,
         [graph.key]: options.visibility[graph.key],
       }),
-      {} as EnabledGraphNames,
+      {} as EnabledGraphKeys,
     ),
-    { id: 'enabledStateByGraphName' },
+    { id: 'enabledStateByGraphKey' },
   )
 
   function computeCanvasHeight(containerHeight: number) {
@@ -131,23 +131,23 @@ export const ChartContext = (options: InternalChartOptions) => {
   }
 
   const enabledGraphKeys = computeLazy(
-    [enabledStateByGraphName],
-    function enabledGraphNamesCompute(enabledStateByGraphName) {
+    [enabledStateByGraphKey],
+    function computeEnabledGraphKeys(enabledStateByGraphKey) {
       return options.graphs
-        .filter(graph => enabledStateByGraphName[graph.key])
+        .filter(graph => enabledStateByGraphKey[graph.key])
         .map(graph => graph.key)
     },
   )
 
   const isAnyGraphEnabled = computeLazy(
     [enabledGraphKeys],
-    enabledGraphNames => {
-      return enabledGraphNames.length !== 0
+    enabledGraphKeys => {
+      return enabledGraphKeys.length !== 0
     },
   )
 
   const {
-    minMaxByGraphName: visibleMinMaxByGraphName,
+    minMaxByGraphKey: visibleMinMaxByGraphKey,
     min: visibleMin,
     max: visibleMax,
   } = createMinMaxView(
@@ -170,16 +170,16 @@ export const ChartContext = (options: InternalChartOptions) => {
     target: visibleMin,
   })
 
-  const inertVisibleMinMaxByGraphName = inert({
+  const inertVisibleMinMaxByGraphKey = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-    target: visibleMinMaxByGraphName,
+    target: visibleMinMaxByGraphKey,
   })
 
   const {
     max: globalMax,
     min: globalMin,
-    minMaxByGraphName: globalMinMaxByGraphName,
+    minMaxByGraphKey: globalMinMaxByGraphKey,
   } = createMinMaxView(
     globalStartIndex,
     globalEndIndex,
@@ -200,30 +200,30 @@ export const ChartContext = (options: InternalChartOptions) => {
     target: globalMin,
   })
 
-  const inertGlobalMinMaxByGraphName = inert({
+  const inertGlobalMinMaxByGraphKey = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-    target: globalMinMaxByGraphName,
+    target: globalMinMaxByGraphKey,
   })
 
   // why lazy
-  const opacityStateByGraphName = computeLazy(
-    [enabledStateByGraphName],
-    function opacityStateByGraphNameCompute(enabledStateByGraphName) {
+  const opacityStateByGraphKey = computeLazy(
+    [enabledStateByGraphKey],
+    enabledStateByGraphKey => {
       return options.graphs.reduce(
         (state, graph) => ({
           ...state,
-          [graph.key]: Number(enabledStateByGraphName[graph.key]),
+          [graph.key]: Number(enabledStateByGraphKey[graph.key]),
         }),
         {} as OpacityState,
       )
     },
   )
 
-  const inertOpacityStateByGraphName = inert({
+  const inertOpacityStateByGraphKey = inert({
     duration: TRANSITION.SLOW,
     easing: special,
-    target: opacityStateByGraphName,
+    target: opacityStateByGraphKey,
   })
 
   const mainGraphPoints = computeLazy(
@@ -271,7 +271,7 @@ export const ChartContext = (options: InternalChartOptions) => {
         // Linear easing when moving
         inertVisibleMax.setTransition(TRANSITION.MEDIUM)
         inertVisibleMin.setTransition(TRANSITION.MEDIUM)
-        inertVisibleMinMaxByGraphName.setTransition(TRANSITION.MEDIUM)
+        inertVisibleMinMaxByGraphKey.setTransition(TRANSITION.MEDIUM)
       } else {
         inertVisibleMax.setTransition({
           duration: TRANSITION.SLOW,
@@ -281,7 +281,7 @@ export const ChartContext = (options: InternalChartOptions) => {
           duration: TRANSITION.SLOW,
           easing: special,
         })
-        inertVisibleMinMaxByGraphName.setTransition({
+        inertVisibleMinMaxByGraphKey.setTransition({
           duration: TRANSITION.SLOW,
           easing: special,
         })
@@ -307,14 +307,14 @@ export const ChartContext = (options: InternalChartOptions) => {
     isWheeling,
     isGrabbingGraphs,
     activeCursor,
-    enabledStateByGraphName,
+    enabledStateByGraphKey,
     enabledGraphKeys,
     isAnyGraphEnabled,
     mainGraphPoints,
     startIndex,
     endIndex,
     mouseX,
-    inertOpacityStateByGraphName,
+    inertOpacityStateByGraphKey,
     visibleMax,
     visibleMin,
     width,
@@ -324,10 +324,10 @@ export const ChartContext = (options: InternalChartOptions) => {
     globalMin,
     inertGlobalMax,
     inertGlobalMin,
-    globalMinMaxByGraphName,
-    visibleMinMaxByGraphName,
-    inertVisibleMinMaxByGraphName,
-    inertGlobalMinMaxByGraphName,
+    globalMinMaxByGraphKey,
+    visibleMinMaxByGraphKey,
+    inertVisibleMinMaxByGraphKey,
+    inertGlobalMinMaxByGraphKey,
     globalStartIndex,
     globalEndIndex,
     inertVisibleMax,

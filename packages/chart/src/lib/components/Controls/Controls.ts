@@ -3,7 +3,7 @@ import { Component } from '../types'
 
 export const Controls: Component<InternalChartOptions, ChartContext> = (
   config,
-  { enabledStateByGraphName },
+  { enabledStateByGraphKey },
 ) => {
   const element = document.createElement('div')
   element.style.position = 'fixed'
@@ -11,9 +11,9 @@ export const Controls: Component<InternalChartOptions, ChartContext> = (
   element.style.top = '20px'
 
   function onButtonClick(graphKey: string) {
-    enabledStateByGraphName.set({
-      ...enabledStateByGraphName.get(),
-      [graphKey]: !enabledStateByGraphName.get()[graphKey],
+    enabledStateByGraphKey.set({
+      ...enabledStateByGraphKey.get(),
+      [graphKey]: !enabledStateByGraphKey.get()[graphKey],
     })
   }
 

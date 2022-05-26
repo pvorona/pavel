@@ -5,7 +5,7 @@ export interface VisibilityState {
   readonly [key: string]: boolean
 }
 
-export interface DataByGraphName {
+export interface DataByGraphKey {
   readonly [key: string]: readonly number[]
 }
 
@@ -151,7 +151,7 @@ export type MappedOptions = 'graphs'
 
 export type ExternalChartOptions = DeepPartial<DeeplyOptionalChartOptions> &
   OptionalChartOptions & {
-    readonly data: DataByGraphName
+    readonly data: DataByGraphKey
     readonly domain: readonly number[]
     readonly graphs: readonly ExternalGraph[]
   }

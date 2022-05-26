@@ -135,7 +135,6 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
       tooltipValues[enabledGraphKeys[i]].innerText = String(
         options.data[enabledGraphKeys[i]][dataIndex],
       )
-      // tooltipValues[enabledGraphNames[i]].innerText = getShortNumber(options.data[enabledGraphNames[i]][dataIndex])
     }
     tooltipDate.innerText = getTooltipDateText(options.domain[dataIndex])
     tooltip.style.transform = `translateX(calc(${x}px - 50%))`
@@ -165,10 +164,10 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
       tooltipGraphInfo.style.padding = '0 16px 12px'
       tooltipGraphInfos[graph.key] = tooltipGraphInfo
 
-      const graphNameElement = document.createElement('div')
-      graphNameElement.innerText = graph.label
-      graphNameElement.style.fontWeight = 'bold'
-      tooltipGraphInfo.appendChild(graphNameElement)
+      const graphLabelElement = document.createElement('div')
+      graphLabelElement.innerText = graph.label
+      graphLabelElement.style.fontWeight = 'bold'
+      tooltipGraphInfo.appendChild(graphLabelElement)
 
       const tooltipValue = document.createElement('div')
       tooltipValue.style.marginTop = '4px'

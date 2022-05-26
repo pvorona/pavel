@@ -26,8 +26,8 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
     globalEndIndex,
     inertGlobalMax,
     inertGlobalMin,
-    inertOpacityStateByGraphName,
-    inertGlobalMinMaxByGraphName,
+    inertOpacityStateByGraphKey,
+    inertGlobalMinMaxByGraphKey,
   } = context
 
   const canvasHeight =
@@ -67,7 +67,7 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
     if (isDragging || isWheeling) {
       inertGlobalMax.setTransition(TRANSITION.MEDIUM)
       inertGlobalMin.setTransition(TRANSITION.MEDIUM)
-      inertGlobalMinMaxByGraphName.setTransition(TRANSITION.MEDIUM)
+      inertGlobalMinMaxByGraphKey.setTransition(TRANSITION.MEDIUM)
     } else {
       inertGlobalMax.setTransition({
         duration: TRANSITION.SLOW,
@@ -77,7 +77,7 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
         duration: TRANSITION.SLOW,
         easing: special,
       })
-      inertGlobalMinMaxByGraphName.setTransition({
+      inertGlobalMinMaxByGraphKey.setTransition({
         duration: TRANSITION.SLOW,
         easing: special,
       })
@@ -89,10 +89,10 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
   scheduleTask(() => {
     renderPoints(
       overviewGraphPoints.get(),
-      inertOpacityStateByGraphName.get(),
+      inertOpacityStateByGraphKey.get(),
       inertGlobalMin.get(),
       inertGlobalMax.get(),
-      inertGlobalMinMaxByGraphName.get(),
+      inertGlobalMinMaxByGraphKey.get(),
     )
   })
 
@@ -106,10 +106,10 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
       )
       renderPoints(
         overviewGraphPoints.get(),
-        inertOpacityStateByGraphName.get(),
+        inertOpacityStateByGraphKey.get(),
         inertGlobalMin.get(),
         inertGlobalMax.get(),
-        inertGlobalMinMaxByGraphName.get(),
+        inertGlobalMinMaxByGraphKey.get(),
       )
     },
     { fireImmediately: false },
@@ -118,17 +118,17 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
   effect(
     [
       overviewGraphPoints,
-      inertOpacityStateByGraphName,
+      inertOpacityStateByGraphKey,
       inertGlobalMin,
       inertGlobalMax,
-      inertGlobalMinMaxByGraphName,
+      inertGlobalMinMaxByGraphKey,
     ],
     (
       overviewGraphPoints,
-      inertOpacityStateByGraphName,
+      inertOpacityStateByGraphKey,
       inertGlobalMin,
       inertGlobalMax,
-      inertGlobalMinMaxByGraphName,
+      inertGlobalMinMaxByGraphKey,
     ) => {
       clearRect(
         graphs.context,
@@ -139,10 +139,10 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
       )
       renderPoints(
         overviewGraphPoints,
-        inertOpacityStateByGraphName,
+        inertOpacityStateByGraphKey,
         inertGlobalMin,
         inertGlobalMax,
-        inertGlobalMinMaxByGraphName,
+        inertGlobalMinMaxByGraphKey,
       )
     },
     { fireImmediately: false },
@@ -150,13 +150,13 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
 
   function renderPoints(
     overviewGraphPoints: { [key: string]: Point[] },
-    inertOpacityStateByGraphName: { [key: string]: number },
+    inertOpacityStateByGraphKey: { [key: string]: number },
     min: number,
     max: number,
-    minMaxByGraphName: Record<string, { min: number; max: number }>,
+    minMaxByGraphKey: Record<string, { min: number; max: number }>,
   ) {
     renderLineSeriesWithAreaGradient({
-      opacityState: inertOpacityStateByGraphName,
+      opacityState: inertOpacityStateByGraphKey,
       points: overviewGraphPoints,
       context: graphs.context,
       graphs: options.graphs,
@@ -168,7 +168,7 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
       lineCap: options.lineCap,
       min,
       max,
-      minMaxByGraphName,
+      minMaxByGraphKey,
     })
   }
 

@@ -1,4 +1,4 @@
-export interface EnabledGraphNames {
+export type EnabledGraphKeys = {
   readonly [key: string]: boolean
 }
 
@@ -6,12 +6,12 @@ export type OpacityState = {
   readonly [key: string]: number
 }
 
-export interface Point {
+export type Point = {
   x: number
   y: number
 }
 
 export type Component<Props, Context> = (
-  p: Props,
-  c: Context,
+  props: Props,
+  context: Context,
 ) => { element: HTMLElement }
