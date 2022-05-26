@@ -1,11 +1,11 @@
 import { DeepPartial, DeepRequired, Nominal } from '@pavel/types'
 import { ChartContext } from './components'
 
-export interface VisibilityState {
+export type VisibilityState = {
   readonly [key: string]: boolean
 }
 
-export interface DataByGraphKey {
+export type DataByGraphKey = {
   readonly [key: string]: readonly number[]
 }
 
@@ -97,10 +97,19 @@ export type ExternalRectMarker = {
   fill?: string
 }
 
-export type ExternalMarker =
+export type ExternalMarkerGroup = {
+  readonly type: 'group'
+  readonly label: string
+  readonly color?: string
+  readonly markers: readonly ExternalSimpleMarker[]
+}
+
+export type ExternalSimpleMarker =
   | ExternalXMarker
   | ExternalYMarker
   | ExternalRectMarker
+
+export type ExternalMarker = ExternalMarkerGroup | ExternalSimpleMarker
 
 export type InternalXMarker = {
   type: 'x'
@@ -125,10 +134,19 @@ export type InternalRectMarker = {
   fill: string
 }
 
-export type InternalMarker =
+export type InternalSimpleMarker =
   | InternalXMarker
   | InternalYMarker
   | InternalRectMarker
+
+export type InternalMarkerGroup = {
+  readonly type: 'group'
+  readonly label: string
+  readonly color: string
+  readonly markers: readonly InternalSimpleMarker[]
+}
+
+export type InternalMarker = InternalSimpleMarker | InternalMarkerGroup
 
 export type InternalMarkerType = InternalMarker['type']
 

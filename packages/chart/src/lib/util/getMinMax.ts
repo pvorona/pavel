@@ -1,4 +1,4 @@
-import { max, min, ceil, floor } from './math'
+import { max, min, ceil, floor } from '@pavel/utils'
 import { interpolatePoint } from './interpolatePoint'
 
 export function getMinMax(

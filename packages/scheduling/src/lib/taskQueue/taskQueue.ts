@@ -88,7 +88,7 @@ function createTaskQueue() {
       }
     }
 
-    currentFrameTimestamp = timestamp
+    currentFrameTimestamp = undefined
   }
 
   function scheduleTask(task: Lambda, priority = PRIORITY.WRITE): Lambda {

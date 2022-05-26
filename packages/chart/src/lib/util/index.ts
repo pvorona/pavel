@@ -1,5 +1,4 @@
 export * from './mapDataToCoords'
-export * from './math'
 export * from './getMinMax'
 export * from './calculateOrderOfMagnitude'
 export * from './calculateLogScaleMultiplier'

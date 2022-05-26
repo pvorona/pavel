@@ -1,29 +1,40 @@
-import { compute, observe, ReadonlySubject } from '@pavel/observable'
+import {
+  compute,
+  computeLazy,
+  observe,
+  ReadonlySubject,
+} from '@pavel/observable'
 import { Lambda } from '@pavel/types'
 import { Line } from '@pavel/utils'
-import { InternalXMarker as XMarkerType } from '../../../types'
+import { ChartContext, InternalXMarker as XMarkerType } from '../../../types'
 import { toBitMapSize, xToScreenX } from '../../../util'
+import { applyAlpha } from '../../../util/color'
 import { renderLine } from '../../renderers'
 
 type XMarkerProps = {
-  context: CanvasRenderingContext2D
-  marker: XMarkerType
-  startX: ReadonlySubject<number>
-  endX: ReadonlySubject<number>
-  width: ReadonlySubject<number>
-  height: ReadonlySubject<number>
-  onChange: Lambda
+  readonly index: number
+  readonly context: CanvasRenderingContext2D
+  readonly marker: XMarkerType
+  readonly startX: ReadonlySubject<number>
+  readonly endX: ReadonlySubject<number>
+  readonly width: ReadonlySubject<number>
+  readonly height: ReadonlySubject<number>
+  readonly onChange: Lambda
 }
 
-export const XMarker = ({
-  width,
-  height,
-  startX,
-  endX,
-  context,
-  onChange,
-  marker: { x, color, lineWidth },
-}: XMarkerProps) => {
+export const XMarker = (
+  {
+    index,
+    width,
+    height,
+    startX,
+    endX,
+    context,
+    onChange,
+    marker: { x, color, lineWidth },
+  }: XMarkerProps,
+  { inertOpacityStateByMarkerIndex }: ChartContext,
+) => {
   const line = compute([startX, endX], (startX, endX) => {
     const screenX = xToScreenX(startX, endX, width.get(), x)
 
@@ -35,20 +46,29 @@ export const XMarker = ({
     } as Line
   })
 
-  observe([line], onChange)
+  const opacity = computeLazy(
+    [inertOpacityStateByMarkerIndex],
+    inertOpacityStateByMarkerIndex => {
+      return inertOpacityStateByMarkerIndex[index]
+    },
+  )
+
+  observe([line, opacity], onChange)
 
   function rerender() {
-    render(line.get())
+    render(line.get(), opacity.get())
   }
 
-  function render(line: Line) {
+  function render(line: Line, opacity: number) {
+    const colorWithOpacity = applyAlpha(color, opacity)
+
     renderLine(
       context,
       toBitMapSize(line.x1),
       toBitMapSize(line.y1),
       toBitMapSize(line.x2),
       toBitMapSize(line.y2),
-      color,
+      colorWithOpacity,
       toBitMapSize(lineWidth),
     )
   }

@@ -1,13 +1,13 @@
 import { assert, isNull } from '@pavel/assert'
 import { effect, ReadonlySubject } from '@pavel/observable'
 import { createObservers } from '@pavel/utils'
-import { ChartContext, InternalMarker } from '../../types'
+import { ChartContext, InternalMarker, InternalSimpleMarker } from '../../types'
 import { toBitMapSize } from '../../util'
 import { clearRect, setCanvasSize } from '../renderers'
 import { Component } from '../types'
 import { XMarker } from './XMarker'
 import { RectMarker } from './RectMarker'
-import { scheduleTask, throttleTask } from '@pavel/scheduling'
+import { throttleTask } from '@pavel/scheduling'
 
 type MarkersProps = {
   readonly width: ReadonlySubject<number>
@@ -19,15 +19,10 @@ type MarkersProps = {
   readonly max: ReadonlySubject<number>
 }
 
-export const Markers: Component<MarkersProps, ChartContext> = ({
-  width,
-  height,
-  markers,
-  startX,
-  endX,
-  min,
-  max,
-}) => {
+export const Markers: Component<MarkersProps, ChartContext> = (
+  { width, height, markers, startX, endX, min, max },
+  chartContext,
+) => {
   const markersRenders = createObservers()
   const scheduleRenderMarkers = throttleTask(function renderMarkers() {
     clearRect(
@@ -71,9 +66,33 @@ export const Markers: Component<MarkersProps, ChartContext> = ({
       toBitMapSize(height.get()),
     )
 
-    for (const marker of markers) {
-      if (marker.type === 'x') {
-        const { render } = XMarker({
+    for (let index = 0; index < markers.length; index++) {
+      const marker = markers[index]
+
+      if (marker.type === 'group') {
+        for (const childMarker of marker.markers) {
+          // Markers inside a group have a single visibility state
+          createSimpleMarker(childMarker, index, context)
+        }
+
+        continue
+      }
+
+      createSimpleMarker(marker, index, context)
+    }
+
+    return { element, context }
+  }
+
+  function createSimpleMarker(
+    marker: InternalSimpleMarker,
+    index: number,
+    context: CanvasRenderingContext2D,
+  ) {
+    if (marker.type === 'x') {
+      const { render } = XMarker(
+        {
+          index,
           startX,
           endX,
           context,
@@ -81,15 +100,17 @@ export const Markers: Component<MarkersProps, ChartContext> = ({
           width,
           height,
           onChange: scheduleRenderMarkers,
-        })
+        },
+        chartContext,
+      )
 
-        markersRenders.register(render)
+      markersRenders.register(render)
+    }
 
-        continue
-      }
-
-      if (marker.type === 'rect') {
-        const { render } = RectMarker({
+    if (marker.type === 'rect') {
+      const { render } = RectMarker(
+        {
+          index,
           startX,
           endX,
           context,
@@ -99,16 +120,11 @@ export const Markers: Component<MarkersProps, ChartContext> = ({
           min,
           max,
           onChange: scheduleRenderMarkers,
-        })
+        },
+        chartContext,
+      )
 
-        markersRenders.register(render)
-
-        continue
-      }
-
-      throw new Error('Not implemented')
+      markersRenders.register(render)
     }
-
-    return { element, context }
   }
 }

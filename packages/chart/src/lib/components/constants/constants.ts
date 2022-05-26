@@ -35,7 +35,7 @@ export const WHEEL_CLEAR_TIMEOUT = 50
 
 export const MIN_VIEWBOX_MS = 10
 
-export const WHEEL_SPEED = 0.001
+export const WHEEL_SPEED = 0.00065
 
 export const DEVIATION_FROM_STRAIGHT_LINE_DEGREES = 45
 

@@ -4,7 +4,6 @@
 
 .like-button {
   touch-action: manipulation;
-  margin-bottom: 20px;
   display: inline-block;
   outline: none;
   border: 1px solid;

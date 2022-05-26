@@ -1,5 +1,4 @@
-import { floor, ceil } from './math'
-import { interpolate } from '@pavel/utils'
+import { floor, ceil, interpolate } from '@pavel/utils'
 
 export function interpolatePoint(
   index: number,

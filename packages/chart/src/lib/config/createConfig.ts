@@ -8,9 +8,11 @@ import {
   ExternalChartOptions,
   ExternalGraph,
   ExternalMarker,
+  ExternalSimpleMarker,
   InternalChartOptions,
   InternalGraph,
   InternalMarker,
+  InternalSimpleMarker,
   VisibilityState,
 } from '../types'
 import { DEFAULT_CHART_OPTIONS } from './constants'
@@ -89,7 +91,9 @@ function getGraphLabel(graph: ExternalGraph): string {
   return graph.label
 }
 
-function createInternalMarker(marker: ExternalMarker): InternalMarker {
+function createInternalSimpleMarker(
+  marker: ExternalSimpleMarker,
+): InternalSimpleMarker {
   if (marker.type === 'x') {
     return {
       type: marker.type,
@@ -120,4 +124,17 @@ function createInternalMarker(marker: ExternalMarker): InternalMarker {
   }
 
   assertNever(marker)
+}
+
+function createInternalMarker(marker: ExternalMarker): InternalMarker {
+  if (marker.type === 'group') {
+    return {
+      type: 'group',
+      markers: marker.markers.map(createInternalSimpleMarker),
+      label: marker.label,
+      color: marker.color ?? DEFAULT_MARKER_COLOR,
+    }
+  }
+
+  return createInternalSimpleMarker(marker)
 }

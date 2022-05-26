@@ -1,6 +1,5 @@
-import { interpolate } from '@pavel/utils'
+import { ceil, floor, isInteger, interpolate } from '@pavel/utils'
 import { Point } from '../components/types'
-import { ceil, floor, isInteger } from './math'
 
 export function mapDataToCoords(
   data: readonly number[],
@@ -94,6 +93,8 @@ export function getX(xs: readonly number[], index: number): number {
   return interpolate(left, right, xs[left], xs[right], index)
 }
 
+// TODO
+// - Replace `toScreenX` with `xToScreenX`
 export function toScreenX(
   xs: readonly number[],
   width: number,

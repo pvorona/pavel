@@ -119,6 +119,17 @@ export const ChartContext = (options: InternalChartOptions) => {
     { id: 'enabledStateByGraphKey' },
   )
 
+  const enabledStateByMarkerIndex = observable(
+    options.markers.reduce(
+      (previousValue, _, index) => ({
+        ...previousValue,
+        [index]: true,
+      }),
+      {} as Record<number, boolean>,
+    ),
+    { id: 'enabledStateByMarkerIndex' },
+  )
+
   function computeCanvasHeight(containerHeight: number) {
     return Math.max(
       containerHeight -
@@ -206,8 +217,7 @@ export const ChartContext = (options: InternalChartOptions) => {
     target: globalMinMaxByGraphKey,
   })
 
-  // why lazy
-  const opacityStateByGraphKey = computeLazy(
+  const opacityStateByGraphKey = compute(
     [enabledStateByGraphKey],
     enabledStateByGraphKey => {
       return options.graphs.reduce(
@@ -224,6 +234,25 @@ export const ChartContext = (options: InternalChartOptions) => {
     duration: TRANSITION.SLOW,
     easing: special,
     target: opacityStateByGraphKey,
+  })
+
+  const opacityStateByMarkerIndex = compute(
+    [enabledStateByMarkerIndex],
+    enabledStateByMarkerIndex => {
+      return options.markers.reduce(
+        (previousValue, currentValue, index) => ({
+          ...previousValue,
+          [index]: Number(enabledStateByMarkerIndex[index]),
+        }),
+        {} as Record<number, number>,
+      )
+    },
+  )
+
+  const inertOpacityStateByMarkerIndex = inert({
+    duration: TRANSITION.SLOW,
+    easing: special,
+    target: opacityStateByMarkerIndex,
   })
 
   const mainGraphPoints = computeLazy(
@@ -308,6 +337,7 @@ export const ChartContext = (options: InternalChartOptions) => {
     isGrabbingGraphs,
     activeCursor,
     enabledStateByGraphKey,
+    enabledStateByMarkerIndex,
     enabledGraphKeys,
     isAnyGraphEnabled,
     mainGraphPoints,
@@ -315,6 +345,7 @@ export const ChartContext = (options: InternalChartOptions) => {
     endIndex,
     mouseX,
     inertOpacityStateByGraphKey,
+    inertOpacityStateByMarkerIndex,
     visibleMax,
     visibleMin,
     width,
