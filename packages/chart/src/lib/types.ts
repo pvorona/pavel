@@ -5,6 +5,10 @@ export type VisibilityState = {
   readonly [key: string]: boolean
 }
 
+export type GradientOptions = {
+  readonly [key: string]: boolean
+}
+
 export type DataByGraphKey = {
   readonly [key: string]: readonly number[]
 }
@@ -163,9 +167,10 @@ export type DeeplyOptionalChartOptions = {
 
 export type OptionalChartOptions = {
   readonly markers?: readonly ExternalMarker[]
+  readonly gradient?: GradientOptions
 }
 
-export type MappedOptions = 'graphs'
+export type MappedOptions = 'graphs' | 'gradient'
 
 export type ExternalChartOptions = DeepPartial<DeeplyOptionalChartOptions> &
   OptionalChartOptions & {
@@ -185,6 +190,7 @@ export type InternalChartOptions = Omit<
   readonly viewBox: ViewBoxOptions
   readonly graphs: readonly InternalGraph[]
   readonly markers: readonly InternalMarker[]
+  readonly gradient: GradientOptions
 }
 
 // type Series = {

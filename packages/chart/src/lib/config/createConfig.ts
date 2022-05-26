@@ -14,6 +14,7 @@ import {
   InternalMarker,
   InternalSimpleMarker,
   VisibilityState,
+  GradientOptions,
 } from '../types'
 import { DEFAULT_CHART_OPTIONS } from './constants'
 
@@ -49,6 +50,19 @@ export function createConfig(
     },
   }
 
+  const gradient =
+    options.gradient ??
+    graphs.reduce(
+      (previousValue, graph) => ({
+        ...previousValue,
+        [graph.key]: true,
+      }),
+      {} as GradientOptions,
+    )
+  const gradientTrait = {
+    gradient,
+  }
+
   const markers = (options.markers ?? []).map(createInternalMarker)
   const markersTrait = { markers }
 
@@ -58,6 +72,7 @@ export function createConfig(
     visibilityOptions,
     totalOptions,
     viewBoxOptions,
+    gradientTrait,
     options,
     graphsTrait,
     markersTrait,
