@@ -69,7 +69,6 @@ export const Controls: Component<InternalChartOptions, ChartContext> = (
 
   config.graphs.forEach((graph, graphIndex) => {
     const label = document.createElement('label')
-    // label.style.marginRight = '15px'
 
     const input = document.createElement('input')
     input.checked = true

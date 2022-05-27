@@ -240,7 +240,7 @@ export const ChartContext = (options: InternalChartOptions) => {
     [enabledStateByMarkerIndex],
     enabledStateByMarkerIndex => {
       return options.markers.reduce(
-        (previousValue, currentValue, index) => ({
+        (previousValue, _, index) => ({
           ...previousValue,
           [index]: Number(enabledStateByMarkerIndex[index]),
         }),
