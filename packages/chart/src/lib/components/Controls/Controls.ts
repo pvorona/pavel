@@ -62,7 +62,7 @@ export const Controls: Component<InternalChartOptions, ChartContext> = (
 
   if (hasAnyGroupMarkers) {
     const separator = document.createElement('div')
-    separator.style.borderLeft = '2px solid hsl(0deg 0% 100% / 25%)'
+    separator.style.borderLeft = '2px solid hsl(212deg 100% 91% / 25%)'
     separator.style.height = '30px'
     element.appendChild(separator)
   }

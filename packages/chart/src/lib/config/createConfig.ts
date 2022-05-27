@@ -134,6 +134,8 @@ function createInternalSimpleMarker(
       width: marker.width,
       height: marker.height,
       fill: marker.fill ?? DEFAULT_MARKER_COLOR,
+      stroke: marker.stroke ?? DEFAULT_MARKER_COLOR,
+      lineWidth: marker.lineWidth ?? DEFAULT_MARKER_LINE_WIDTH,
     }
   }
 

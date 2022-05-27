@@ -1,8 +1,4 @@
-import {
-  Capital,
-  createMonthlyOscillationStrategy,
-  ExchangeRate,
-} from '@pavel/trading'
+import { Capital, createStrategy, ExchangeRate } from '@pavel/trading'
 import { data } from './usd.myfin'
 
 const initialCapital: Capital = {
@@ -10,7 +6,7 @@ const initialCapital: Capital = {
   BYN: 0,
 }
 
-export const strategy = createMonthlyOscillationStrategy(initialCapital)
+export const strategy = createStrategy(initialCapital)
 
 for (let i = 0; i < data.length; i++) {
   const rate: ExchangeRate = {

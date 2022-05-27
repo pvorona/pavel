@@ -99,6 +99,8 @@ export type ExternalRectMarker = {
   width: number
   height: number
   fill?: string
+  stroke?: string
+  lineWidth?: LineWidth
 }
 
 export type ExternalMarkerGroup = {
@@ -136,6 +138,8 @@ export type InternalRectMarker = {
   width: number
   height: number
   fill: string
+  stroke: string
+  lineWidth: LineWidth
 }
 
 export type InternalSimpleMarker =
