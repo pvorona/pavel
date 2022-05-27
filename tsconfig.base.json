@@ -27,6 +27,7 @@
       "@pavel/react-utils": ["packages/react-utils/src/index.ts"],
       "@pavel/redux-slice": ["packages/redux-slice/src/index.ts"],
       "@pavel/scheduling": ["packages/scheduling/src/index.ts"],
+      "@pavel/trading": ["packages/trading/src/index.ts"],
       "@pavel/types": ["packages/types/src/index.ts"],
       "@pavel/utils": ["packages/utils/src/index.ts"]
     }

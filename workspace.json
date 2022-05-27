@@ -16,6 +16,7 @@
     "react-utils": "packages/react-utils",
     "redux-slice": "packages/redux-slice",
     "scheduling": "packages/scheduling",
+    "trading": "packages/trading",
     "types": "packages/types",
     "utils": "packages/utils"
   }
