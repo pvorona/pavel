@@ -168,6 +168,7 @@ export type DeeplyOptionalChartOptions = {
 export type OptionalChartOptions = {
   readonly markers?: readonly ExternalMarker[]
   readonly gradient?: GradientOptions
+  readonly viewBox?: { start: number; end: number }
 }
 
 export type MappedOptions = 'graphs' | 'gradient'

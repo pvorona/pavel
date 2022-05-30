@@ -43,12 +43,11 @@ export function createConfig(
     total: options.domain.length,
   }
 
-  const viewBoxOptions = {
-    viewBox: {
-      start: options.domain[0],
-      end: options.domain[options.domain.length - 1],
-    },
+  const viewBox = options.viewBox ?? {
+    start: options.domain[0],
+    end: options.domain[options.domain.length - 1],
   }
+  const viewBoxTrait = { viewBox }
 
   const gradient =
     options.gradient ??
@@ -71,7 +70,7 @@ export function createConfig(
     sizeOptions,
     visibilityOptions,
     totalOptions,
-    viewBoxOptions,
+    viewBoxTrait,
     gradientTrait,
     options,
     graphsTrait,

@@ -74,41 +74,57 @@ export const RangeSlider: Component<InternalChartOptions, ChartContext> = (
     viewBoxElement.style.right = `${width - right}px`
   })
 
-  observe([startX, width], (startX, width) => {
-    const newLeft = computeLeft(startX, width)
+  observe(
+    [startX, width],
+    (startX, width) => {
+      const newLeft = computeLeft(startX, width)
 
-    left.set(newLeft)
-  })
+      left.set(newLeft)
+    },
+    { fireImmediately: false },
+  )
 
-  observe([endX, width], (endX, width) => {
-    const newRight = computeRight(endX, width)
+  observe(
+    [endX, width],
+    (endX, width) => {
+      const newRight = computeRight(endX, width)
 
-    right.set(newRight)
-  })
+      right.set(newRight)
+    },
+    { fireImmediately: false },
+  )
 
-  observe([left, width], (left, width) => {
-    const newX = interpolate(
-      0,
-      width,
-      options.domain[0],
-      options.domain[options.total - 1],
-      left,
-    )
+  observe(
+    [left, width],
+    (left, width) => {
+      const newX = interpolate(
+        0,
+        width,
+        options.domain[0],
+        options.domain[options.total - 1],
+        left,
+      )
 
-    startX.set(newX)
-  })
+      startX.set(newX)
+    },
+    { fireImmediately: false },
+  )
 
-  observe([right, width], (right, width) => {
-    const newX = interpolate(
-      0,
-      width,
-      options.domain[0],
-      options.domain[options.total - 1],
-      right,
-    )
+  observe(
+    [right, width],
+    (right, width) => {
+      const newX = interpolate(
+        0,
+        width,
+        options.domain[0],
+        options.domain[options.total - 1],
+        right,
+      )
 
-    endX.set(newX)
-  })
+      endX.set(newX)
+    },
+    { fireImmediately: false },
+  )
 
   let cursorResizeHandlerDelta = 0
 
