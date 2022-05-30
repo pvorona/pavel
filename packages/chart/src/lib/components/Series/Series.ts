@@ -5,7 +5,7 @@ import {
   setCanvasSize,
 } from '../renderers'
 import { ChartContext, InternalChartOptions } from '../../types'
-import { toBitMapSize } from '../../util'
+import { Points, toBitMapSize } from '../../util'
 import { cursor, MIN_HEIGHT } from '../constants'
 import { Component, Point } from '../types'
 import { createGraphs } from '../Graphs/createGraphs'
@@ -97,7 +97,7 @@ export const Series: Component<InternalChartOptions, ChartContext> = (
   )
 
   function renderPoints(
-    points: { [key: string]: Point[] },
+    points: { [key: string]: Points },
     opacityState: { [key: string]: number },
     min: number,
     max: number,

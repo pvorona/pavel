@@ -15,7 +15,12 @@ import {
   WHEEL_CLEAR_TIMEOUT,
 } from '../constants'
 import { OpacityState, Point, EnabledGraphKeys } from '../types'
-import { mapDataToCoords, createMinMaxView, areNumbersClose } from '../../util'
+import {
+  mapDataToCoords,
+  createMinMaxView,
+  areNumbersClose,
+  Points,
+} from '../../util'
 import { special } from '@pavel/easing'
 import { xToIndex } from '../../util/xToIndex'
 import { ensureInBounds } from '@pavel/utils'
@@ -288,7 +293,7 @@ export const ChartContext = (options: InternalChartOptions) => {
             options.lineWidth,
           ),
         }),
-        {} as { [key: string]: Point[] },
+        {} as { [key: string]: Points },
       )
     },
   )
