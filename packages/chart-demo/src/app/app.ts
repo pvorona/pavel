@@ -17,9 +17,10 @@ async function startApp() {
   ).then(r => r.json())
 
   document.addEventListener('DOMContentLoaded', async () => {
-    const startIndex = 5000
-    // const itemsToShow = 13_908
-    const itemsToShow = 1000
+    // const startIndex = 5000
+    const startIndex = 0
+    const itemsToShow = 13_908
+    // const itemsToShow = 1000
 
     try {
       const [data1O, data2O] = await Promise.all([series1, series2])

@@ -1,6 +1,43 @@
 import { ceil, floor, isInteger, interpolate } from '@pavel/utils'
 import { Point } from '../components/types'
 
+export type Points = {
+  readonly xAt: (index: number) => number
+  readonly yAt: (index: number) => number
+  readonly set: (index: number, x: number, y: number) => void
+  readonly length: number
+}
+
+function createPoints(length: number): Points {
+  const xs = new Float64Array(length)
+  const ys = new Float64Array(length)
+
+  // function at(index: number): Point {
+  //   return {
+  //     x: xs[index],
+  //     y: ys[index],
+  //   }
+  // }
+
+  function xAt(index: number): number {
+    return xs[index]
+  }
+  function yAt(index: number): number {
+    return ys[index]
+  }
+  function set(index: number, x: number, y: number) {
+    xs[index] = x
+    ys[index] = y
+  }
+
+  return {
+    xAt,
+    yAt,
+    set,
+    length,
+  }
+}
+
 export function mapDataToCoords(
   data: readonly number[],
   domain: readonly number[],
@@ -9,13 +46,28 @@ export function mapDataToCoords(
   { width, height: availableHeight }: { width: number; height: number },
   { startIndex, endIndex }: { startIndex: number; endIndex: number },
   lineWidth: number,
-): Point[] {
+  // ): Point[] {
+): Points {
+  // console.time('mapDataToCoords')
   // half of the line width is subtracted from both sides
   // to prevent line trimming on the edges
   const lineWidthBuffer = lineWidth / 2
   const minY = lineWidthBuffer
   const maxY = availableHeight - lineWidthBuffer
-  const coords: Point[] = []
+
+  const isFirstPointEphemeral = !isInteger(startIndex)
+  const isLastPointEphemeral = !isInteger(endIndex)
+  const totalItems =
+    floor(endIndex) -
+    ceil(startIndex) +
+    1 +
+    Number(isFirstPointEphemeral) +
+    Number(isLastPointEphemeral)
+
+  // const coords: Point[] = new Array(totalItems)
+  const points = createPoints(totalItems)
+
+  let currentPointIndex = 0
 
   if (!isInteger(startIndex)) {
     const x = 0
@@ -27,7 +79,9 @@ export function mapDataToCoords(
       getValueAt(startIndex, domain, data),
     )
 
-    coords.push({ x, y })
+    // coords.push({ x, y })
+    // coords[currentPointIndex++] = { x, y }
+    points.set(currentPointIndex++, x, y)
   }
 
   for (
@@ -44,7 +98,9 @@ export function mapDataToCoords(
       getValueAt(currentIndex, domain, data),
     )
 
-    coords.push({ x, y })
+    // coords.push({ x, y })
+    // coords[currentPointIndex++] = { x, y }
+    points.set(currentPointIndex++, x, y)
   }
 
   if (!isInteger(endIndex)) {
@@ -57,10 +113,13 @@ export function mapDataToCoords(
       getValueAt(endIndex, domain, data),
     )
 
-    coords.push({ x, y })
+    // coords.push({ x, y })
+    // coords[currentPointIndex] = { x, y }
+    points.set(currentPointIndex++, x, y)
   }
+  // console.timeEnd('mapDataToCoords')
 
-  return coords
+  return points
 }
 
 function getValueAt(

@@ -1,9 +1,9 @@
 import { Controls } from '../Controls'
 import { ExternalChartOptions } from '../../types'
-import { Overview } from '../Overview'
+// import { Overview } from '../Overview'
 import { XAxis } from '../XAxis'
 import { YAxis } from '../YAxis'
-import { Tooltip } from '../Tooltip'
+// import { Tooltip } from '../Tooltip'
 import { Series } from '../Series'
 import { ChartContext } from '../Context'
 import { throttleTask, PRIORITY } from '@pavel/scheduling'
@@ -150,18 +150,18 @@ export const Chart = (
       },
       context,
     )
-    const overview = Overview(options, context)
+    // const overview = Overview(options, context)
     const controls = Controls(options, context)
-    const tooltip = Tooltip(options, context)
+    // const tooltip = Tooltip(options, context)
     const xAxis = XAxis(options, context)
     const yAxis = YAxis(options, context)
 
-    series.element.appendChild(tooltip.element)
+    // series.element.appendChild(tooltip.element)
     series.element.appendChild(markers.element)
     element.appendChild(series.element)
     element.appendChild(xAxis.element)
     element.appendChild(yAxis.element)
-    element.appendChild(overview.element)
+    // element.appendChild(overview.element)
     element.appendChild(controls.element)
 
     return {

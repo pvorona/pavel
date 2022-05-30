@@ -1,5 +1,5 @@
 import { GradientOptions, InternalChartOptions } from '../../types'
-import { hexToRGB, toBitMapSize, toScreenY } from '../../util'
+import { hexToRGB, Points, toBitMapSize, toScreenY } from '../../util'
 import { Point } from '../types'
 import { lineTo } from './lineTo'
 
@@ -23,7 +23,7 @@ export function renderLineSeriesWithAreaGradient({
   gradient,
 }: {
   context: CanvasRenderingContext2D
-  points: { [key: string]: Point[] }
+  points: { [key: string]: Points }
   graphs: InternalChartOptions['graphs']
   lineWidth: InternalChartOptions['lineWidth']
   colors: InternalChartOptions['colors']
@@ -55,13 +55,15 @@ export function renderLineSeriesWithAreaGradient({
     context.beginPath()
 
     for (let j = 0; j < points[graph.key].length; j++) {
-      const { x, y } = points[graph.key][j]
+      // const { x, y } = points[graph.key].at(j)
+      const x = points[graph.key].xAt(j)
+      const y = points[graph.key].yAt(j)
 
       lineTo(context, toBitMapSize(x), toBitMapSize(y))
     }
 
     if (gradient[graph.key]) {
-      const { y } = points[graph.key][points[graph.key].length - 1]
+      const y = points[graph.key].yAt(points[graph.key].length - 1)
 
       const yStart = toScreenY(
         min,
@@ -96,7 +98,7 @@ export function renderLineSeriesWithAreaGradient({
       lineTo(
         context,
         toBitMapSize(0 - MARGIN_OVERSHOOT),
-        toBitMapSize(points[graph.key][0].y),
+        toBitMapSize(points[graph.key].yAt(0)),
       )
       context.fillStyle = gradient
       context.fill()
