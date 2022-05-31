@@ -41,18 +41,6 @@
   background: currentColor;
 }
 
-.button:checked ~ .like-button::after {
-  content: '';
-  width: 0.3em;
-  height: 0.6em;
-  position: absolute;
-  border-right: 1px solid white;
-  border-bottom: 1px solid white;
-  top: 50%;
-  transform: translateY(-63%) translateX(9px) rotate(55deg) skew(5deg);
-  left: 10px;
-}
-
 .button-text {
   transition: color 0.3s ease-in-out;
 }
