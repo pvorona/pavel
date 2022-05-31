@@ -53,7 +53,7 @@ export const XMarker = (
     },
   )
 
-  observe([line, opacity], onChange)
+  observe([line, opacity], onChange, { collectValues: false })
 
   function rerender() {
     render(line.get(), opacity.get())
