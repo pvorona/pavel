@@ -5,7 +5,7 @@ import {
   ChartContext,
   InternalRectMarker as RectMarkerType,
 } from '../../../types'
-import { toBitMapSize, toScreenY, xToScreenX } from '../../../util'
+import { toBitMapSize, toScreenY, toScreenX } from '../../../util'
 import { applyAlpha } from '../../../util/color'
 import { fillRect, strokeRect } from '../../renderers'
 
@@ -40,7 +40,7 @@ export const RectMarker = (
   const rect = computeLazy(
     [startX, endX, min, max, width, height],
     (startX, endX, min, max, width, height) => {
-      const screenX = xToScreenX(startX, endX, width, marker.x)
+      const screenX = toScreenX(startX, endX, 0, width, marker.x)
       const screenY = toScreenY(min, max, 0, height, marker.y)
       const screenWidth = interpolate(
         startX,

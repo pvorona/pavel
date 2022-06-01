@@ -7,7 +7,7 @@ import {
 import { Lambda } from '@pavel/types'
 import { Line } from '@pavel/utils'
 import { ChartContext, InternalXMarker as XMarkerType } from '../../../types'
-import { toBitMapSize, xToScreenX } from '../../../util'
+import { toBitMapSize, toScreenX } from '../../../util'
 import { applyAlpha } from '../../../util/color'
 import { renderLine } from '../../renderers'
 
@@ -38,7 +38,7 @@ export const XMarker = (
   const line = compute(
     [startX, endX, width, height],
     (startX, endX, width, height) => {
-      const screenX = xToScreenX(startX, endX, width, x)
+      const screenX = toScreenX(startX, endX, 0, width, x)
 
       return {
         x1: screenX,

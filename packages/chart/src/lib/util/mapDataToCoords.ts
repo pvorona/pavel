@@ -35,7 +35,13 @@ export function mapDataToCoords(
     currentIndex <= floor(endIndex);
     currentIndex++
   ) {
-    const x = toScreenX(domain, width, startIndex, endIndex, currentIndex)
+    const x = toScreenXByIndexes(
+      domain,
+      width,
+      startIndex,
+      endIndex,
+      currentIndex,
+    )
     const y = toScreenY(
       min,
       max,
@@ -93,16 +99,14 @@ export function getX(xs: readonly number[], index: number): number {
   return interpolate(left, right, xs[left], xs[right], index)
 }
 
-// TODO
-// - Replace `toScreenX` with `xToScreenX`
-export function toScreenX(
+export function toScreenXByIndexes(
   xs: readonly number[],
   width: number,
   startIndex: number,
   endIndex: number,
   currentIndex: number,
 ) {
-  return interpolate(
+  return toScreenX(
     getX(xs, startIndex),
     getX(xs, endIndex),
     0,
@@ -111,21 +115,22 @@ export function toScreenX(
   )
 }
 
-export function xToScreenX(
+export function toScreenX(
   startX: number,
   endX: number,
-  width: number,
+  minScreenX: number,
+  maxScreenX: number,
   x: number,
 ) {
-  return interpolate(startX, endX, 0, width, x)
+  return interpolate(startX, endX, minScreenX, maxScreenX, x)
 }
 
 export function toScreenY(
-  minValue: number,
-  maxValue: number,
   minY: number,
   maxY: number,
-  value: number,
+  minScreenY: number,
+  maxScreenY: number,
+  y: number,
 ) {
-  return interpolate(maxValue, minValue, minY, maxY, value)
+  return interpolate(maxY, minY, minScreenY, maxScreenY, y)
 }
