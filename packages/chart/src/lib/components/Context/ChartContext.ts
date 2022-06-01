@@ -15,7 +15,12 @@ import {
   WHEEL_CLEAR_TIMEOUT,
 } from '../constants'
 import { OpacityState, Point, EnabledGraphKeys } from '../types'
-import { mapDataToCoords, createMinMaxView, areNumbersClose } from '../../util'
+import {
+  mapDataToCoords,
+  createMinMaxView,
+  areNumbersClose,
+  getMarkerVisibility,
+} from '../../util'
 import { special } from '@pavel/easing'
 import { xToIndex } from '../../util/xToIndex'
 import { ensureInBounds } from '@pavel/utils'
@@ -121,9 +126,9 @@ export const ChartContext = (options: InternalChartOptions) => {
 
   const enabledStateByMarkerIndex = observable(
     options.markers.reduce(
-      (previousValue, _, index) => ({
+      (previousValue, marker, index) => ({
         ...previousValue,
-        [index]: true,
+        [index]: getMarkerVisibility(marker),
       }),
       {} as Record<number, boolean>,
     ),
@@ -240,7 +245,7 @@ export const ChartContext = (options: InternalChartOptions) => {
     [enabledStateByMarkerIndex],
     enabledStateByMarkerIndex => {
       return options.markers.reduce(
-        (previousValue, currentValue, index) => ({
+        (previousValue, _, index) => ({
           ...previousValue,
           [index]: Number(enabledStateByMarkerIndex[index]),
         }),

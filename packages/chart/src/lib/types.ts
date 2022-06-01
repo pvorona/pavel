@@ -99,6 +99,8 @@ export type ExternalRectMarker = {
   width: number
   height: number
   fill?: string
+  stroke?: string
+  lineWidth?: LineWidth
 }
 
 export type ExternalMarkerGroup = {
@@ -106,6 +108,7 @@ export type ExternalMarkerGroup = {
   readonly label: string
   readonly color?: string
   readonly markers: readonly ExternalSimpleMarker[]
+  readonly visible?: boolean
 }
 
 export type ExternalSimpleMarker =
@@ -136,6 +139,8 @@ export type InternalRectMarker = {
   width: number
   height: number
   fill: string
+  stroke: string
+  lineWidth: LineWidth
 }
 
 export type InternalSimpleMarker =
@@ -148,6 +153,7 @@ export type InternalMarkerGroup = {
   readonly label: string
   readonly color: string
   readonly markers: readonly InternalSimpleMarker[]
+  readonly visible: boolean
 }
 
 export type InternalMarker = InternalSimpleMarker | InternalMarkerGroup

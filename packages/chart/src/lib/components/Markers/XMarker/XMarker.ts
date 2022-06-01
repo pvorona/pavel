@@ -35,16 +35,19 @@ export const XMarker = (
   }: XMarkerProps,
   { inertOpacityStateByMarkerIndex }: ChartContext,
 ) => {
-  const line = compute([startX, endX], (startX, endX) => {
-    const screenX = xToScreenX(startX, endX, width.get(), x)
+  const line = compute(
+    [startX, endX, width, height],
+    (startX, endX, width, height) => {
+      const screenX = xToScreenX(startX, endX, width, x)
 
-    return {
-      x1: screenX,
-      y1: 0,
-      x2: screenX,
-      y2: height.get(),
-    } as Line
-  })
+      return {
+        x1: screenX,
+        y1: 0,
+        x2: screenX,
+        y2: height,
+      } as Line
+    },
+  )
 
   const opacity = computeLazy(
     [inertOpacityStateByMarkerIndex],

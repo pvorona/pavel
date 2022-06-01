@@ -1,4 +1,5 @@
 import { ChartContext, InternalChartOptions } from '../../types'
+import { getMarkerVisibility } from '../../util'
 import { Component } from '../types'
 
 export const Controls: Component<InternalChartOptions, ChartContext> = (
@@ -44,6 +45,7 @@ export const Controls: Component<InternalChartOptions, ChartContext> = (
     input.checked = true
     input.type = 'checkbox'
     input.className = 'button'
+    input.checked = getMarkerVisibility(marker)
     input.onclick = () => handleMarkerGroupButtonClick(index)
 
     const button = document.createElement('div')
@@ -62,14 +64,13 @@ export const Controls: Component<InternalChartOptions, ChartContext> = (
 
   if (hasAnyGroupMarkers) {
     const separator = document.createElement('div')
-    separator.style.borderLeft = '2px solid hsl(0deg 0% 100% / 25%)'
+    separator.style.borderLeft = '2px solid hsl(212deg 100% 91% / 25%)'
     separator.style.height = '30px'
     element.appendChild(separator)
   }
 
   config.graphs.forEach((graph, graphIndex) => {
     const label = document.createElement('label')
-    // label.style.marginRight = '15px'
 
     const input = document.createElement('input')
     input.checked = true

@@ -7,7 +7,7 @@ import {
 } from '../../../types'
 import { toBitMapSize, toScreenY, xToScreenX } from '../../../util'
 import { applyAlpha } from '../../../util/color'
-import { fillRect } from '../../renderers'
+import { fillRect, strokeRect } from '../../renderers'
 
 type RectMarkerProps = {
   readonly index: number
@@ -38,24 +38,18 @@ export const RectMarker = (
   { inertOpacityStateByMarkerIndex }: ChartContext,
 ) => {
   const rect = computeLazy(
-    [startX, endX, min, max],
-    (startX, endX, min, max) => {
-      const screenX = xToScreenX(startX, endX, width.get(), marker.x)
-      const screenY = toScreenY(min, max, 0, height.get(), marker.y)
+    [startX, endX, min, max, width, height],
+    (startX, endX, min, max, width, height) => {
+      const screenX = xToScreenX(startX, endX, width, marker.x)
+      const screenY = toScreenY(min, max, 0, height, marker.y)
       const screenWidth = interpolate(
         startX,
         endX,
         0,
-        width.get(),
+        width,
         startX + marker.width,
       )
-      const screenHeight = interpolate(
-        min,
-        max,
-        0,
-        height.get(),
-        min + marker.height,
-      )
+      const screenHeight = interpolate(min, max, 0, height, min + marker.height)
 
       return {
         x: screenX,
@@ -112,7 +106,8 @@ export const RectMarker = (
     const boundedMaxY = Math.min(rect.y + rect.height, maxY)
     const boundedHeight = boundedMaxY - boundedMinY
 
-    const color = applyAlpha(marker.fill, opacity)
+    const fill = applyAlpha(marker.fill, opacity)
+    const stroke = applyAlpha(marker.stroke, opacity)
 
     fillRect(
       context,
@@ -120,7 +115,17 @@ export const RectMarker = (
       toBitMapSize(boundedMinY),
       toBitMapSize(boundedWidth),
       toBitMapSize(boundedHeight),
-      color,
+      fill,
+    )
+
+    strokeRect(
+      context,
+      toBitMapSize(boundedMinX),
+      toBitMapSize(boundedMinY),
+      toBitMapSize(boundedWidth),
+      toBitMapSize(boundedHeight),
+      stroke,
+      toBitMapSize(marker.lineWidth),
     )
   }
 

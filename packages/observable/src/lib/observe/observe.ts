@@ -27,6 +27,11 @@ export function observe<T extends ReadonlySubject<unknown>[]>(
   observer: (...args: ObservedTypesOf<T>) => void | Lambda,
   options?: CollectingValuesOptions,
 ): Lambda
+// export function observe<T extends ReadonlyEagerSubject<unknown>[]>(
+//   deps: readonly [...T],
+//   observer: (...args: ObservedTypesOf<T>) => void | Lambda,
+//   options?: CollectingValuesOptions,
+// ): Lambda
 export function observe<T extends ReadonlySubject<unknown>[]>(
   deps: readonly [...T],
   observer: () => void | Lambda,

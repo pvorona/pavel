@@ -3,6 +3,7 @@ import { merge } from 'lodash'
 import {
   DEFAULT_MARKER_COLOR,
   DEFAULT_MARKER_LINE_WIDTH,
+  DEFAULT_MARKER_VISIBLE,
 } from '../components/constants'
 import {
   ExternalChartOptions,
@@ -134,6 +135,8 @@ function createInternalSimpleMarker(
       width: marker.width,
       height: marker.height,
       fill: marker.fill ?? DEFAULT_MARKER_COLOR,
+      stroke: marker.stroke ?? DEFAULT_MARKER_COLOR,
+      lineWidth: marker.lineWidth ?? DEFAULT_MARKER_LINE_WIDTH,
     }
   }
 
@@ -147,6 +150,7 @@ function createInternalMarker(marker: ExternalMarker): InternalMarker {
       markers: marker.markers.map(createInternalSimpleMarker),
       label: marker.label,
       color: marker.color ?? DEFAULT_MARKER_COLOR,
+      visible: marker.visible ?? DEFAULT_MARKER_VISIBLE,
     }
   }
 

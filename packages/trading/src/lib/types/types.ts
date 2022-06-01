@@ -1,3 +1,10 @@
+import { ExternalMarker } from '@pavel/chart'
+
+export enum Asset {
+  USD = 'USD',
+  BYN = 'BYN',
+}
+
 export type Capital = {
   readonly USD: number
   readonly BYN: number
@@ -25,7 +32,10 @@ export type TradeHistory = {
   readonly getStatistics: () => TradeStatistics
 }
 
-export type TradeType = 'BUY_USD' | 'BUY_BYN'
+export enum TradeType {
+  BUY_USD='BUY_USD',
+  BUY_BYN='BUY_BYN',
+}
 
 export type Trade = {
   readonly type: TradeType
@@ -38,6 +48,27 @@ export type Strategy = {
   readonly next: (timestamp: number, rate: ExchangeRate) => Capital
   readonly getCapital: () => Capital
   readonly getHistory: () => readonly Trade[]
+  readonly getMarkers: () => readonly ExternalMarker[]
+}
+
+export enum Decision {
+  DO_NOTHING,
+  BUY_USD,
+  BUY_BYN,
+}
+
+export type DecisionMachine = {
+  readonly next: (state: {
+    timestamp: number
+    rate: ExchangeRate
+    capital: Capital
+    position: Trade | undefined
+  }) => Decision
+}
+
+export type Position = {
+  open: Trade
+  close: Trade
 }
 
 // export type Verifier = (data, strategy: Strategy) => TradeHistory

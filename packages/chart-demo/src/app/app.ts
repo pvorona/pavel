@@ -44,36 +44,36 @@ async function startApp() {
           A: data1.map(d => d.value),
           B: data2.map(d => d.value),
         },
-        markers: [
-          // {
-          //   type: 'group',
-          //   label: 'Markers',
-          //   markers: [
-          //     {
-          //       type: 'x',
-          //       x: domain[500],
-          //       color: '#d85c7b',
-          //       lineWidth: 2,
-          //     },
-          //     {
-          //       type: 'x',
-          //       x: domain[600],
-          //       color: '#2EB086',
-          //       lineWidth: 2,
-          //     },
-          //     {
-          //       type: 'rect',
-          //       ...toCanonicalRect(
-          //         domain[500],
-          //         data1[500].value,
-          //         domain[600],
-          //         data1[600].value,
-          //       ),
-          //       fill: 'rgba(23, 213, 153, 0.176)',
-          //     },
-          //   ],
-          // },
-        ],
+        // markers: [
+        //   {
+        //     type: 'group',
+        //     label: 'Markers',
+        //     markers: [
+        //       {
+        //         type: 'x',
+        //         x: domain[500],
+        //         color: '#d85c7b',
+        //         lineWidth: 2,
+        //       },
+        //       {
+        //         type: 'x',
+        //         x: domain[600],
+        //         color: '#2EB086',
+        //         lineWidth: 2,
+        //       },
+        //       {
+        //         type: 'rect',
+        //         ...toCanonicalRect(
+        //           domain[500],
+        //           data1[500].value,
+        //           domain[600],
+        //           data1[600].value,
+        //         ),
+        //         fill: 'rgba(23, 213, 153, 0.176)',
+        //       },
+        //     ],
+        //   },
+        // ],
       }
 
       Chart(chartContainer, options)
