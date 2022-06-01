@@ -64,6 +64,7 @@ export function createStrategy(
       markers: transactionDateMarkers,
       label: 'Dates',
       color: '#bd99ff',
+      visible: false,
     },
   ]
   const history: Trade[] = []

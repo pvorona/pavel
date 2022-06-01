@@ -108,6 +108,7 @@ export type ExternalMarkerGroup = {
   readonly label: string
   readonly color?: string
   readonly markers: readonly ExternalSimpleMarker[]
+  readonly visible?: boolean
 }
 
 export type ExternalSimpleMarker =
@@ -152,6 +153,7 @@ export type InternalMarkerGroup = {
   readonly label: string
   readonly color: string
   readonly markers: readonly InternalSimpleMarker[]
+  readonly visible: boolean
 }
 
 export type InternalMarker = InternalSimpleMarker | InternalMarkerGroup
