@@ -67,7 +67,7 @@ const themes: Theme[] = [
     overviewBackdrop: `hsla(198, 17%,10%,0.75)`,
     overviewEdge: `hsla(198, 17%, ${dark.overviewEdgeLightness}%, ${dark.overviewEdgeAlpha})`,
     tooltipBackgroundColor: `hsla(198, 17%, 30%, 0.5)`,
-    series: ['#FECEA8', '#FF847C', '#6fadec', '#E84A5F'],
+    series: ['#E84A5F', '#FECEA8', '#FF847C', '#6fadec'],
     tooltipLine: `hsla(198, 17%, 77%, ${tooltipAlpha})`,
     tooltipColor: 'hsl(198, 17%, 77%)',
     x: 'hsl(198, 17%, 77%)',

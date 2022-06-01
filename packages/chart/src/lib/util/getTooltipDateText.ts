@@ -11,6 +11,6 @@ export function getTooltipDateText(timestamp: number) {
   const seconds = String(dateObject.getSeconds()).padStart(2, '0')
   const year = dateObject.getFullYear()
 
-  // return `${month} ${date} ${hours}:${minutes}:${seconds}`
-  return `${month} ${date} ${year}`
+  return `${month} ${date} ${hours}:${minutes}:${seconds}`
+  // return `${month} ${date} ${year}`
 }
