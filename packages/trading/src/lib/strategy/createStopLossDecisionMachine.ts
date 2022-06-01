@@ -86,13 +86,13 @@ export function createStopLossDecisionMachine({
         return Decision.DO_NOTHING
       }
 
-      console.log(
-        `Stop loss ${absoluteChangeInValueOfOppositeAsset.toFixed(
-          1,
-        )} ${asset} (${relativeChangeInTheValueOfOppositeAsset.toFixed(
-          2,
-        )}) on ${new Date(timestamp)}`,
-      )
+      // console.log(
+      //   `Stop loss ${absoluteChangeInValueOfOppositeAsset.toFixed(
+      //     1,
+      //   )} ${asset} (${relativeChangeInTheValueOfOppositeAsset.toFixed(
+      //     2,
+      //   )}) on ${new Date(timestamp)}`,
+      // )
 
       if (asset === Asset.USD) {
         return Decision.BUY_BYN

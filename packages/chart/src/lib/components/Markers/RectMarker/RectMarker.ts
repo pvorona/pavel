@@ -38,24 +38,18 @@ export const RectMarker = (
   { inertOpacityStateByMarkerIndex }: ChartContext,
 ) => {
   const rect = computeLazy(
-    [startX, endX, min, max],
-    (startX, endX, min, max) => {
-      const screenX = xToScreenX(startX, endX, width.get(), marker.x)
-      const screenY = toScreenY(min, max, 0, height.get(), marker.y)
+    [startX, endX, min, max, width, height],
+    (startX, endX, min, max, width, height) => {
+      const screenX = xToScreenX(startX, endX, width, marker.x)
+      const screenY = toScreenY(min, max, 0, height, marker.y)
       const screenWidth = interpolate(
         startX,
         endX,
         0,
-        width.get(),
+        width,
         startX + marker.width,
       )
-      const screenHeight = interpolate(
-        min,
-        max,
-        0,
-        height.get(),
-        min + marker.height,
-      )
+      const screenHeight = interpolate(min, max, 0, height, min + marker.height)
 
       return {
         x: screenX,
