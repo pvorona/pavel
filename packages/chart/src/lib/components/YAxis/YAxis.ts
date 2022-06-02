@@ -95,6 +95,7 @@ export const YAxis = (
     height: number,
   ) {
     context.beginPath()
+
     for (
       let i = getClosestGreaterOrEqualDivisibleInt(inertVisibleMin, factor);
       i <= inertVisibleMax;
@@ -119,6 +120,7 @@ export const YAxis = (
       )
       line(context, x1, y1, x2, y2)
     }
+
     context.stroke()
   }
 

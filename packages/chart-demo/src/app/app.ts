@@ -51,15 +51,17 @@ async function startApp() {
         //     markers: [
         //       {
         //         type: 'x',
-        //         x: domain[500],
+        //         x: domain[185],
         //         color: '#d85c7b',
         //         lineWidth: 2,
+        //         lineDash: [45, 20],
         //       },
         //       {
         //         type: 'x',
-        //         x: domain[600],
+        //         x: domain[835],
         //         color: '#2EB086',
         //         lineWidth: 2,
+        //         lineDash: [45, 20],
         //       },
         //       {
         //         type: 'rect',

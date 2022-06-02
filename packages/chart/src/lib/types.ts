@@ -83,6 +83,7 @@ export type ExternalXMarker = {
   x: number
   color?: string
   lineWidth?: LineWidth
+  lineDash?: number[]
 }
 
 export type ExternalYMarker = {
@@ -123,6 +124,7 @@ export type InternalXMarker = {
   x: number
   color: string
   lineWidth: LineWidth
+  lineDash?: number[]
 }
 
 export type InternalYMarker = {

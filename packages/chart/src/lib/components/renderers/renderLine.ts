@@ -6,13 +6,29 @@ export function renderLine(
   y1: BitMapSize,
   x2: BitMapSize,
   y2: BitMapSize,
-  color: string,
-  lineWidth: BitMapSize,
+  options: {
+    strokeStyle?: string
+    lineWidth?: BitMapSize
+    lineDash?: number[]
+  },
 ) {
+  context.save()
   context.beginPath()
-  context.strokeStyle = color
-  context.lineWidth = lineWidth
+
+  if (options.lineDash) {
+    context.setLineDash(options.lineDash)
+  }
+
+  if (options.strokeStyle) {
+    context.strokeStyle = options.strokeStyle
+  }
+
+  if (options.lineWidth) {
+    context.lineWidth = options.lineWidth
+  }
+
   context.moveTo(x1, y1)
   context.lineTo(x2, y2)
   context.stroke()
+  context.restore()
 }

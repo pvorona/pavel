@@ -31,7 +31,7 @@ export const XMarker = (
     endX,
     context,
     onChange,
-    marker: { x, color, lineWidth },
+    marker: { x, color, lineWidth, lineDash },
   }: XMarkerProps,
   { inertOpacityStateByMarkerIndex }: ChartContext,
 ) => {
@@ -71,8 +71,11 @@ export const XMarker = (
       toBitMapSize(line.y1),
       toBitMapSize(line.x2),
       toBitMapSize(line.y2),
-      colorWithOpacity,
-      toBitMapSize(lineWidth),
+      {
+        strokeStyle: colorWithOpacity,
+        lineWidth: toBitMapSize(lineWidth),
+        lineDash,
+      },
     )
   }
 

@@ -27,7 +27,7 @@ import { Component } from '../types'
 // - [ ] Ticks should overlap main canvas
 // - [ ] Highlight tick when hovering point around it
 // - [ ] Calculating factor with loop
-// - [ ] Extract domain to screen coords mapping from graph points to reuse?
+// - [x] Extract domain to screen coords mapping from graph points to reuse?
 // - [ ] Animation when changing step size
 //       Inert Observable Factor
 //       opacity -> progress between int factors
@@ -45,7 +45,7 @@ export const XAxis: Component<InternalChartOptions, ChartContext> = (
   const {
     x: {
       label: { fontSize, fontFamily, color },
-      margin: { blockStart, blockEnd },
+      margin,
     },
   } = options
   const height = fontSize
@@ -54,8 +54,7 @@ export const XAxis: Component<InternalChartOptions, ChartContext> = (
   )
   const { element, context, canvas } = createDOM({
     height,
-    marginBottom: blockEnd,
-    marginTop: blockStart,
+    margin,
   })
 
   scheduleTask(() => {
@@ -102,16 +101,14 @@ export const XAxis: Component<InternalChartOptions, ChartContext> = (
 
   function createDOM({
     height,
-    marginBottom,
-    marginTop,
+    margin: { blockStart, blockEnd },
   }: {
     height: number
-    marginBottom: number
-    marginTop: number
+    margin: InternalChartOptions['x']['margin']
   }) {
     const canvas = document.createElement('canvas')
-    canvas.style.marginBottom = `${marginBottom}px`
-    canvas.style.marginTop = `${marginTop}px`
+    canvas.style.marginBottom = `${blockEnd}px`
+    canvas.style.marginTop = `${blockStart}px`
     canvas.style.width = `100%`
     canvas.style.height = `${height}px`
     const context = canvas.getContext('2d')
