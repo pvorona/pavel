@@ -6,6 +6,7 @@ import { toBitMapSize } from '../../util'
 import { clearRect, setCanvasSize } from '../renderers'
 import { Component } from '../types'
 import { XMarker } from './XMarker'
+import { YMarker } from './YMarker'
 import { RectMarker } from './RectMarker'
 import { throttleTask } from '@pavel/scheduling'
 
@@ -105,6 +106,28 @@ export const Markers: Component<MarkersProps, ChartContext> = (
       )
 
       markersRenders.register(render)
+
+      return
+    }
+
+    if (marker.type === 'y') {
+      const { render } = YMarker(
+        {
+          index,
+          minY: min,
+          maxY: max,
+          context,
+          marker,
+          width,
+          height,
+          onChange: scheduleRenderMarkers,
+        },
+        chartContext,
+      )
+
+      markersRenders.register(render)
+
+      return
     }
 
     if (marker.type === 'rect') {
@@ -125,6 +148,8 @@ export const Markers: Component<MarkersProps, ChartContext> = (
       )
 
       markersRenders.register(render)
+
+      return
     }
   }
 }

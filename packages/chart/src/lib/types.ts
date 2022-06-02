@@ -78,19 +78,20 @@ export type InternalGraph = {
 
 export type LineWidth = 1 | 2 | 3 | 4
 
-export type ExternalXMarker = {
-  type: 'x'
-  x: number
+export type ExternalLineMarkerStyle = {
   color?: string
   lineWidth?: LineWidth
   lineDash?: number[]
 }
 
-export type ExternalYMarker = {
+export type ExternalXMarker = ExternalLineMarkerStyle & {
+  type: 'x'
+  x: number
+}
+
+export type ExternalYMarker = ExternalLineMarkerStyle & {
   type: 'y'
   y: number
-  color?: string
-  lineWidth?: LineWidth
 }
 
 export type ExternalRectMarker = {
@@ -119,19 +120,20 @@ export type ExternalSimpleMarker =
 
 export type ExternalMarker = ExternalMarkerGroup | ExternalSimpleMarker
 
-export type InternalXMarker = {
-  type: 'x'
-  x: number
+export type InternalLineMarkerStyle = {
   color: string
   lineWidth: LineWidth
   lineDash?: number[]
 }
 
-export type InternalYMarker = {
+export type InternalXMarker = InternalLineMarkerStyle & {
+  type: 'x'
+  x: number
+}
+
+export type InternalYMarker = InternalLineMarkerStyle & {
   type: 'y'
   y: number
-  color: string
-  lineWidth: LineWidth
 }
 
 export type InternalRectMarker = {

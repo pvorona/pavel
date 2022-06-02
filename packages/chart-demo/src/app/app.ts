@@ -50,6 +50,13 @@ async function startApp() {
         //     label: 'Markers',
         //     markers: [
         //       {
+        //         type: 'y',
+        //         y: data1[185].value,
+        //         color: '#e94e75',
+        //         lineWidth: 2,
+        //         lineDash: [45, 20],
+        //       },
+        //       {
         //         type: 'x',
         //         x: domain[185],
         //         color: '#d85c7b',

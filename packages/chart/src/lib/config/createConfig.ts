@@ -125,6 +125,7 @@ function createInternalSimpleMarker(
       y: marker.y,
       lineWidth: marker.lineWidth ?? DEFAULT_MARKER_LINE_WIDTH,
       color: marker.color ?? DEFAULT_MARKER_COLOR,
+      lineDash: marker.lineDash,
     }
   }
 

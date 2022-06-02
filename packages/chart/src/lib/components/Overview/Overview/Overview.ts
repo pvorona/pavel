@@ -30,8 +30,8 @@ export const Overview: Component<InternalChartOptions, ChartContext> = (
         markers: options.markers,
         width: context.width,
         height: observable(options.overview.height),
-        min: context.globalMin,
-        max: context.globalMax,
+        min: context.inertGlobalMin,
+        max: context.inertGlobalMax,
       },
       context,
     )
