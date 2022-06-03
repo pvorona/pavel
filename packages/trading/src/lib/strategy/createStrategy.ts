@@ -14,11 +14,11 @@ import { combineMachines } from './combineMachines'
 import { createMonthlyOscillationDecisionMachine } from './createMonthlyOscillationDecisionMachine'
 import { createStopLossDecisionMachine } from './createStopLossDecisionMachine'
 
-const GOOD_TRADE_FILL = 'rgba(27, 245, 110, 0.2)'
-const GOOD_TRADE_STROKE = 'rgba(27, 245, 110, 1)'
+const GOOD_TRADE_FILL = 'rgba(73, 192, 73, 0.3)'
+const GOOD_TRADE_STROKE = '#51ff50'
 
-const BAD_TRADE_FILL = 'rgba(255, 0, 0, 0.3)'
-const BAD_TRADE_STROKE = 'rgba(255, 0, 0, 1)'
+const BAD_TRADE_FILL = 'rgba(193, 71, 71, 0.3)'
+const BAD_TRADE_STROKE = '#ff5051'
 
 export type OscillationStrategyOptions = {
   readonly buyUSDDate: number
