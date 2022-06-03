@@ -1,3 +1,4 @@
+import { assert, isNull } from '@pavel/assert'
 import { computeLazy, effect } from '@pavel/observable'
 import { scheduleTask } from '@pavel/scheduling'
 import { interpolate } from '@pavel/utils'
@@ -14,7 +15,7 @@ export const YAxis = (
     inertVisibleMax,
   }: ChartContext,
 ) => {
-  const { element, context } = createDOM(
+  const { element, context, fragment } = createDOM(
     width.get(),
     height.get(),
     options.y.color,
@@ -85,7 +86,7 @@ export const YAxis = (
     { fireImmediately: false },
   )
 
-  return { element }
+  return { element: fragment }
 
   function renderLabelsAndGrid(
     inertVisibleMin: number,
@@ -125,10 +126,23 @@ export const YAxis = (
   }
 
   function createDOM(width: number, height: number, color: string) {
+    const fragment = document.createDocumentFragment()
+
+    const overlay = document.createElement('div')
+    overlay.style.backgroundImage =
+      'linear-gradient(90deg, rgba(33, 44, 48, 0.75) 45px, rgb(33 44 48 / 20%) 245px, rgba(33 44 48 / 0%) 445px)'
+    overlay.style.top = `0`
+    overlay.style.height = `${height + 80}px`
+    overlay.style.position = 'absolute'
+    overlay.style.width = `100%`
+    overlay.style.pointerEvents = 'none'
+
+    fragment.appendChild(overlay)
+
     const element = document.createElement('canvas')
     const context = element.getContext('2d')
 
-    if (!context) throw Error('Cannot acquire context')
+    assert(!isNull(context), 'Cannot acquire context')
 
     element.style.height = `${height}px`
     element.style.position = 'absolute'
@@ -144,8 +158,9 @@ export const YAxis = (
     )
 
     context.strokeStyle = color
+    fragment.appendChild(element)
 
-    return { element, context }
+    return { fragment, element, context }
   }
 
   function setCanvasStyle(
