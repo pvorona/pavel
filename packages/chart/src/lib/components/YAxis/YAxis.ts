@@ -1,7 +1,7 @@
 import { assert, isNull } from '@pavel/assert'
 import { computeLazy, effect } from '@pavel/observable'
 import { scheduleTask } from '@pavel/scheduling'
-import { interpolate } from '@pavel/utils'
+import { getNumberOfDecimalDigits, interpolate, isInteger } from '@pavel/utils'
 import { BitMapSize, ChartContext, InternalChartOptions } from '../../types'
 import { getClosestGreaterOrEqualDivisibleInt, toBitMapSize } from '../../util'
 import { clearRect, line, setCanvasSize } from '../renderers'
@@ -21,12 +21,12 @@ export const YAxis = (
     options.y.color,
   )
 
-  const factor = computeLazy(
+  const unit = computeLazy(
     [inertVisibleMin, inertVisibleMax],
     (inertVisibleMin, inertVisibleMax) => {
       const yRange = inertVisibleMax - inertVisibleMin
 
-      return computeScaleFactor(yRange, options.y.ticks)
+      return computeScaleUnit(yRange, options.y.ticks)
     },
   )
 
@@ -34,7 +34,7 @@ export const YAxis = (
     renderLabelsAndGrid(
       inertVisibleMin.get(),
       inertVisibleMax.get(),
-      factor.get(),
+      unit.get(),
       width.get(),
       height.get(),
     )
@@ -57,7 +57,7 @@ export const YAxis = (
       renderLabelsAndGrid(
         inertVisibleMin.get(),
         inertVisibleMax.get(),
-        factor.get(),
+        unit.get(),
         width,
         height,
       )
@@ -66,7 +66,7 @@ export const YAxis = (
   )
 
   effect(
-    [inertVisibleMin, inertVisibleMax, factor],
+    [inertVisibleMin, inertVisibleMax, unit],
     (inertVisibleMin, inertVisibleMax, factor) => {
       clearRect(
         context,
@@ -91,16 +91,18 @@ export const YAxis = (
   function renderLabelsAndGrid(
     inertVisibleMin: number,
     inertVisibleMax: number,
-    factor: number,
+    unit: number,
     width: number,
     height: number,
   ) {
     context.beginPath()
 
+    const precision = getNumberOfDecimalDigits(unit)
+
     for (
-      let i = getClosestGreaterOrEqualDivisibleInt(inertVisibleMin, factor);
+      let i = getClosestGreaterOrEqualDivisibleInt(inertVisibleMin, unit);
       i <= inertVisibleMax;
-      i += factor
+      i += unit
     ) {
       const screenY = toBitMapSize(
         interpolate(inertVisibleMin, inertVisibleMax, height, 0, i),
@@ -110,7 +112,7 @@ export const YAxis = (
       const x2 = toBitMapSize(width)
       const y2 = screenY
       const textY = screenY - toBitMapSize(options.y.label.margin.blockEnd)
-      const label = `${i}`
+      const label = i.toFixed(precision)
 
       if (textY - toBitMapSize(options.y.label.fontSize) < 0) continue
 
@@ -178,16 +180,27 @@ export const YAxis = (
   }
 }
 
-const PREFERRED_FACTORS = [
-  1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000,
-]
+const PREFERRED_FACTORS = [1, 2, 5]
+const MAX_ITERATIONS = 100
 
-function computeScaleFactor(number: number, ticks: number) {
+function computeScaleUnit(number: number, ticks: number) {
+  let factorMultiplier = 1e-6
   let factorIndex = 0
+  let iterationIndex = MAX_ITERATIONS
 
-  while (number / PREFERRED_FACTORS[factorIndex] > ticks) {
-    factorIndex++
+  while (iterationIndex--) {
+    const currentUnit = factorMultiplier * PREFERRED_FACTORS[factorIndex]
+
+    if (number / currentUnit < ticks) {
+      return currentUnit
+    }
+
+    factorIndex = (factorIndex + 1) % PREFERRED_FACTORS.length
+
+    if (factorIndex === 0) {
+      factorMultiplier *= 10
+    }
   }
 
-  return PREFERRED_FACTORS[factorIndex]
+  return 1
 }
