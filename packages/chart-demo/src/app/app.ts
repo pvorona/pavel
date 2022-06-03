@@ -41,8 +41,8 @@ async function startApp() {
         graphs: ['A', 'B'],
         domain,
         data: {
-          A: data1.map(d => d.value),
-          B: data2.map(d => d.value),
+          A: data1.map(d => d.value / 1000),
+          B: data2.map(d => d.value / 1000),
         },
         // markers: [
         //   {

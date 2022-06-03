@@ -1,13 +1,23 @@
+import { getNumberOfDecimalDigits, round } from '@pavel/utils'
+
 export function getClosestGreaterOrEqualDivisibleInt(
   n: number,
   divisor: number,
 ): number {
+  const numberOfDecimalDigits = getNumberOfDecimalDigits(n)
+  const adjustedN = n * 10 ** numberOfDecimalDigits
+  const adjustedDivisor = divisor * 10 ** numberOfDecimalDigits
   const closestSmallerOrEqualDivisibleInt =
-    getClosestSmallerOrEqualDivisibleInt(n, divisor)
+    getClosestSmallerOrEqualDivisibleInt(adjustedN, adjustedDivisor)
+  const magnifiedResult = (() => {
+    if (closestSmallerOrEqualDivisibleInt === adjustedN) {
+      return closestSmallerOrEqualDivisibleInt
+    }
 
-  return closestSmallerOrEqualDivisibleInt >= n
-    ? closestSmallerOrEqualDivisibleInt
-    : getClosestGreaterDivisibleInt(n, divisor)
+    return getClosestGreaterDivisibleInt(adjustedN, adjustedDivisor)
+  })()
+
+  return magnifiedResult / 10 ** numberOfDecimalDigits
 }
 
 export function getClosestSmallerOrEqualDivisibleInt(
@@ -21,5 +31,5 @@ export function getClosestGreaterDivisibleInt(
   n: number,
   divisor: number,
 ): number {
-  return Math.round(n + divisor - (n % divisor))
+  return round(n + divisor - (n % divisor))
 }
