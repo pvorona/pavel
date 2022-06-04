@@ -1,5 +1,5 @@
 import { LineWidth } from '../../types'
-import { hexToRGB, toBitMapSize } from '../../util'
+import { toBitMapSize } from '../../util'
 import { Point } from '../types'
 import { applyCanvasStyle } from './applyCanvasStyle'
 import { lineTo } from './lineTo'
@@ -17,10 +17,9 @@ export function renderSeries(
     return
   }
 
-  const strokeStyleWithAlpha = `rgba(${hexToRGB(strokeStyle)},${opacity})`
-
   applyCanvasStyle(context, {
-    strokeStyle: strokeStyleWithAlpha,
+    opacity,
+    strokeStyle,
     lineWidth,
     lineCap,
     lineJoin,

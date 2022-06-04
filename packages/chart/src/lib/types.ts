@@ -48,7 +48,7 @@ export type YOptions = {
 
 export type OverviewOptions = {
   readonly height: number
-  readonly lineWidth: number
+  readonly lineWidth: LineWidth
   readonly overlayColor: string
   readonly edgeColor: string
 }
@@ -199,7 +199,7 @@ export type DeeplyOptionalChartOptions = {
   readonly y: YOptions
   readonly overview: OverviewOptions
   readonly tooltip: TooltipOptions
-  readonly lineWidth: number
+  readonly lineWidth: LineWidth
   readonly colors: readonly string[]
   readonly lineJoin: CanvasLineJoin
   readonly lineCap: CanvasLineCap
