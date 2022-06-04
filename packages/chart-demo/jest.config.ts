@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   displayName: 'chart-demo',
 
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
@@ -7,5 +7,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/packages/chart-demo',
-  preset: '../../jest.preset.ts',
+  preset: '../../jest.preset.js',
 }
