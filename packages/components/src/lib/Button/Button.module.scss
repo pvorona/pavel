@@ -58,35 +58,40 @@
 
 .Outlined,
 .Filled {
-  --border-width: 2px;
+  --border-width: 1px;
   --font-weight: 700;
 }
 
 .Outlined {
   --color-light-default: hsl(var(--c-1-25));
   --color-light-hover: hsl(var(--c-1-5));
-  --color-dark-default: hsl(var(--c-1-90));
+  --color-dark-default: hsl(var(--c-1-95));
   --color-dark-hover: hsl(var(--c-1-100));
   --color: var(--color-light-default);
+
+  --background-color-dark-hover: hsl(var(--c-1-30));
+  --background-color-light-hover: hsl(var(--c-1-95));
 
   --outline-color-light: hsl(var(--c-1-15));
   --outline-color-dark: hsl(var(--c-1-35));
   --outline-color: var(--outline-color-light);
 
   --border-color-default: transparent;
-  --border-color-light-hover: hsl(var(--c-1-30));
-  --border-color-dark-hover: hsl(var(--c-1-70));
+  --border-color-light-hover: hsl(var(--c-1-75));
+  --border-color-dark-hover: hsl(var(--c-1-50));
   --border-color: var(--border-color-default);
 
   color: var(--color);
-  transition-property: color, box-shadow, border-color;
+  transition-property: color, box-shadow, border-color, background-color;
   transition-duration: var(--duration-1);
   border: var(--border-width) solid var(--border-color);
-  will-change: color, box-shadow, border-color;
+  will-change: color, box-shadow, border-color, background-color;
 
   &:not(:disabled):hover,
   &:not(:disabled):focus-visible {
     --color: var(--color-light-hover);
+    --background-color: var(--background-color-light-hover);
+    background-color: var(--background-color);
   }
 
   &:not(:disabled):not(:focus-visible):hover {
@@ -106,6 +111,7 @@
       &:not(:disabled):hover,
       &:not(:disabled):focus-visible {
         --color: var(--color-dark-hover);
+        --background-color: var(--background-color-dark-hover);
       }
 
       &:not(:disabled):not(:focus-visible):hover {
