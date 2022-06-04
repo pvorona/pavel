@@ -79,9 +79,11 @@ export type InternalGraph = {
 export type LineWidth = 1 | 2 | 3 | 4
 
 export type ExternalLineMarkerStyle = {
-  color?: string
-  lineWidth?: LineWidth
-  lineDash?: number[]
+  readonly strokeStyle?: string
+  readonly lineWidth?: LineWidth
+  readonly lineJoin?: CanvasLineJoin
+  readonly lineCap?: CanvasLineCap
+  readonly lineDash?: readonly number[]
 }
 
 export type ExternalXMarker = ExternalLineMarkerStyle & {
@@ -113,17 +115,32 @@ export type ExternalMarkerGroup = {
   readonly visible?: boolean
 }
 
+export type ExternalLineMarker = ExternalLineMarkerStyle & {
+  readonly key: string
+}
+
+export type ExternalFlowMarker = {
+  readonly type: 'flow'
+  readonly domain: number[]
+  readonly data: Record<string, readonly number[]>
+  readonly lines: [ExternalLineMarker, ExternalLineMarker]
+  readonly fill?: string
+}
+
 export type ExternalSimpleMarker =
   | ExternalXMarker
   | ExternalYMarker
   | ExternalRectMarker
+  | ExternalFlowMarker
 
 export type ExternalMarker = ExternalMarkerGroup | ExternalSimpleMarker
 
 export type InternalLineMarkerStyle = {
-  color: string
-  lineWidth: LineWidth
-  lineDash?: number[]
+  readonly strokeStyle: string
+  readonly lineWidth: LineWidth
+  readonly lineJoin: CanvasLineJoin
+  readonly lineCap: CanvasLineCap
+  readonly lineDash?: readonly number[]
 }
 
 export type InternalXMarker = InternalLineMarkerStyle & {
@@ -147,10 +164,23 @@ export type InternalRectMarker = {
   lineWidth: LineWidth
 }
 
+export type InternalLineMarker = InternalLineMarkerStyle & {
+  readonly key: string
+}
+
+export type InternalFlowMarker = {
+  readonly type: 'flow'
+  readonly domain: number[]
+  readonly data: Record<string, readonly number[]>
+  readonly lines: [InternalLineMarker, InternalLineMarker]
+  readonly fill: string
+}
+
 export type InternalSimpleMarker =
   | InternalXMarker
   | InternalYMarker
   | InternalRectMarker
+  | InternalFlowMarker
 
 export type InternalMarkerGroup = {
   readonly type: 'group'

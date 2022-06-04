@@ -8,6 +8,7 @@ import { Component } from '../types'
 import { XMarker } from './XMarker'
 import { YMarker } from './YMarker'
 import { RectMarker } from './RectMarker'
+import { FlowMarker } from './FlowMarker'
 import { throttleTask } from '@pavel/scheduling'
 
 type MarkersProps = {
@@ -16,12 +17,14 @@ type MarkersProps = {
   readonly markers: readonly InternalMarker[]
   readonly startX: ReadonlySubject<number>
   readonly endX: ReadonlySubject<number>
+  readonly startIndex: ReadonlySubject<number>
+  readonly endIndex: ReadonlySubject<number>
   readonly min: ReadonlySubject<number>
   readonly max: ReadonlySubject<number>
 }
 
 export const Markers: Component<MarkersProps, ChartContext> = (
-  { width, height, markers, startX, endX, min, max },
+  { width, height, markers, startX, endX, min, max, startIndex, endIndex },
   chartContext,
 ) => {
   const markersRenders = createObservers()
@@ -142,6 +145,28 @@ export const Markers: Component<MarkersProps, ChartContext> = (
           height,
           min,
           max,
+          onChange: scheduleRenderMarkers,
+        },
+        chartContext,
+      )
+
+      markersRenders.register(render)
+
+      return
+    }
+
+    if (marker.type === 'flow') {
+      const { render } = FlowMarker(
+        {
+          index,
+          startIndex,
+          endIndex,
+          min,
+          max,
+          context,
+          marker,
+          width,
+          height,
           onChange: scheduleRenderMarkers,
         },
         chartContext,

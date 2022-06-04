@@ -8,8 +8,7 @@ import { Lambda } from '@pavel/types'
 import { Line } from '@pavel/utils'
 import { ChartContext, InternalYMarker as YMarkerType } from '../../../types'
 import { toBitMapSize, toScreenY } from '../../../util'
-import { applyAlpha } from '../../../util/color'
-import { renderLine } from '../../renderers'
+import { applyCanvasStyle, renderLine } from '../../renderers'
 
 type YMarkerProps = {
   readonly index: number
@@ -31,7 +30,7 @@ export const YMarker = (
     maxY,
     context,
     onChange,
-    marker: { y, color, lineWidth, lineDash },
+    marker: { y, strokeStyle, lineWidth, lineDash },
   }: YMarkerProps,
   { inertOpacityStateByMarkerIndex }: ChartContext,
 ) => {
@@ -63,7 +62,12 @@ export const YMarker = (
   }
 
   function render(line: Line, opacity: number) {
-    const colorWithOpacity = applyAlpha(color, opacity)
+    applyCanvasStyle(context, {
+      strokeStyle,
+      opacity,
+      lineWidth,
+      lineDash,
+    })
 
     renderLine(
       context,
@@ -71,11 +75,6 @@ export const YMarker = (
       toBitMapSize(line.y1),
       toBitMapSize(line.x2),
       toBitMapSize(line.y2),
-      {
-        strokeStyle: colorWithOpacity,
-        lineWidth: toBitMapSize(lineWidth),
-        lineDash,
-      },
     )
   }
 

@@ -1,10 +1,8 @@
 import { GradientOptions, InternalChartOptions } from '../../types'
 import { hexToRGB, toBitMapSize, toScreenY } from '../../util'
 import { Point } from '../types'
+import { MARGIN_OVERSHOOT, TRANSPARENT } from './constants'
 import { lineTo } from './lineTo'
-
-const MARGIN_OVERSHOOT = 1
-const TRANSPARENT = `rgba(0,0,0,0)`
 
 export function renderLineSeriesWithAreaGradient({
   context,
@@ -32,9 +30,9 @@ export function renderLineSeriesWithAreaGradient({
   lineCap: InternalChartOptions['lineCap']
   width: number
   height: number
-  minMaxByGraphKey: Record<string, { min: number; max: number }>
   min: number
   max: number
+  minMaxByGraphKey: Record<string, { min: number; max: number }>
   gradient: GradientOptions
 }) {
   for (let i = 0; i < graphs.length; i++) {

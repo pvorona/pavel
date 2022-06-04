@@ -147,6 +147,8 @@ export const Chart = (
         height: context.canvasHeight,
         min: context.inertVisibleMin,
         max: context.inertVisibleMax,
+        startIndex: context.startIndex,
+        endIndex: context.endIndex,
       },
       context,
     )
