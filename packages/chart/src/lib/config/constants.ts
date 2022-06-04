@@ -22,6 +22,10 @@ const theme = {
   yLabel: `hsla(198, 17%, 77%, ${yLabelAlpha})`,
 }
 
+export const DEFAULT_LINE_JOIN = 'bevel'
+
+export const DEFAULT_LINE_CAP = 'butt'
+
 export const DEFAULT_CHART_OPTIONS: DeeplyOptionalChartOptions = {
   x: {
     margin: {
@@ -51,8 +55,8 @@ export const DEFAULT_CHART_OPTIONS: DeeplyOptionalChartOptions = {
   },
 
   lineWidth: 1,
-  lineJoin: 'bevel',
-  lineCap: 'butt',
+  lineJoin: DEFAULT_LINE_JOIN,
+  lineCap: DEFAULT_LINE_CAP,
 
   overview: {
     height: 100,

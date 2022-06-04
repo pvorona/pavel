@@ -97,7 +97,7 @@ export function createStrategy(
         transactionDateMarkers.push({
           type: 'x',
           x: trade.timestamp,
-          color: 'green',
+          strokeStyle: 'green',
         })
 
         if (prevTrade) {
@@ -133,7 +133,7 @@ export function createStrategy(
         transactionDateMarkers.push({
           type: 'x',
           x: trade.timestamp,
-          color: 'red',
+          strokeStyle: 'red',
         })
 
         if (prevTrade) {

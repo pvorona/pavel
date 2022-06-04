@@ -10,6 +10,7 @@ import { ChartContext, InternalXMarker as XMarkerType } from '../../../types'
 import { toBitMapSize, toScreenX } from '../../../util'
 import { applyAlpha } from '../../../util/color'
 import { renderLine } from '../../renderers'
+import { applyCanvasStyle } from '../../renderers/applyCanvasStyle'
 
 type XMarkerProps = {
   readonly index: number
@@ -31,7 +32,7 @@ export const XMarker = (
     endX,
     context,
     onChange,
-    marker: { x, color, lineWidth, lineDash },
+    marker: { x, strokeStyle, lineWidth, lineDash },
   }: XMarkerProps,
   { inertOpacityStateByMarkerIndex }: ChartContext,
 ) => {
@@ -63,7 +64,14 @@ export const XMarker = (
   }
 
   function render(line: Line, opacity: number) {
-    const colorWithOpacity = applyAlpha(color, opacity)
+    const colorWithOpacity = applyAlpha(strokeStyle, opacity)
+
+    applyCanvasStyle(context, {
+      strokeStyle,
+      opacity,
+      lineWidth,
+      lineDash,
+    })
 
     renderLine(
       context,
@@ -71,11 +79,6 @@ export const XMarker = (
       toBitMapSize(line.y1),
       toBitMapSize(line.x2),
       toBitMapSize(line.y2),
-      {
-        strokeStyle: colorWithOpacity,
-        lineWidth: toBitMapSize(lineWidth),
-        lineDash,
-      },
     )
   }
 

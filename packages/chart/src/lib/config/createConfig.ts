@@ -16,8 +16,14 @@ import {
   InternalSimpleMarker,
   VisibilityState,
   GradientOptions,
+  ExternalLineMarker,
+  InternalLineMarker,
 } from '../types'
-import { DEFAULT_CHART_OPTIONS } from './constants'
+import {
+  DEFAULT_CHART_OPTIONS,
+  DEFAULT_LINE_CAP,
+  DEFAULT_LINE_JOIN,
+} from './constants'
 
 export function createConfig(
   element: HTMLElement,
@@ -114,8 +120,10 @@ function createInternalSimpleMarker(
       type: marker.type,
       x: marker.x,
       lineWidth: marker.lineWidth ?? DEFAULT_MARKER_LINE_WIDTH,
-      color: marker.color ?? DEFAULT_MARKER_COLOR,
+      strokeStyle: marker.strokeStyle ?? DEFAULT_MARKER_COLOR,
       lineDash: marker.lineDash,
+      lineCap: DEFAULT_LINE_CAP,
+      lineJoin: DEFAULT_LINE_JOIN,
     }
   }
 
@@ -124,8 +132,10 @@ function createInternalSimpleMarker(
       type: marker.type,
       y: marker.y,
       lineWidth: marker.lineWidth ?? DEFAULT_MARKER_LINE_WIDTH,
-      color: marker.color ?? DEFAULT_MARKER_COLOR,
+      strokeStyle: marker.strokeStyle ?? DEFAULT_MARKER_COLOR,
       lineDash: marker.lineDash,
+      lineCap: DEFAULT_LINE_CAP,
+      lineJoin: DEFAULT_LINE_JOIN,
     }
   }
 
@@ -139,6 +149,19 @@ function createInternalSimpleMarker(
       fill: marker.fill ?? DEFAULT_MARKER_COLOR,
       stroke: marker.stroke ?? DEFAULT_MARKER_COLOR,
       lineWidth: marker.lineWidth ?? DEFAULT_MARKER_LINE_WIDTH,
+    }
+  }
+
+  if (marker.type === 'flow') {
+    return {
+      type: marker.type,
+      domain: marker.domain,
+      data: marker.data,
+      lines: marker.lines.map(toInternalLine) as [
+        InternalLineMarker,
+        InternalLineMarker,
+      ],
+      fill: marker.fill ?? DEFAULT_MARKER_COLOR,
     }
   }
 
@@ -157,4 +180,15 @@ function createInternalMarker(marker: ExternalMarker): InternalMarker {
   }
 
   return createInternalSimpleMarker(marker)
+}
+
+function toInternalLine(line: ExternalLineMarker): InternalLineMarker {
+  return {
+    strokeStyle: line.strokeStyle ?? DEFAULT_MARKER_COLOR,
+    lineWidth: line.lineWidth ?? DEFAULT_MARKER_LINE_WIDTH,
+    lineDash: line.lineDash,
+    lineCap: line.lineCap ?? DEFAULT_LINE_CAP,
+    lineJoin: line.lineJoin ?? DEFAULT_LINE_JOIN,
+    key: line.key,
+  }
 }

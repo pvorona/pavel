@@ -36,14 +36,47 @@ async function startApp() {
       assert(!isNull(chartContainer), 'Chart container is not found')
 
       const domain = data1.map(d => d.timestamp)
+      const adjustedData1 = data1.map(d => d.value)
+      const adjustedData2 = data2.map(d => d.value)
 
       const options: ExternalChartOptions = {
         graphs: ['A', 'B'],
         domain,
         data: {
-          A: data1.map(d => d.value / 1000),
-          B: data2.map(d => d.value / 1000),
+          A: adjustedData1,
+          B: adjustedData2,
         },
+
+        // markers: [
+        //   {
+        //     type: 'flow',
+        //     fill: 'rgba(10, 108, 255, 0.1)',
+        //     lines: [
+        //       {
+        //         key: 'top',
+        //         lineWidth: 2,
+        //         strokeStyle: 'rgb(10, 108, 255)',
+        //       },
+        //       {
+        //         key: 'bottom',
+        //         lineWidth: 2,
+        //         strokeStyle: 'rgb(10, 108, 255)',
+        //       },
+        //     ],
+        //     domain,
+        //     data: {
+        //       top: domain.map(
+        //         (_, index) =>
+        //           (adjustedData1[index] + adjustedData2[index]) / 2 + 10,
+        //       ),
+        //       bottom: domain.map(
+        //         (_, index) =>
+        //           (adjustedData1[index] + adjustedData2[index]) / 2 - 10,
+        //       ),
+        //     },
+        //   },
+        // ],
+
         // markers: [
         //   {
         //     type: 'group',
