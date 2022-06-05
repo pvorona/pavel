@@ -70,14 +70,14 @@
   --color: var(--color-light-default);
 
   --background-color-dark-hover: hsl(var(--c-1-30));
-  --background-color-light-hover: hsl(var(--c-1-95));
+  --background-color-light-hover: hsl(var(--c-1-95) / 0.35);
 
   --outline-color-light: hsl(var(--c-1-15));
   --outline-color-dark: hsl(var(--c-1-35));
   --outline-color: var(--outline-color-light);
 
   --border-color-default: transparent;
-  --border-color-light-hover: hsl(var(--c-1-75));
+  --border-color-light-hover: hsl(var(--c-1-85));
   --border-color-dark-hover: hsl(var(--c-1-50));
   --border-color: var(--border-color-default);
 
