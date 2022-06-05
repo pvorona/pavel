@@ -16,7 +16,7 @@ import { Interpolate, TransitionTimingOptions } from '../transition'
 import { createObservers } from '@pavel/utils'
 import { RecordKey } from '@pavel/types'
 import { ObservedTypeOf } from '../types'
-import { isNumber, isObject, isUndefined } from '@pavel/assert'
+import { isNumber, isObject, isDefined } from '@pavel/assert'
 
 const INERT_GROUP = 'Inert'
 
@@ -71,8 +71,8 @@ export const inert = <T extends AnimatableSubject<AnimatableValue>>(
   const observers = createObservers()
   const id = createWrapperId(createId(INERT_GROUP, options), target.id)
 
-  let lastFrameTimestamp: DOMHighResTimeStamp | undefined = undefined
-  let lastValue: ObservedTypeOf<T> | undefined = undefined
+  let previousFrameTimestamp: DOMHighResTimeStamp | undefined = undefined
+  let previousValue: ObservedTypeOf<T> | undefined = undefined
 
   // TODO: don't emit values when there are no observers.
   // Ensure emitting renews if new observers join while transition is in progress
@@ -85,18 +85,18 @@ export const inert = <T extends AnimatableSubject<AnimatableValue>>(
     const currentFrameTimestamp = getCurrentFrameTimestamp()
 
     if (
-      !isUndefined(currentFrameTimestamp) &&
-      currentFrameTimestamp === lastFrameTimestamp
+      isDefined(currentFrameTimestamp) &&
+      currentFrameTimestamp === previousFrameTimestamp
     ) {
-      return lastValue as ObservedTypeOf<T>
+      return previousValue as ObservedTypeOf<T>
     }
 
-    lastFrameTimestamp = currentFrameTimestamp
+    previousFrameTimestamp = currentFrameTimestamp
 
     // TODO: compute value using requestAnimationFrame parameter instead of performance.now()
     const { value, hasCompleted } = transition.getCurrentValue()
 
-    lastValue = value
+    previousValue = value
 
     if (!hasCompleted) {
       throttledNotifyBeforeNextRender()

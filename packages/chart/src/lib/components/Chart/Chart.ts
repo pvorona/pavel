@@ -158,8 +158,8 @@ export const Chart = (
     const xAxis = XAxis(options, context)
     const yAxis = YAxis(options, context)
 
-    series.element.appendChild(tooltip.element)
     series.element.appendChild(markers.element)
+    series.element.appendChild(tooltip.element)
     element.appendChild(series.element)
     element.appendChild(xAxis.element)
     element.appendChild(yAxis.element)

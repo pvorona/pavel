@@ -167,17 +167,22 @@ export const ChartContext = (options: InternalChartOptions) => {
     min: visibleMin,
     max: visibleMax,
   } = createMinMaxView(
+    startX,
+    endX,
     startIndex,
     endIndex,
-    enabledGraphKeys,
+    enabledStateByGraphKey,
     options.graphs,
     options.data,
+    options.markers,
+    enabledStateByMarkerIndex,
   )
 
   const inertVisibleMax = inert({
     duration: TRANSITION.SLOW,
     easing: special,
     target: visibleMax,
+    id: 'inertVisibleMax',
   })
 
   const inertVisibleMin = inert({
@@ -197,11 +202,15 @@ export const ChartContext = (options: InternalChartOptions) => {
     min: globalMin,
     minMaxByGraphKey: globalMinMaxByGraphKey,
   } = createMinMaxView(
+    globalStartX,
+    globalEndX,
     globalStartIndex,
     globalEndIndex,
-    enabledGraphKeys,
+    enabledStateByGraphKey,
     options.graphs,
     options.data,
+    options.markers,
+    enabledStateByMarkerIndex,
   )
 
   const inertGlobalMax = inert({

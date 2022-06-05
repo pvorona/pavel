@@ -55,8 +55,6 @@ function createTaskQueue() {
   }
 
   function performFrameTasks(timestamp: DOMHighResTimeStamp) {
-    currentFrameTimestamp = timestamp
-
     // We were not able to run idle tasks before the next frame
     // Let's run them now before frame tasks
     if (idleCallbackId !== undefined) {
@@ -65,7 +63,7 @@ function createTaskQueue() {
       idleCallbackId = undefined
     }
 
-    // Idle tasks can be in the queue event if idleCallbackId is undefined
+    // Idle tasks can still be in the queue
     // If they didn't have enough time to run during idle time
     for (const priority of IDLE_PRIORITIES_IN_ORDER) {
       for (const task of currentFrameQueueByPriority[priority]) {
@@ -73,6 +71,7 @@ function createTaskQueue() {
       }
     }
 
+    currentFrameTimestamp = timestamp
     // Should be cleared before calling `scheduleAnimationFrameIfNeeded`
     // Clear frameId so that scheduling new tasks will schedule respective callbacks
     animationFrameId = undefined
