@@ -50,17 +50,17 @@ async function startApp() {
         // markers: [
         //   {
         //     type: 'flow',
-        //     fill: 'rgba(10, 108, 255, 0.1)',
+        //     fill: 'rgba(47, 115, 218, 0.2)',
         //     lines: [
         //       {
         //         key: 'top',
         //         lineWidth: 2,
-        //         strokeStyle: 'rgb(10, 108, 255)',
+        //         strokeStyle: 'rgb(47, 115, 218)',
         //       },
         //       {
         //         key: 'bottom',
         //         lineWidth: 2,
-        //         strokeStyle: 'rgb(10, 108, 255)',
+        //         strokeStyle: 'rgb(47, 115, 218)',
         //       },
         //     ],
         //     domain,
@@ -77,6 +77,8 @@ async function startApp() {
         //   },
         // ],
 
+        // gradient: {},
+
         // markers: [
         //   {
         //     type: 'group',
@@ -85,23 +87,20 @@ async function startApp() {
         //       {
         //         type: 'y',
         //         y: data1[185].value,
-        //         color: '#e94e75',
+        //         strokeStyle: '#e94e75',
         //         lineWidth: 2,
-        //         lineDash: [45, 20],
         //       },
         //       {
         //         type: 'x',
         //         x: domain[185],
-        //         color: '#d85c7b',
+        //         strokeStyle: '#d85c7b',
         //         lineWidth: 2,
-        //         lineDash: [45, 20],
         //       },
         //       {
         //         type: 'x',
         //         x: domain[835],
-        //         color: '#2EB086',
+        //         strokeStyle: '#2EB086',
         //         lineWidth: 2,
-        //         lineDash: [45, 20],
         //       },
         //       {
         //         type: 'rect',
