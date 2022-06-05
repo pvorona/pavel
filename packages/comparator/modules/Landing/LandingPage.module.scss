@@ -52,25 +52,25 @@
 @property --neon-color-1 {
   syntax: '<color>';
   // initial-value: hsl(193, 100%, 68%);
-  initial-value: hsl(193, 100%, 50%);
+  initial-value: hsl(177deg 78% 57%);
   inherits: true;
 }
 
 @property --neon-color-1-alternate {
   syntax: '<color>';
-  initial-value: hsl(193, 100%, 50%);
+  initial-value: hsl(177deg 78% 57%);
   inherits: true;
 }
 
 @property --neon-color-2 {
   syntax: '<color>';
-  initial-value: hsl(225, 75%, 70%);
+  initial-value: hwb(157deg 33% 0%);
   inherits: true;
 }
 
 @property --neon-color-3 {
   syntax: '<color>';
-  initial-value: hsl(264, 100%, 80%);
+  initial-value: hsl(177deg 78% 57%);
   inherits: true;
 }
 
@@ -85,10 +85,10 @@
 
 @keyframes to-default-colors {
   to {
-    --neon-color-1: hsl(193, 100%, 50%);
+    --neon-color-1: hsl(177deg 78% 57%);
     --neon-color-1-alternate: hsl(165, 100%, 50%);
-    --neon-color-2: hsl(225, 75%, 70%);
-    --neon-color-3: hsl(264, 100%, 80%);
+    --neon-color-2: hwb(157deg 33% 0%);
+    --neon-color-3: hsl(177deg 78% 57%);
   }
 }
 
@@ -117,11 +117,14 @@
   --animation-delay: 2s;
   --animation-timing-function: linear;
 
+  // hsl(177deg 78% 57%);
+  // hwb(157deg 33% 0%);
+  // hsl(0deg 95% 68%);
   // hsl(338deg 70% 55%)
-  --neon-color-1: hsl(193, 100%, 50%);
+  --neon-color-1: hsl(177deg 78% 57%);
   --neon-color-1-alternate: hsl(165, 100%, 50%);
-  --neon-color-2: hsl(225, 75%, 70%);
-  --neon-color-3: hsl(264, 100%, 80%);
+  --neon-color-2: hwb(157deg 33% 0%);
+  --neon-color-3: hsl(177deg 78% 57%);
 
   --background-color-default: hsl(var(--c-1-100));
   --background-color-hover: hsl(var(--c-1-100));
@@ -162,8 +165,8 @@
 
     // --neon-color-1: hsl(317deg 100% 50%);
     // --neon-color-1-alternate: hsl(184deg 100% 50%);
-    // --neon-color-2: hsl(225, 75%, 70%);
-    // --neon-color-3: hsl(264, 100%, 80%);
+    // --neon-color-2: hwb(157deg 33% 0%);
+    // --neon-color-3: hsl(0deg 95% 68%);
 
     // --neon-color-1: hsl(317, 100%, 50%);
     // --neon-color-1-alternate: hsl(184, 100%, 50%);
