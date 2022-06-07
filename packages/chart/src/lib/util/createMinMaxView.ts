@@ -1,3 +1,4 @@
+import { assertNever } from '@pavel/assert'
 import {
   computeLazy,
   observable,
@@ -5,76 +6,180 @@ import {
   ReadonlySubject,
   ReadonlyLazySubject,
 } from '@pavel/observable'
-import { InternalGraph } from '../types'
+import { InternalGraph, InternalMarker } from '../types'
 import { getMinMax } from './getMinMax'
 
+const INVISIBLE_MARKER_MIN_MAX = { max: -Infinity, min: +Infinity } as const
+
 export function createMinMaxView(
+  startX: ReadonlySubject<number>,
+  endX: ReadonlySubject<number>,
   startIndex: ReadonlyLazySubject<number>,
   endIndex: ReadonlyLazySubject<number>,
-  enabledGraphKeys: ReadonlySubject<string[]>,
+  enabledStateByGraphKey: ReadonlySubject<Record<string, boolean>>,
   graphs: readonly InternalGraph[],
   dataByGraphKey: { readonly [graphKey: string]: readonly number[] },
+  markers: readonly InternalMarker[],
+  enabledMarkerIndexes: ReadonlySubject<Record<number, boolean>>,
 ) {
   const minMaxByGraphKey = computeLazy(
-    [startIndex, endIndex],
-    (startIndex, endIndex) => {
+    [startIndex, endIndex, enabledStateByGraphKey],
+    (startIndex, endIndex, enabledGraphKeys) => {
       const result: { [graphKey: string]: { min: number; max: number } } = {}
 
       for (let i = 0; i < graphs.length; i++) {
         const { key } = graphs[i]
 
-        result[key] = getMinMax(startIndex, endIndex, dataByGraphKey[key])
+        if (enabledGraphKeys[key]) {
+          result[key] = getMinMax(startIndex, endIndex, dataByGraphKey[key])
+
+          continue
+        }
+
+        result[key] = INVISIBLE_MARKER_MIN_MAX
       }
 
       return result
     },
   )
 
-  const max = computeLazy(
-    [minMaxByGraphKey, enabledGraphKeys],
-    (minMaxByGraphKey, enabledGraphKeys) => {
-      if (enabledGraphKeys.length === 0) {
-        return prevVisibleMax.get()
+  const minMaxMarkers = computeLazy(
+    [startX, endX, startIndex, endIndex, enabledMarkerIndexes],
+    (startX, endX, startIndex, endIndex, enabledMarkerIndexes) => {
+      let currentMin = +Infinity
+      let currentMax = -Infinity
+
+      for (let index = 0; index < markers.length; index++) {
+        const marker = markers[index]
+
+        const minMax = getMarkerMinMax(
+          startX,
+          endX,
+          startIndex,
+          endIndex,
+          marker,
+          index,
+          enabledMarkerIndexes,
+        )
+
+        currentMin = Math.min(currentMin, minMax.min)
+        currentMax = Math.max(currentMax, minMax.max)
       }
 
-      let result = -Infinity
-
-      for (const graphKey of enabledGraphKeys) {
-        result = Math.max(result, minMaxByGraphKey[graphKey].max)
-      }
-
-      return result
+      return { min: currentMin, max: currentMax }
     },
   )
 
-  const min = computeLazy(
-    [minMaxByGraphKey, enabledGraphKeys],
-    (minMaxByGraphKey, enabledGraphKeys) => {
-      if (enabledGraphKeys.length === 0) {
-        return prevVisibleMin.get()
+  const minMax = computeLazy(
+    [minMaxByGraphKey, minMaxMarkers],
+    (minMaxByGraphKey, minMaxMarkers) => {
+      let currentMin = +Infinity
+      let currentMax = -Infinity
+
+      for (let index = 0; index < graphs.length; index++) {
+        const { key } = graphs[index]
+        const graphMinMax = minMaxByGraphKey[key]
+
+        currentMin = Math.min(currentMin, graphMinMax.min)
+        currentMax = Math.max(currentMax, graphMinMax.max)
       }
 
-      let result = +Infinity
+      currentMin = Math.min(currentMin, minMaxMarkers.min)
+      currentMax = Math.max(currentMax, minMaxMarkers.max)
 
-      for (const graphKey of enabledGraphKeys) {
-        result = Math.min(result, minMaxByGraphKey[graphKey].min)
+      if (currentMin === +Infinity && currentMax === -Infinity) {
+        return prevMinMax.get()
       }
 
-      return result
+      return { min: currentMin, max: currentMax }
     },
   )
 
-  const prevVisibleMax = observable(+Infinity)
+  const min = computeLazy([minMax], ({ min }) => min)
 
-  effect([max], visibleMax => {
-    prevVisibleMax.set(visibleMax)
+  const max = computeLazy([minMax], ({ max }) => max)
+
+  const prevMinMax = observable({
+    min: +Infinity,
+    max: -Infinity,
   })
 
-  const prevVisibleMin = observable(-Infinity)
-
-  effect([min], visibleMin => {
-    prevVisibleMin.set(visibleMin)
-  })
+  effect([minMax], prevMinMax.set)
 
   return { minMaxByGraphKey, min, max }
+}
+
+function getMarkerMinMax(
+  startX: number,
+  endX: number,
+  startIndex: number,
+  endIndex: number,
+  marker: InternalMarker,
+  groupIndex: number,
+  enabledMarkerIndexes: Record<number, boolean>,
+): { min: number; max: number } {
+  if (marker.type === 'x') {
+    return INVISIBLE_MARKER_MIN_MAX
+  }
+
+  if (marker.type === 'y') {
+    return { max: marker.y, min: marker.y }
+  }
+
+  if (marker.type === 'rect') {
+    const isVisible = !(marker.x > endX || marker.x + marker.width < startX)
+
+    if (!isVisible) {
+      return INVISIBLE_MARKER_MIN_MAX
+    }
+
+    return { max: marker.y, min: marker.y + marker.height }
+  }
+
+  if (marker.type === 'flow') {
+    const minMaxLine1 = getMinMax(
+      startIndex,
+      endIndex,
+      marker.data[marker.lines[0].key],
+    )
+    const minMaxLine2 = getMinMax(
+      startIndex,
+      endIndex,
+      marker.data[marker.lines[1].key],
+    )
+
+    return {
+      min: Math.min(minMaxLine1.min, minMaxLine2.min),
+      max: Math.max(minMaxLine1.max, minMaxLine2.max),
+    }
+  }
+
+  if (marker.type === 'group') {
+    if (!enabledMarkerIndexes[groupIndex]) {
+      return INVISIBLE_MARKER_MIN_MAX
+    }
+
+    let currentMin = +Infinity
+    let currentMax = -Infinity
+
+    for (let childIndex = 0; childIndex < marker.markers.length; childIndex++) {
+      const child = marker.markers[childIndex]
+      const minmax = getMarkerMinMax(
+        startX,
+        endX,
+        startIndex,
+        endIndex,
+        child,
+        groupIndex,
+        enabledMarkerIndexes,
+      )
+
+      currentMin = Math.min(currentMin, minmax.min)
+      currentMax = Math.max(currentMax, minmax.max)
+    }
+
+    return { min: currentMin, max: currentMax }
+  }
+
+  assertNever(marker)
 }

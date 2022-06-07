@@ -63,6 +63,7 @@ export const Markers: Component<MarkersProps, ChartContext> = (
     element.style.height = '100%'
     element.style.position = 'absolute'
     element.style.top = '0'
+    element.style.zIndex = '-1'
 
     setCanvasSize(
       element,

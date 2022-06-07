@@ -22,6 +22,21 @@ const theme = {
   yLabel: `hsla(198, 17%, 77%, ${yLabelAlpha})`,
 }
 
+// const theme = {
+//   body: 'hsl(0, 0%, 100%)',
+//   series: ['#f7515f', '#22ab94'],
+//   overviewBackdrop: `hsl(0deg 0% 100% / 70%)`,
+//   overviewEdge: `hsl(0deg 0% 0% / 15%)`,
+//   tooltipLine: `hsla(0, 0%, 77%, ${tooltipAlpha})`,
+//   tooltipBackgroundColor: `hsla(0, 0%, 100%, 0.75)`,
+//   x: 'hsl(0, 0%, 20%)',
+//   y: `hsla(0, 0%, 20%, ${yLineAlpha})`,
+//   yLabel: `hsla(0, 0%, 20%, ${yLabelAlpha})`,
+//   tooltipColor: 'hsl(0, 0%, 35%)',
+//   lineWidth: 2,
+//   overviewBoxShadow: 'inset 0px 0 0 1px hsl(0deg 0% 75%)',
+// }
+
 export const DEFAULT_LINE_JOIN = 'bevel'
 
 export const DEFAULT_LINE_CAP = 'butt'

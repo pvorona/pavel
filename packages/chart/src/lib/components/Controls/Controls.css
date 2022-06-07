@@ -7,7 +7,7 @@
   display: inline-block;
   outline: none;
   border: 1px solid;
-  padding: 11px 19px 11px 42px;
+  padding: 11px 19px 11px 40px;
   background: none;
   border-radius: 8px;
   font-size: 14px;
@@ -26,8 +26,8 @@
 
 .like-button::before {
   content: '';
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.4em;
+  height: 1.4em;
   position: absolute;
   border: 1px solid currentColor;
   top: 50%;

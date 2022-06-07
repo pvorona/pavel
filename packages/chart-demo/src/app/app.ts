@@ -47,33 +47,41 @@ async function startApp() {
           B: adjustedData2,
         },
 
+        // lineWidth:3,
+
         // markers: [
         //   {
-        //     type: 'flow',
-        //     fill: 'rgba(47, 115, 218, 0.2)',
-        //     lines: [
+        //     type: 'group',
+        //     label: 'Prediction',
+        //     markers: [
         //       {
-        //         key: 'top',
-        //         lineWidth: 2,
-        //         strokeStyle: 'rgb(47, 115, 218)',
-        //       },
-        //       {
-        //         key: 'bottom',
-        //         lineWidth: 2,
-        //         strokeStyle: 'rgb(47, 115, 218)',
+        //         type: 'flow',
+        //         fill: 'rgba(0, 153, 255, 0.1)',
+        //         lines: [
+        //           {
+        //             key: 'top',
+        //             lineWidth: 2,
+        //             strokeStyle: '#2d9bf4',
+        //           },
+        //           {
+        //             key: 'bottom',
+        //             lineWidth: 2,
+        //             strokeStyle: '#2d9bf4',
+        //           },
+        //         ],
+        //         domain,
+        //         data: {
+        //           top: domain.map(
+        //             (_, index) =>
+        //               Math.max(adjustedData1[index], adjustedData2[index]) + 10,
+        //           ),
+        //           bottom: domain.map(
+        //             (_, index) =>
+        //               Math.min(adjustedData1[index], adjustedData2[index]) - 10,
+        //           ),
+        //         },
         //       },
         //     ],
-        //     domain,
-        //     data: {
-        //       top: domain.map(
-        //         (_, index) =>
-        //           (adjustedData1[index] + adjustedData2[index]) / 2 + 10,
-        //       ),
-        //       bottom: domain.map(
-        //         (_, index) =>
-        //           (adjustedData1[index] + adjustedData2[index]) / 2 - 10,
-        //       ),
-        //     },
         //   },
         // ],
 
@@ -106,14 +114,14 @@ async function startApp() {
         //         type: 'rect',
         //         ...toCanonicalRect(
         //           domain[500],
-        //           data1[500].value,
+        //           data1[500].value + 15,
         //           domain[600],
         //           data1[600].value,
         //         ),
         //         fill: 'rgba(23, 213, 153, 0.176)',
         //       },
         //     ],
-        //   },
+        // },
         // ],
       }
 
