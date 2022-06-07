@@ -22,28 +22,23 @@ export function createMinMaxView(
   markers: readonly InternalMarker[],
   enabledMarkerIndexes: ReadonlySubject<Record<number, boolean>>,
 ) {
-  const minMaxByGraphKey = computeLazy(
-    [startIndex, endIndex, enabledStateByGraphKey],
-    (startIndex, endIndex, enabledGraphKeys) => {
+  const minmaxByGraphKey = computeLazy(
+    [startIndex, endIndex],
+    (startIndex, endIndex) => {
       const result: { [graphKey: string]: { min: number; max: number } } = {}
 
+      // Compute minmax for disappearing graphs to correctly render gradient
       for (let i = 0; i < graphs.length; i++) {
         const { key } = graphs[i]
 
-        if (enabledGraphKeys[key]) {
-          result[key] = getMinMax(startIndex, endIndex, dataByGraphKey[key])
-
-          continue
-        }
-
-        result[key] = INVISIBLE_MARKER_MIN_MAX
+        result[key] = getMinMax(startIndex, endIndex, dataByGraphKey[key])
       }
 
       return result
     },
   )
 
-  const minMaxMarkers = computeLazy(
+  const minmaxMarkers = computeLazy(
     [startX, endX, startIndex, endIndex, enabledMarkerIndexes],
     (startX, endX, startIndex, endIndex, enabledMarkerIndexes) => {
       let currentMin = +Infinity
@@ -70,22 +65,27 @@ export function createMinMaxView(
     },
   )
 
-  const minMax = computeLazy(
-    [minMaxByGraphKey, minMaxMarkers],
-    (minMaxByGraphKey, minMaxMarkers) => {
+  const minmax = computeLazy(
+    [minmaxByGraphKey, minmaxMarkers, enabledStateByGraphKey],
+    (minmaxByGraphKey, minmaxMarkers, enabledStateByGraphKey) => {
       let currentMin = +Infinity
       let currentMax = -Infinity
 
       for (let index = 0; index < graphs.length; index++) {
         const { key } = graphs[index]
-        const graphMinMax = minMaxByGraphKey[key]
+
+        if (!enabledStateByGraphKey[key]) {
+          continue
+        }
+
+        const graphMinMax = minmaxByGraphKey[key]
 
         currentMin = Math.min(currentMin, graphMinMax.min)
         currentMax = Math.max(currentMax, graphMinMax.max)
       }
 
-      currentMin = Math.min(currentMin, minMaxMarkers.min)
-      currentMax = Math.max(currentMax, minMaxMarkers.max)
+      currentMin = Math.min(currentMin, minmaxMarkers.min)
+      currentMax = Math.max(currentMax, minmaxMarkers.max)
 
       if (currentMin === +Infinity && currentMax === -Infinity) {
         return prevMinMax.get()
@@ -95,18 +95,18 @@ export function createMinMaxView(
     },
   )
 
-  const min = computeLazy([minMax], ({ min }) => min)
+  const min = computeLazy([minmax], ({ min }) => min)
 
-  const max = computeLazy([minMax], ({ max }) => max)
+  const max = computeLazy([minmax], ({ max }) => max)
 
   const prevMinMax = observable({
     min: +Infinity,
     max: -Infinity,
   })
 
-  effect([minMax], prevMinMax.set)
+  effect([minmax], prevMinMax.set)
 
-  return { minMaxByGraphKey, min, max }
+  return { minmaxByGraphKey: minmaxByGraphKey, min, max }
 }
 
 function getMarkerMinMax(

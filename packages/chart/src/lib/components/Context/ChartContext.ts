@@ -163,7 +163,7 @@ export const ChartContext = (options: InternalChartOptions) => {
   )
 
   const {
-    minMaxByGraphKey: visibleMinMaxByGraphKey,
+    minmaxByGraphKey: visibleMinMaxByGraphKey,
     min: visibleMin,
     max: visibleMax,
   } = createMinMaxView(
@@ -200,7 +200,7 @@ export const ChartContext = (options: InternalChartOptions) => {
   const {
     max: globalMax,
     min: globalMin,
-    minMaxByGraphKey: globalMinMaxByGraphKey,
+    minmaxByGraphKey: globalMinMaxByGraphKey,
   } = createMinMaxView(
     globalStartX,
     globalEndX,
