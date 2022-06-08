@@ -22,7 +22,6 @@ function AuthSection() {
         size="sm"
         rounded
         style={{
-          '--background-dark-hover': 'hsl(var(--c-1-30))',
           '--global-background': globalBackground,
           '--outline-color-dark': 'hsl(var(--c-1-50))',
         }}
@@ -40,7 +39,6 @@ function AuthSection() {
           size="sm"
           variant={Variant.Outlined}
           style={{
-            '--background-dark-hover': 'hsl(var(--c-1-30))',
             '--global-background': globalBackground,
             '--outline-color-dark': 'hsl(var(--c-1-40))',
           }}

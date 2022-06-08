@@ -69,7 +69,7 @@
   --color-dark-hover: hsl(var(--c-1-100));
   --color: var(--color-light-default);
 
-  --background-color-dark-hover: hsl(var(--c-1-30));
+  --background-color-dark-hover: hsl(var(--c-1-30) / 0.55);
   --background-color-light-hover: hsl(var(--c-1-95) / 0.35);
 
   --outline-color-light: hsl(var(--c-1-15));
