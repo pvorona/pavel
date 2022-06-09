@@ -151,10 +151,10 @@ export function EmailPasswordForm({
   return (
     <>
       <div className="text-3xl font-bold mt-28">{title}</div>
-      <div className={classNames('text-sm mt-5 tracking-wide', styles['Hint'])}>
+      <div className={classNames('text-sm mt-4 tracking-wide', styles['Hint'])}>
         {hint}
       </div>
-      <form onSubmit={handleSubmit} className="mt-6">
+      <form onSubmit={handleSubmit} className="mt-5">
         <Input
           name="email"
           className="block"
