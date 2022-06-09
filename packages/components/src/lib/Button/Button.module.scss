@@ -178,6 +178,7 @@
       &:disabled {
         --color: var(--color-dark-disabled);
         --background-color: var(--background-dark-disabled);
+        --border-color: var(--background-color);
       }
 
       &:not(:disabled):hover,
