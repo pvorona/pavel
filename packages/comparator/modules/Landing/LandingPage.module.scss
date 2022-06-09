@@ -105,6 +105,14 @@
   font-size: 1.1rem;
   font-weight: 700;
 
+  background: linear-gradient(
+    to right,
+    hwb(195deg 70% 0%) 0,
+    hwb(180deg 65% 5%) 51%,
+    hwb(195deg 70% 0%) 100%
+  );
+  // box-shadow: 0px 10px 20px 0px hwb(200deg 65% 0% / 50%) !important;
+
   --rotate: 0deg;
 
   --duration-hover-animation: 0.5s;
@@ -118,10 +126,10 @@
   --animation-timing-function: linear;
 
   // hsl(338deg 70% 55%)
-  --neon-color-1: hsl(193, 100%, 50%);
-  --neon-color-1-alternate: hsl(165, 100%, 50%);
-  --neon-color-2: hsl(225, 75%, 70%);
-  --neon-color-3: hsl(264, 100%, 80%);
+  // --neon-color-1: hsl(193, 100%, 50%);
+  // --neon-color-1-alternate: hsl(165, 100%, 50%);
+  // --neon-color-2: hsl(225, 75%, 70%);
+  // --neon-color-3: hsl(264, 100%, 80%);
 
   --background-color-default: hsl(var(--c-1-100));
   --background-color-hover: hsl(var(--c-1-100));
@@ -184,43 +192,45 @@
   }
 }
 
-.Neon::before {
-  content: '';
-  width: calc(100% + var(--border-size) * 2);
-  height: calc(100% + var(--border-size) * 2);
-  border-radius: var(--border-radius);
-  background-image: linear-gradient(
-    var(--rotate),
-    var(--neon-color-1),
-    var(--neon-color-2) 43%,
-    var(--neon-color-3)
-  );
-  position: absolute;
-  z-index: -1;
-  top: calc(-1 * var(--border-size));
-  left: calc(-1 * var(--border-size));
-  transition: all var(--duration-hover-animation);
-  animation: spin var(--animation-duration) var(--animation-delay)
-    var(--animation-timing-function) infinite;
-}
+// .Neon::before {
+//   content: '';
+//   width: calc(100% + var(--border-size) * 2);
+//   height: calc(100% + var(--border-size) * 2);
+//   border-radius: var(--border-radius);
+//   background-image: linear-gradient(
+//     var(--rotate),
+//     var(--neon-color-1),
+//     var(--neon-color-2) 43%,
+//     var(--neon-color-3)
+//   );
+//   position: absolute;
+//   z-index: -1;
+//   top: calc(-1 * var(--border-size));
+//   left: calc(-1 * var(--border-size));
+//   transition: all var(--duration-hover-animation);
+//   animation: spin var(--animation-duration) var(--animation-delay)
+//     var(--animation-timing-function) infinite;
+// }
 
 .NeonLabel {
-  background-size: 100%;
-  background-repeat: repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  // background-size: 100%;
+  // background-repeat: repeat;
+  // -webkit-background-clip: text;
+  // background-clip: text;
+  // -webkit-text-fill-color: transparent;
   margin-bottom: -0.1em;
 
-  background-image: linear-gradient(
-    var(--rotate),
-    var(--neon-color-1),
-    var(--neon-color-2) 43%,
-    var(--neon-color-3)
-  );
-  animation: spin var(--animation-duration)
-    calc(var(--animation-duration) + var(--animation-delay))
-    var(--animation-timing-function) infinite;
+  color: hsl(var(--c-1-10));
+
+  // background-image: linear-gradient(
+  //   var(--rotate),
+  //   var(--neon-color-1),
+  //   var(--neon-color-2) 43%,
+  //   var(--neon-color-3)
+  // );
+  // animation: spin var(--animation-duration)
+  //   calc(var(--animation-duration) + var(--animation-delay))
+  //   var(--animation-timing-function) infinite;
 }
 
 @keyframes spin {
@@ -264,6 +274,6 @@
   color: hsl(var(--c-1-15));
 }
 
-.Hero {
-  // margin-top: var(--space-250);
-}
+// .Hero {
+// margin-top: var(--space-250);
+// }
