@@ -10,7 +10,7 @@ export function SignInLayout(
     <>
       <Background />
       <div
-        className="flex flex-col items-center justify-center h-screen"
+        className="flex flex-col items-center justify-center h-screen max-w-full px-3"
         {...props}
       />
     </>

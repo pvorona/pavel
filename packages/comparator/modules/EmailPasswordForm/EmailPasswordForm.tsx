@@ -154,7 +154,7 @@ export function EmailPasswordForm({
       <div className={classNames('text-sm mt-4 tracking-wide', styles['Hint'])}>
         {hint}
       </div>
-      <form onSubmit={handleSubmit} className="mt-5">
+      <form onSubmit={handleSubmit} className="mt-5 max-w-full">
         <Input
           name="email"
           className="block"
