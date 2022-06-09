@@ -133,7 +133,7 @@ function getMarkerMinMax(
       return INVISIBLE_MARKER_MIN_MAX
     }
 
-    return { max: marker.y, min: marker.y + marker.height }
+    return { max: marker.y, min: marker.y - marker.height }
   }
 
   if (marker.type === 'flow') {
