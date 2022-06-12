@@ -171,6 +171,7 @@ export function EmailPasswordForm({
           value={values.email}
           onInput={handleChange}
           validity={emailValidity}
+          inputMode="email"
         />
         <Input
           className="block mt-4"
