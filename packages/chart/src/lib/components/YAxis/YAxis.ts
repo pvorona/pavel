@@ -131,8 +131,10 @@ export const YAxis = (
     const fragment = document.createDocumentFragment()
 
     const overlay = document.createElement('div')
+    // overlay.style.backgroundImage =
+    //   'linear-gradient(90deg, rgba(33, 44, 48, 0.75) 45px, rgb(33 44 48 / 20%) 245px, rgba(33 44 48 / 0%) 445px)'
     overlay.style.backgroundImage =
-      'linear-gradient(90deg, rgba(33, 44, 48, 0.75) 45px, rgb(33 44 48 / 20%) 245px, rgba(33 44 48 / 0%) 445px)'
+      'linear-gradient(90deg, rgba(255, 255, 255, 0.75) 45px, rgb(255, 255, 255, 0.2) 245px, rgba(255, 255, 255, 0) 445px)'
     overlay.style.top = `0`
     overlay.style.height = `${height + 80}px`
     overlay.style.position = 'absolute'
@@ -173,7 +175,7 @@ export const YAxis = (
     fontFamily: string,
   ) {
     context.fillStyle = fillColor
-    context.font = `${toBitMapSize(fontSize)}px ${fontFamily}`
+    context.font = `600 ${toBitMapSize(fontSize)}px ${fontFamily}`
     context.textBaseline = 'bottom'
     context.textAlign = 'left'
     context.strokeStyle = strokeColor
