@@ -150,7 +150,9 @@ export function EmailPasswordForm({
 
   return (
     <>
-      <div className="text-3xl font-bold mt-28">{title}</div>
+      <div className={classNames(styles.Title, 'text-3xl font-bold')}>
+        {title}
+      </div>
       <div className={classNames('text-sm mt-3 tracking-wide', styles['Hint'])}>
         {hint}
       </div>
