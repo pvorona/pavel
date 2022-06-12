@@ -58,6 +58,7 @@
   width: 360px;
   caret-color: var(--color-caret);
   transition: box-shadow var(--time-transition-duration);
+  appearance: none;
 
   /* Border / box-shadow */
   --border-width: var(--border-width-default);
