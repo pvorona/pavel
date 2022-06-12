@@ -63,7 +63,7 @@
   --border-width: var(--border-width-default);
   --border-color: var(--color-box-shadow);
 
-  box-shadow: 0 0 0 var(--border-width) var(--border-color) inset;
+  box-shadow: 0 0 0 var(--border-width) var(--border-color);
 
   max-width: 100%;
 }

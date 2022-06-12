@@ -189,6 +189,7 @@ export function EmailPasswordForm({
           value={values.password}
           icon={
             <IconButton
+              className={styles.ShowPasswordIcon}
               aria-label="Show password"
               aria-checked={isPasswordVisible}
               onClick={togglePasswordVisible}
