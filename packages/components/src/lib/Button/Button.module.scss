@@ -142,8 +142,10 @@
   --outline-color-dark: hsl(var(--c-1-35));
   --outline-color: var(--outline-color-light);
 
-  --border-color-light-disabled: hsl(var(--c-1-90));
+  --border-color-light-disabled: hsl(var(--c-1-95));
   --border-color: var(--background-color);
+
+  --font-weight-disabled: 500;
 
   color: var(--color);
   background-color: var(--background-color);
@@ -156,6 +158,7 @@
     --color: var(--color-light-disabled);
     --background-color: var(--background-light-disabled);
     --border-color: var(--border-color-light-disabled);
+    --font-weight: var(--font-weight-disabled);
   }
 
   &:focus-visible {

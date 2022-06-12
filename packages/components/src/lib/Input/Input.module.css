@@ -94,6 +94,7 @@
   left: 0;
   top: 0;
   pointer-events: none;
+  white-space: nowrap;
 
   --placeholder-color: var(--color-placeholder-default);
 
