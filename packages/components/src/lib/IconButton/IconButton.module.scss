@@ -5,6 +5,8 @@
 
   --icon-color: var(--color-default);
 
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
   background: none;
 
   color: var(--icon-color);

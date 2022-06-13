@@ -3,6 +3,7 @@
   display: inline-flex;
   justify-content: center;
   outline: none;
+  -webkit-tap-highlight-color: transparent;
 
   &:not(:disabled) {
     cursor: pointer;
