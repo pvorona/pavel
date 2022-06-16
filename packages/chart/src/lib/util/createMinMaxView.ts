@@ -1,4 +1,4 @@
-import { assertNever } from '@pavel/assert'
+import { ensureNever } from '@pavel/assert'
 import {
   computeLazy,
   observable,
@@ -181,5 +181,5 @@ function getMarkerMinMax(
     return { min: currentMin, max: currentMax }
   }
 
-  assertNever(marker)
+  ensureNever(marker)
 }

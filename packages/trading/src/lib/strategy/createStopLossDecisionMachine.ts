@@ -1,4 +1,4 @@
-import { assertNever } from '@pavel/assert'
+import { ensureNever } from '@pavel/assert'
 import { abs } from '@pavel/utils'
 import { Asset, Decision, DecisionMachine, TradeType } from '../types'
 
@@ -24,7 +24,7 @@ export function createStopLossDecisionMachine({
           return position.rate.buyBYNPrice
         }
 
-        assertNever(position.type)
+        ensureNever(position.type)
       })()
 
       const sellPriceOfAssetNow: number = (() => {
@@ -36,7 +36,7 @@ export function createStopLossDecisionMachine({
           return rate.buyUSDPrice
         }
 
-        assertNever(asset)
+        ensureNever(asset)
       })()
 
       const assetQuantity: number = (() => {
@@ -48,7 +48,7 @@ export function createStopLossDecisionMachine({
           return capital.BYN
         }
 
-        assertNever(asset)
+        ensureNever(asset)
       })()
 
       const valueOfOppositeAssetAtTheTimeOfBuying = (() => {
@@ -60,7 +60,7 @@ export function createStopLossDecisionMachine({
           return assetQuantity / buyPriceOfAssetAtTheTimeOfBuying
         }
 
-        assertNever(asset)
+        ensureNever(asset)
       })()
       const valueOfOppositeAssetNow = (() => {
         if (asset === Asset.USD) {
@@ -71,7 +71,7 @@ export function createStopLossDecisionMachine({
           return assetQuantity / sellPriceOfAssetNow
         }
 
-        assertNever(asset)
+        ensureNever(asset)
       })()
 
       const relativeChangeInTheValueOfOppositeAsset =
@@ -102,7 +102,7 @@ export function createStopLossDecisionMachine({
         return Decision.BUY_USD
       }
 
-      assertNever(asset)
+      ensureNever(asset)
     },
   }
 }

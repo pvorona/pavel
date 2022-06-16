@@ -1,5 +1,3 @@
-import { isNumber } from '../isNumber'
-
-export function isPositive(n: unknown): boolean {
-  return isNumber(n) && n > 0
+export function isPositive(n: number): boolean {
+  return n > 0
 }

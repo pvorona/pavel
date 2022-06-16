@@ -1,4 +1,4 @@
-import { assertNever } from '@pavel/assert'
+import { ensureNever } from '@pavel/assert'
 import { useSelector } from 'react-redux'
 import { selectViewMode, ViewMode } from '../../modules'
 import { MarkdownView } from '../MarkdownView'
@@ -15,7 +15,7 @@ export function MainView() {
     return <MarkdownView />
   }
 
-  assertNever(uiMode)
+  ensureNever(uiMode)
 
   return null
 }

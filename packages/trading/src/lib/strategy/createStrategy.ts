@@ -1,4 +1,4 @@
-import { assert, assertNever } from '@pavel/assert'
+import { assert, ensureNever } from '@pavel/assert'
 import { ExternalMarker, ExternalSimpleMarker } from '@pavel/chart'
 import { getLast, toCanonicalRect } from '@pavel/utils'
 import { buyBYN, buyUSD } from '../exchange'
@@ -156,7 +156,7 @@ export function createStrategy(
         return capital
       }
 
-      assertNever(decision)
+      ensureNever(decision)
     },
     getCapital: () => capital,
     getHistory: () => history,

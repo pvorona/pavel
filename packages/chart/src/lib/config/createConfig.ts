@@ -1,4 +1,4 @@
-import { assertNever, isString } from '@pavel/assert'
+import { ensureNever, isString } from '@pavel/assert'
 import { merge } from 'lodash'
 import {
   DEFAULT_MARKER_COLOR,
@@ -165,7 +165,7 @@ function createInternalSimpleMarker(
     }
   }
 
-  assertNever(marker)
+  ensureNever(marker)
 }
 
 function createInternalMarker(marker: ExternalMarker): InternalMarker {
