@@ -26,7 +26,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <input
         ref={ref}
         className={classNames(
-          'outline-none rounded border-none overflow-ellipsis bg-transparent peer',
+          'outline-none rounded border-none overflow-ellipsis peer',
           className,
           styles['input'],
           {

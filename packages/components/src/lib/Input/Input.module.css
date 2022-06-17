@@ -13,7 +13,6 @@
   );
   --placeholder-active-y: -10px;
 
-  --color-background: white;
   --color-caret: black;
 
   --color-box-shadow: hsla(var(--c-1-80));
@@ -34,11 +33,16 @@
   --border-width-hover: 2px;
   --border-width-active: 2px;
   --border-width-invalid: 2px;
+
+  --background-color-light: white;
+  --background-color-dark: hsl(var(--c-1-15));
+  --background-color: var(--background-color-light);
 }
 
 @media (prefers-color-scheme: dark) {
   .container {
-    --color-background: hsl(var(--c-1-15));
+    --background-color: var(--background-color-dark);
+
     --color-caret: white;
 
     --color-box-shadow: hsla(var(--c-1-30));
@@ -59,6 +63,7 @@
   caret-color: var(--color-caret);
   transition: box-shadow var(--time-transition-duration);
   appearance: none;
+  background-color: var(--background-color);
 
   /* Border / box-shadow */
   --border-width: var(--border-width-default);
@@ -112,7 +117,7 @@
 
 /* Lifted */
 .input:not(:placeholder-shown) ~ .placeholder {
-  background-color: var(--color-background);
+  background-color: var(--background-color);
   transform: translate(
       calc(
         var(--input-padding-horizontal) - var(--placeholder-horizontal-space)

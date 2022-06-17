@@ -133,7 +133,8 @@
 
   --background-light-default: hsl(var(--c-1-25));
   --background-light-hover: hsl(var(--c-1-15));
-  --background-light-disabled: hsla(var(--c-1-95) / 0.5);
+  // TODO: extract color
+  --background-light-disabled: #f8f8f9;
   --background-dark-default: hsl(var(--c-1-25));
   --background-dark-hover: hsl(var(--c-1-30));
   --background-dark-disabled: hsl(var(--c-1-20));
