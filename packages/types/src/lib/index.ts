@@ -26,3 +26,7 @@ export type DeepRequired<T> = T extends object
       [P in keyof T]-?: DeepRequired<T[P]>
     }
   : T
+
+export type Mutable<Type> = {
+  -readonly [Key in keyof Type]: Type[Key]
+}
