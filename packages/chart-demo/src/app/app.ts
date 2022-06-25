@@ -40,7 +40,10 @@ async function startApp() {
       const adjustedData2 = data2.map(d => d.value)
 
       const options: ExternalChartOptions = {
-        graphs: ['A', 'B'],
+        graphs: [
+          { key: 'A', gradient: true },
+          { key: 'B', gradient: true },
+        ],
         domain,
         data: {
           A: adjustedData1,

@@ -68,6 +68,7 @@ export type ExternalGraph =
   | {
       readonly key: string
       readonly label?: string
+      readonly gradient?: boolean
     }
   | string
 
@@ -207,7 +208,6 @@ export type DeeplyOptionalChartOptions = {
 
 export type OptionalChartOptions = {
   readonly markers?: readonly ExternalMarker[]
-  readonly gradient?: GradientOptions
   readonly viewBox?: { start: number; end: number }
 }
 

@@ -1,4 +1,5 @@
 import { ensureNever, isString } from '@pavel/assert'
+import { Mutable } from '@pavel/types'
 import { merge } from 'lodash'
 import {
   DEFAULT_MARKER_COLOR,
@@ -34,8 +35,9 @@ export function createConfig(
     height: element.offsetHeight,
   }
 
-  const graphs = options.graphs.map(createInternalGraph)
+  const { graphs, gradient } = parseGraphs(options.graphs)
   const graphsTrait = { graphs }
+  const gradientTrait = { gradient }
 
   const visibility = graphs.reduce(
     (accumulated, graph) => ({
@@ -56,19 +58,6 @@ export function createConfig(
   }
   const viewBoxTrait = { viewBox }
 
-  const gradient =
-    options.gradient ??
-    graphs.reduce(
-      (previousValue, graph) => ({
-        ...previousValue,
-        [graph.key]: true,
-      }),
-      {} as GradientOptions,
-    )
-  const gradientTrait = {
-    gradient,
-  }
-
   const markers = (options.markers ?? []).map(createInternalMarker)
   const markersTrait = { markers }
 
@@ -83,6 +72,20 @@ export function createConfig(
     graphsTrait,
     markersTrait,
   ) as InternalChartOptions
+}
+
+function parseGraphs(externalGraphs: readonly ExternalGraph[]) {
+  const graphs: InternalGraph[] = []
+  const gradient: Mutable<GradientOptions> = {}
+
+  for (const externalGraph of externalGraphs) {
+    const graph = createInternalGraph(externalGraph)
+    graphs.push(graph)
+
+    gradient[graph.key] = hasGradient(externalGraph)
+  }
+
+  return { graphs, gradient }
 }
 
 function createInternalGraph(graph: ExternalGraph): InternalGraph {
@@ -110,6 +113,14 @@ function getGraphLabel(graph: ExternalGraph): string {
   }
 
   return graph.label
+}
+
+function hasGradient(graph: ExternalGraph) {
+  if (isString(graph)) {
+    return false
+  }
+
+  return Boolean(graph.gradient)
 }
 
 function createInternalSimpleMarker(
