@@ -69,6 +69,7 @@ export type ExternalGraph =
       readonly key: string
       readonly label?: string
       readonly gradient?: boolean
+      readonly lineWidth?: LineWidth
     }
   | string
 
@@ -200,7 +201,6 @@ export type DeeplyOptionalChartOptions = {
   readonly y: YOptions
   readonly overview: OverviewOptions
   readonly tooltip: TooltipOptions
-  readonly lineWidth: LineWidth
   readonly colors: readonly string[]
   readonly lineJoin: CanvasLineJoin
   readonly lineCap: CanvasLineCap
@@ -211,7 +211,7 @@ export type OptionalChartOptions = {
   readonly viewBox?: { start: number; end: number }
 }
 
-export type MappedOptions = 'graphs' | 'gradient'
+export type MappedOptions = 'graphs'
 
 export type ExternalChartOptions = DeepPartial<DeeplyOptionalChartOptions> &
   OptionalChartOptions & {
@@ -219,6 +219,10 @@ export type ExternalChartOptions = DeepPartial<DeeplyOptionalChartOptions> &
     readonly domain: readonly number[]
     readonly graphs: readonly ExternalGraph[]
   }
+
+export type InternalLineWidthOptions = {
+  readonly [graphKey: string]: LineWidth
+}
 
 export type InternalChartOptions = Omit<
   DeepRequired<ExternalChartOptions>,
@@ -232,6 +236,7 @@ export type InternalChartOptions = Omit<
   readonly graphs: readonly InternalGraph[]
   readonly markers: readonly InternalMarker[]
   readonly gradient: GradientOptions
+  readonly lineWidth: InternalLineWidthOptions
 }
 
 // type Series = {

@@ -311,7 +311,6 @@ function rgbaToGrayscale(rgbValue: Rgba): number {
 }
 
 export function applyAlpha(color: string, alpha: number): string {
-  // special case optimization
   if (color === 'transparent') {
     return color
   }

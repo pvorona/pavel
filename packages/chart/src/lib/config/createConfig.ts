@@ -19,11 +19,14 @@ import {
   GradientOptions,
   ExternalLineMarker,
   InternalLineMarker,
+  InternalLineWidthOptions,
+  LineWidth,
 } from '../types'
 import {
   DEFAULT_CHART_OPTIONS,
   DEFAULT_LINE_CAP,
   DEFAULT_LINE_JOIN,
+  DEFAULT_LINE_WIDTH,
 } from './constants'
 
 export function createConfig(
@@ -35,9 +38,10 @@ export function createConfig(
     height: element.offsetHeight,
   }
 
-  const { graphs, gradient } = parseGraphs(options.graphs)
+  const { graphs, gradient, lineWidth } = parseGraphs(options.graphs)
   const graphsTrait = { graphs }
   const gradientTrait = { gradient }
+  const lineWidthTrait = { lineWidth }
 
   const visibility = graphs.reduce(
     (accumulated, graph) => ({
@@ -68,24 +72,27 @@ export function createConfig(
     totalOptions,
     viewBoxTrait,
     gradientTrait,
+    lineWidthTrait,
     options,
     graphsTrait,
     markersTrait,
-  ) as InternalChartOptions
+  )
 }
 
 function parseGraphs(externalGraphs: readonly ExternalGraph[]) {
   const graphs: InternalGraph[] = []
   const gradient: Mutable<GradientOptions> = {}
+  const lineWidth: Mutable<InternalLineWidthOptions> = {}
 
   for (const externalGraph of externalGraphs) {
     const graph = createInternalGraph(externalGraph)
     graphs.push(graph)
 
     gradient[graph.key] = hasGradient(externalGraph)
+    lineWidth[graph.key] = getLineWidth(externalGraph)
   }
 
-  return { graphs, gradient }
+  return { graphs, gradient, lineWidth }
 }
 
 function createInternalGraph(graph: ExternalGraph): InternalGraph {
@@ -121,6 +128,14 @@ function hasGradient(graph: ExternalGraph) {
   }
 
   return Boolean(graph.gradient)
+}
+
+function getLineWidth(graph: ExternalGraph): LineWidth {
+  if (isString(graph)) {
+    return DEFAULT_LINE_WIDTH
+  }
+
+  return graph.lineWidth ?? DEFAULT_LINE_WIDTH
 }
 
 function createInternalSimpleMarker(

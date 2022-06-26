@@ -52,7 +52,7 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
               height: canvasHeight,
             },
             { startIndex: globalStartIndex, endIndex: globalEndIndex },
-            options.lineWidth,
+            options.lineWidth[graph.key],
           ),
         }),
         {} as { [key: string]: Point[] },
@@ -128,7 +128,7 @@ export const Graphs: Component<InternalChartOptions, ChartContext> = (
         points[graph.key],
         strokeStyle,
         opacityByGraphKey[graph.key],
-        options.lineWidth,
+        options.lineWidth[graph.key],
         options.lineJoin,
         options.lineCap,
       )

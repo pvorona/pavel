@@ -1,14 +1,14 @@
 import { GradientOptions, InternalChartOptions } from '../../types'
 import { hexToRGB, toBitMapSize, toScreenY } from '../../util'
 import { Point } from '../types'
-import { MARGIN_OVERSHOOT, TRANSPARENT } from './constants'
+import { TRANSPARENT } from './constants'
 import { lineTo } from './lineTo'
 
 export function renderLineSeriesWithAreaGradient({
   context,
   points,
   graphs,
-  lineWidth,
+  lineWidth: lineWidthConfig,
   colors,
   opacityState,
   lineJoin,
@@ -45,6 +45,7 @@ export function renderLineSeriesWithAreaGradient({
     const rgbColor = `rgba(${hexToRGB(color)},${opacity})`
     const gradientColorStart = `rgba(${hexToRGB(color)},${opacity / 4})`
     const gradientColorStop = `rgba(${hexToRGB(color)},${opacity / 32})`
+    const lineWidth = lineWidthConfig[graph.key]
 
     context.strokeStyle = rgbColor
     context.lineWidth = toBitMapSize(lineWidth)
@@ -80,20 +81,20 @@ export function renderLineSeriesWithAreaGradient({
       gradient.addColorStop(0.5, gradientColorStop)
       gradient.addColorStop(1, TRANSPARENT)
 
-      lineTo(context, toBitMapSize(width + MARGIN_OVERSHOOT), toBitMapSize(y))
+      lineTo(context, toBitMapSize(width + lineWidth / 2), toBitMapSize(y))
       lineTo(
         context,
-        toBitMapSize(width + MARGIN_OVERSHOOT),
-        toBitMapSize(height + MARGIN_OVERSHOOT),
+        toBitMapSize(width + lineWidth / 2),
+        toBitMapSize(height + lineWidth / 2),
       )
       lineTo(
         context,
-        toBitMapSize(0 - MARGIN_OVERSHOOT),
-        toBitMapSize(height + MARGIN_OVERSHOOT),
+        toBitMapSize(0 - lineWidth / 2),
+        toBitMapSize(height + lineWidth / 2),
       )
       lineTo(
         context,
-        toBitMapSize(0 - MARGIN_OVERSHOOT),
+        toBitMapSize(0 - lineWidth / 2),
         toBitMapSize(points[graph.key][0].y),
       )
       context.fillStyle = gradient

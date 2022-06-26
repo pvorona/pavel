@@ -37,6 +37,8 @@ const theme = {
 //   overviewBoxShadow: 'inset 0px 0 0 1px hsl(0deg 0% 75%)',
 // }
 
+export const DEFAULT_LINE_WIDTH = 1
+
 export const DEFAULT_LINE_JOIN = 'bevel'
 
 export const DEFAULT_LINE_CAP = 'butt'
@@ -69,7 +71,6 @@ export const DEFAULT_CHART_OPTIONS: DeeplyOptionalChartOptions = {
     },
   },
 
-  lineWidth: 1,
   lineJoin: DEFAULT_LINE_JOIN,
   lineCap: DEFAULT_LINE_CAP,
 

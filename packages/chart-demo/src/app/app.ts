@@ -50,8 +50,6 @@ async function startApp() {
           B: adjustedData2,
         },
 
-        // lineWidth:3,
-
         // markers: [
         //   {
         //     type: 'group',

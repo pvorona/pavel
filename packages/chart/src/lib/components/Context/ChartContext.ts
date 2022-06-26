@@ -299,7 +299,7 @@ export const ChartContext = (options: InternalChartOptions) => {
               height: canvasHeight,
             },
             { startIndex, endIndex },
-            options.lineWidth,
+            options.lineWidth[graph.key],
           ),
         }),
         {} as { [key: string]: Point[] },
