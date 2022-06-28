@@ -1,6 +1,6 @@
 import { MONTHS } from '../components/constants'
 
-export function getTooltipDateText(timestamp: number) {
+export function getTooltipDateText(timestamp: number, index: number) {
   // TODO
   // - Cache Date objects
   const dateObject = new Date(timestamp)
@@ -10,8 +10,9 @@ export function getTooltipDateText(timestamp: number) {
   const minutes = String(dateObject.getMinutes()).padStart(2, '0')
   const seconds = String(dateObject.getSeconds()).padStart(2, '0')
   // const year = dateObject.getFullYear()
-  // const year = dateObject.getFullYear().toString().slice(-2)
+  const year = dateObject.getFullYear().toString().slice(-2)
 
-  return `${month} ${date} ${hours}:${minutes}:${seconds}`
+  // return `${month} ${date} ${hours}:${minutes}:${seconds}`
   // return `${date} ${month} ${year}`
+  return `${index}`
 }

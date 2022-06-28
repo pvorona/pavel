@@ -136,7 +136,7 @@ export const Tooltip: Component<InternalChartOptions, ChartContext> = (
         options.data[enabledGraphKeys[i]][dataIndex],
       )
     }
-    tooltipDate.innerText = getTooltipDateText(options.domain[dataIndex])
+    tooltipDate.innerText = getTooltipDateText(options.domain[dataIndex], index)
     tooltip.style.transform = `translateX(calc(${x}px - 50%))`
   }
 
