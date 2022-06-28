@@ -1,1 +1,2 @@
-import './app/app.ts'
+import './app/app'
+// import './app/app.usd'

@@ -1,5 +1,8 @@
 import { assert, ensureNever } from '@pavel/assert'
-import { ExternalMarker, ExternalSimpleMarker } from '@pavel/chart'
+import {
+  ExternalMarker as Marker,
+  ExternalSimpleMarker as SimpleMarker,
+} from '@pavel/chart'
 import { getLast, toCanonicalRect } from '@pavel/utils'
 import { buyBYN, buyUSD } from '../exchange'
 import {
@@ -14,11 +17,11 @@ import { combineMachines } from './combineMachines'
 import { createMonthlyOscillationDecisionMachine } from './createMonthlyOscillationDecisionMachine'
 import { createStopLossDecisionMachine } from './createStopLossDecisionMachine'
 
-const GOOD_TRADE_FILL = 'rgba(73, 192, 73, 0.3)'
-const GOOD_TRADE_STROKE = '#51ff50'
+const GOOD_TRADE_FILL = 'rgba(73, 192, 73, 0.15)'
+const GOOD_TRADE_STROKE = 'rgba(82, 255, 82, 0.6)'
 
-const BAD_TRADE_FILL = 'rgba(193, 71, 71, 0.3)'
-const BAD_TRADE_STROKE = '#ff5051'
+const BAD_TRADE_FILL = 'rgba(193, 71, 71, 0.15)'
+const BAD_TRADE_STROKE = 'rgba(255, 80, 81, 0.6)'
 
 export type OscillationStrategyOptions = {
   readonly buyUSDDate: number
@@ -46,18 +49,22 @@ export function createStrategy(
   assert(buyBYNDate !== buyUSDDate)
   assert(maxDrawdown >= 0 && maxDrawdown <= 1)
 
+  let good = 0
+  let bad = 0
+
   const machine = combineMachines([
     createStopLossDecisionMachine({ maxDrawdown }),
     createMonthlyOscillationDecisionMachine({ buyUSDDate, buyBYNDate }),
   ])
-  const transactionValueMarkers: ExternalSimpleMarker[] = []
-  const transactionDateMarkers: ExternalSimpleMarker[] = []
-  const markers: ExternalMarker[] = [
+  const transactionValueMarkers: SimpleMarker[] = []
+  const transactionDateMarkers: SimpleMarker[] = []
+  const markers: Marker[] = [
     {
       type: 'group',
       markers: transactionValueMarkers,
       label: 'Transactions',
       color: '#99ffdf',
+      visible: false,
     },
     {
       type: 'group',
@@ -108,6 +115,12 @@ export function createStrategy(
           const fill = y2 < y1 ? GOOD_TRADE_FILL : BAD_TRADE_FILL
           const stroke = y2 < y1 ? GOOD_TRADE_STROKE : BAD_TRADE_STROKE
 
+          if (y2 < y1) {
+            good++
+          } else {
+            bad++
+          }
+
           transactionValueMarkers.push({
             type: 'rect',
             fill,
@@ -144,6 +157,12 @@ export function createStrategy(
           const fill = y2 > y1 ? GOOD_TRADE_FILL : BAD_TRADE_FILL
           const stroke = y2 > y1 ? GOOD_TRADE_STROKE : BAD_TRADE_STROKE
 
+          if (y2 > y1) {
+            good++
+          } else {
+            bad++
+          }
+
           transactionValueMarkers.push({
             type: 'rect',
             fill,
@@ -160,6 +179,9 @@ export function createStrategy(
     },
     getCapital: () => capital,
     getHistory: () => history,
-    getMarkers: () => markers,
+    getMarkers: () => {
+      console.log({ good, bad })
+      return markers
+    },
   }
 }
