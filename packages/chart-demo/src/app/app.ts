@@ -1,4 +1,4 @@
-import { Chart, ExternalChartOptions } from '@pavel/chart'
+import { Chart, ChartOptions } from '@pavel/chart'
 import { theme } from './theme'
 import './app.scss'
 import { assert, isNull } from '@pavel/assert'
@@ -39,7 +39,7 @@ async function startApp() {
       const adjustedData1 = data1.map(d => d.value)
       const adjustedData2 = data2.map(d => d.value)
 
-      const options: ExternalChartOptions = {
+      const options: ChartOptions = {
         graphs: [
           { key: 'A', gradient: true },
           { key: 'B', gradient: true },

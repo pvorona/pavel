@@ -13,7 +13,6 @@ for (let i = 0; i < data.length; i++) {
     buyBYNPrice: data[i].buy,
     buyUSDPrice: data[i].sell,
   }
-  const timestamp = new Date(data[i].date).getTime()
 
-  strategy.next(timestamp, rate)
+  strategy.next(data[i].timestamp, rate)
 }

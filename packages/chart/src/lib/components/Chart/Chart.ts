@@ -1,5 +1,5 @@
 import { Controls } from '../Controls'
-import { ExternalChartOptions } from '../../types'
+import { ChartOptions } from '../../types'
 import { Overview } from '../Overview'
 import { XAxis } from '../XAxis'
 import { YAxis } from '../YAxis'
@@ -16,10 +16,7 @@ import {
 import { ensureInBounds, interpolate } from '@pavel/utils'
 import { Markers } from '../Markers'
 
-export const Chart = (
-  parent: HTMLElement,
-  uncheckedOptions: ExternalChartOptions,
-) => {
+export const Chart = (parent: HTMLElement, uncheckedOptions: ChartOptions) => {
   const options = createConfig(parent, uncheckedOptions)
   const context = ChartContext(options)
   const { width, height, endX, startX, isWheeling } = context

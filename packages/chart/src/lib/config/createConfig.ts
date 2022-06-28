@@ -7,7 +7,7 @@ import {
   DEFAULT_MARKER_VISIBLE,
 } from '../components/constants'
 import {
-  ExternalChartOptions,
+  ChartOptions,
   ExternalGraph,
   ExternalMarker,
   ExternalSimpleMarker,
@@ -31,7 +31,7 @@ import {
 
 export function createConfig(
   element: HTMLElement,
-  options: ExternalChartOptions,
+  options: ChartOptions,
 ): InternalChartOptions {
   const sizeOptions = {
     width: element.offsetWidth,

@@ -24,7 +24,7 @@ const theme = {
 
 // const theme = {
 //   body: 'hsl(0, 0%, 100%)',
-//   series: ['#f7515f', '#22ab94'],
+//   series: ['#f7515f', '#22ab94', '#297cf0'],
 //   overviewBackdrop: `hsl(0deg 0% 100% / 70%)`,
 //   overviewEdge: `hsl(0deg 0% 0% / 15%)`,
 //   tooltipLine: `hsla(0, 0%, 77%, ${tooltipAlpha})`,

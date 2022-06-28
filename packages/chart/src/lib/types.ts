@@ -53,10 +53,28 @@ export type OverviewOptions = {
   readonly edgeColor: string
 }
 
+export enum DatePart {
+  Year4Digits,
+  Year2Digits,
+  MonthFullWord,
+  MonthShortWord,
+  Month2Digits,
+  Date,
+}
+
+export enum TimePart {
+  Hours24,
+  Hours12,
+  Minutes,
+  Seconds,
+  Milliseconds,
+}
+
 export type TooltipOptions = {
   readonly lineColor: string
   readonly backgroundColor: string
   readonly color: string
+  readonly format?: readonly (string | DatePart | TimePart)[]
 }
 
 export type ViewBoxOptions = {
@@ -70,6 +88,9 @@ export type ExternalGraph =
       readonly label?: string
       readonly gradient?: boolean
       readonly lineWidth?: LineWidth
+
+      readonly color?: string
+      readonly isVisible?: boolean
     }
   | string
 
@@ -213,7 +234,7 @@ export type OptionalChartOptions = {
 
 export type MappedOptions = 'graphs'
 
-export type ExternalChartOptions = DeepPartial<DeeplyOptionalChartOptions> &
+export type ChartOptions = DeepPartial<DeeplyOptionalChartOptions> &
   OptionalChartOptions & {
     readonly data: DataByGraphKey
     readonly domain: readonly number[]
@@ -225,7 +246,7 @@ export type InternalLineWidthOptions = {
 }
 
 export type InternalChartOptions = Omit<
-  DeepRequired<ExternalChartOptions>,
+  DeepRequired<ChartOptions>,
   MappedOptions
 > & {
   readonly width: number
