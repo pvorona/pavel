@@ -2,7 +2,6 @@ import { Chart, ChartOptions } from '@pavel/chart'
 import { theme } from './theme'
 import './app.scss'
 import { assert, isNull } from '@pavel/assert'
-import { toCanonicalRect } from '@pavel/utils'
 
 type DataEntry = { timestamp: number; value: number }
 

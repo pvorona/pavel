@@ -73,7 +73,7 @@ export const Controls: Component<InternalChartOptions, ChartContext> = (
     const label = document.createElement('label')
 
     const input = document.createElement('input')
-    input.checked = true
+    input.checked = enabledStateByGraphKey.get()[graph.key]
     input.type = 'checkbox'
     input.className = 'button'
     input.onclick = () => handleGraphButtonClick(graph.key)

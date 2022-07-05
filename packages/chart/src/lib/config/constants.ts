@@ -37,6 +37,8 @@ const theme = {
 //   overviewBoxShadow: 'inset 0px 0 0 1px hsl(0deg 0% 75%)',
 // }
 
+export const DEFAULT_GRAPH_VISIBILITY = true
+
 export const DEFAULT_LINE_WIDTH = 1
 
 export const DEFAULT_LINE_JOIN = 'bevel'
