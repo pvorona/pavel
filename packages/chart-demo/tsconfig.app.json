@@ -16,5 +16,5 @@
     "**/__test__/**.ts",
     "jest.config.ts"
   ],
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "../chart/src/fft.test.ts"]
 }

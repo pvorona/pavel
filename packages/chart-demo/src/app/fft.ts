@@ -25,7 +25,7 @@
  * Computes the discrete Fourier transform (DFT) of the given complex vector, storing the result back into the vector.
  * The vector can have any length. This is a wrapper function.
  */
-function transform(
+export function transform(
   real: Array<number> | Float64Array,
   imag: Array<number> | Float64Array,
 ): void {
@@ -234,7 +234,7 @@ function convolveComplex(
   }
 }
 
-function newArrayOfZeros(n: number): Array<number> {
+export function newArrayOfZeros(n: number): Array<number> {
   const result: Array<number> = []
   for (let i = 0; i < n; i++) result.push(0)
   return result
