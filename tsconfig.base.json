@@ -18,6 +18,7 @@
     "baseUrl": ".",
     "paths": {
       "@pavel/assert": ["packages/assert/src/index.ts"],
+      "@pavel/bubbler-core": ["packages/bubbler-core/src/index.ts"],
       "@pavel/chart": ["packages/chart/src/index.ts"],
       "@pavel/comparator-shared": ["packages/comparator-shared/src/index.ts"],
       "@pavel/components": ["packages/components/src/index.ts"],
