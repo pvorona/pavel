@@ -27,7 +27,10 @@ export function createLRUCache<Key extends RecordKey, Value>(
   const nodeByKey = new Map<Key, ListNode<CacheNode<Key, Value>>>()
 
   function get(key: Key) {
-    assert(nodeByKey.has(key), `Trying to get by non-existent key: ${key}`)
+    assert(
+      nodeByKey.has(key),
+      `Trying to get by non-existent key: ${String(key)}`,
+    )
 
     updateRecency(key)
 
