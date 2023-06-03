@@ -243,7 +243,7 @@ webSocketServer.on('connection', async (client, request) => {
 
         let shouldCompleteGame = false
         for (const innerClient of clients) {
-          const events = ((): ServerEvent | ServerEvent[] => {
+          const events: ServerEvent | ServerEvent[] = (() => {
             const playEvent = createPieceAddedEvent({
               x: result.payload.x,
               y: result.payload.y,
