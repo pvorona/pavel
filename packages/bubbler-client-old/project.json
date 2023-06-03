@@ -1,7 +1,7 @@
 {
-  "name": "bubbler",
+  "name": "bubbler-client-old",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/bubbler",
+  "sourceRoot": "packages/bubbler-client-old",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,12 +9,12 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "root": "packages/bubbler",
-        "outputPath": "dist/packages/bubbler"
+        "root": "packages/bubbler-client-old",
+        "outputPath": "dist/packages/bubbler-client-old"
       },
       "configurations": {
         "development": {
-          "outputPath": "packages/bubbler"
+          "outputPath": "packages/bubbler-client-old"
         },
         "production": {}
       }
@@ -23,17 +23,17 @@
       "executor": "@nx/next:server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "bubbler:build",
+        "buildTarget": "bubbler-client-old:build",
         "dev": true,
-        "proxyConfig": "packages/bubbler/proxy.conf.json"
+        "proxyConfig": "packages/bubbler-client-old/proxy.conf.json"
       },
       "configurations": {
         "development": {
-          "buildTarget": "bubbler:build:development",
+          "buildTarget": "bubbler-client-old:build:development",
           "dev": true
         },
         "production": {
-          "buildTarget": "bubbler:build:production",
+          "buildTarget": "bubbler-client-old:build:production",
           "dev": false
         }
       }
@@ -41,14 +41,14 @@
     "export": {
       "executor": "@nx/next:export",
       "options": {
-        "buildTarget": "bubbler:build:production"
+        "buildTarget": "bubbler-client-old:build:production"
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/bubbler/jest.config.ts",
+        "jestConfig": "packages/bubbler-client-old/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
@@ -62,7 +62,7 @@
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/bubbler/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["packages/bubbler-client-old/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },
