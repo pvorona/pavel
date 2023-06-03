@@ -7,17 +7,16 @@ export type ClientEvent =
   | ClientPongEvent
 
 export enum ClientEventType {
-  Ping,
-  Pong,
-
-  Play,
-  Surrender,
+  Ping = 'Ping',
+  Pong = 'Pong',
+  Play = 'Play',
+  Surrender = 'Surrender',
 }
 
 export type PlayEvent = {
   readonly type: ClientEventType.Play
   readonly payload: {
-    readonly rowIndex: number
+    readonly y: number
     readonly side: Side
   }
 }

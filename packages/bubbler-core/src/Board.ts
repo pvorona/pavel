@@ -10,9 +10,39 @@ import { assert } from '@pavel/assert'
 export type CellValue = undefined | string
 export type Field = CellValue[][]
 
+export enum EndReason {
+  Won,
+  Draw,
+}
+
+export type BoardState =
+  | {
+      ended: true
+      reason: EndReason.Draw
+    }
+  | {
+      ended: true
+      reason: EndReason.Won
+      winner: string
+    }
+  | {
+      ended: false
+    }
+
+// TODO: BoardDiff or BoardState
+export enum AddPieceResult {
+  Unchanged,
+  PieceAdded,
+  Draw,
+  Won,
+}
+
+const BOARD_UNCHANGED = { type: AddPieceResult.Unchanged } as const
+
 export class Board {
   private field = createField()
   private moveCount = 0
+  private state: BoardState
 
   constructor(
     private userIds: readonly string[],
@@ -20,40 +50,61 @@ export class Board {
   ) {
     assert(userIds.length === 2, 'Invalid number of users')
     assert(userIds.includes(currentUserId), 'Current user is not in userIds')
+
+    this.state =
+      this.moveCount === MAX_MOVE_COUNT
+        ? { ended: true, reason: EndReason.Draw }
+        : { ended: false }
   }
 
-  play(rowIndex: number, side: Side): PlayResult {
-    const initialColIndex = side === Side.Left ? 0 : FieldSize.X - 1
+  addPiece(y: number, side: Side) {
+    if (this.state.ended) {
+      return BOARD_UNCHANGED
+    }
+
+    const initialX = side === Side.Left ? 0 : FieldSize.X - 1
     for (
-      let colIndex = initialColIndex;
-      side === Side.Left ? colIndex < FieldSize.X : colIndex >= 0;
-      side === Side.Left ? colIndex++ : colIndex--
+      let x = initialX;
+      side === Side.Left ? x < FieldSize.X : x >= 0;
+      side === Side.Left ? x++ : x--
     ) {
-      if (this.field[rowIndex] === undefined) {
-        this.field[rowIndex][colIndex] = this.currentUserId
+      if (this.field[y][x] === undefined) {
+        this.field[y][x] = this.currentUserId
         this.moveCount++
 
-        if (this.isWinningMove(colIndex, rowIndex)) {
-          return PlayResult.Won
+        if (this.moveCount === MAX_MOVE_COUNT) {
+          this.state = { ended: true, reason: EndReason.Draw }
+
+          return { type: AddPieceResult.PieceAdded, payload: { x, y } } as const
         }
 
-        if (this.moveCount === MAX_MOVE_COUNT) {
-          return PlayResult.Draw
+        if (this.isWinningMove(x, y)) {
+          this.state = {
+            ended: true,
+            reason: EndReason.Won,
+            winner: this.currentUserId,
+          }
+
+          return { type: AddPieceResult.PieceAdded, payload: { x, y } } as const
         }
 
         const nextUserIndex =
           (this.userIds.indexOf(this.currentUserId) + 1) % this.userIds.length
         this.currentUserId = this.userIds[nextUserIndex]
 
-        return PlayResult.PieceAdded
+        return { type: AddPieceResult.PieceAdded, payload: { x, y } } as const
       }
     }
 
-    return PlayResult.Unchanged
+    return BOARD_UNCHANGED
   }
 
   getCurrentUserId() {
     return this.currentUserId
+  }
+
+  getState() {
+    return this.state
   }
 
   private isWinningMove(x: number, y: number): boolean {
@@ -120,16 +171,8 @@ function createField(): Field {
   const result = new Array(FieldSize.Y)
 
   for (let i = 0; i < result.length; i++) {
-    result.push(new Array(FieldSize.X))
+    result[i] = new Array(FieldSize.X)
   }
 
   return result
-}
-
-// TODO: BoardDiff or BoardState
-export enum PlayResult {
-  Unchanged,
-  PieceAdded,
-  Draw,
-  Won,
 }

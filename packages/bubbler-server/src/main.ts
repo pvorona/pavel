@@ -11,13 +11,16 @@ import {
   SERVER_PING_EVENT,
   createPieceAddedEvent,
   Board,
-  PlayResult,
-  createDrawEvent,
-  createWonEvent,
-  createOpponentLeftEvent,
-  createLostEvent,
-  createOpponentSurrenderedEvent,
-  createOpponentDisconnectedEvent,
+  AddPieceResult,
+  EndReason,
+  Player,
+  OPPONENT_LEFT_EVENT,
+  WON_EVENT,
+  LOST_EVENT,
+  OPPONENT_SURRENDERED_EVENT,
+  DRAW_EVENT,
+  OPPONENT_DISCONNECTED_EVENT,
+  ServerEvent,
 } from '@pavel/bubbler-core'
 import {
   PING_INTERVAL,
@@ -36,6 +39,8 @@ const app = express()
 app.get('/', (req, res) => {
   res.send({ message: 'Welcome to ${options.name}!' })
 })
+
+// TODO: event validation
 
 const server = app.listen(port, () => {
   console.log(`Listening at http://${host}:${port}`)
@@ -59,8 +64,8 @@ startClosingInactiveClients()
 webSocketServer.on('connection', async (client, request) => {
   // TODO: Auth
   // const userId: string
-  const userId = 'a'
-  const searchParams = new URLSearchParams(request.url.slice(2))
+  const userId = String(Math.random())
+  const searchParams = new URLSearchParams(request.url?.slice(2))
 
   if (!searchParams.has(GAME_ID_SEARCH_PARAM)) {
     console.error(
@@ -71,11 +76,28 @@ webSocketServer.on('connection', async (client, request) => {
   }
 
   const gameId = searchParams.get(GAME_ID_SEARCH_PARAM)
+
+  if (!gameId) {
+    console.error(
+      `User ${userId} tried to connect to server without providing "${GAME_ID_SEARCH_PARAM}" param: ${request.url}`,
+    )
+
+    return client.close(1008)
+  }
+
   const game = await db.game.findFirst({ where: { id: gameId } })
 
-  if (!game || game.status !== GameStatus.WAITING_FOR_OPPONENT) {
+  if (!game) {
     console.error(
-      `Game ${gameId} is not accepting new players. User ${userId} tried to connect`,
+      `User ${userId} tried to connect to game ${gameId} that doesn't exist`,
+    )
+
+    return client.close(1008)
+  }
+
+  if (game.status !== GameStatus.WAITING_FOR_OPPONENT) {
+    console.error(
+      `User ${userId} tried to connect to game ${gameId} that doesn't accept new players`,
     )
 
     return client.close(1008)
@@ -84,6 +106,8 @@ webSocketServer.on('connection', async (client, request) => {
   userIdByClient.set(client, userId)
   lastInteractionTimestampByClient.set(client, Date.now())
   gameIdByClient.set(client, gameId)
+
+  console.log(`${userId} connected to ${gameId}`)
 
   const clients = getOrInitMap(clientsByGameId, gameId, [])
 
@@ -95,32 +119,30 @@ webSocketServer.on('connection', async (client, request) => {
       where: { id: gameId },
       data: { status: GameStatus.IN_PROGRESS },
     })
-
     const userIds = clients.map(client =>
-      ensureDefined(userIdByClient.get(client)),
+      ensureDefined(userIdByClient.get(client), 'Cannot get userId for client'),
     )
     const startingUserId = getRandomArrayElement(userIds)
     const board = new Board(userIds, startingUserId)
 
     boardByGameId.set(game.id, board)
-
     // TODO: WS readyState
     for (const client of clients) {
       const userId = ensureDefined(userIdByClient.get(client))
       const pendingMove = startingUserId === userId
       const event = createGameStartedEvent({ pendingMove })
+      console.log(`Sending ${JSON.stringify(event)} to ${userId}`)
       const response = encodeServerMessage(event)
       client.send(response)
     }
   }
 
-  client.on('close', () => {
+  client.on('close', async () => {
     for (const innerClient of clients) {
       if (innerClient !== client) {
-        const event = createOpponentLeftEvent()
+        const event = [OPPONENT_LEFT_EVENT, WON_EVENT]
         const response = encodeServerMessage(event)
         innerClient.send(response)
-        // TODO: Closing active client? Check interaction protocol.
         innerClient.close()
       }
 
@@ -128,6 +150,13 @@ webSocketServer.on('connection', async (client, request) => {
     }
 
     cleanUpGame(gameId)
+
+    await db.game.update({
+      where: { id: gameId },
+      data: {
+        status: GameStatus.ENDED,
+      },
+    })
   })
 
   client.on('message', async data => {
@@ -150,8 +179,8 @@ webSocketServer.on('connection', async (client, request) => {
       for (const innerClient of clients) {
         const events =
           innerClient === client
-            ? createLostEvent()
-            : [createOpponentSurrenderedEvent(), createWonEvent()]
+            ? LOST_EVENT
+            : [OPPONENT_SURRENDERED_EVENT, WON_EVENT]
         const response = encodeServerMessage(events)
         innerClient.send(response)
         innerClient.close()
@@ -161,82 +190,103 @@ webSocketServer.on('connection', async (client, request) => {
 
       cleanUpGame(gameId)
 
+      await db.game.update({
+        where: { id: gameId },
+        data: {
+          status: GameStatus.ENDED,
+        },
+      })
+
       return
     }
 
     if (clientEvent.type === ClientEventType.Play) {
-      const board = ensureDefined(boardByGameId.get(game.id))
+      const board = boardByGameId.get(game.id)
+
+      if (!board) {
+        console.log(
+          `User ${userId} tried to perform a move in a deleted game ${game.id}`,
+        )
+
+        return
+      }
+
+      if (board.getState().ended) {
+        console.log(
+          `User ${userId} tried to perform a move in a completed game ${game.id}`,
+        )
+
+        return
+      }
 
       if (board.getCurrentUserId() !== userId) {
+        console.log(
+          `User ${userId} tried to perform a move while it's an opponent's turn`,
+        )
+
         return
       }
 
       const {
-        payload: { rowIndex, side },
+        payload: { y, side },
       } = clientEvent
-      const result = board.play(rowIndex, side)
+      const result = board.addPiece(y, side)
 
-      if (result === PlayResult.Unchanged) {
-        return
-      }
-
-      if (result === PlayResult.PieceAdded) {
-        const event = createPieceAddedEvent(clientEvent.payload)
-        const response = encodeServerMessage(event)
-
-        for (const client of clients) {
-          client.send(response)
-        }
+      if (result.type === AddPieceResult.Unchanged) {
+        console.log(`User ${userId} tried to perform illegal move`)
 
         return
       }
 
-      if (result === PlayResult.Draw) {
-        const events = [
-          createPieceAddedEvent(clientEvent.payload),
-          createDrawEvent(clientEvent.payload),
-        ]
-        const response = encodeServerMessage(events)
+      if (result.type === AddPieceResult.PieceAdded) {
+        const boardState = board.getState()
 
-        for (const client of clients) {
-          client.send(response)
-          client.close()
-          cleanUpClient(client)
-        }
-
-        cleanUpGame(game.id)
-
-        await db.game.update({
-          where: { id: gameId },
-          data: {
-            status: GameStatus.ENDED,
-          },
-        })
-
-        return
-      }
-
-      if (result === PlayResult.Won) {
+        let shouldCompleteGame = false
         for (const innerClient of clients) {
-          const events =
-            innerClient === client
-              ? [createPieceAddedEvent(clientEvent.payload), createWonEvent()]
-              : [createPieceAddedEvent(clientEvent.payload), createLostEvent()]
-          const response = encodeServerMessage(events)
+          const events = ((): ServerEvent | ServerEvent[] => {
+            const playEvent = createPieceAddedEvent({
+              x: result.payload.x,
+              y: result.payload.y,
+              player: innerClient === client ? Player.Current : Player.Opponent,
+            })
 
+            if (boardState.ended) {
+              shouldCompleteGame = true
+
+              if (boardState.reason === EndReason.Draw) {
+                return [playEvent, DRAW_EVENT]
+              }
+
+              if (boardState.reason === EndReason.Won) {
+                const endEvent = innerClient === client ? WON_EVENT : LOST_EVENT
+
+                return [playEvent, endEvent]
+              }
+
+              ensureNever(boardState)
+            }
+
+            return playEvent
+          })()
+
+          const response = encodeServerMessage(events)
           innerClient.send(response)
-          innerClient.close()
-          cleanUpClient(innerClient)
+
+          if (shouldCompleteGame) {
+            cleanUpClient(client)
+          }
         }
 
-        cleanUpGame(gameId)
+        if (shouldCompleteGame) {
+          cleanUpGame(game.id)
 
-        await db.game.update({
-          where: { id: gameId },
-          data: {
-            status: GameStatus.ENDED,
-          },
-        })
+          await db.game.update({
+            where: { id: gameId },
+            data: {
+              status: GameStatus.ENDED,
+            },
+          })
+        }
 
         return
       }
@@ -244,7 +294,9 @@ webSocketServer.on('connection', async (client, request) => {
       ensureNever(result)
     }
 
-    ensureNever(clientEvent, `Received unknown message ${clientEvent}`)
+    console.error(
+      `Received unknown message ${JSON.stringify(clientEvent)} from ${userId}`,
+    )
   })
 
   client.on('error', console.error)
@@ -271,7 +323,7 @@ function startClosingInactiveClients() {
       if (now - timestamp > DROP_CONNECTION_TIMEOUT) {
         const gameId = ensureDefined(gameIdByClient.get(client))
         const clients = ensureDefined(clientsByGameId.get(gameId))
-        const event = createOpponentDisconnectedEvent()
+        const event = OPPONENT_DISCONNECTED_EVENT
         const message = encodeServerMessage(event)
 
         for (const innerClient of clients) {

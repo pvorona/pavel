@@ -13,31 +13,21 @@ export type ServerEvent =
   | ServerPongEvent
 
 export enum ServerEventType {
-  Ping,
-  Pong,
-
-  PieceAdded,
-  Draw,
-  Won,
-  Lost,
-  OpponentLeft,
-  OpponentSurrendered,
-  OpponentDisconnected,
-
-  GameStarted,
-  // GameEnded,
+  Ping = 'Ping',
+  Pong = 'Pong',
+  PieceAdded = 'PieceAdded',
+  Draw = 'Draw',
+  Won = 'Won',
+  Lost = 'Lost',
+  OpponentLeft = 'OpponentLeft',
+  OpponentSurrendered = 'OpponentSurrendered',
+  OpponentDisconnected = 'OpponentDisconnected',
+  GameStarted = 'GameStarted',
 }
 
-export enum GameEndReason {
-  LeftPlayerLeft,
-  LeftPlayerDisconnected,
-  LeftPlayerSurrendered,
-  RightPlayerLeft,
-  RightPlayerDisconnected,
-  RightPlayerSurrendered,
-  LeftPlayerWon,
-  RightPlayerWon,
-  Draw,
+export enum Player {
+  Current,
+  Opponent,
 }
 
 export type GameStartedEvent = {
@@ -63,8 +53,9 @@ export function createGameStartedEvent(
 export type PieceAddedEvent = {
   readonly type: ServerEventType.PieceAdded
   readonly payload: {
-    readonly rowIndex: number
-    readonly side: Side
+    readonly y: number
+    readonly x: number
+    readonly player: Player
   }
 }
 
@@ -79,67 +70,50 @@ export function createPieceAddedEvent(
 
 export type DrawEvent = {
   readonly type: ServerEventType.Draw
-  readonly payload: {
-    readonly rowIndex: number
-    readonly side: Side
-  }
 }
 
-export function createDrawEvent(payload: DrawEvent['payload']): DrawEvent {
-  return {
-    type: ServerEventType.Draw,
-    payload,
-  }
+export const DRAW_EVENT: DrawEvent = {
+  type: ServerEventType.Draw,
 }
 
 export type WonEvent = {
   readonly type: ServerEventType.Won
 }
 
-export function createWonEvent(): WonEvent {
-  return {
-    type: ServerEventType.Won,
-  }
+export const WON_EVENT: WonEvent = {
+  type: ServerEventType.Won,
 }
 
 export type LostEvent = {
   readonly type: ServerEventType.Lost
 }
 
-export function createLostEvent(): LostEvent {
-  return {
-    type: ServerEventType.Lost,
-  }
+export const LOST_EVENT: LostEvent = {
+  type: ServerEventType.Lost,
 }
 
 export type OpponentLeftEvent = {
   readonly type: ServerEventType.OpponentLeft
 }
 
-export function createOpponentLeftEvent(): OpponentLeftEvent {
-  return {
-    type: ServerEventType.OpponentLeft,
-  }
+export const OPPONENT_LEFT_EVENT: OpponentLeftEvent = {
+  type: ServerEventType.OpponentLeft,
 }
 
 export type OpponentSurrenderedEvent = {
   readonly type: ServerEventType.OpponentSurrendered
 }
 
-export function createOpponentSurrenderedEvent(): OpponentSurrenderedEvent {
-  return {
-    type: ServerEventType.OpponentSurrendered,
-  }
+export const OPPONENT_SURRENDERED_EVENT: OpponentSurrenderedEvent = {
+  type: ServerEventType.OpponentSurrendered,
 }
 
 export type OpponentDisconnectedEvent = {
   readonly type: ServerEventType.OpponentDisconnected
 }
 
-export function createOpponentDisconnectedEvent(): OpponentDisconnectedEvent {
-  return {
-    type: ServerEventType.OpponentDisconnected,
-  }
+export const OPPONENT_DISCONNECTED_EVENT: OpponentDisconnectedEvent = {
+  type: ServerEventType.OpponentDisconnected,
 }
 
 export type ServerPingEvent = {

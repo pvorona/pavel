@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "strict": true,
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -18,11 +19,11 @@
     "baseUrl": ".",
     "paths": {
       "@pavel/assert": ["packages/assert/src/index.ts"],
+      "@pavel/bubbler-core": ["packages/bubbler-core/src/index.ts"],
       "@pavel/chart": ["packages/chart/src/index.ts"],
       "@pavel/comparator-shared": ["packages/comparator-shared/src/index.ts"],
       "@pavel/components": ["packages/components/src/index.ts"],
       "@pavel/easing": ["packages/easing/src/index.ts"],
-      "@pavel/bubbler-core": ["packages/bubbler-core/src/index.ts"],
       "@pavel/mindmap-ui": ["packages/mindmap-ui/src/index.ts"],
       "@pavel/observable": ["packages/observable/src/index.ts"],
       "@pavel/react-utils": ["packages/react-utils/src/index.ts"],
