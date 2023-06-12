@@ -11,7 +11,7 @@ export type CellValue = undefined | string
 export type Field = CellValue[][]
 
 export enum EndReason {
-  Won,
+  WonLost,
   Draw,
 }
 
@@ -22,7 +22,7 @@ export type BoardState =
     }
   | {
       ended: true
-      reason: EndReason.Won
+      reason: EndReason.WonLost
       winner: string
     }
   | {
@@ -81,7 +81,7 @@ export class Board {
         if (this.isWinningMove(x, y)) {
           this.state = {
             ended: true,
-            reason: EndReason.Won,
+            reason: EndReason.WonLost,
             winner: this.currentUserId,
           }
 

@@ -1,16 +1,21 @@
-export type ServerEvent =
-  | PieceAddedEvent
-  | DrawEvent
-  | WonEvent
-  | LostEvent
-  | OpponentLeftEvent
-  | OpponentSurrenderedEvent
-  | OpponentDisconnectedEvent
-  | GameStartedEvent
-  | ServerPingEvent
-  | ServerPongEvent
+export type ServerMessage =
+  | PieceAdded
+  | Draw
+  | Won
+  | Lost
+  | OpponentLeft
+  | OpponentSurrendered
+  | OpponentDisconnected
+  | GameStarted
+  | ServerPing
+  | ServerPong
+  | AnotherGameInProgress
+  | GameNotFound
+  | Unauthenticated
+  | UserNotFound
+  | GameEnded
 
-export enum ServerEventType {
+export enum ServerMessageType {
   Ping = 'Ping',
   Pong = 'Pong',
   PieceAdded = 'PieceAdded',
@@ -21,6 +26,11 @@ export enum ServerEventType {
   OpponentSurrendered = 'OpponentSurrendered',
   OpponentDisconnected = 'OpponentDisconnected',
   GameStarted = 'GameStarted',
+  AnotherGameInProgress = 'AnotherGameInProgress',
+  GameNotFound = 'GameNotFound',
+  Unauthenticated = 'Unauthenticated',
+  UserNotFound = 'UserNotFound',
+  GameEnded = 'GameEnded',
 }
 
 export enum Player {
@@ -28,8 +38,8 @@ export enum Player {
   Opponent = 'Opponent',
 }
 
-export type GameStartedEvent = {
-  readonly type: ServerEventType.GameStarted
+export type GameStarted = {
+  readonly type: ServerMessageType.GameStarted
   readonly payload: {
     // readonly side: Side
     readonly pendingMove: boolean
@@ -39,17 +49,17 @@ export type GameStartedEvent = {
   }
 }
 
-export function createGameStartedEvent(
-  payload: GameStartedEvent['payload'],
-): GameStartedEvent {
+export function createGameStartedMessage(
+  payload: GameStarted['payload'],
+): GameStarted {
   return {
-    type: ServerEventType.GameStarted,
+    type: ServerMessageType.GameStarted,
     payload,
   }
 }
 
-export type PieceAddedEvent = {
-  readonly type: ServerEventType.PieceAdded
+export type PieceAdded = {
+  readonly type: ServerMessageType.PieceAdded
   readonly payload: {
     readonly y: number
     readonly x: number
@@ -57,75 +67,115 @@ export type PieceAddedEvent = {
   }
 }
 
-export function createPieceAddedEvent(
-  payload: PieceAddedEvent['payload'],
-): PieceAddedEvent {
+export function createPieceAddedMessage(
+  payload: PieceAdded['payload'],
+): PieceAdded {
   return {
-    type: ServerEventType.PieceAdded,
+    type: ServerMessageType.PieceAdded,
     payload,
   }
 }
 
-export type DrawEvent = {
-  readonly type: ServerEventType.Draw
+export type Draw = {
+  readonly type: ServerMessageType.Draw
 }
 
-export const DRAW_EVENT: DrawEvent = {
-  type: ServerEventType.Draw,
+export const DRAW_MESSAGE: Draw = {
+  type: ServerMessageType.Draw,
 }
 
-export type WonEvent = {
-  readonly type: ServerEventType.Won
+export type Won = {
+  readonly type: ServerMessageType.Won
 }
 
-export const WON_EVENT: WonEvent = {
-  type: ServerEventType.Won,
+export const WON_MESSAGE: Won = {
+  type: ServerMessageType.Won,
 }
 
-export type LostEvent = {
-  readonly type: ServerEventType.Lost
+export type Lost = {
+  readonly type: ServerMessageType.Lost
 }
 
-export const LOST_EVENT: LostEvent = {
-  type: ServerEventType.Lost,
+export const LOST_MESSAGE: Lost = {
+  type: ServerMessageType.Lost,
 }
 
-export type OpponentLeftEvent = {
-  readonly type: ServerEventType.OpponentLeft
+export type OpponentLeft = {
+  readonly type: ServerMessageType.OpponentLeft
 }
 
-export const OPPONENT_LEFT_EVENT: OpponentLeftEvent = {
-  type: ServerEventType.OpponentLeft,
+export const OPPONENT_LEFT_MESSAGE: OpponentLeft = {
+  type: ServerMessageType.OpponentLeft,
 }
 
-export type OpponentSurrenderedEvent = {
-  readonly type: ServerEventType.OpponentSurrendered
+export type OpponentSurrendered = {
+  readonly type: ServerMessageType.OpponentSurrendered
 }
 
-export const OPPONENT_SURRENDERED_EVENT: OpponentSurrenderedEvent = {
-  type: ServerEventType.OpponentSurrendered,
+export const OPPONENT_SURRENDERED_MESSAGE: OpponentSurrendered = {
+  type: ServerMessageType.OpponentSurrendered,
 }
 
-export type OpponentDisconnectedEvent = {
-  readonly type: ServerEventType.OpponentDisconnected
+export type OpponentDisconnected = {
+  readonly type: ServerMessageType.OpponentDisconnected
 }
 
-export const OPPONENT_DISCONNECTED_EVENT: OpponentDisconnectedEvent = {
-  type: ServerEventType.OpponentDisconnected,
+export const OPPONENT_DISCONNECTED_MESSAGE: OpponentDisconnected = {
+  type: ServerMessageType.OpponentDisconnected,
 }
 
-export type ServerPingEvent = {
-  readonly type: ServerEventType.Ping
+export type ServerPing = {
+  readonly type: ServerMessageType.Ping
 }
 
-export type ServerPongEvent = {
-  readonly type: ServerEventType.Pong
+export type ServerPong = {
+  readonly type: ServerMessageType.Pong
 }
 
-export const SERVER_PONG_EVENT: ServerPongEvent = {
-  type: ServerEventType.Pong,
+export const SERVER_PONG_MESSAGE: ServerPong = {
+  type: ServerMessageType.Pong,
 }
 
-export const SERVER_PING_EVENT: ServerPingEvent = {
-  type: ServerEventType.Ping,
+export const SERVER_PING_MESSAGE: ServerPing = {
+  type: ServerMessageType.Ping,
+}
+
+export type AnotherGameInProgress = {
+  readonly type: ServerMessageType.AnotherGameInProgress
+}
+
+export const ANOTHER_GAME_IN_PROGRESS_MESSAGE: AnotherGameInProgress = {
+  type: ServerMessageType.AnotherGameInProgress,
+}
+
+export type GameNotFound = {
+  readonly type: ServerMessageType.GameNotFound
+}
+
+export const GAME_NOT_FOUND_MESSAGE: GameNotFound = {
+  type: ServerMessageType.GameNotFound,
+}
+
+export type GameEnded = {
+  readonly type: ServerMessageType.GameEnded
+}
+
+export const GAME_ENDED_MESSAGE: GameEnded = {
+  type: ServerMessageType.GameEnded,
+}
+
+export type Unauthenticated = {
+  readonly type: ServerMessageType.Unauthenticated
+}
+
+export const UNAUTHENTICATED_MESSAGE: Unauthenticated = {
+  type: ServerMessageType.Unauthenticated,
+}
+
+export type UserNotFound = {
+  readonly type: ServerMessageType.UserNotFound
+}
+
+export const USER_NOT_FOUND_MESSAGE: UserNotFound = {
+  type: ServerMessageType.UserNotFound,
 }

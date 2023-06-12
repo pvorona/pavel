@@ -8,17 +8,20 @@ datasource db {
 }
 
 model User {
-  id   String @id @default(cuid())
-  name String
-  Game Game[]
+  id            String  @id @default(cuid())
+  name          String
+  createdGames  Game[]  @relation("createdGames")
+  currentGame   Game?   @relation(name: "currentGame", fields: [currentGameId], references: [id])
+  currentGameId String?
 }
 
 model Game {
   id        String     @id @default(cuid())
   status    GameStatus @default(WAITING_FOR_OPPONENT)
   createdAt DateTime   @default(now())
-  creator   User       @relation(fields: [creatorId], references: [id])
+  creator   User       @relation("createdGames", fields: [creatorId], references: [id])
   creatorId String
+  players   User[]     @relation(name: "currentGame")
 }
 
 enum GameStatus {

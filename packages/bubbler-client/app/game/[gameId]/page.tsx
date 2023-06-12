@@ -2,16 +2,16 @@
 
 import { ensureInBounds, getRandomNumberInRange, times } from '@pavel/utils'
 import {
-  CLIENT_PONG_EVENT,
+  CLIENT_PONG_MESSAGE,
   FieldSize,
   GAME_ID_SEARCH_PARAM,
   Player,
-  SURRENDER_EVENT,
-  ServerEvent,
-  ServerEventType,
+  SURRENDER_MESSAGE,
+  ServerMessage,
+  ServerMessageType,
   Side,
   createField,
-  createPlayEvent,
+  createPlayMessage,
   encodeClientMessage,
 } from '@pavel/bubbler-core'
 import {
@@ -32,6 +32,7 @@ import styles from './Game.module.scss'
 import classNames from 'classnames'
 import { ensureNever } from '@pavel/assert'
 import { BUBBLES } from '../../../constants'
+import { useQueryClient } from '@tanstack/react-query'
 
 enum ConnectionState {
   Idle = 'Idle',
@@ -59,6 +60,14 @@ enum OpponentInfo {
 // TODO: 2nd player connected to the game after the 1st player surrendered
 // TODO: highlight hover move
 
+enum GameError {
+  GameNotFound = 'GameNotFound',
+  AnotherGameInProgress = 'AnotherGameInProgress',
+  Unauthenticated = 'Unauthenticated',
+  UserNotFound = 'UserNotFound',
+  GameEnded = 'GameEnded',
+}
+
 export default function Game({
   params: { gameId },
 }: {
@@ -66,6 +75,7 @@ export default function Game({
 }) {
   const user = useContext(UserContext)
   const wsRef = useRef<WebSocket>()
+  const [error, setError] = useState<GameError | null>(null)
   const [connectionState, setConnectionState] = useState(ConnectionState.Idle)
   const [gameState, setGameState] = useState(GameState.Loading)
   const [opponentInfo, setOpponentInfo] = useState<OpponentInfo | null>(null)
@@ -78,6 +88,7 @@ export default function Game({
   } | null>(null)
   const fieldRef = useRef(createField<Player>())
   const [potentialMove, setPotentialMove] = useState<{ x: number; y: number }>()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (!hoverPosition) {
@@ -160,74 +171,104 @@ export default function Game({
 
       console.log(JSON.parse(data))
 
-      let serverEvents: ServerEvent[] = JSON.parse(data)
+      let serverEvents: ServerMessage[] = JSON.parse(data)
       if (!Array.isArray(serverEvents)) {
         serverEvents = [serverEvents]
       }
 
       for (const message of serverEvents) {
-        if (message.type === ServerEventType.GameStarted) {
+        if (message.type === ServerMessageType.GameStarted) {
           setGameState(GameState.Ongoing)
           setPendingMove(message.payload.pendingMove)
 
           continue
         }
 
-        if (message.type === ServerEventType.Lost) {
+        if (message.type === ServerMessageType.Lost) {
           setGameState(GameState.Lost)
 
           continue
         }
 
-        if (message.type === ServerEventType.Draw) {
+        if (message.type === ServerMessageType.Draw) {
           setGameState(GameState.Draw)
 
           continue
         }
 
-        if (message.type === ServerEventType.Won) {
+        if (message.type === ServerMessageType.Won) {
           setGameState(GameState.Won)
 
           continue
         }
 
-        if (message.type === ServerEventType.Ping) {
-          const event = CLIENT_PONG_EVENT
+        if (message.type === ServerMessageType.Ping) {
+          const event = CLIENT_PONG_MESSAGE
           const request = encodeClientMessage(event)
           ws.send(request)
 
           continue
         }
 
-        if (message.type === ServerEventType.Pong) {
+        if (message.type === ServerMessageType.Pong) {
           continue
         }
 
-        if (message.type === ServerEventType.OpponentDisconnected) {
+        if (message.type === ServerMessageType.OpponentDisconnected) {
           setOpponentInfo(OpponentInfo.OpponentDisconnected)
 
           continue
         }
 
-        if (message.type === ServerEventType.OpponentLeft) {
+        if (message.type === ServerMessageType.OpponentLeft) {
           setOpponentInfo(OpponentInfo.OpponentLeft)
 
           continue
         }
 
-        if (message.type === ServerEventType.OpponentSurrendered) {
+        if (message.type === ServerMessageType.OpponentSurrendered) {
           setOpponentInfo(OpponentInfo.OpponentSurrendered)
 
           continue
         }
 
-        if (message.type === ServerEventType.PieceAdded) {
+        if (message.type === ServerMessageType.PieceAdded) {
           const {
             payload: { x, y, player },
           } = message
 
           fieldRef.current[y][x] = player
           setPendingMove(pendingMove => !pendingMove)
+
+          continue
+        }
+
+        if (message.type === ServerMessageType.GameNotFound) {
+          setError(GameError.GameNotFound)
+
+          continue
+        }
+
+        if (message.type === ServerMessageType.Unauthenticated) {
+          setError(GameError.Unauthenticated)
+
+          continue
+        }
+
+        if (message.type === ServerMessageType.AnotherGameInProgress) {
+          setError(GameError.AnotherGameInProgress)
+
+          continue
+        }
+
+        if (message.type === ServerMessageType.UserNotFound) {
+          setError(GameError.UserNotFound)
+
+          continue
+        }
+
+        if (message.type === ServerMessageType.GameEnded) {
+          setError(GameError.GameEnded)
 
           continue
         }
@@ -250,8 +291,10 @@ export default function Game({
       ws.removeEventListener('message', handleMessage)
       ws.removeEventListener('close', handleClose)
       ws.removeEventListener('error', handleError)
+      ws.close(1000)
+      queryClient.invalidateQueries({ queryKey: ['games'] })
     }
-  }, [gameId, user])
+  }, [gameId, queryClient, user])
 
   function handleSurrender() {
     if (
@@ -264,7 +307,7 @@ export default function Game({
       return
     }
 
-    const event = SURRENDER_EVENT
+    const event = SURRENDER_MESSAGE
     const request = encodeClientMessage(event)
     wsRef.current.send(request)
   }
@@ -283,7 +326,7 @@ export default function Game({
     const { clientX, clientY } = clickEvent
     const { side, y } = getHoverPosition(clientX, clientY, fieldElement)
 
-    const event = createPlayEvent({ y, side })
+    const event = createPlayMessage({ y, side })
     const request = encodeClientMessage(event)
     wsRef.current.send(request)
   }
@@ -307,8 +350,32 @@ export default function Game({
   }
 
   const title = (() => {
+    if (error) {
+      if (error === GameError.AnotherGameInProgress) {
+        return 'Another game in progress'
+      }
+
+      if (error === GameError.Unauthenticated) {
+        return 'Unauthenticated'
+      }
+
+      if (error === GameError.GameNotFound) {
+        return 'Game not found'
+      }
+
+      if (error === GameError.UserNotFound) {
+        return 'User not found'
+      }
+
+      if (error === GameError.GameEnded) {
+        return 'Game ended'
+      }
+
+      ensureNever(error)
+    }
+
     if (!user) {
-      return 'Authorization required'
+      return 'Authorizing...'
     }
 
     if (connectionState === ConnectionState.Idle) {

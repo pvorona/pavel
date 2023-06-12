@@ -1,15 +1,15 @@
 import { RawData } from 'ws'
-import { ClientEvent } from './ClientEvent'
-import { ServerEvent } from './ServerEvent'
+import { ClientMessage } from './ClientEvent'
+import { ServerMessage } from './ServerEvent'
 
 export type MessageEncoder<Input, Output> = (input: Input) => Output
 
 export type ServerMessageEncoder = MessageEncoder<
-  ServerEvent | readonly ServerEvent[],
+  ServerMessage | readonly ServerMessage[],
   string
   // Buffer
 >
-export type ClientMessageEncoder = MessageEncoder<ClientEvent, Buffer>
+export type ClientMessageEncoder = MessageEncoder<ClientMessage, Buffer>
 
 export const encodeServerMessage: ServerMessageEncoder = message => {
   console.log(`Encoding message ${JSON.stringify(message)}`)
@@ -17,7 +17,7 @@ export const encodeServerMessage: ServerMessageEncoder = message => {
   return JSON.stringify(message)
 }
 
-export function decodeClientMessage(data: RawData): ClientEvent {
+export function decodeClientMessage(data: RawData): ClientMessage {
   return JSON.parse(data.toString())
 }
 

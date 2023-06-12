@@ -1,50 +1,46 @@
 import { Side } from './Side'
 
-export type ClientEvent =
-  | PlayEvent
-  | SurrenderEvent
-  | ClientPingEvent
-  | ClientPongEvent
+export type ClientMessage = Play | Surrender | ClientPing | ClientPong
 
-export enum ClientEventType {
+export enum ClientMessageType {
   Ping = 'Ping',
   Pong = 'Pong',
   Play = 'Play',
   Surrender = 'Surrender',
 }
 
-export type PlayEvent = {
-  readonly type: ClientEventType.Play
+export type Play = {
+  readonly type: ClientMessageType.Play
   readonly payload: {
     readonly y: number
     readonly side: Side
   }
 }
 
-export function createPlayEvent(payload: PlayEvent['payload']): PlayEvent {
-  return { type: ClientEventType.Play, payload }
+export function createPlayMessage(payload: Play['payload']): Play {
+  return { type: ClientMessageType.Play, payload }
 }
 
-export type SurrenderEvent = {
-  readonly type: ClientEventType.Surrender
+export type Surrender = {
+  readonly type: ClientMessageType.Surrender
 }
 
-export const SURRENDER_EVENT: SurrenderEvent = {
-  type: ClientEventType.Surrender,
+export const SURRENDER_MESSAGE: Surrender = {
+  type: ClientMessageType.Surrender,
 }
 
-export type ClientPingEvent = {
-  readonly type: ClientEventType.Ping
+export type ClientPing = {
+  readonly type: ClientMessageType.Ping
 }
 
-export const CLIENT_PING_EVENT: ClientPingEvent = {
-  type: ClientEventType.Ping,
+export const CLIENT_PING_MESSAGE: ClientPing = {
+  type: ClientMessageType.Ping,
 }
 
-export type ClientPongEvent = {
-  readonly type: ClientEventType.Pong
+export type ClientPong = {
+  readonly type: ClientMessageType.Pong
 }
 
-export const CLIENT_PONG_EVENT: ClientPongEvent = {
-  type: ClientEventType.Pong,
+export const CLIENT_PONG_MESSAGE: ClientPong = {
+  type: ClientMessageType.Pong,
 }

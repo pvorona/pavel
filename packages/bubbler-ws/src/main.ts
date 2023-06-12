@@ -3,25 +3,30 @@ import { parse } from 'cookie'
 import { getOrInitMap, getRandomArrayElement } from '@pavel/utils'
 import { WebSocket, WebSocketServer } from 'ws'
 import {
-  ClientEventType,
-  createGameStartedEvent,
+  ClientMessageType,
+  createGameStartedMessage,
   encodeServerMessage,
   GAME_ID_SEARCH_PARAM,
-  SERVER_PONG_EVENT,
+  SERVER_PONG_MESSAGE,
   decodeClientMessage,
-  SERVER_PING_EVENT,
-  createPieceAddedEvent,
+  SERVER_PING_MESSAGE,
+  createPieceAddedMessage,
   Board,
   AddPieceResult,
   EndReason,
   Player,
-  OPPONENT_LEFT_EVENT,
-  WON_EVENT,
-  LOST_EVENT,
-  OPPONENT_SURRENDERED_EVENT,
-  DRAW_EVENT,
-  OPPONENT_DISCONNECTED_EVENT,
-  ServerEvent,
+  OPPONENT_LEFT_MESSAGE,
+  WON_MESSAGE,
+  LOST_MESSAGE,
+  OPPONENT_SURRENDERED_MESSAGE,
+  DRAW_MESSAGE,
+  OPPONENT_DISCONNECTED_MESSAGE,
+  ServerMessage,
+  ANOTHER_GAME_IN_PROGRESS_MESSAGE,
+  GAME_NOT_FOUND_MESSAGE,
+  UNAUTHENTICATED_MESSAGE,
+  USER_NOT_FOUND_MESSAGE,
+  GAME_ENDED_MESSAGE,
 } from '@pavel/bubbler-core'
 import {
   PING_INTERVAL_MILLIS,
@@ -54,6 +59,7 @@ const webSocketServer = new WebSocketServer({ server })
 const clientsByGameId = new Map<string, WebSocket[]>()
 const gameIdByClient = new Map<WebSocket, string>()
 const userIdByClient = new Map<WebSocket, string>()
+const connectedUserIds = new Set<string>()
 const boardByGameId = new Map<string, Board>()
 const lastInteractionTimestampByClient = new Map<WebSocket, number>()
 
@@ -66,8 +72,10 @@ webSocketServer.on('connection', async (client, request) => {
   const { bubbler } = parse(request.headers.cookie ?? '')
 
   if (!bubbler) {
-    console.error(`Connection attempt without auth cookie`)
+    console.error(`Unauthenticated connection attempt`)
 
+    const message = encodeServerMessage(UNAUTHENTICATED_MESSAGE)
+    client.send(message)
     return client.close(1008)
   }
 
@@ -76,10 +84,23 @@ webSocketServer.on('connection', async (client, request) => {
   if (!user) {
     console.error(`Connection attempt without matching user`)
 
+    const message = encodeServerMessage(USER_NOT_FOUND_MESSAGE)
+    client.send(message)
     return client.close(1008)
   }
 
   const { id: userId } = user
+
+  if (connectedUserIds.has(userId)) {
+    console.error(
+      `User ${userId} tried to connect to a game while he is inside another game`,
+    )
+
+    const message = encodeServerMessage(ANOTHER_GAME_IN_PROGRESS_MESSAGE)
+    client.send(message)
+    return client.close(1008)
+  }
+
   const url = `ws://${host}:${port}/${request.url}`
   const { searchParams } = new URL(url)
   const gameId = searchParams.get(GAME_ID_SEARCH_PARAM)
@@ -89,6 +110,8 @@ webSocketServer.on('connection', async (client, request) => {
       `User ${userId} tried to connect to server without providing "${GAME_ID_SEARCH_PARAM}" param: ${url}`,
     )
 
+    const message = encodeServerMessage(GAME_NOT_FOUND_MESSAGE)
+    client.send(message)
     return client.close(1008)
   }
 
@@ -99,6 +122,8 @@ webSocketServer.on('connection', async (client, request) => {
       `User ${userId} tried to connect to game ${gameId} that doesn't exist`,
     )
 
+    const message = encodeServerMessage(GAME_NOT_FOUND_MESSAGE)
+    client.send(message)
     return client.close(1008)
   }
 
@@ -107,14 +132,15 @@ webSocketServer.on('connection', async (client, request) => {
       `User ${userId} tried to connect to game ${gameId} that doesn't accept new players`,
     )
 
+    const message = encodeServerMessage(GAME_ENDED_MESSAGE)
+    client.send(message)
     return client.close(1008)
   }
 
   userIdByClient.set(client, userId)
   lastInteractionTimestampByClient.set(client, Date.now())
   gameIdByClient.set(client, gameId)
-
-  // TODO: check if the same user tries to connect
+  connectedUserIds.add(userId)
 
   console.log(`${userId} connected to ${gameId}`)
 
@@ -139,20 +165,21 @@ webSocketServer.on('connection', async (client, request) => {
     for (const client of clients) {
       const userId = ensureDefined(userIdByClient.get(client))
       const pendingMove = startingUserId === userId
-      const event = createGameStartedEvent({ pendingMove })
-      const response = encodeServerMessage(event)
-      client.send(response)
+      const message = createGameStartedMessage({ pendingMove })
+      const encodedMessage = encodeServerMessage(message)
+      client.send(encodedMessage)
     }
   }
 
+  // TODO user disconnected from the game that did not start yet
   client.on('close', async () => {
     // TODO handle connecting to game state
     for (const innerClient of clients) {
       if (innerClient !== client) {
-        const event = [OPPONENT_LEFT_EVENT, WON_EVENT]
-        const response = encodeServerMessage(event)
-        innerClient.send(response)
-        innerClient.close()
+        const messages = [OPPONENT_LEFT_MESSAGE, WON_MESSAGE]
+        const encodedMessage = encodeServerMessage(messages)
+        innerClient.send(encodedMessage)
+        innerClient.close(1000)
       }
 
       cleanUpClient(innerClient)
@@ -171,46 +198,35 @@ webSocketServer.on('connection', async (client, request) => {
   client.on('message', async data => {
     lastInteractionTimestampByClient.set(client, Date.now())
 
-    const clientEvent = decodeClientMessage(data)
+    const clientMessage = decodeClientMessage(data)
 
-    if (clientEvent.type === ClientEventType.Ping) {
-      const response = encodeServerMessage(SERVER_PONG_EVENT)
-      client.send(response)
+    if (clientMessage.type === ClientMessageType.Ping) {
+      const message = encodeServerMessage(SERVER_PONG_MESSAGE)
+      client.send(message)
 
       return
     }
 
-    if (clientEvent.type === ClientEventType.Pong) {
+    if (clientMessage.type === ClientMessageType.Pong) {
       return
     }
 
-    if (clientEvent.type === ClientEventType.Surrender) {
+    if (clientMessage.type === ClientMessageType.Surrender) {
       // TODO handle game connecting state
       for (const innerClient of clients) {
-        const events =
+        const messages =
           innerClient === client
-            ? LOST_EVENT
-            : [OPPONENT_SURRENDERED_EVENT, WON_EVENT]
-        const response = encodeServerMessage(events)
-        innerClient.send(response)
-        innerClient.close()
-
-        cleanUpClient(innerClient)
+            ? LOST_MESSAGE
+            : [OPPONENT_SURRENDERED_MESSAGE, WON_MESSAGE]
+        const encodedMessage = encodeServerMessage(messages)
+        innerClient.send(encodedMessage)
+        innerClient.close(1000)
       }
-
-      cleanUpGame(gameId)
-
-      await db.game.update({
-        where: { id: gameId },
-        data: {
-          status: GameStatus.ENDED,
-        },
-      })
 
       return
     }
 
-    if (clientEvent.type === ClientEventType.Play) {
+    if (clientMessage.type === ClientMessageType.Play) {
       const board = boardByGameId.get(game.id)
 
       if (!board) {
@@ -239,7 +255,7 @@ webSocketServer.on('connection', async (client, request) => {
 
       const {
         payload: { y, side },
-      } = clientEvent
+      } = clientMessage
       const result = board.addPiece(y, side)
 
       if (result.type === AddPieceResult.Unchanged) {
@@ -253,8 +269,8 @@ webSocketServer.on('connection', async (client, request) => {
 
         let shouldCompleteGame = false
         for (const innerClient of clients) {
-          const events: ServerEvent | ServerEvent[] = (() => {
-            const playEvent = createPieceAddedEvent({
+          const messages: ServerMessage | ServerMessage[] = (() => {
+            const playMessage = createPieceAddedMessage({
               x: result.payload.x,
               y: result.payload.y,
               player: innerClient === client ? Player.Current : Player.Opponent,
@@ -264,28 +280,24 @@ webSocketServer.on('connection', async (client, request) => {
               shouldCompleteGame = true
 
               if (boardState.reason === EndReason.Draw) {
-                return [playEvent, DRAW_EVENT]
+                return [playMessage, DRAW_MESSAGE]
               }
 
-              if (boardState.reason === EndReason.Won) {
-                const endEvent = innerClient === client ? WON_EVENT : LOST_EVENT
+              if (boardState.reason === EndReason.WonLost) {
+                const endMessage =
+                  innerClient === client ? WON_MESSAGE : LOST_MESSAGE
 
-                return [playEvent, endEvent]
+                return [playMessage, endMessage]
               }
 
               ensureNever(boardState)
             }
 
-            return playEvent
+            return playMessage
           })()
 
-          const response = encodeServerMessage(events)
-          innerClient.send(response)
-
-          if (shouldCompleteGame) {
-            innerClient.close()
-            cleanUpClient(client)
-          }
+          const encodedMessage = encodeServerMessage(messages)
+          innerClient.send(encodedMessage)
         }
 
         if (shouldCompleteGame) {
@@ -297,6 +309,10 @@ webSocketServer.on('connection', async (client, request) => {
               status: GameStatus.ENDED,
             },
           })
+
+          for (const innerClient of clients) {
+            innerClient.close(1000)
+          }
         }
 
         return
@@ -306,7 +322,9 @@ webSocketServer.on('connection', async (client, request) => {
     }
 
     console.error(
-      `Received unknown message ${JSON.stringify(clientEvent)} from ${userId}`,
+      `Received unknown message ${JSON.stringify(
+        clientMessage,
+      )} from ${userId}`,
     )
   })
 
@@ -319,8 +337,8 @@ function startPingingInactiveClients() {
 
     for (const [client, timestamp] of lastInteractionTimestampByClient) {
       if (now - timestamp > PING_INTERVAL_MILLIS) {
-        const response = encodeServerMessage(SERVER_PING_EVENT)
-        client.send(response)
+        const message = encodeServerMessage(SERVER_PING_MESSAGE)
+        client.send(message)
       }
     }
   }, PING_INTERVAL_MILLIS)
@@ -338,8 +356,7 @@ function startClosingInactiveClients() {
 
         for (const innerClient of clients) {
           if (innerClient === client) {
-            const event = LOST_EVENT
-            const message = encodeServerMessage(event)
+            const message = encodeServerMessage(LOST_MESSAGE)
             innerClient.send(message)
             innerClient.terminate()
             cleanUpClient(innerClient)
@@ -347,31 +364,33 @@ function startClosingInactiveClients() {
             continue
           }
 
-          const events = [OPPONENT_DISCONNECTED_EVENT, WON_EVENT]
-          const message = encodeServerMessage(events)
+          const message = encodeServerMessage([
+            OPPONENT_DISCONNECTED_MESSAGE,
+            WON_MESSAGE,
+          ])
           innerClient.send(message)
-          innerClient.close()
-
-          cleanUpClient(innerClient)
+          innerClient.close(1000)
         }
-
-        cleanUpGame(gameId)
-
-        await db.game.update({
-          where: { id: gameId },
-          data: { status: GameStatus.ENDED },
-        })
       }
     }
   }, CHECK_DROPPED_CONNECTION_INTERVAL_MILLIS)
 }
 
 function cleanUpGame(gameId: string) {
+  console.log(`Cleanup game ${gameId}`)
   clientsByGameId.delete(gameId)
   boardByGameId.delete(gameId)
 }
 
 function cleanUpClient(client: WebSocket) {
+  const userId = userIdByClient.get(client)
+
+  if (!userId) {
+    return
+  }
+
+  console.log(`Cleanup client for ${userId}`)
+  connectedUserIds.delete(userId)
   userIdByClient.delete(client)
   lastInteractionTimestampByClient.delete(client)
   gameIdByClient.delete(client)

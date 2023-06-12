@@ -21,6 +21,12 @@ export default function Index() {
   const name = user?.name ?? 'Choosing username...'
   const router = useRouter()
 
+  useEffect(() => {
+    if (user?.currentGameId) {
+      router.push(`/game/${user.currentGameId}`)
+    }
+  }, [router, user?.currentGameId])
+
   const createGame = useMutation({
     mutationFn: handleCreateGame,
     onSuccess({ id }) {

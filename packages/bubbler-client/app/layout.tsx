@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import './global.css'
 import { UserContext } from '../components'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { User } from '@prisma/client'
 
 const queryClient = new QueryClient()
 
@@ -12,12 +13,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     async function fetchCurrentUser() {
       const response = await fetch('/api/me', { cache: 'no-store' })
-      const user = await response.json()
+      const user = (await response.json()) as User
       setUser(user)
     }
 
