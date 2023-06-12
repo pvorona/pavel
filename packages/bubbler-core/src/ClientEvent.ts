@@ -21,12 +21,24 @@ export type PlayEvent = {
   }
 }
 
+export function createPlayEvent(payload: PlayEvent['payload']): PlayEvent {
+  return { type: ClientEventType.Play, payload }
+}
+
 export type SurrenderEvent = {
   readonly type: ClientEventType.Surrender
 }
 
+export const SURRENDER_EVENT: SurrenderEvent = {
+  type: ClientEventType.Surrender,
+}
+
 export type ClientPingEvent = {
   readonly type: ClientEventType.Ping
+}
+
+export const CLIENT_PING_EVENT: ClientPingEvent = {
+  type: ClientEventType.Ping,
 }
 
 export type ClientPongEvent = {

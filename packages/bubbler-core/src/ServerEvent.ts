@@ -1,5 +1,3 @@
-import { Side } from './Side'
-
 export type ServerEvent =
   | PieceAddedEvent
   | DrawEvent
@@ -26,8 +24,8 @@ export enum ServerEventType {
 }
 
 export enum Player {
-  Current,
-  Opponent,
+  Current = 'Current',
+  Opponent = 'Opponent',
 }
 
 export type GameStartedEvent = {

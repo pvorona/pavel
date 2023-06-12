@@ -2,42 +2,17 @@
   "name": "bubbler-server",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/bubbler-server/src",
-  "projectType": "application",
+  "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx/webpack:webpack",
+      "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
       "options": {
-        "target": "node",
-        "compiler": "tsc",
         "outputPath": "dist/packages/bubbler-server",
-        "main": "packages/bubbler-server/src/main.ts",
-        "tsConfig": "packages/bubbler-server/tsconfig.app.json",
-        "assets": ["packages/bubbler-server/src/assets"],
-        "isolatedConfig": true,
-        "webpackConfig": "packages/bubbler-server/webpack.config.js"
-      },
-      "configurations": {
-        "development": {},
-        "production": {
-          "generateLockfile": true
-        }
-      }
-    },
-    "serve": {
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
-      "options": {
-        "buildTarget": "bubbler-server:build"
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "bubbler-server:build:development"
-        },
-        "production": {
-          "buildTarget": "bubbler-server:build:production"
-        }
+        "tsConfig": "packages/bubbler-server/tsconfig.lib.json",
+        "packageJson": "packages/bubbler-server/package.json",
+        "main": "packages/bubbler-server/src/index.ts",
+        "assets": ["packages/bubbler-server/*.md"]
       }
     },
     "lint": {
@@ -61,10 +36,7 @@
         }
       }
     },
-    "docker-build": {
-      "dependsOn": ["build"],
-      "command": "docker build -f packages/bubbler-server/Dockerfile . -t bubbler-server"
-    },
+
     "prisma-generate": {
       "executor": "@nx-tools/nx-prisma:generate",
       "options": {

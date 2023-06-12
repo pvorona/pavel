@@ -1,0 +1,14 @@
+.Username {
+  animation: hue 3s infinite;
+  color: hsl(346 100% 78% / 1);
+}
+
+@keyframes hue {
+  from {
+    filter: hue-rotate(0);
+  }
+
+  to {
+    filter: hue-rotate(360deg);
+  }
+}

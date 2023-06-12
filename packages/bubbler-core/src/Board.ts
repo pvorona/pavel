@@ -167,7 +167,7 @@ function hasMinConsecutivePieces(
   }
 }
 
-function createField(): Field {
+export function createField<T = CellValue>(): (T | undefined)[][] {
   const result = new Array(FieldSize.Y)
 
   for (let i = 0; i < result.length; i++) {

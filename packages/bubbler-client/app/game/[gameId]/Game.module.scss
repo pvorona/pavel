@@ -1,0 +1,17 @@
+.Container {
+  background-image: linear-gradient(rgba(182, 94, 201, 1), rgba(31, 0, 61, 1));
+}
+
+.Circle {
+  animation: pop 0.4s cubic-bezier(0.64, 0.57, 0.27, 1.29);
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}

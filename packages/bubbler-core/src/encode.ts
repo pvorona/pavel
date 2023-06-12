@@ -20,3 +20,7 @@ export const encodeServerMessage: ServerMessageEncoder = message => {
 export function decodeClientMessage(data: RawData): ClientEvent {
   return JSON.parse(data.toString())
 }
+
+export const encodeClientMessage: ClientMessageEncoder = message => {
+  return Buffer.from(JSON.stringify(message), 'utf-8')
+}
