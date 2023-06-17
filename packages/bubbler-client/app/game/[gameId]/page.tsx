@@ -471,9 +471,7 @@ export default function Game({
                   const className = 'rounded-full'
                   const style: CSSProperties | undefined = (() => {
                     if (cell === undefined) {
-                      return {
-                        // border: '1px solid black',
-                      }
+                      return {}
                     }
 
                     if (cell === Player.Current) {
@@ -518,11 +516,9 @@ export default function Game({
                         width: CELL_SIZE * 0.75,
                         height: CELL_SIZE * 0.75,
                       }}
-                      className={classNames(
-                        className,
-                        potentialMoveClassName,
-                        styles.Circle,
-                      )}
+                      className={classNames(className, potentialMoveClassName, {
+                        [styles.Circle]: fieldRef.current[y][x],
+                      })}
                     />
                   )
                 })()}
