@@ -475,26 +475,18 @@ export default function Game({
                     }
 
                     if (cell === Player.Current) {
-                      const {
-                        background: { from, to },
-                        border,
-                      } = BUBBLES[6]
-
                       return {
-                        background: `linear-gradient(${from}, ${to})`,
-                        border: `1px solid ${border}`,
+                        background: `linear-gradient(hsl(155 100% 76% / 1), hsl(144 100% 12% / 1))`,
                       }
                     }
 
                     if (cell === Player.Opponent) {
                       const {
                         background: { from, to },
-                        border,
                       } = BUBBLES[7]
 
                       return {
                         background: `linear-gradient(${from}, ${to})`,
-                        border: `1px solid ${border}`,
                       }
                     }
                   })()
