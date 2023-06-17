@@ -42,6 +42,12 @@ const port = process.env.PORT ? Number(process.env.PORT) : 3001
 
 const app = express()
 
+enum StatusCode {
+  Normal = 1000,
+  PolicyViolation = 1008,
+  ClosedByServer = 3000,
+}
+
 app.get('/', (req, res) => {
   res.send({ message: 'Welcome to ${options.name}!' })
 })
@@ -76,7 +82,7 @@ webSocketServer.on('connection', async (client, request) => {
 
     const message = encodeServerMessage(UNAUTHENTICATED_MESSAGE)
     client.send(message)
-    return client.close(1008)
+    return client.close(StatusCode.PolicyViolation)
   }
 
   const user = await db.user.findFirst({ where: { id: bubbler } })
@@ -86,7 +92,7 @@ webSocketServer.on('connection', async (client, request) => {
 
     const message = encodeServerMessage(USER_NOT_FOUND_MESSAGE)
     client.send(message)
-    return client.close(1008)
+    return client.close(StatusCode.PolicyViolation)
   }
 
   const { id: userId } = user
@@ -98,7 +104,7 @@ webSocketServer.on('connection', async (client, request) => {
 
     const message = encodeServerMessage(ANOTHER_GAME_IN_PROGRESS_MESSAGE)
     client.send(message)
-    return client.close(1008)
+    return client.close(StatusCode.PolicyViolation)
   }
 
   const url = `ws://${host}:${port}/${request.url}`
@@ -112,7 +118,7 @@ webSocketServer.on('connection', async (client, request) => {
 
     const message = encodeServerMessage(GAME_NOT_FOUND_MESSAGE)
     client.send(message)
-    return client.close(1008)
+    return client.close(StatusCode.PolicyViolation)
   }
 
   const game = await db.game.findFirst({ where: { id: gameId } })
@@ -124,7 +130,7 @@ webSocketServer.on('connection', async (client, request) => {
 
     const message = encodeServerMessage(GAME_NOT_FOUND_MESSAGE)
     client.send(message)
-    return client.close(1008)
+    return client.close(StatusCode.PolicyViolation)
   }
 
   if (game.status !== GameStatus.WAITING_FOR_OPPONENT) {
@@ -134,7 +140,7 @@ webSocketServer.on('connection', async (client, request) => {
 
     const message = encodeServerMessage(GAME_ENDED_MESSAGE)
     client.send(message)
-    return client.close(1008)
+    return client.close(StatusCode.PolicyViolation)
   }
 
   userIdByClient.set(client, userId)
@@ -171,15 +177,15 @@ webSocketServer.on('connection', async (client, request) => {
     }
   }
 
-  // TODO user disconnected from the game that did not start yet
-  client.on('close', async () => {
+  // TODO handle user disconnected from the game that have not been started yet
+  client.on('close', async code => {
     // TODO handle connecting to game state
     for (const innerClient of clients) {
-      if (innerClient !== client) {
+      if (code !== StatusCode.ClosedByServer && innerClient !== client) {
         const messages = [OPPONENT_LEFT_MESSAGE, WON_MESSAGE]
         const encodedMessage = encodeServerMessage(messages)
         innerClient.send(encodedMessage)
-        innerClient.close(1000)
+        innerClient.close(StatusCode.ClosedByServer)
       }
 
       cleanUpClient(innerClient)
@@ -220,7 +226,7 @@ webSocketServer.on('connection', async (client, request) => {
             : [OPPONENT_SURRENDERED_MESSAGE, WON_MESSAGE]
         const encodedMessage = encodeServerMessage(messages)
         innerClient.send(encodedMessage)
-        innerClient.close(1000)
+        innerClient.close(StatusCode.ClosedByServer)
       }
 
       return
@@ -301,17 +307,8 @@ webSocketServer.on('connection', async (client, request) => {
         }
 
         if (shouldCompleteGame) {
-          cleanUpGame(game.id)
-
-          await db.game.update({
-            where: { id: gameId },
-            data: {
-              status: GameStatus.ENDED,
-            },
-          })
-
           for (const innerClient of clients) {
-            innerClient.close(1000)
+            innerClient.close(StatusCode.ClosedByServer)
           }
         }
 
@@ -352,7 +349,6 @@ function startClosingInactiveClients() {
       if (now - timestamp > DROP_CONNECTION_TIMEOUT_MILLIS) {
         const gameId = ensureDefined(gameIdByClient.get(client))
         const clients = ensureDefined(clientsByGameId.get(gameId))
-        // TODO CHECK IF WE NEED TO provide lost reason
 
         for (const innerClient of clients) {
           if (innerClient === client) {
@@ -369,7 +365,7 @@ function startClosingInactiveClients() {
             WON_MESSAGE,
           ])
           innerClient.send(message)
-          innerClient.close(1000)
+          innerClient.close(StatusCode.ClosedByServer)
         }
       }
     }
