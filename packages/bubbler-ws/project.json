@@ -63,7 +63,7 @@
     },
     "docker-build": {
       "dependsOn": ["build"],
-      "command": "docker build -f packages/bubbler-ws/Dockerfile . -t bubbler-server"
+      "command": "docker build -f packages/bubbler-ws/Dockerfile . -t bubbler-ws"
     }
   },
   "tags": []
