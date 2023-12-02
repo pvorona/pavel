@@ -5,9 +5,9 @@ import {
   MAX_MOVE_COUNT,
   MIN_CONSECUTIVE_PIECES,
 } from './constants'
-import { assert } from '@pavel/assert'
+import { assert, ensureDefined } from '@pavel/assert'
 
-export type CellValue = undefined | string
+export type CellValue = undefined | string | 'pending'
 export type Field = CellValue[][]
 
 export enum EndReason {
@@ -43,21 +43,65 @@ export class Board {
   private field = createField()
   private moveCount = 0
   private state: BoardState
+  private currentUserId: string | undefined
 
-  constructor(
-    private userIds: readonly string[],
-    private currentUserId: string,
-  ) {
+  constructor(private userIds: string[], currentUserId: string) {
     assert(userIds.length === 2, 'Invalid number of users')
     assert(userIds.includes(currentUserId), 'Current user is not in userIds')
 
+    this.currentUserId = currentUserId
     this.state =
       this.moveCount === MAX_MOVE_COUNT
         ? { ended: true, reason: EndReason.Draw }
         : { ended: false }
   }
 
+  removeUserId(userId: string) {
+    assert(
+      this.userIds.includes(userId),
+      'Trying to remove the user that is not in the game',
+    )
+    const index = this.userIds.indexOf(userId)
+    this.userIds.splice(index, 1)
+
+    if (this.currentUserId === userId) {
+      this.currentUserId = undefined
+    }
+
+    for (let y = 0; y < FieldSize.Y; y++) {
+      for (let x = 0; x < FieldSize.X; x++) {
+        if (this.field[y][x] === userId) {
+          this.field[y][x] = 'pending'
+        }
+      }
+    }
+  }
+
+  addUser(userId: string) {
+    assert(
+      !this.userIds.includes(userId),
+      'User tries to join the same game he is in',
+    )
+    this.userIds.push(userId)
+
+    if (this.currentUserId === undefined) {
+      this.currentUserId = userId
+    }
+
+    for (let y = 0; y < FieldSize.Y; y++) {
+      for (let x = 0; x < FieldSize.X; x++) {
+        if (this.field[y][x] === 'pending') {
+          this.field[y][x] = userId
+        }
+      }
+    }
+  }
+
   addPiece(y: number, side: Side) {
+    if (this.userIds.length !== 2 || !this.currentUserId) {
+      return BOARD_UNCHANGED
+    }
+
     if (this.state.ended) {
       return BOARD_UNCHANGED
     }
@@ -105,6 +149,24 @@ export class Board {
 
   getState() {
     return this.state
+  }
+
+  getMoves() {
+    const moves: { x: number; y: number; userId: string }[] = []
+
+    for (let y = 0; y < FieldSize.Y; y++) {
+      for (let x = 0; x < FieldSize.X; x++) {
+        if (this.field[y][x] !== undefined) {
+          moves.push({
+            x,
+            y,
+            userId: ensureDefined(this.field[y][x]),
+          })
+        }
+      }
+    }
+
+    return moves
   }
 
   private isWinningMove(x: number, y: number): boolean {

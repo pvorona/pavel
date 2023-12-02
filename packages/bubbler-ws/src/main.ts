@@ -27,6 +27,8 @@ import {
   UNAUTHENTICATED_MESSAGE,
   USER_NOT_FOUND_MESSAGE,
   GAME_ENDED_MESSAGE,
+  GAME_PAUSED_MESSAGE,
+  GAME_UNPAUSED_MESSAGE,
 } from '@pavel/bubbler-core'
 import {
   PING_INTERVAL_MILLIS,
@@ -154,6 +156,7 @@ webSocketServer.on('connection', async (client, request) => {
 
   clients.push(client)
 
+  // TODO: handle reconnection
   if (clients.length === 2) {
     // TODO: Race conditions
     await db.game.update({
@@ -163,42 +166,132 @@ webSocketServer.on('connection', async (client, request) => {
     const userIds = clients.map(client =>
       ensureDefined(userIdByClient.get(client), 'Cannot get userId for client'),
     )
-    const startingUserId = getRandomArrayElement(userIds)
-    const board = new Board(userIds, startingUserId)
 
-    boardByGameId.set(game.id, board)
-    // TODO: WS readyState
-    for (const client of clients) {
-      const userId = ensureDefined(userIdByClient.get(client))
-      const pendingMove = startingUserId === userId
-      const message = createGameStartedMessage({ pendingMove })
-      const encodedMessage = encodeServerMessage(message)
-      client.send(encodedMessage)
+    if (boardByGameId.has(gameId)) {
+      const board = ensureDefined(boardByGameId.get(gameId))
+      board.addUser(userId)
+
+      for (const innerClient of clients) {
+        if (innerClient === client) {
+          // send game restarted state to new user
+          // 1. Create new event with initial board state
+          // 2. Use game started event with initial board state
+          // 3. Create an array of "Piece added" events
+          const gameStartedEvent = createGameStartedMessage({
+            pendingMove: board.getCurrentUserId() === userId,
+          })
+          const moves = board.getMoves()
+          const events = moves.map(({ x, y, userId: moveUserId }) =>
+            createPieceAddedMessage({
+              x,
+              y,
+              player: userId === moveUserId ? Player.Current : Player.Opponent,
+            }),
+          )
+          const message = encodeServerMessage([gameStartedEvent, ...events])
+          client.send(message)
+        } else {
+          // Send game unpaused event to the existing user
+          const message = encodeServerMessage(GAME_UNPAUSED_MESSAGE)
+          client.send(message)
+        }
+      }
+
+      // TODO: SEND game restarted events
+    } else {
+      const startingUserId = getRandomArrayElement(userIds)
+      const board = new Board(userIds, startingUserId)
+
+      boardByGameId.set(game.id, board)
+      // TODO: WS readyState
+      for (const client of clients) {
+        const userId = ensureDefined(userIdByClient.get(client))
+        const pendingMove = startingUserId === userId
+        const message = createGameStartedMessage({ pendingMove })
+        const encodedMessage = encodeServerMessage(message)
+        client.send(encodedMessage)
+      }
     }
   }
 
   // TODO handle user disconnected from the game that have not been started yet
   client.on('close', async code => {
-    // TODO handle connecting to game state
-    for (const innerClient of clients) {
-      if (code !== StatusCode.ClosedByServer && innerClient !== client) {
-        const messages = [OPPONENT_LEFT_MESSAGE, WON_MESSAGE]
-        const encodedMessage = encodeServerMessage(messages)
-        innerClient.send(encodedMessage)
-        innerClient.close(StatusCode.ClosedByServer)
+    if (code == StatusCode.ClosedByServer) {
+      for (const innerClient of clients) {
+        if (innerClient !== client) {
+          // const messages = [OPPONENT_LEFT_MESSAGE, WON_MESSAGE]
+          // const encodedMessage = encodeServerMessage(messages)
+          // innerClient.send(encodedMessage)
+          innerClient.close(StatusCode.ClosedByServer)
+        }
+
+        cleanUpClient(innerClient)
       }
 
-      cleanUpClient(innerClient)
+      cleanUpGame(gameId)
+
+      await db.game.update({
+        where: { id: gameId },
+        data: {
+          status: GameStatus.ENDED,
+        },
+      })
+
+      return
     }
 
-    cleanUpGame(gameId)
+    // remove disconnected user from memory
+
+    const index = clients.indexOf(client)
+
+    if (index !== -1) {
+      clients.splice(index, 1)
+    }
+
+    const disconnectedUserId = ensureDefined(userIdByClient.get(client))
+
+    gameIdByClient.delete(client)
+    userIdByClient.delete(client)
+    connectedUserIds.delete(disconnectedUserId)
+    ensureDefined(boardByGameId.get(gameId)).removeUserId(disconnectedUserId)
+    lastInteractionTimestampByClient.delete(client)
+
+    for (const innerClient of clients) {
+      if (innerClient !== client) {
+        const message = encodeServerMessage(GAME_PAUSED_MESSAGE)
+        client.send(message)
+      }
+    }
 
     await db.game.update({
       where: { id: gameId },
       data: {
-        status: GameStatus.ENDED,
+        status: GameStatus.WAITING_FOR_OPPONENT,
       },
     })
+
+    // TODO: add cleanup logic to all the cases
+
+    // TODO handle connecting to game state
+    // for (const innerClient of clients) {
+    // if (code !== StatusCode.ClosedByServer && innerClient !== client) {
+    //   const messages = [OPPONENT_LEFT_MESSAGE, WON_MESSAGE]
+    //   const encodedMessage = encodeServerMessage(messages)
+    //   innerClient.send(encodedMessage)
+    //   innerClient.close(StatusCode.ClosedByServer)
+    // }
+
+    // cleanUpClient(innerClient)
+    // }
+
+    // cleanUpGame(gameId)
+
+    // await db.game.update({
+    //   where: { id: gameId },
+    //   data: {
+    //     status: GameStatus.ENDED,
+    //   },
+    // })
   })
 
   client.on('message', async data => {

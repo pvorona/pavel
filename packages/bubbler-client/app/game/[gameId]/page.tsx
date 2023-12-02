@@ -44,6 +44,7 @@ enum ConnectionState {
 enum GameState {
   Loading = 'Loading',
   Ongoing = 'Ongoing',
+  Paused = 'Paused',
   Won = 'Won',
   Lost = 'Lost',
   Draw = 'Draw',
@@ -273,6 +274,18 @@ export default function Game({
           continue
         }
 
+        if (message.type === ServerMessageType.GamePaused) {
+          setGameState(GameState.Paused)
+
+          continue
+        }
+
+        if (message.type === ServerMessageType.GameUnpaused) {
+          setGameState(GameState.Ongoing)
+
+          continue
+        }
+
         ensureNever(message)
       }
     }
@@ -426,6 +439,10 @@ export default function Game({
 
     if (gameState === GameState.Won) {
       return 'You won'
+    }
+
+    if (gameState === GameState.Paused) {
+      return 'Game paused -- opponent left, waiting for a new one'
     }
 
     ensureNever(gameState)

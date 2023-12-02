@@ -6,7 +6,7 @@ export type LazyValue<T> = {
 }
 
 export function lazyValue<T>(compute: () => T): LazyValue<T> {
-  let value: undefined | T
+  let value: T
   let shouldCompute = true
 
   function get() {
@@ -15,7 +15,7 @@ export function lazyValue<T>(compute: () => T): LazyValue<T> {
       value = compute()
     }
 
-    return value as T
+    return value
   }
 
   function notifyChanged() {

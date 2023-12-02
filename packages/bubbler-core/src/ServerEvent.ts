@@ -14,6 +14,8 @@ export type ServerMessage =
   | Unauthenticated
   | UserNotFound
   | GameEnded
+  | GamePaused
+  | GameUnpaused
 
 export enum ServerMessageType {
   Ping = 'Ping',
@@ -31,6 +33,8 @@ export enum ServerMessageType {
   Unauthenticated = 'Unauthenticated',
   UserNotFound = 'UserNotFound',
   GameEnded = 'GameEnded',
+  GamePaused = 'GamePaused',
+  GameUnpaused = 'GameUnpaused',
 }
 
 export enum Player {
@@ -178,4 +182,20 @@ export type UserNotFound = {
 
 export const USER_NOT_FOUND_MESSAGE: UserNotFound = {
   type: ServerMessageType.UserNotFound,
+}
+
+export type GamePaused = {
+  readonly type: ServerMessageType.GamePaused
+}
+
+export const GAME_PAUSED_MESSAGE: GamePaused = {
+  type: ServerMessageType.GamePaused,
+}
+
+export type GameUnpaused = {
+  readonly type: ServerMessageType.GameUnpaused
+}
+
+export const GAME_UNPAUSED_MESSAGE: GameUnpaused = {
+  type: ServerMessageType.GameUnpaused,
 }
