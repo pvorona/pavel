@@ -1,4 +1,4 @@
-import { Lambda } from '@pavel/types'
+import { Getter, Lambda, Setter } from '@pavel/types'
 
 export type Observer<A> = (value: A) => void
 
@@ -13,14 +13,14 @@ export type LazyObservable = {
 export type Observable<T> = EagerObservable<T> | LazyObservable
 
 export type Gettable<T> = {
-  get: () => T
+  get: Getter<T>
 }
 
 export type Settable<T> = {
-  set: (value: T) => void
+  set: Setter<T>
 }
 
-export type Identifiable = Readonly<{ id: string }>
+export type Identifiable<T = string> = { id: T }
 
 export type EagerSubject<T> = EagerObservable<T> &
   Gettable<T> &

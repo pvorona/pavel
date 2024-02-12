@@ -1,25 +1,22 @@
-import { EagerSubject, Gettable, Identifiable, Settable } from '../types'
+import { EagerSubject, Identifiable } from '../types'
 import { createId } from '../createId'
 import { createObservers } from '@pavel/utils'
+import { Setter, Getter } from '@pavel/types'
 
 type InterceptorOptions<T> = {
-  readonly get?: (target: {
-    set: Settable<T>['set']
-    get: Gettable<T>['get']
-  }) => T
-  readonly set?: (
-    value: T,
-    target: { set: Settable<T>['set']; get: Gettable<T>['get'] },
-  ) => void
+  get: (target: { set: Setter<T>; get: Getter<T> }) => T
+  set: (value: T, target: { set: Setter<T>; get: Getter<T> }) => void
 }
 
-export type ObservableOptions<T> = Partial<Identifiable> &
-  InterceptorOptions<T> & {
-    readonly is?: (a: T, b: T) => boolean
-  }
+export type ObservableOptions<T> = Partial<
+  Readonly<
+    Identifiable & InterceptorOptions<T> & { is: (a: T, b: T) => boolean }
+  >
+>
 
 const OBSERVABLE_GROUP = 'Observable'
 
+// export function createObservable<T>(
 export function observable<T>(
   initialValue: T,
   options?: ObservableOptions<T>,
@@ -39,6 +36,10 @@ export function observable<T>(
 
     notify()
   }
+
+  // function update(updater: (value: T) => T) {}
+
+  // function mutate() {}
 
   function notify() {
     observers.notify(value)
