@@ -9,12 +9,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react'
 import { FormikHelpers, useFormik } from 'formik'
 import { useAutoFocus, useHoverState, useOnUnload } from '@pavel/react-utils'
-import {
-  bindStorage,
-  getFromStorage,
-  isBrowser,
-  moveCursorToEnd,
-} from '@pavel/utils'
+import { bindStorage, getItem, isBrowser, moveCursorToEnd } from '@pavel/utils'
 import { LoadingStatus } from '@pavel/types'
 import { useRouter } from 'next/router'
 import { SIGN_IN, SIGN_UP } from '@pavel/comparator-shared'
@@ -103,7 +98,7 @@ export function EmailPasswordForm({
     [onSubmit],
   )
   const initialValues = {
-    email: getFromStorage(EMAIL_STORAGE_KEY, '', EMAIL_STORAGE),
+    email: getItem(EMAIL_STORAGE_KEY, '', EMAIL_STORAGE).value,
     password: '',
   }
   const {

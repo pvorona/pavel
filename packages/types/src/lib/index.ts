@@ -30,3 +30,7 @@ export type DeepRequired<T> = T extends object
 export type Mutable<Type> = {
   -readonly [Key in keyof Type]: Type[Key]
 }
+
+export type Getter<T> = () => T
+
+export type Setter<T> = (value: T) => void

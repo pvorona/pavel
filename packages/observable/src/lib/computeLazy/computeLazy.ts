@@ -11,13 +11,13 @@ import { observableLazy } from '../observable'
 
 const COMPUTE_LAZY_GROUP = 'ComputeLazy'
 
-export type ComputeLazyOptions = Partial<Identifiable>
+export type ComputeLazyOptions = Partial<Readonly<Identifiable>>
 
-export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
-  deps: readonly [...A],
-  compute: (...args: ObservedTypesOf<A>) => T,
+export function computeLazy<Deps extends ReadonlySubject<unknown>[], Output>(
+  deps: readonly [...Deps],
+  compute: (...args: ObservedTypesOf<Deps>) => Output,
   options?: ComputeLazyOptions,
-): ReadonlyLazySubject<T> {
+): ReadonlyLazySubject<Output> {
   const id = createId(COMPUTE_LAZY_GROUP, options, compute.name)
   const holder = observableLazy(recompute, { id })
 
@@ -28,7 +28,6 @@ export function computeLazy<A extends ReadonlySubject<unknown>[], T>(
 
   function recompute() {
     const values = collectValues(deps)
-
     return compute(...values)
   }
 
